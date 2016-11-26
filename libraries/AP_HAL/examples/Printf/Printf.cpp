@@ -49,7 +49,7 @@ static void test_printf(void)
     uint8_t i;
     char buf[30];
     uint8_t failures = 0;
-    hal.console->printf("Running printf tests\n");
+    hal.console->println("Running printf tests");
     for (i=0; i < ARRAY_SIZE(float_tests); i++) {
         int ret = hal.util->snprintf(buf, sizeof(buf), float_tests[i].fmt, float_tests[i].v);
         if (strcmp(buf, float_tests[i].result) != 0) {

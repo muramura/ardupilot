@@ -5,7 +5,7 @@ const AP_HAL::HAL& hal = AP_HAL::get_HAL();
 AP_HAL::AnalogSource* ch;
 
 void setup (void) {
-    hal.console->printf("Starting AP_HAL::AnalogIn test\r\n");
+    hal.console->println("Starting AP_HAL::AnalogIn test");
     ch = hal.analogin->channel(0);
 }
 

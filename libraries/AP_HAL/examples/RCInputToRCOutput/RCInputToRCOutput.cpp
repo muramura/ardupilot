@@ -15,7 +15,7 @@ static uint16_t last_value[MAX_CHANNELS];
 
 void setup(void) 
 {
-    hal.console->printf("Starting RCInputToRCOutput test\n");
+    hal.console->println("Starting RCInputToRCOutput test");
 
     for(uint8_t i = 0; i < MAX_CHANNELS; i++) {
         hal.rcout->enable_ch(i);

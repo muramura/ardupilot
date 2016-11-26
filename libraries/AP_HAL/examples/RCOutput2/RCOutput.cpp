@@ -41,10 +41,10 @@ void drive(uint16_t hz_speed) {
             pwm += delta;
             if (delta > 0 && pwm >= 2000) {
                 delta = -1;
-                hal.console->printf("reversing\n");
+                hal.console->println("reversing");
             } else if (delta < 0 && pwm <= 1000) {
                 delta = 1;
-                hal.console->printf("normalizing\n");
+                hal.console->println("normalizing");
             }
         }
         hal.scheduler->delay(5);

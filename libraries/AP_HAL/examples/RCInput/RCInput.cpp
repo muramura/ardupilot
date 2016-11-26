@@ -13,7 +13,7 @@ static uint16_t last_value[MAX_CHANNELS];
 
 void setup(void) 
 {
-    hal.console->printf("Starting RCInput test\n");
+    hal.console->println("Starting RCInput test");
 }
 
 void loop(void)
@@ -43,7 +43,7 @@ void loop(void)
             }
         } else {
             hal.console->printf("Channels detected: %2u\n", nchannels);
-            hal.console->printf("Set max_channels_display > 0 to display channels values\n");
+            hal.console->println("Set max_channels_display > 0 to display channels values");
         }
     }
     hal.scheduler->delay(100);

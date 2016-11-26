@@ -13,7 +13,7 @@ void setup(void)
     /*
       init Storage API
      */
-    hal.console->printf("Starting AP_HAL::Storage test\r\n");
+    hal.console->println("Starting AP_HAL::Storage test");
     st->init();
 
     /*

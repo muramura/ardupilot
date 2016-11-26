@@ -25,10 +25,10 @@ void loop (void)
         pwm += delta;
         if (delta > 0 && pwm >= 2000) {
             delta = -1;
-            hal.console->printf("reversing\n");
+            hal.console->println("reversing");
         } else if (delta < 0 && pwm <= 1000) {
             delta = 1;
-            hal.console->printf("reversing\n");
+            hal.console->println("reversing");
         }
     }
     hal.scheduler->delay(5);
