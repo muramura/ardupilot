@@ -35,10 +35,10 @@ void setup(void)
     serial_manager.init();
 
     if( compass.init() ) {
-        hal.console->printf("Enabling compass\n");
+        hal.console->println("Enabling compass");
         ahrs.set_compass(&compass);
     } else {
-        hal.console->printf("No compass detected\n");
+        hal.console->println("No compass detected");
     }
     gps.init(nullptr, serial_manager);
 }
