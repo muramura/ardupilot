@@ -81,7 +81,7 @@ static void print_pwm(void)
     for (int i=0; i<NUM_CHANNELS; i++) {
 	    hal.console->printf("ch%u: %4d ", (unsigned)i+1, (int)rc[i]->get_control_in());
     }
-    hal.console->printf("\n");
+    hal.console->println();
 }
 
 
