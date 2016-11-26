@@ -45,7 +45,7 @@ void AP_OpticalFlow_PX4::init(void)
 {
 #if defined(CONFIG_ARCH_BOARD_PX4FMU_V1) || defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined(CONFIG_ARCH_BOARD_VRBRAIN_V51) || defined(CONFIG_ARCH_BOARD_VRBRAIN_V52) || defined(CONFIG_ARCH_BOARD_VRBRAIN_V54) || defined(CONFIG_ARCH_BOARD_VRUBRAIN_V51) || defined(CONFIG_ARCH_BOARD_VRUBRAIN_V52) || defined(CONFIG_ARCH_BOARD_VRCORE_V10)
     if (!AP_BoardConfig::px4_start_driver(px4flow_main, "px4flow", "start")) {
-        hal.console->printf("Unable to start px4flow driver\n");
+        hal.console->println("Unable to start px4flow driver");
     } else {
         // give it time to initialise
         hal.scheduler->delay(500);
@@ -60,7 +60,7 @@ void AP_OpticalFlow_PX4::init(void)
 
     // change to 10Hz update
     if (ioctl(_fd, SENSORIOCSPOLLRATE, 10) != 0) {
-        hal.console->printf("Unable to set flow rate to 10Hz\n");        
+        hal.console->println("Unable to set flow rate to 10Hz");
     }
 }
 
