@@ -1266,7 +1266,7 @@ void AP_Param::load_object_from_eeprom(const void *object_pointer, const struct 
     uint16_t key;
 
     if (!find_key_by_pointer(object_pointer, key)) {
-        hal.console->printf("ERROR: Unable to find param pointer\n");
+        hal.console->print("ERROR: Unable to find param pointer\n");
         return;
     }
     
