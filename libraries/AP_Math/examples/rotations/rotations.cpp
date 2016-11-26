@@ -140,11 +140,11 @@ static void test_euler(enum Rotation rotation, float roll, float pitch, float ya
         (int)yaw,
         (int)roll,
         (int)pitch);
-        hal.console->printf("fast rotated: ");
+        hal.console->print("fast rotated: ");
         print_vector(v1);
-        hal.console->printf("slow rotated: ");
+        hal.console->print("slow rotated: ");
         print_vector(v2);
-        hal.console->printf("\n");
+        hal.console->println();
     }
 }
 

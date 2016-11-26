@@ -230,7 +230,7 @@ static void test_wrap_cd(void)
         }
     }
 
-    hal.console->printf("wrap_cd tests done\n");
+    hal.console->println("wrap_cd tests done");
 }
 
 static void test_wgs_conversion_functions(void)
@@ -276,7 +276,7 @@ static void test_wgs_conversion_functions(void)
     ecefs[8] = Vector3d((22+EARTH_A), 0, 0);
     ecefs[9] = Vector3d(-(22+EARTH_A), 0, 0);
 
-    hal.console->printf("TESTING wgsllh2ecef\n");
+    hal.console->println("TESTING wgsllh2ecef");
     for (int i = 0; i < NUM_COORDS; i++) {
 
         Vector3d ecef;
@@ -296,7 +296,7 @@ static void test_wgs_conversion_functions(void)
 
     }
 
-    hal.console->printf("TESTING wgsecef2llh\n");
+    hal.console->println("TESTING wgsecef2llh");
     for (int i = 0; i < NUM_COORDS; i++) {
 
         Vector3d llh;
@@ -328,7 +328,7 @@ void setup(void)
     test_accuracy();
     test_wrap_cd();
     test_wgs_conversion_functions();
-    hal.console->printf("ALL TESTS DONE\n");
+    hal.console->println("ALL TESTS DONE");
 }
 
 void loop(void){}
