@@ -315,7 +315,7 @@ void AP_InertialSensor_MPU9250::start()
 
     if (enable_fast_sampling(_accel_instance) && _dev->bus_type() == AP_HAL::Device::BUS_TYPE_SPI) {
         _fast_sampling = true;
-        hal.console->printf("MPU9250: enabled fast sampling\n");
+        hal.console->println("MPU9250: enabled fast sampling");
     }
     
     if (_fast_sampling) {
