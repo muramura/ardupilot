@@ -197,12 +197,12 @@ void DataFlashTest_AllTypes::setup(void)
     Log_Write_TypeMessages();
     Log_Write_TypeMessages_Log_Write();
 
-    hal.console->printf("tests done\n");
+    hal.console->println("tests done");
 }
 
 void DataFlashTest_AllTypes::loop(void)
 {
-    hal.console->printf("all done\n");
+    hal.console->println("all done");
     hal.scheduler->delay(1000);
 }
 
