@@ -720,7 +720,7 @@ void AP_InertialSensor_MPU6000::_set_filter_register(void)
     if (enable_fast_sampling(_accel_instance)) {
         _fast_sampling = (_is_icm_device && _dev->bus_type() == AP_HAL::Device::BUS_TYPE_SPI);
         if (_fast_sampling) {
-            hal.console->printf("MPU6000: enabled fast sampling\n");
+            hal.console->println("MPU6000: enabled fast sampling");
         }
     }
     
