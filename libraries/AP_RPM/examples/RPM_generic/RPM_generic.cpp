@@ -58,14 +58,14 @@ void loop(void)
 
         if (ii+1<RPM.num_sensors()) {
             // Print a seperating bar if more sensors to process
-            hal.console->printf("|  ");
+            hal.console->print("|  ");
         }
 
     }
 
     hal.scheduler->delay(100);
 
-    hal.console->printf("\n");
+    hal.console->println();
 }
 
 AP_HAL_MAIN();
