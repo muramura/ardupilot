@@ -29,7 +29,7 @@ void setup()
 void loop()
 {
     // print message to user
-    hal.console->printf("this example tests compilation only");
+    hal.console->print("this example tests compilation only");
     hal.scheduler->delay(5000);
 }
 
