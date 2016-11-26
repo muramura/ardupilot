@@ -47,7 +47,7 @@ void setup(void) {
     try_send_statustext(MAVLINK_COMM_0, hello, strlen(hello));
 
     hal.console->backend_open();
-    hal.console->printf("Hello hal.console\r\n");
+    hal.console->println("Hello hal.console");
 }
 
 int i = 0;
