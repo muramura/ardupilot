@@ -84,12 +84,12 @@ public:
     }
 
     int8_t gpio_input_channel(uint8_t argc, const Menu::arg *argv) {
-        hal.console->printf("GPIO Input using digital source\n");
+        hal.console->println("GPIO Input using digital source");
         return test_gpio_input(argc, argv, true);
     }
 
     int8_t gpio_output_channel(uint8_t argc, const Menu::arg *argv) {
-        hal.console->printf("GPIO Output using digital source\n");
+        hal.console->println("GPIO Output using digital source");
         return test_gpio_output(argc, argv, true);
     }
 
