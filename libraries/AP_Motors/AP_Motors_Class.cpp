@@ -140,6 +140,7 @@ void AP_Motors::rc_enable_ch(uint8_t chan)
  */
 uint32_t AP_Motors::rc_map_mask(uint32_t mask) const
 {
+    uint64_t tstart = AP_HAL::micros64();
     uint32_t mask2 = mask & (0xFFFFFFFFu ^ ((1 << AP_MOTORS_MAX_NUM_MOTORS) - 1));
     for (uint8_t i=0; i<AP_MOTORS_MAX_NUM_MOTORS; i++) {
         uint32_t bit = 1UL<<i;
@@ -147,10 +148,13 @@ uint32_t AP_Motors::rc_map_mask(uint32_t mask) const
             if ((i < AP_MOTORS_MAX_NUM_MOTORS) && (_motor_map_mask & bit)) {
                 // we have a mapped motor number for this channel
                 mask2 |= (1UL << _motor_map[i]);
+            } else {
+                mask2 |= bit;
             }
         }
     }
-    hal.console->printf("_motor_map_mask=04X, mask=%08X, mask2=%08X\n", _motor_map_mask, mask, mask2);
+    uint64_t texec = AP_HAL::micros64() - tstart;
+    hal.console->printf("tend=%d, _motor_map_mask=%04X, mask=%08X, mask2=%08X\n", texec, _motor_map_mask, mask, mask2);
     return mask2;
 }
 
