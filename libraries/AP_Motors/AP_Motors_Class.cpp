@@ -19,6 +19,7 @@
  *
  */
 
+#include <stdio.h>
 #include "AP_Motors_Class.h"
 #include <AP_HAL/AP_HAL.h>
 #include <SRV_Channel/SRV_Channel.h>
@@ -149,6 +150,7 @@ uint32_t AP_Motors::rc_map_mask(uint32_t mask) const
             }
         }
     }
+    hal.console->printf("_motor_map_mask=04X, mask=%08X, mask2=%08X\n", _motor_map_mask, mask, mask2);
     return mask2;
 }
 
