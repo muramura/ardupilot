@@ -587,6 +587,45 @@ bool GCS_MAVLINK_Rover::set_home_to_current_location(bool _lock) {
     return rover.set_home_to_current_location(_lock);
 }
 
+MAV_RESULT GCS_MAVLINK_Rover::handle_command_int_do_reposition(const mavlink_command_int_t &packet)
+{
+    const bool change_modes = ((int32_t)packet.param2 & MAV_DO_REPOSITION_FLAGS_CHANGE_MODE) == MAV_DO_REPOSITION_FLAGS_CHANGE_MODE;
+    if (!rover.control_mode->in_guided_mode() && !change_modes) {
+        return MAV_RESULT_DENIED;
+    }
+
+    // sanity check location
+    if (!check_latlng(packet.x, packet.y)) {
+        return MAV_RESULT_DENIED;
+    }
+
+    Location request_location {};
+    request_location.lat = packet.x;
+    request_location.lng = packet.y;
+
+    if (request_location.sanitize(rover.current_loc)) {
+        // if the location wasn't already sane don't load it
+        return MAV_RESULT_DENIED; // failed as the location is not valid
+    }
+
+    // we need to do this first, as we don't want to change the flight mode unless we can also set the target
+    if (!rover.mode_guided.set_desired_location(request_location)) {
+        return MAV_RESULT_FAILED;
+    }
+
+    if (!rover.control_mode->in_guided_mode()) {
+        if (!rover.set_mode(rover.mode_guided, ModeReason::GCS_COMMAND)) {
+            return MAV_RESULT_FAILED;
+        }
+        // the position won't have been loaded if we had to change the flight mode, so load it again
+        if (!rover.mode_guided.set_desired_location(request_location)) {
+            return MAV_RESULT_FAILED;
+        }
+    }
+
+    return MAV_RESULT_ACCEPTED;
+}
+
 bool GCS_MAVLINK_Rover::set_home(const Location& loc, bool _lock) {
     return rover.set_home(loc, _lock);
 }
@@ -602,6 +641,9 @@ MAV_RESULT GCS_MAVLINK_Rover::handle_command_int_packet(const mavlink_command_in
             return MAV_RESULT_FAILED;
         }
         return MAV_RESULT_ACCEPTED;
+
+    case MAV_CMD_DO_REPOSITION:
+        return handle_command_int_do_reposition(packet);
 
     case MAV_CMD_DO_SET_REVERSE:
         // param1 : Direction (0=Forward, 1=Reverse)
