@@ -454,6 +454,10 @@ bool AP_Arming::gps_checks(bool report)
 {
     const AP_GPS &gps = AP::gps();
     if ((checks_to_perform & ARMING_CHECK_ALL) || (checks_to_perform & ARMING_CHECK_GPS)) {
+        if ((gps.get_type(0) | gps.get_type(1)) == AP_GPS::GPS_TYPE_NONE) {
+            check_failed(ARMING_CHECK_GPS, report, "GPS is None");
+            return false;
+        }     
 
         //GPS OK?
         if (!AP::ahrs().home_is_set() ||
@@ -493,6 +497,11 @@ bool AP_Arming::gps_checks(bool report)
     }
 
     if ((checks_to_perform & ARMING_CHECK_ALL) || (checks_to_perform & ARMING_CHECK_GPS_CONFIG)) {
+        if ((gps.get_type(0) | gps.get_type(1)) == AP_GPS::GPS_TYPE_NONE) {
+            check_failed(ARMING_CHECK_GPS, report, "GPS is None");
+            return false;
+        }     
+
         uint8_t first_unconfigured;
         if (gps.first_unconfigured_gps(first_unconfigured)) {
             check_failed(ARMING_CHECK_GPS_CONFIG,
