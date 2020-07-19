@@ -19,6 +19,10 @@ extern const AP_HAL::HAL& hal;
 */
 void NavEKF3_core::calcGpsGoodToAlign(void)
 {
+    if (frontend->_fusionModeGPS == 3) {
+        return;
+    }
+
     if (inFlight && assume_zero_sideslip() && !use_compass()) {
         // this is a special case where a plane has launched without magnetometer
         // is now in the air and needs to align yaw to the GPS and start navigating as soon as possible
