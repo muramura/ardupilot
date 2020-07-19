@@ -24,6 +24,9 @@ extern const AP_HAL::HAL& hal;
 void NavEKF2_core::calcGpsGoodToAlign(void)
 {
     const AP_GPS &gps = AP::gps();
+    if (frontend->_fusionModeGPS == 3) {
+        return;
+    }
 
     if (inFlight && assume_zero_sideslip() && !use_compass()) {
         // this is a special case where a plane has launched without magnetometer
