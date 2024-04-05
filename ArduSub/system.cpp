@@ -77,10 +77,10 @@ void Sub::init_ardupilot()
     airspeed.set_log_bit(MASK_LOG_IMU);
 #endif
 
-#if AP_OPTICALFLOW_ENABLED
+
     // initialise optical flow sensor
     optflow.init(MASK_LOG_OPTFLOW);
-#endif
+
 
 #if HAL_MOUNT_ENABLED
     // initialise camera mount
@@ -91,10 +91,10 @@ void Sub::init_ardupilot()
     camera_mount.set_mode(MAV_MOUNT_MODE_RC_TARGETING);
 #endif
 
-#if AP_CAMERA_ENABLED
+
     // initialise camera
     camera.init();
-#endif
+
 
 #ifdef USERHOOK_INIT
     USERHOOK_INIT
@@ -217,11 +217,11 @@ bool Sub::optflow_position_ok()
 
     // return immediately if neither optflow nor visual odometry is enabled
     bool enabled = false;
-#if AP_OPTICALFLOW_ENABLED
+
     if (optflow.enabled()) {
         enabled = true;
     }
-#endif
+
 #if HAL_VISUALODOM_ENABLED
     if (visual_odom.enabled()) {
         enabled = true;

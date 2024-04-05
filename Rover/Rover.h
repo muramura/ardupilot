@@ -153,9 +153,9 @@ private:
     AP_ExternalControl_Rover external_control;
 #endif
 
-#if AP_OPTICALFLOW_ENABLED
+
     AP_OpticalFlow optflow;
-#endif
+
 
 #if OSD_ENABLED || OSD_PARAM_ENABLED
     AP_OSD osd;

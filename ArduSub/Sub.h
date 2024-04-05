@@ -167,9 +167,9 @@ private:
             FUNCTOR_BIND_MEMBER(&Sub::exit_mission, void)};
 
     // Optical flow sensor
-#if AP_OPTICALFLOW_ENABLED
+
     AP_OpticalFlow optflow;
-#endif
+
 
     // system time in milliseconds of last recorded yaw reset from ekf
     uint32_t ekfYawReset_ms = 0;
@@ -335,9 +335,9 @@ private:
     AC_Circle circle_nav;
 
     // Camera
-#if AP_CAMERA_ENABLED
+
     AP_Camera camera{MASK_LOG_CAMERA};
-#endif
+
 
     // Camera/Antenna mount tracking and stabilisation stuff
 #if HAL_MOUNT_ENABLED

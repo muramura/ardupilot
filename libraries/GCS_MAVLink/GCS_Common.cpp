@@ -1046,22 +1046,22 @@ ap_message GCS_MAVLINK::mavlink_id_to_ap_message_id(const uint32_t mavlink_id) c
 #if AP_MAVLINK_BATTERY2_ENABLED
         { MAVLINK_MSG_ID_BATTERY2,              MSG_BATTERY2},
 #endif
-#if AP_CAMERA_ENABLED
+
         { MAVLINK_MSG_ID_CAMERA_FEEDBACK,       MSG_CAMERA_FEEDBACK},
         { MAVLINK_MSG_ID_CAMERA_INFORMATION,    MSG_CAMERA_INFORMATION},
         { MAVLINK_MSG_ID_CAMERA_SETTINGS,       MSG_CAMERA_SETTINGS},
         { MAVLINK_MSG_ID_CAMERA_FOV_STATUS,     MSG_CAMERA_FOV_STATUS},
         { MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS, MSG_CAMERA_CAPTURE_STATUS},
-#endif
+
 #if HAL_MOUNT_ENABLED
         { MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS, MSG_GIMBAL_DEVICE_ATTITUDE_STATUS},
         { MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE, MSG_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE},
         { MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION, MSG_GIMBAL_MANAGER_INFORMATION},
         { MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS, MSG_GIMBAL_MANAGER_STATUS},
 #endif
-#if AP_OPTICALFLOW_ENABLED
+
         { MAVLINK_MSG_ID_OPTICAL_FLOW,          MSG_OPTICAL_FLOW},
-#endif
+
 #if COMPASS_CAL_ENABLED
         { MAVLINK_MSG_ID_MAG_CAL_PROGRESS,      MSG_MAG_CAL_PROGRESS},
         { MAVLINK_MSG_ID_MAG_CAL_REPORT,        MSG_MAG_CAL_REPORT},
@@ -2682,7 +2682,7 @@ MAV_RESULT GCS_MAVLINK::_set_mode_common(const MAV_MODE _base_mode, const uint32
     return MAV_RESULT_DENIED;
 }
 
-#if AP_OPTICALFLOW_ENABLED
+
 /*
   send OPTICAL_FLOW message
  */
@@ -2721,7 +2721,7 @@ void GCS_MAVLINK::send_opticalflow()
         flowRate.x,
         flowRate.y);
 }
-#endif  // AP_OPTICALFLOW_ENABLED
+
 
 /*
   send AUTOPILOT_VERSION packet
@@ -3560,7 +3560,7 @@ void GCS_MAVLINK::handle_system_time_message(const mavlink_message_t &msg)
 }
 #endif
 
-#if AP_CAMERA_ENABLED
+
 MAV_RESULT GCS_MAVLINK::handle_command_camera(const mavlink_command_int_t &packet)
 {
     AP_Camera *camera = AP::camera();
@@ -3570,7 +3570,7 @@ MAV_RESULT GCS_MAVLINK::handle_command_camera(const mavlink_command_int_t &packe
 
     return camera->handle_command(packet);
 }
-#endif
+
 
 
 #if AP_AHRS_ENABLED
@@ -3852,7 +3852,7 @@ void GCS_MAVLINK::handle_rc_channels_override(const mavlink_message_t &msg)
 }
 #endif  // AP_RC_CHANNEL_ENABLED
 
-#if AP_OPTICALFLOW_ENABLED
+
 void GCS_MAVLINK::handle_optical_flow(const mavlink_message_t &msg)
 {
     AP_OpticalFlow *optflow = AP::opticalflow();
@@ -3861,7 +3861,7 @@ void GCS_MAVLINK::handle_optical_flow(const mavlink_message_t &msg)
     }
     optflow->handle_msg(msg);
 }
-#endif
+
 
 
 #if AP_COMPASS_CALIBRATION_FIXED_YAW_ENABLED
@@ -4031,7 +4031,7 @@ void GCS_MAVLINK::handle_message(const mavlink_message_t &msg)
         break;
 #endif
 
-#if AP_CAMERA_ENABLED
+
     case MAVLINK_MSG_ID_DIGICAM_CONTROL:
     case MAVLINK_MSG_ID_GOPRO_HEARTBEAT: // heartbeat from a GoPro in Solo gimbal
     case MAVLINK_MSG_ID_CAMERA_INFORMATION:
@@ -4043,7 +4043,7 @@ void GCS_MAVLINK::handle_message(const mavlink_message_t &msg)
             camera->handle_message(chan, msg);
         }
         break;
-#endif
+
 
     case MAVLINK_MSG_ID_SET_MODE:
         handle_set_mode(msg);
@@ -4218,11 +4218,11 @@ void GCS_MAVLINK::handle_message(const mavlink_message_t &msg)
 #endif
 #endif
 
-#if AP_OPTICALFLOW_ENABLED
+
     case MAVLINK_MSG_ID_OPTICAL_FLOW:
         handle_optical_flow(msg);
         break;
-#endif
+
 
     case MAVLINK_MSG_ID_DISTANCE_SENSOR:
         handle_distance_sensor(msg);
@@ -5274,7 +5274,7 @@ MAV_RESULT GCS_MAVLINK::handle_command_int_packet(const mavlink_command_int_t &p
         return handle_command_do_sprayer(packet);
 #endif
 
-#if AP_CAMERA_ENABLED
+
     case MAV_CMD_DO_DIGICAM_CONFIGURE:
     case MAV_CMD_DO_DIGICAM_CONTROL:
     case MAV_CMD_DO_SET_CAM_TRIGG_DIST:
@@ -5289,7 +5289,7 @@ MAV_RESULT GCS_MAVLINK::handle_command_int_packet(const mavlink_command_int_t &p
     case MAV_CMD_VIDEO_START_CAPTURE:
     case MAV_CMD_VIDEO_STOP_CAPTURE:
         return handle_command_camera(packet);
-#endif
+
 
     case MAV_CMD_DO_SET_ROI_NONE: {
         const Location zero_loc = Location();
@@ -6115,12 +6115,12 @@ bool GCS_MAVLINK::try_send_message(const enum ap_message id)
         break;
 #endif  // HAL_MOUNT_ENABLED
 
-#if AP_OPTICALFLOW_ENABLED
+
     case MSG_OPTICAL_FLOW:
         CHECK_PAYLOAD_SIZE(OPTICAL_FLOW);
         send_opticalflow();
         break;
-#endif
+
 
     case MSG_ATTITUDE_TARGET:
         CHECK_PAYLOAD_SIZE(ATTITUDE_TARGET);

@@ -76,10 +76,10 @@ void Plane::init_ardupilot()
     camera_mount.init();
 #endif
 
-#if AP_CAMERA_ENABLED
+
     // initialise camera
     camera.init();
-#endif
+
 
 #if AP_LANDINGGEAR_ENABLED
     // initialise landing gear position
@@ -150,11 +150,11 @@ void Plane::init_ardupilot()
     rc().reset_mode_switch();
 
     // initialise sensor
-#if AP_OPTICALFLOW_ENABLED
+
     if (optflow.enabled()) {
         optflow.init(-1);
     }
-#endif
+
 
 #if AC_PRECLAND_ENABLED
     g2.precland.init(scheduler.get_loop_rate_hz());

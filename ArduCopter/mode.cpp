@@ -376,9 +376,9 @@ bool Copter::set_mode(Mode::Number mode, ModeReason reason)
     fence.manual_recovery_start();
 
 
-#if AP_CAMERA_ENABLED
+
     camera.set_is_auto_mode(flightmode->mode_number() == Mode::Number::AUTO);
-#endif
+
 
     // set rate shaping time constants
 #if MODE_ACRO_ENABLED == ENABLED || MODE_SPORT_ENABLED == ENABLED

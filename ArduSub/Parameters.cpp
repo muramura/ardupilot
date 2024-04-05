@@ -458,11 +458,11 @@ const AP_Param::Info Sub::var_info[] = {
 
     // variables not in the g class which contain EEPROM saved variables
 
-#if AP_CAMERA_ENABLED
+
     // @Group: CAM
     // @Path: ../libraries/AP_Camera/AP_Camera.cpp
     GOBJECT(camera, "CAM", AP_Camera),
-#endif
+
 
 #if AP_RELAY_ENABLED
     // @Group: RELAY
@@ -656,11 +656,11 @@ const AP_Param::Info Sub::var_info[] = {
     GOBJECT(terrain,                "TERRAIN_", AP_Terrain),
 #endif
 
-#if AP_OPTICALFLOW_ENABLED
+
     // @Group: FLOW
     // @Path: ../libraries/AP_OpticalFlow/AP_OpticalFlow.cpp
     GOBJECT(optflow,   "FLOW", AP_OpticalFlow),
-#endif
+
 
 #if AP_RPM_ENABLED
     // @Group: RPM

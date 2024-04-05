@@ -242,14 +242,14 @@ private:
     AP_Navigation *nav_controller = &L1_controller;
 
     // Camera
-#if AP_CAMERA_ENABLED
-    AP_Camera camera{MASK_LOG_CAMERA};
-#endif
 
-#if AP_OPTICALFLOW_ENABLED
+    AP_Camera camera{MASK_LOG_CAMERA};
+
+
+
     // Optical flow sensor
     AP_OpticalFlow optflow;
-#endif
+
 
 #if HAL_RALLY_ENABLED
     // Rally Points

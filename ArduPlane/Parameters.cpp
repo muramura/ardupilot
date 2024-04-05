@@ -745,11 +745,11 @@ const AP_Param::Info Plane::var_info[] = {
     // @Path: ../libraries/AP_GPS/AP_GPS.cpp
     GOBJECT(gps, "GPS", AP_GPS),
 
-#if AP_CAMERA_ENABLED
+
     // @Group: CAM
     // @Path: ../libraries/AP_Camera/AP_Camera.cpp
     GOBJECT(camera, "CAM", AP_Camera),
-#endif
+
 
     // @Group: ARMING_
     // @Path: AP_Arming.cpp,../libraries/AP_Arming/AP_Arming.cpp
@@ -934,11 +934,11 @@ const AP_Param::Info Plane::var_info[] = {
     GOBJECT(afs,  "AFS_", AP_AdvancedFailsafe),
 #endif
 
-#if AP_OPTICALFLOW_ENABLED
+
     // @Group: FLOW
     // @Path: ../libraries/AP_OpticalFlow/AP_OpticalFlow.cpp
     GOBJECT(optflow,   "FLOW", AP_OpticalFlow),
-#endif
+
 
     // @Group: MIS_
     // @Path: ../libraries/AP_Mission/AP_Mission.cpp

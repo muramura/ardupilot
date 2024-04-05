@@ -153,9 +153,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
     SCHED_TASK(fence_check,           25,    100,  7),
 
     SCHED_TASK_CLASS(AP_GPS,               &copter.gps,                 update,          50, 200,   9),
-#if AP_OPTICALFLOW_ENABLED
+
     SCHED_TASK_CLASS(AP_OpticalFlow,          &copter.optflow,             update,         200, 160,  12),
-#endif
+
     SCHED_TASK(update_batt_compass,   10,    120, 15),
     SCHED_TASK_CLASS(RC_Channels, (RC_Channels*)&copter.g2.rc_channels, read_aux_all,    10,  50,  18),
     SCHED_TASK(arm_motors_check,      10,     50, 21),
@@ -210,9 +210,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #if HAL_MOUNT_ENABLED
     SCHED_TASK_CLASS(AP_Mount,             &copter.camera_mount,        update,          50,  75, 108),
 #endif
-#if AP_CAMERA_ENABLED
+
     SCHED_TASK_CLASS(AP_Camera,            &copter.camera,              update,          50,  75, 111),
-#endif
+
 #if HAL_LOGGING_ENABLED
     SCHED_TASK(ten_hz_logging_loop,   10,    350, 114),
     SCHED_TASK(twentyfive_hz_logging, 25,    110, 117),

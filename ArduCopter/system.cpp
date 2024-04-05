@@ -99,20 +99,20 @@ void Copter::init_ardupilot()
 
     attitude_control->parameter_sanity_check();
 
-#if AP_OPTICALFLOW_ENABLED
+
     // initialise optical flow sensor
     optflow.init(MASK_LOG_OPTFLOW);
-#endif      // AP_OPTICALFLOW_ENABLED
+
 
 #if HAL_MOUNT_ENABLED
     // initialise camera mount
     camera_mount.init();
 #endif
 
-#if AP_CAMERA_ENABLED
+
     // initialise camera
     camera.init();
-#endif
+
 
 #if AC_PRECLAND_ENABLED
     // initialise precision landing
@@ -258,11 +258,11 @@ bool Copter::ekf_has_relative_position() const
 
     // return immediately if neither optflow nor visual odometry is enabled and dead reckoning is inactive
     bool enabled = false;
-#if AP_OPTICALFLOW_ENABLED
+
     if (optflow.enabled()) {
         enabled = true;
     }
-#endif
+
 #if HAL_VISUALODOM_ENABLED
     if (visual_odom.enabled()) {
         enabled = true;

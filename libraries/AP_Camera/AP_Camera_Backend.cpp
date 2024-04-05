@@ -1,6 +1,6 @@
 #include "AP_Camera_Backend.h"
 
-#if AP_CAMERA_ENABLED
+
 #include <GCS_MAVLink/GCS.h>
 #include <AP_GPS/AP_GPS.h>
 #include <AP_Mount/AP_Mount.h>
@@ -414,5 +414,3 @@ void AP_Camera_Backend::log_picture()
     }
 }
 #endif
-
-#endif // AP_CAMERA_ENABLED

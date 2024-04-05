@@ -226,13 +226,13 @@ void AP_Relay::convert_params()
 #endif
 
     int8_t cam_relay = -1;
-#if AP_CAMERA_ENABLED
+
     AP_Camera *camera = AP::camera();
     int8_t camera_relay_index;
     if ((camera != nullptr) && (camera->get_legacy_relay_index(camera_relay_index))) {
         cam_relay = camera_relay_index;
     }
-#endif
+
 
 #if APM_BUILD_TYPE(APM_BUILD_Rover)
     int8_t rover_relay[] = { -1, -1, -1, -1 };

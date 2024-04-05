@@ -16,7 +16,7 @@
 
 #include "AP_OpticalFlow_config.h"
 
-#if AP_OPTICALFLOW_ENABLED
+
 
 /*
  * AP_OpticalFlow.h - OpticalFlow Base Class for ArduPilot
@@ -150,5 +150,3 @@ namespace AP {
 }
 
 #include "AP_OpticalFlow_Backend.h"
-
-#endif // AP_OPTICALFLOW_ENABLED

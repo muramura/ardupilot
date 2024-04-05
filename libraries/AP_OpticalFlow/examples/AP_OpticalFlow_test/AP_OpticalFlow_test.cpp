@@ -32,9 +32,9 @@ public:
 };
 
 static DummyVehicle vehicle;
-#if AP_OPTICALFLOW_ENABLED
+
 static AP_OpticalFlow optflow;
-#endif
+
 
 void setup()
 {
@@ -42,16 +42,16 @@ void setup()
 
     hal.scheduler->delay(1000);
 
-#if AP_OPTICALFLOW_ENABLED
+
     // flowSensor initialization
     optflow.init(-1);
 
     if (!optflow.healthy()) {
         hal.console->printf("Failed to initialise OpticalFlow");
     }
-#else
-    hal.console->printf("OpticalFlow compiled out");
-#endif
+
+
+
 
     hal.scheduler->delay(1000);
 }

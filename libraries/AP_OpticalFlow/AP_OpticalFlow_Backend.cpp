@@ -15,7 +15,7 @@
 
 #include "AP_OpticalFlow.h"
 
-#if AP_OPTICALFLOW_ENABLED
+
 
 extern const AP_HAL::HAL& hal;
 
@@ -43,5 +43,3 @@ void OpticalFlow_backend::_applyYaw(Vector2f &v)
     }
     v.rotate(yawAngleRad);
 }
-
-#endif

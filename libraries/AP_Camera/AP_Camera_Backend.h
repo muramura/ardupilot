@@ -21,7 +21,7 @@
 
 #include "AP_Camera_config.h"
 
-#if AP_CAMERA_ENABLED
+
 #include "AP_Camera.h"
 #include <AP_Common/Location.h>
 #include <AP_Logger/LogStructure.h>
@@ -184,5 +184,3 @@ protected:
     uint16_t image_index;           // number of pictures taken since boot
     bool last_is_armed;             // stores last arm/disarm state. true if it was armed lastly
 };
-
-#endif // AP_CAMERA_ENABLED

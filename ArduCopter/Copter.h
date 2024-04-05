@@ -313,9 +313,9 @@ private:
     AP_Arming_Copter arming;
 
     // Optical flow sensor
-#if AP_OPTICALFLOW_ENABLED
+
     AP_OpticalFlow optflow;
-#endif
+
 
     // external control library
 #if AP_EXTERNAL_CONTROL_ENABLED
@@ -504,9 +504,9 @@ private:
     bool auto_trim_started = false;
 
     // Camera
-#if AP_CAMERA_ENABLED
+
     AP_Camera camera{MASK_LOG_CAMERA};
-#endif
+
 
     // Camera/Antenna mount tracking and stabilisation stuff
 #if HAL_MOUNT_ENABLED
