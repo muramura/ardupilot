@@ -2,7 +2,7 @@
 
 // Code to integrate AC_Fence library with main ArduSub code
 
-#if AP_FENCE_ENABLED
+
 
 // fence_check - ask fence library to check for breaches and initiate the response
 // called at 1hz
@@ -47,5 +47,3 @@ void Sub::fence_check()
         LOGGER_WRITE_ERROR(LogErrorSubsystem::FAILSAFE_FENCE, LogErrorCode::ERROR_RESOLVED);
     }
 }
-
-#endif

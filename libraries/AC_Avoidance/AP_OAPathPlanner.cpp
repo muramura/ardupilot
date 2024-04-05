@@ -97,18 +97,18 @@ void AP_OAPathPlanner::init()
         }
         break;
     case OA_PATHPLAN_DIJKSTRA:
-#if AP_FENCE_ENABLED
+
         if (_oadijkstra == nullptr) {
             _oadijkstra = new AP_OADijkstra(_options);
         }
-#endif
+
         break;
     case OA_PATHPLAN_DJIKSTRA_BENDYRULER:
-#if AP_FENCE_ENABLED
+
         if (_oadijkstra == nullptr) {
             _oadijkstra = new AP_OADijkstra(_options);
         }
-#endif
+
         if (_oabendyruler == nullptr) {
             _oabendyruler = new AP_OABendyRuler();
             AP_Param::load_object_from_eeprom(_oabendyruler, AP_OABendyRuler::var_info);
@@ -326,7 +326,7 @@ void AP_OAPathPlanner::avoidance_thread()
         }
 
         case OA_PATHPLAN_DIJKSTRA: {
-#if AP_FENCE_ENABLED
+
             if (_oadijkstra == nullptr) {
                 continue;
             }
@@ -350,7 +350,7 @@ void AP_OAPathPlanner::avoidance_thread()
                 break;
             }
             path_planner_used = OAPathPlannerUsed::Dijkstras;
-#endif
+
             break;
         }
 
@@ -368,15 +368,15 @@ void AP_OAPathPlanner::avoidance_thread()
                 break;
             } else {
                 // cleared all obstacles, trigger Dijkstra's to calculate path based on current deviated position  
-#if AP_FENCE_ENABLED
+
                 if (proximity_only == false) {
                     _oadijkstra->recalculate_path();
                 }
-#endif
+
                 // only use proximity avoidance now for BendyRuler
                 proximity_only = true;
             }
-#if AP_FENCE_ENABLED
+
             _oadijkstra->set_fence_margin(_margin_max);
             const AP_OADijkstra::AP_OADijkstra_State dijkstra_state = _oadijkstra->update(avoidance_request2.current_loc,
                                                                                           avoidance_request2.destination,
@@ -397,7 +397,7 @@ void AP_OAPathPlanner::avoidance_thread()
                 break;
             }
             path_planner_used = OAPathPlannerUsed::Dijkstras;
-#endif
+
             break;
         }
 

@@ -1091,7 +1091,7 @@ void RC_Channel::do_aux_function_runcam_osd_control(const AuxSwitchPos ch_flag)
 #endif
 }
 
-#if AP_FENCE_ENABLED
+
 // enable or disable the fence
 void RC_Channel::do_aux_function_fence(const AuxSwitchPos ch_flag)
 {
@@ -1102,7 +1102,7 @@ void RC_Channel::do_aux_function_fence(const AuxSwitchPos ch_flag)
 
     fence->enable(ch_flag == AuxSwitchPos::HIGH);
 }
-#endif
+
 
 #if AP_MISSION_ENABLED
 void RC_Channel::do_aux_function_clear_wp(const AuxSwitchPos ch_flag)
@@ -1286,11 +1286,11 @@ bool RC_Channel::run_aux_function(AUX_FUNC ch_option, AuxSwitchPos pos, AuxFuncT
 bool RC_Channel::do_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos ch_flag)
 {
     switch (ch_option) {
-#if AP_FENCE_ENABLED
+
     case AUX_FUNC::FENCE:
         do_aux_function_fence(ch_flag);
         break;
-#endif
+
 
 #if AP_GRIPPER_ENABLED
     case AUX_FUNC::GRIPPER:

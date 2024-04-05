@@ -325,7 +325,7 @@ void ModeGuided::angle_control_start()
 // else return false if the waypoint is outside the fence
 bool ModeGuided::set_destination(const Vector3f& destination, bool use_yaw, float yaw_cd, bool use_yaw_rate, float yaw_rate_cds, bool relative_yaw, bool terrain_alt)
 {
-#if AP_FENCE_ENABLED
+
     // reject destination if outside the fence
     const Location dest_loc(destination, terrain_alt ? Location::AltFrame::ABOVE_TERRAIN : Location::AltFrame::ABOVE_ORIGIN);
     if (!copter.fence.check_destination_within_fence(dest_loc)) {
@@ -333,7 +333,7 @@ bool ModeGuided::set_destination(const Vector3f& destination, bool use_yaw, floa
         // failure is propagated to GCS with NAK
         return false;
     }
-#endif
+
 
     // if configured to use wpnav for position control
     if (use_wpnav_for_position_control()) {
@@ -421,7 +421,7 @@ bool ModeGuided::get_wp(Location& destination) const
 // or if the fence is enabled and guided waypoint is outside the fence
 bool ModeGuided::set_destination(const Location& dest_loc, bool use_yaw, float yaw_cd, bool use_yaw_rate, float yaw_rate_cds, bool relative_yaw)
 {
-#if AP_FENCE_ENABLED
+
     // reject destination outside the fence.
     // Note: there is a danger that a target specified as a terrain altitude might not be checked if the conversion to alt-above-home fails
     if (!copter.fence.check_destination_within_fence(dest_loc)) {
@@ -429,7 +429,7 @@ bool ModeGuided::set_destination(const Location& dest_loc, bool use_yaw, float y
         // failure is propagated to GCS with NAK
         return false;
     }
-#endif
+
 
     // if using wpnav for position control
     if (use_wpnav_for_position_control()) {
@@ -573,7 +573,7 @@ bool ModeGuided::set_destination_posvel(const Vector3f& destination, const Vecto
 // set_destination_posvelaccel - set guided mode position, velocity and acceleration target
 bool ModeGuided::set_destination_posvelaccel(const Vector3f& destination, const Vector3f& velocity, const Vector3f& acceleration, bool use_yaw, float yaw_cd, bool use_yaw_rate, float yaw_rate_cds, bool relative_yaw)
 {
-#if AP_FENCE_ENABLED
+
     // reject destination if outside the fence
     const Location dest_loc(destination, Location::AltFrame::ABOVE_ORIGIN);
     if (!copter.fence.check_destination_within_fence(dest_loc)) {
@@ -581,7 +581,7 @@ bool ModeGuided::set_destination_posvelaccel(const Vector3f& destination, const 
         // failure is propagated to GCS with NAK
         return false;
     }
-#endif
+
 
     // check we are in velocity control mode
     if (guided_mode != SubMode::PosVelAccel) {
@@ -797,11 +797,11 @@ void ModeGuided::velaccel_control_run()
     }
 
     bool do_avoid = false;
-#if AP_AVOIDANCE_ENABLED
+
     // limit the velocity for obstacle/fence avoidance
     copter.avoid.adjust_velocity(guided_vel_target_cms, pos_control->get_pos_xy_p().kP(), pos_control->get_max_accel_xy_cmss(), pos_control->get_pos_z_p().kP(), pos_control->get_max_accel_z_cmss(), G_Dt);
     do_avoid = copter.avoid.limits_active();
-#endif
+
 
     // update position controller with new target
 

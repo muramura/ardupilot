@@ -594,9 +594,9 @@ const AP_Param::Info Copter::var_info[] = {
 
     // @Group: AVOID_
     // @Path: ../libraries/AC_Avoidance/AC_Avoid.cpp
-#if AP_AVOIDANCE_ENABLED
+
     GOBJECT(avoid,      "AVOID_",   AC_Avoid),
-#endif
+
 
 #if HAL_RALLY_ENABLED
     // @Group: RALLY_
@@ -1350,15 +1350,15 @@ void Copter::load_parameters(void)
 #endif
 
     // PARAMETER_CONVERSION - Added: Mar-2022
-#if AP_FENCE_ENABLED
+
     AP_Param::convert_class(g.k_param_fence_old, &fence, fence.var_info, 0, true);
-#endif
+
 
     static const AP_Param::G2ObjectConversion g2_conversions[] {
-#if AP_STATS_ENABLED
+
     // PARAMETER_CONVERSION - Added: Jan-2024 for Copter-4.6
         { &stats, stats.var_info, 12 },
-#endif
+
 #if AP_SCRIPTING_ENABLED
     // PARAMETER_CONVERSION - Added: Jan-2024 for Copter-4.6
         { &scripting, scripting.var_info, 30 },

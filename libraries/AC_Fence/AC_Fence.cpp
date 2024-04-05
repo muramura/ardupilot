@@ -1,6 +1,6 @@
 #include "AC_Fence.h"
 
-#if AP_FENCE_ENABLED
+
 
 #include <AP_Vehicle/AP_Vehicle_Type.h>
 
@@ -788,5 +788,3 @@ AC_Fence *fence()
 }
 
 }
-
-#endif // AP_FENCE_ENABLED

@@ -2,7 +2,7 @@
 
 #include "AC_Avoidance_config.h"
 
-#if AP_AVOIDANCE_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Param/AP_Param.h>
@@ -232,5 +232,3 @@ private:
 namespace AP {
     AC_Avoid *ac_avoid();
 };
-
-#endif  // AP_AVOIDANCE_ENABLED

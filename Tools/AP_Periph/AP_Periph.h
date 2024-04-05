@@ -203,9 +203,9 @@ public:
 
     AP_SerialManager serial_manager;
 
-#if AP_STATS_ENABLED
+
     AP_Stats node_stats;
-#endif
+
 
 #ifdef HAL_PERIPH_ENABLE_GPS
     AP_GPS gps;

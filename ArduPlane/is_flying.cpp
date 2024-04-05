@@ -165,9 +165,9 @@ void Plane::update_is_flying_5Hz(void)
 #if PARACHUTE == ENABLED
     parachute.set_is_flying(new_is_flying);
 #endif
-#if AP_STATS_ENABLED
+
     AP::stats()->set_flying(new_is_flying);
-#endif
+
     AP_Notify::flags.flying = new_is_flying;
 
     crash_detection_update();

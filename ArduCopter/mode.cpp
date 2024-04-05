@@ -369,12 +369,12 @@ bool Copter::set_mode(Mode::Number mode, ModeReason reason)
     adsb.set_is_auto_mode((mode == Mode::Number::AUTO) || (mode == Mode::Number::RTL) || (mode == Mode::Number::GUIDED));
 #endif
 
-#if AP_FENCE_ENABLED
+
     // pilot requested flight mode change during a fence breach indicates pilot is attempting to manually recover
     // this flight mode change could be automatic (i.e. fence, battery, GPS or GCS failsafe)
     // but it should be harmless to disable the fence temporarily in these situations as well
     fence.manual_recovery_start();
-#endif
+
 
 #if AP_CAMERA_ENABLED
     camera.set_is_auto_mode(flightmode->mode_number() == Mode::Number::AUTO);
@@ -947,12 +947,12 @@ float Mode::get_pilot_desired_throttle() const
 
 float Mode::get_avoidance_adjusted_climbrate(float target_rate)
 {
-#if AP_AVOIDANCE_ENABLED
+
     AP::ac_avoid()->adjust_velocity_z(pos_control->get_pos_z_p().kP(), pos_control->get_max_accel_z_cmss(), target_rate, G_Dt);
     return target_rate;
-#else
-    return target_rate;
-#endif
+
+
+
 }
 
 // send output to the motors, can be overridden by subclasses

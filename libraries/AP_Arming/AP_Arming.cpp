@@ -1264,7 +1264,7 @@ bool AP_Arming::can_checks(bool report)
 #endif  // HAL_MAX_CAN_PROTOCOL_DRIVERS && HAL_CANMANAGER_ENABLED
 
 
-#if AP_FENCE_ENABLED
+
 bool AP_Arming::fence_checks(bool display_failure)
 {
     const AC_Fence *fence = AP::fence();
@@ -1293,7 +1293,7 @@ bool AP_Arming::fence_checks(bool display_failure)
     
     return false;
 }
-#endif  // AP_FENCE_ENABLED
+
 
 #if HAL_RUNCAM_ENABLED
 bool AP_Arming::camera_checks(bool display_failure)
@@ -1628,9 +1628,9 @@ bool AP_Arming::pre_arm_checks(bool report)
 #if AP_RC_CHANNEL_ENABLED
         &  disarm_switch_checks(report)
 #endif
-#if AP_FENCE_ENABLED
+
         &  fence_checks(report)
-#endif
+
 #if AP_OPENDRONEID_ENABLED
         &  opendroneid_checks(report)
 #endif
@@ -1786,7 +1786,7 @@ bool AP_Arming::arm(AP_Arming::Method method, const bool do_arming_checks)
     }
 #endif
 
-#if AP_FENCE_ENABLED
+
     if (armed) {
         auto *fence = AP::fence();
         if (fence != nullptr) {
@@ -1797,7 +1797,7 @@ bool AP_Arming::arm(AP_Arming::Method method, const bool do_arming_checks)
             }
         }
     }
-#endif
+
 #if defined(HAL_ARM_GPIO_PIN)
     update_arm_gpio();
 #endif
@@ -1834,14 +1834,14 @@ bool AP_Arming::disarm(const AP_Arming::Method method, bool do_disarm_checks)
     }
 #endif
 
-#if AP_FENCE_ENABLED
+
     AC_Fence *fence = AP::fence();
     if (fence != nullptr) {
         if(fence->auto_enabled() == AC_Fence::AutoEnable::ONLY_WHEN_ARMED) {
             fence->enable(false);
         }
     }
-#endif
+
 #if defined(HAL_ARM_GPIO_PIN)
     update_arm_gpio();
 #endif

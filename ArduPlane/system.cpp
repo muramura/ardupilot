@@ -161,7 +161,7 @@ void Plane::init_ardupilot()
 #endif
 }
 
-#if AP_FENCE_ENABLED
+
 /*
   return true if a mode reason is an automatic mode change due to
   landing sequencing.
@@ -179,7 +179,7 @@ static bool mode_reason_is_landing_sequence(const ModeReason reason)
     }
     return false;
 }
-#endif // AP_FENCE_ENABLED
+
 
 // Check if this mode can be entered from the GCS
 bool Plane::gcs_mode_enabled(const Mode::Number mode_num) const
@@ -250,7 +250,7 @@ bool Plane::set_mode(Mode &new_mode, const ModeReason reason)
     }
 #endif  // HAL_QUADPLANE_ENABLED
 
-#if AP_FENCE_ENABLED
+
     // may not be allowed to change mode if recovering from fence breach
     if (hal.util->get_soft_armed() &&
         fence.enabled() &&
@@ -262,7 +262,7 @@ bool Plane::set_mode(Mode &new_mode, const ModeReason reason)
         AP_Notify::events.user_mode_change_failed = 1;
         return false;
     }
-#endif
+
 
     // Check if GCS mode change is disabled via parameter
     if ((reason == ModeReason::GCS_COMMAND) && !gcs_mode_enabled(new_mode.mode_number())) {

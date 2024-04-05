@@ -145,7 +145,7 @@ bool Plane::start_command(const AP_Mission::Mission_Command& cmd)
         break;
 
     case MAV_CMD_DO_FENCE_ENABLE:
-#if AP_FENCE_ENABLED
+
         if (cmd.p1 == 0) { // disable fence
             plane.fence.enable(false);
             gcs().send_text(MAV_SEVERITY_INFO, "Fence disabled");
@@ -156,7 +156,7 @@ bool Plane::start_command(const AP_Mission::Mission_Command& cmd)
             plane.fence.disable_floor();
             gcs().send_text(MAV_SEVERITY_INFO, "Fence floor disabled");
         }
-#endif
+
         break;
 
     case MAV_CMD_DO_AUTOTUNE_ENABLE:
@@ -202,11 +202,11 @@ bool Plane::start_command(const AP_Mission::Mission_Command& cmd)
         break;
 #endif
 
-#if AP_SCRIPTING_ENABLED
+
     case MAV_CMD_NAV_SCRIPT_TIME:
         do_nav_script_time(cmd);
         break;
-#endif
+
 
     case MAV_CMD_NAV_DELAY:
         mode_auto.do_nav_delay(cmd);
@@ -308,10 +308,10 @@ bool Plane::verify_command(const AP_Mission::Mission_Command& cmd)        // Ret
     case MAV_CMD_CONDITION_DISTANCE:
         return verify_within_distance();
 
-#if AP_SCRIPTING_ENABLED
+
     case MAV_CMD_NAV_SCRIPT_TIME:
         return verify_nav_script_time(cmd);
-#endif
+
 
      case MAV_CMD_NAV_DELAY:
          return mode_auto.verify_nav_delay(cmd);
@@ -432,9 +432,9 @@ void Plane::do_land(const AP_Mission::Mission_Command& cmd)
         set_flight_stage(AP_FixedWing::FlightStage::LAND);
     }
 
-#if AP_FENCE_ENABLED
+
     plane.fence.auto_disable_fence_for_landing();
-#endif
+
 }
 
 #if HAL_QUADPLANE_ENABLED
@@ -604,9 +604,9 @@ bool Plane::verify_takeoff()
         auto_state.takeoff_complete = true;
         next_WP_loc = prev_WP_loc = current_loc;
 
-#if AP_FENCE_ENABLED
+
         plane.fence.auto_enable_fence_after_takeoff();
-#endif
+
 
         // don't cross-track on completion of takeoff, as otherwise we
         // can end up doing too sharp a turn
@@ -1167,7 +1167,7 @@ float Plane::get_wp_radius() const
     return g.waypoint_radius;
 }
 
-#if AP_SCRIPTING_ENABLED
+
 /*
   support for scripted navigation, with verify operation for completion
  */
@@ -1286,7 +1286,7 @@ bool Plane::nav_scripting_enable(uint8_t mode)
    }
    return nav_scripting.enabled;
 }
-#endif // AP_SCRIPTING_ENABLED
+
 
 /*
   return true if this is a LAND command

@@ -1379,7 +1379,7 @@ void Plane::load_parameters(void)
         }
     }
 
-#if AP_FENCE_ENABLED
+
     enum ap_var_type ptype_fence_type;
     AP_Int8 *fence_type_new = (AP_Int8*)AP_Param::find("FENCE_TYPE", &ptype_fence_type);
     if (fence_type_new && !fence_type_new->configured()) {
@@ -1464,7 +1464,7 @@ void Plane::load_parameters(void)
             }
         }
     }
-#endif // AP_FENCE_ENABLED
+
 
 #if AP_TERRAIN_AVAILABLE
     g.terrain_follow.convert_parameter_width(AP_PARAM_INT8);
@@ -1499,9 +1499,9 @@ void Plane::load_parameters(void)
 #endif  // AP_INERTIALSENSOR_HARMONICNOTCH_ENABLED
 
     // PARAMETER_CONVERSION - Added: Mar-2022
-#if AP_FENCE_ENABLED
+
     AP_Param::convert_class(g.k_param_fence, &fence, fence.var_info, 0, true);
-#endif
+
   
     // PARAMETER_CONVERSION - Added: Dec 2023
     // Convert _CM (centimeter) parameters to meters and _CD (centidegrees) parameters to meters
@@ -1521,10 +1521,10 @@ void Plane::load_parameters(void)
 #if HAL_EFI_ENABLED
         { &efi, efi.var_info, 22 },
 #endif
-#if AP_STATS_ENABLED
+
     // PARAMETER_CONVERSION - Added: Jan-2024 for Plane-4.6
         { &stats, stats.var_info, 5 },
-#endif
+
 #if AP_SCRIPTING_ENABLED
     // PARAMETER_CONVERSION - Added: Jan-2024 for Plane-4.6
         { &scripting, scripting.var_info, 14 },

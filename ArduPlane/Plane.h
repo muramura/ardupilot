@@ -1013,12 +1013,12 @@ private:
     void handle_battery_failsafe(const char* type_str, const int8_t action);
     bool failsafe_in_landing_sequence() const;  // returns true if the vehicle is in landing sequence.  Intended only for use in failsafe code.
 
-#if AP_FENCE_ENABLED
+
     // fence.cpp
     void fence_check();
     bool fence_stickmixing() const;
     bool in_fence_recovery() const;
-#endif
+
 
     // ArduPlane.cpp
     void disarm_if_autoland_complete();

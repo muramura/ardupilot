@@ -185,11 +185,11 @@ void Plane::read_radio()
 
     control_failsafe();
 
-#if AP_FENCE_ENABLED
+
     const bool stickmixing = fence_stickmixing();
-#else
-    const bool stickmixing = true;
-#endif
+
+
+
     airspeed_nudge_cm = 0;
     throttle_nudge = 0;
     if (g.throttle_nudge

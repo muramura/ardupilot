@@ -140,9 +140,9 @@ void AP_Periph_FW::init()
         printf("Reboot after watchdog reset\n");
     }
 
-#if AP_STATS_ENABLED
+
     node_stats.init();
-#endif
+
 
 #ifdef HAL_PERIPH_ENABLE_SERIAL_OPTIONS
     serial_options.init();
@@ -399,9 +399,9 @@ void AP_Periph_FW::show_stack_free()
 
 void AP_Periph_FW::update()
 {
-#if AP_STATS_ENABLED
+
     node_stats.update();
-#endif
+
 
     static uint32_t last_led_ms;
     uint32_t now = AP_HAL::millis();

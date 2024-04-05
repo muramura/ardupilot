@@ -103,9 +103,9 @@
  #include <AP_Beacon/AP_Beacon.h>
 #endif
 
-#if AP_AVOIDANCE_ENABLED
+
  #include <AC_Avoidance/AC_Avoid.h>
-#endif
+
 #if AP_OAPATHPLANNER_ENABLED
  #include <AC_WPNav/AC_WPNav_OA.h>
  #include <AC_Avoidance/AP_OAPathPlanner.h>
@@ -147,9 +147,9 @@
 #endif
 #include <AP_RPM/AP_RPM.h>
 
-#if AP_SCRIPTING_ENABLED
+
 #include <AP_Scripting/AP_Scripting.h>
-#endif
+
 
 #if AC_CUSTOMCONTROL_MULTI_ENABLED == ENABLED
 #include <AC_CustomControl/AC_CustomControl.h>                  // Custom control library
@@ -513,9 +513,9 @@ private:
     AP_Mount camera_mount;
 #endif
 
-#if AP_AVOIDANCE_ENABLED
+
     AC_Avoid avoid;
-#endif
+
 
     // Rally library
 #if HAL_RALLY_ENABLED
@@ -801,9 +801,9 @@ private:
 #endif
 
     // fence.cpp
-#if AP_FENCE_ENABLED
+
     void fence_check();
-#endif
+
 
     // heli.cpp
     void heli_init();

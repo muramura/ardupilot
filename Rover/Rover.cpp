@@ -291,7 +291,7 @@ void Rover::nav_script_time_done(uint16_t id)
 }
 #endif // AP_SCRIPTING_ENABLED
 
-#if AP_STATS_ENABLED
+
 /*
   update AP_Stats
 */
@@ -299,7 +299,7 @@ void Rover::stats_update(void)
 {
     AP::stats()->set_flying(g2.motors.active());
 }
-#endif
+
 
 
 // update AHRS system

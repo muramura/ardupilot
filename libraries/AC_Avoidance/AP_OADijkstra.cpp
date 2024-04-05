@@ -22,7 +22,7 @@
 
 #include <AC_Fence/AC_Fence.h>
 
-#if AP_FENCE_ENABLED
+
 
 #include <AP_AHRS/AP_AHRS.h>
 #include <AP_Logger/AP_Logger.h>
@@ -1013,7 +1013,7 @@ bool AP_OADijkstra::convert_node_to_point(const AP_OAVisGraph::OAItemID& id, Vec
     // we should never reach here but just in case
     return false;
 }
-#endif // AP_FENCE_ENABLED
+
 
 
 #endif  // AP_OAPATHPLANNER_DIJKSTRA_ENABLED

@@ -2,7 +2,7 @@
 
 // Code to integrate AC_Fence library with main ArduPlane code
 
-#if AP_FENCE_ENABLED
+
 
 // fence_check - ask fence library to check for breaches and initiate the response
 void Plane::fence_check()
@@ -145,5 +145,3 @@ bool Plane::in_fence_recovery() const
 
     return current_mode_breach || (previous_mode_breach && previous_mode_complete);
 }
-
-#endif

@@ -378,9 +378,9 @@ void Plane::one_second_loop()
 
 void Plane::three_hz_loop()
 {
-#if AP_FENCE_ENABLED
+
     fence_check();
-#endif
+
 }
 
 void Plane::compass_save()

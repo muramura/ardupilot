@@ -153,9 +153,9 @@ void ModeTakeoff::update()
         plane.takeoff_calc_pitch();
     } else {
         if ((altitude_cm >= alt * 100 - 200)) { //within 2m of TKOFF_ALT ,or above and loitering
-#if AP_FENCE_ENABLED
+
             plane.fence.auto_enable_fence_after_takeoff();
-#endif
+
             plane.calc_nav_roll();
             plane.calc_nav_pitch();
             plane.calc_throttle();

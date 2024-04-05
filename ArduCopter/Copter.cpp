@@ -149,9 +149,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 
     SCHED_TASK(rc_loop,              250,    130,  3),
     SCHED_TASK(throttle_loop,         50,     75,  6),
-#if AP_FENCE_ENABLED
+
     SCHED_TASK(fence_check,           25,    100,  7),
-#endif
+
     SCHED_TASK_CLASS(AP_GPS,               &copter.gps,                 update,          50, 200,   9),
 #if AP_OPTICALFLOW_ENABLED
     SCHED_TASK_CLASS(AP_OpticalFlow,          &copter.optflow,             update,         200, 160,  12),
@@ -272,7 +272,7 @@ void Copter::get_scheduler_tasks(const AP_Scheduler::Task *&tasks,
 
 constexpr int8_t Copter::_failsafe_priorities[7];
 
-#if AP_SCRIPTING_ENABLED
+
 #if MODE_GUIDED_ENABLED == ENABLED
 // start takeoff to given altitude (for use by scripting)
 bool Copter::start_takeoff(float alt)
@@ -441,7 +441,7 @@ bool Copter::has_ekf_failsafed() const
     return failsafe.ekf;
 }
 
-#endif // AP_SCRIPTING_ENABLED
+
 
 // returns true if vehicle is landing. Only used by Lua scripts
 bool Copter::is_landing() const

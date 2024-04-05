@@ -97,12 +97,12 @@ void ModeAuto::update()
         } else {
             plane.calc_throttle();
         }
-#if AP_SCRIPTING_ENABLED
+
     } else if (nav_cmd_id == MAV_CMD_NAV_SCRIPT_TIME) {
         // NAV_SCRIPTING has a desired roll and pitch rate and desired throttle
         plane.nav_roll_cd = ahrs.roll_sensor;
         plane.nav_pitch_cd = ahrs.pitch_sensor;
-#endif
+
     } else {
         // we are doing normal AUTO flight, the special cases
         // are for takeoff and landing
@@ -125,18 +125,18 @@ void ModeAuto::navigate()
 
 bool ModeAuto::does_auto_navigation() const
 {
-#if AP_SCRIPTING_ENABLED
+
    return (!plane.nav_scripting_active());
-#endif
-   return true;
+
+
 }
 
 bool ModeAuto::does_auto_throttle() const
 {
-#if AP_SCRIPTING_ENABLED
+
    return (!plane.nav_scripting_active());
-#endif
-   return true;
+
+
 }
 
 // returns true if the vehicle can be armed in this mode

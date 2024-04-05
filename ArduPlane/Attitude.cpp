@@ -66,11 +66,11 @@ bool Plane::stick_mixing_enabled(void)
         // never stick mix without valid RC
         return false;
     }
-#if AP_FENCE_ENABLED
+
     const bool stickmixing = fence_stickmixing();
-#else
-    const bool stickmixing = true;
-#endif
+
+
+
 #if HAL_QUADPLANE_ENABLED
     if (control_mode == &mode_qrtl &&
         quadplane.poscontrol.get_state() >= QuadPlane::QPOS_POSITION1) {
@@ -401,7 +401,7 @@ void Plane::stabilize()
     if (control_mode == &mode_training ||
             control_mode == &mode_manual) {
         plane.control_mode->run();
-#if AP_SCRIPTING_ENABLED
+
     } else if (nav_scripting_active()) {
         // scripting is in control of roll and pitch rates and throttle
         const float speed_scaler = get_speed_scaler();
@@ -421,7 +421,7 @@ void Plane::stabilize()
         SRV_Channels::set_output_scaled(SRV_Channel::k_rudder, rudder);
         SRV_Channels::set_output_scaled(SRV_Channel::k_steering, rudder);
         SRV_Channels::set_output_scaled(SRV_Channel::k_throttle, plane.nav_scripting.throttle_pct);
-#endif
+
     } else {
         plane.control_mode->run();
     }

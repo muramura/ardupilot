@@ -112,11 +112,11 @@ const AP_Param::GroupInfo AP_Vehicle::var_info[] = {
     AP_SUBGROUPINFO(ais, "AIS_",  13, AP_Vehicle, AP_AIS),
 #endif
 
-#if AP_FENCE_ENABLED
+
     // @Group: FENCE_
     // @Path: ../AC_Fence/AC_Fence.cpp
     AP_SUBGROUPINFO(fence, "FENCE_", 14, AP_Vehicle, AC_Fence),
-#endif
+
 
 #if AP_OPENDRONEID_ENABLED
     // @Group: DID_
@@ -254,11 +254,11 @@ const AP_Param::GroupInfo AP_Vehicle::var_info[] = {
     AP_SUBGROUPINFO(filters, "FILT", 26, AP_Vehicle, AP_Filters),
 #endif
 
-#if AP_STATS_ENABLED
+
     // @Group: STAT
     // @Path: ../AP_Stats/AP_Stats.cpp
     AP_SUBGROUPINFO(stats, "STAT", 27, AP_Vehicle, AP_Stats),
-#endif
+
 
 #if AP_SCRIPTING_ENABLED
     // @Group: SCR_
@@ -387,10 +387,10 @@ void AP_Vehicle::setup()
     generator.init();
 #endif
 
-#if AP_STATS_ENABLED
+
     // initialise stats module
     stats.init();
-#endif
+
 
     BoardConfig.init();
 
@@ -493,9 +493,9 @@ void AP_Vehicle::setup()
     nmea.init();
 #endif
 
-#if AP_FENCE_ENABLED
+
     fence.init();
-#endif
+
 
 #if AP_CUSTOMROTATIONS_ENABLED
     custom_rotations.init();
@@ -638,9 +638,9 @@ const AP_Scheduler::Task AP_Vehicle::scheduler_tasks[] = {
 #if HAL_INS_ACCELCAL_ENABLED
     SCHED_TASK(accel_cal_update,                                                      10, 100, 245),
 #endif
-#if AP_FENCE_ENABLED
+
     SCHED_TASK_CLASS(AC_Fence,     &vehicle.fence,          update,                   10, 100, 248),
-#endif
+
 #if AP_AIS_ENABLED
     SCHED_TASK_CLASS(AP_AIS,       &vehicle.ais,            update,                    5, 100, 249),
 #endif
@@ -657,9 +657,9 @@ const AP_Scheduler::Task AP_Vehicle::scheduler_tasks[] = {
 #if AP_FILTER_ENABLED
     SCHED_TASK_CLASS(AP_Filters,   &vehicle.filters,        update,                   1, 100, 252),
 #endif
-#if AP_STATS_ENABLED
+
     SCHED_TASK_CLASS(AP_Stats,             &vehicle.stats,            update,           1, 100, 252),
-#endif
+
 #if AP_ARMING_ENABLED
     SCHED_TASK(update_arming,          1,     50, 253),
 #endif

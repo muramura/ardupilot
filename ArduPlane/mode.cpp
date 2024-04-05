@@ -122,12 +122,12 @@ bool Mode::enter()
         // update RC failsafe, as mode change may have necessitated changing the failsafe throttle
         plane.control_failsafe();
 
-#if AP_FENCE_ENABLED
+
         // pilot requested flight mode change during a fence breach indicates pilot is attempting to manually recover
         // this flight mode change could be automatic (i.e. fence, battery, GPS or GCS failsafe)
         // but it should be harmless to disable the fence temporarily in these situations as well
         plane.fence.manual_recovery_start();
-#endif
+
         //reset mission if in landing sequence, disarmed, not flying, and have changed to a non-autothrottle mode to clear prearm
         if (plane.mission.get_in_landing_sequence_flag() &&
             !plane.is_flying() && !plane.arming.is_armed_and_safety_off() &&

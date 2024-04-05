@@ -641,9 +641,9 @@ private:
 #endif
     void do_payload_place(const AP_Mission::Mission_Command& cmd);
     void do_RTL(void);
-#if AP_SCRIPTING_ENABLED
+
     void do_nav_script_time(const AP_Mission::Mission_Command& cmd);
-#endif
+
     void do_nav_attitude_time(const AP_Mission::Mission_Command& cmd);
 
     bool verify_takeoff();
@@ -663,9 +663,9 @@ private:
     bool verify_nav_guided_enable(const AP_Mission::Mission_Command& cmd);
 #endif
     bool verify_nav_delay(const AP_Mission::Mission_Command& cmd);
-#if AP_SCRIPTING_ENABLED
+
     bool verify_nav_script_time();
-#endif
+
     bool verify_nav_attitude_time(const AP_Mission::Mission_Command& cmd);
 
     // Loiter control
@@ -700,7 +700,7 @@ private:
     // True if we have entered AUTO to perform a DO_LAND_START landing sequence and we should report as AUTO RTL mode
     bool auto_RTL;
 
-#if AP_SCRIPTING_ENABLED
+
     // nav_script_time command variables
     struct {
         bool done;          // true once lua script indicates it has completed
@@ -713,7 +713,7 @@ private:
         int16_t arg3;       // 3rd argument provided by mission command
         int16_t arg4;       // 4th argument provided by mission command
     } nav_scripting;
-#endif
+
 
     // nav attitude time command variables
     struct {

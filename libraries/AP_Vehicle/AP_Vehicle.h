@@ -432,10 +432,10 @@ protected:
     AP_Airspeed airspeed;
 #endif
 
-#if AP_STATS_ENABLED
+
     // vehicle statistics
     AP_Stats stats;
-#endif
+
 
 #if AP_AIS_ENABLED
     // Automatic Identification System - for tracking sea-going vehicles
@@ -450,9 +450,9 @@ protected:
     AP_KDECAN kdecan;
 #endif
 
-#if AP_FENCE_ENABLED
+
     AC_Fence fence;
-#endif
+
 
 #if AP_TEMPERATURE_SENSOR_ENABLED
     AP_TemperatureSensor temperature_sensor;

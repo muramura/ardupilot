@@ -1,6 +1,6 @@
 #include "AC_PolyFence_loader.h"
 
-#if AP_FENCE_ENABLED
+
 
 #include <AP_Vehicle/AP_Vehicle_Type.h>
 #include <AP_BoardConfig/AP_BoardConfig.h>
@@ -1668,4 +1668,3 @@ bool AC_PolyFence_loader::get_return_point(Vector2l &ret) { return false; }
 #endif
 
 #endif // #if AC_FENCE_DUMMY_METHODS_ENABLED
-#endif // AP_FENCE_ENABLED

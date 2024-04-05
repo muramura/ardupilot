@@ -337,10 +337,10 @@ bool AP_Arming_Copter::gps_checks(bool display_failure)
 {
     // check if fence requires GPS
     bool fence_requires_gps = false;
-    #if AP_FENCE_ENABLED
+
     // if circular or polygon fence is enabled we need GPS
     fence_requires_gps = (copter.fence.get_enabled_fences() & (AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON)) > 0;
-    #endif
+
 
     // check if flight mode requires GPS
     bool mode_requires_gps = copter.flightmode->requires_GPS() || fence_requires_gps || (copter.simple_mode == Copter::SimpleMode::SUPERSIMPLE);
@@ -407,7 +407,7 @@ bool AP_Arming_Copter::proximity_checks(bool display_failure) const
     }
 
     // get closest object if we might use it for avoidance
-#if AP_AVOIDANCE_ENABLED
+
     float angle_deg, distance;
     if (copter.avoid.proximity_avoidance_enabled() && copter.g2.proximity.get_closest_object(angle_deg, distance)) {
         // display error if something is within 60cm
@@ -417,7 +417,7 @@ bool AP_Arming_Copter::proximity_checks(bool display_failure) const
             return false;
         }
     }
-#endif
+
 
     return true;
 }
@@ -439,10 +439,10 @@ bool AP_Arming_Copter::mandatory_gps_checks(bool display_failure)
 
     // check if fence requires GPS
     bool fence_requires_gps = false;
-    #if AP_FENCE_ENABLED
+
     // if circular or polygon fence is enabled we need GPS
     fence_requires_gps = (copter.fence.get_enabled_fences() & (AC_FENCE_TYPE_CIRCLE | AC_FENCE_TYPE_POLYGON)) > 0;
-    #endif
+
 
     if (mode_requires_gps) {
         if (!copter.position_ok()) {

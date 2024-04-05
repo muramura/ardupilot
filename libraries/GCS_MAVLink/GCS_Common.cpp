@@ -1019,9 +1019,9 @@ ap_message GCS_MAVLINK::mavlink_id_to_ap_message_id(const uint32_t mavlink_id) c
         { MAVLINK_MSG_ID_SYSTEM_TIME,           MSG_SYSTEM_TIME},
         { MAVLINK_MSG_ID_RC_CHANNELS_SCALED,    MSG_SERVO_OUT},
         { MAVLINK_MSG_ID_PARAM_VALUE,           MSG_NEXT_PARAM},
-#if AP_FENCE_ENABLED
+
         { MAVLINK_MSG_ID_FENCE_STATUS,          MSG_FENCE_STATUS},
-#endif
+
 #if AP_SIM_ENABLED
         { MAVLINK_MSG_ID_SIMSTATE,              MSG_SIMSTATE},
         { MAVLINK_MSG_ID_SIM_STATE,             MSG_SIM_STATE},
@@ -2489,12 +2489,12 @@ void GCS::update_send()
             missionitemprotocols[MAV_MISSION_TYPE_RALLY] = new MissionItemProtocol_Rally(*rally);
         }
 #endif
-#if AP_FENCE_ENABLED
+
         AC_Fence *fence = AP::fence();
         if (fence != nullptr) {
             missionitemprotocols[MAV_MISSION_TYPE_FENCE] = new MissionItemProtocol_Fence(*fence);
         }
-#endif
+
     }
 
     for (auto *prot : missionitemprotocols) {
@@ -5245,10 +5245,10 @@ MAV_RESULT GCS_MAVLINK::handle_command_int_packet(const mavlink_command_int_t &p
         return handle_command_do_aux_function(packet);
 #endif
 
-#if AP_FENCE_ENABLED
+
     case MAV_CMD_DO_FENCE_ENABLE:
         return handle_command_do_fence_enable(packet);
-#endif
+
 
     case MAV_CMD_DO_FLIGHTTERMINATION:
         return handle_flight_termination(packet);
@@ -5491,12 +5491,12 @@ bool GCS_MAVLINK::try_send_mission_message(const enum ap_message id)
         gcs().try_send_queued_message_for_type(MAV_MISSION_TYPE_RALLY);
         break;
 #endif
-#if AP_FENCE_ENABLED
+
     case MSG_NEXT_MISSION_REQUEST_FENCE:
         CHECK_PAYLOAD_SIZE(MISSION_REQUEST);
         gcs().try_send_queued_message_for_type(MAV_MISSION_TYPE_FENCE);
         break;
-#endif
+
     default:
         break;
     }
@@ -5990,12 +5990,12 @@ bool GCS_MAVLINK::try_send_message(const enum ap_message id)
         send_meminfo();
         break;
 
-#if AP_FENCE_ENABLED
+
     case MSG_FENCE_STATUS:
         CHECK_PAYLOAD_SIZE(FENCE_STATUS);
         send_fence_status();
         break;
-#endif
+
 
 #if AP_RANGEFINDER_ENABLED
     case MSG_RANGEFINDER:
@@ -6827,11 +6827,11 @@ uint64_t GCS_MAVLINK::capabilities() const
     }
 #endif
 
-#if AP_FENCE_ENABLED
+
     if (AP::fence()) {
         ret |= MAV_PROTOCOL_CAPABILITY_MISSION_FENCE;
     }
-#endif
+
 
 #if AP_MAVLINK_FTP_ENABLED
     if (!AP_BoardConfig::ftp_disabled()){  //if ftp disable board option is not set

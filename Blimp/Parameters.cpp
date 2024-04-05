@@ -840,10 +840,10 @@ void Blimp::load_parameters(void)
     AP_Vehicle::load_parameters(g.format_version, Parameters::k_format_version);
 
     static const AP_Param::G2ObjectConversion g2_conversions[] {
-#if AP_STATS_ENABLED
+
     // PARAMETER_CONVERSION - Added: Jan-2024 for Copter-4.6
         { &stats, stats.var_info, 12 },
-#endif
+
 #if AP_SCRIPTING_ENABLED
     // PARAMETER_CONVERSION - Added: Jan-2024 for Copter-4.6
         { &scripting, scripting.var_info, 30 },

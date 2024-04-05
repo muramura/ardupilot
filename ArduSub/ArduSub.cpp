@@ -101,9 +101,9 @@ const AP_Scheduler::Task Sub::scheduler_tasks[] = {
     SCHED_TASK_CLASS(AP_RPM,              &sub.rpm_sensor,   update,              10, 200,  66),
 #endif
     SCHED_TASK(terrain_update,        10,    100,  72),
-#if AP_STATS_ENABLED
+
     SCHED_TASK(stats_update,           1,    200,  76),
-#endif
+
 #ifdef USERHOOK_FASTLOOP
     SCHED_TASK(userhook_FastLoop,    100,     75,  78),
 #endif
@@ -258,10 +258,10 @@ void Sub::three_hz_loop()
     // check if we've lost terrain data
     failsafe_terrain_check();
 
-#if AP_FENCE_ENABLED
+
     // check if we have breached a fence
     fence_check();
-#endif // AP_FENCE_ENABLED
+
 
 #if AP_SERVORELAYEVENTS_ENABLED
     ServoRelayEvents.update_events();
@@ -369,7 +369,7 @@ bool Sub::get_wp_crosstrack_error_m(float &xtrack_error) const
     return true;
 }
 
-#if AP_STATS_ENABLED
+
 /*
   update AP_Stats
 */
@@ -377,7 +377,7 @@ void Sub::stats_update(void)
 {
     AP::stats()->set_flying(motors.armed());
 }
-#endif
+
 
 // get the altitude relative to the home position or the ekf origin
 float Sub::get_alt_rel() const

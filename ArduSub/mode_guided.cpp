@@ -166,7 +166,7 @@ bool ModeGuided::guided_set_destination(const Vector3f& destination)
         guided_pos_control_start();
     }
 
-#if AP_FENCE_ENABLED
+
     // reject destination if outside the fence
     const Location dest_loc(destination, Location::AltFrame::ABOVE_ORIGIN);
     if (!sub.fence.check_destination_within_fence(dest_loc)) {
@@ -174,7 +174,7 @@ bool ModeGuided::guided_set_destination(const Vector3f& destination)
         // failure is propagated to GCS with NAK
         return false;
     }
-#endif
+
 
     // no need to check return status because terrain data is not used
     sub.wp_nav.set_wp_destination(destination, false);
@@ -197,7 +197,7 @@ bool ModeGuided::guided_set_destination(const Location& dest_loc)
         guided_pos_control_start();
     }
 
-#if AP_FENCE_ENABLED
+
     // reject destination outside the fence.
     // Note: there is a danger that a target specified as a terrain altitude might not be checked if the conversion to alt-above-home fails
     if (!sub.fence.check_destination_within_fence(dest_loc)) {
@@ -205,7 +205,7 @@ bool ModeGuided::guided_set_destination(const Location& dest_loc)
         // failure is propagated to GCS with NAK
         return false;
     }
-#endif
+
 
     if (!sub.wp_nav.set_wp_destination_loc(dest_loc)) {
         // failure to set destination can only be because of missing terrain data
@@ -232,7 +232,7 @@ bool ModeGuided::guided_set_destination(const Vector3f& destination, bool use_ya
         guided_pos_control_start();
     }
 
-#if AP_FENCE_ENABLED
+
     // reject destination if outside the fence
     const Location dest_loc(destination, Location::AltFrame::ABOVE_ORIGIN);
     if (!sub.fence.check_destination_within_fence(dest_loc)) {
@@ -240,7 +240,7 @@ bool ModeGuided::guided_set_destination(const Vector3f& destination, bool use_ya
         // failure is propagated to GCS with NAK
         return false;
     }
-#endif
+
 
     // set yaw state
     guided_set_yaw_state(use_yaw, yaw_cd, use_yaw_rate, yaw_rate_cds, relative_yaw);
@@ -298,7 +298,7 @@ bool ModeGuided::guided_set_destination_posvel(const Vector3f& destination, cons
         guided_posvel_control_start();
     }
 
-#if AP_FENCE_ENABLED
+
     // reject destination if outside the fence
     const Location dest_loc(destination, Location::AltFrame::ABOVE_ORIGIN);
     if (!sub.fence.check_destination_within_fence(dest_loc)) {
@@ -306,7 +306,7 @@ bool ModeGuided::guided_set_destination_posvel(const Vector3f& destination, cons
         // failure is propagated to GCS with NAK
         return false;
     }
-#endif
+
 
     update_time_ms = AP_HAL::millis();
     posvel_pos_target_cm = destination.topostype();
@@ -333,7 +333,7 @@ bool ModeGuided::guided_set_destination_posvel(const Vector3f& destination, cons
         guided_posvel_control_start();
     }
 
-    #if AP_FENCE_ENABLED
+    
     // reject destination if outside the fence
     const Location dest_loc(destination, Location::AltFrame::ABOVE_ORIGIN);
     if (!sub.fence.check_destination_within_fence(dest_loc)) {
@@ -341,7 +341,7 @@ bool ModeGuided::guided_set_destination_posvel(const Vector3f& destination, cons
         // failure is propagated to GCS with NAK
         return false;
     }
-    #endif
+    
 
     // set yaw state
     guided_set_yaw_state(use_yaw, yaw_cd, use_yaw_rate, yaw_rate_cds, relative_yaw);

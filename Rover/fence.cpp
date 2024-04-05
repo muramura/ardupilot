@@ -3,7 +3,7 @@
 // fence_check - ask fence library to check for breaches and initiate the response
 void Rover::fence_check()
 {
-#if AP_FENCE_ENABLED
+
     uint8_t new_breaches;  // the type of fence that has been breached
     const uint8_t orig_breaches = fence.get_breaches();
 
@@ -58,5 +58,5 @@ void Rover::fence_check()
         LOGGER_WRITE_ERROR(LogErrorSubsystem::FAILSAFE_FENCE,
                                  LogErrorCode::ERROR_RESOLVED);
     }
-#endif // AP_FENCE_ENABLED
+
 }

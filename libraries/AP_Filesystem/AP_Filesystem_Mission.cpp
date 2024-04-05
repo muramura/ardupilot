@@ -218,12 +218,12 @@ bool AP_Filesystem_Mission::check_file_name(const char *name, enum MAV_MISSION_T
         return true;
     }
 #endif
-#if AP_FENCE_ENABLED
+
     if (strcmp(name, "fence.dat") == 0) {
         mtype = MAV_MISSION_TYPE_FENCE;
         return true;
     }
-#endif
+
 #if HAL_RALLY_ENABLED
     if (strcmp(name, "rally.dat") == 0) {
         mtype = MAV_MISSION_TYPE_RALLY;
@@ -246,10 +246,10 @@ bool AP_Filesystem_Mission::get_item(uint32_t idx, enum MAV_MISSION_TYPE mtype, 
         }
         return mission->get_item(idx, item);
     }
-#if AP_FENCE_ENABLED
+
     case MAV_MISSION_TYPE_FENCE:
         return MissionItemProtocol_Fence::get_item_as_mission_item(idx, item);
-#endif
+
 #if HAL_RALLY_ENABLED
     case MAV_MISSION_TYPE_RALLY:
         return MissionItemProtocol_Rally::get_item_as_mission_item(idx, item);
@@ -274,7 +274,7 @@ uint32_t AP_Filesystem_Mission::get_num_items(enum MAV_MISSION_TYPE mtype) const
     }
 #endif
 
-#if AP_FENCE_ENABLED
+
     case MAV_MISSION_TYPE_FENCE: {
         auto *fence = AP::fence();
         if (fence == nullptr) {
@@ -282,7 +282,7 @@ uint32_t AP_Filesystem_Mission::get_num_items(enum MAV_MISSION_TYPE mtype) const
         }
         return fence->polyfence().num_stored_items();
     }
-#endif
+
 
 #if HAL_RALLY_ENABLED
     case MAV_MISSION_TYPE_RALLY: {
@@ -393,10 +393,10 @@ bool AP_Filesystem_Mission::finish_upload(const rfile &r)
     case MAV_MISSION_TYPE_RALLY:
         return finish_upload_rally(hdr, r, b);
 #endif
-#if AP_FENCE_ENABLED
+
     case MAV_MISSION_TYPE_FENCE:
         return finish_upload_fence(hdr, r, b);
-#endif
+
     default:
         // really should not get here....
         break;
@@ -444,7 +444,7 @@ bool AP_Filesystem_Mission::finish_upload_mission(const struct header &hdr, cons
 }
 #endif  // AP_MISSION_ENABLED
 
-#if AP_FENCE_ENABLED
+
 bool AP_Filesystem_Mission::finish_upload_fence(const struct header &hdr, const rfile &r, const uint8_t *b)
 {
     bool success = false;
@@ -490,7 +490,7 @@ OUT:
 
     return success;
 }
-#endif  // AP_FENCE_ENABLED
+
 
 #if HAL_RALLY_ENABLED
 bool AP_Filesystem_Mission::finish_upload_rally(const struct header &hdr, const rfile &r, const uint8_t *b)

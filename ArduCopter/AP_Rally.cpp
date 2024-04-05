@@ -25,11 +25,11 @@
 
 bool AP_Rally_Copter::is_valid(const Location &rally_point) const
 {
-#if AP_FENCE_ENABLED
+
     if (!copter.fence.check_destination_within_fence(rally_point)) {
         return false;
     }
-#endif
+
     return true;
 }
 

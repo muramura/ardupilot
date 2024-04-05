@@ -189,7 +189,7 @@ AP_AdvancedFailsafe::check(uint32_t last_valid_rc_ms)
         return;
     }
 
-#if AP_FENCE_ENABLED
+
     // we always check for fence breach
     if(_enable_geofence_fs) {
         const AC_Fence *ap_fence = AP::fence();
@@ -200,7 +200,7 @@ AP_AdvancedFailsafe::check(uint32_t last_valid_rc_ms)
             }
         }
     }
-#endif
+
 
     // update max range check
     max_range_update();

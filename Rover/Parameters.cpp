@@ -487,11 +487,11 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     AP_SUBGROUPINFO(proximity, "PRX", 18, ParametersG2, AP_Proximity),
 #endif
 
-#if AP_AVOIDANCE_ENABLED
+
     // @Group: AVOID_
     // @Path: ../libraries/AC_Avoidance/AC_Avoid.cpp
     AP_SUBGROUPINFO(avoid, "AVOID_", 19, ParametersG2, AC_Avoid),
-#endif
+
 
     // 20 was PIVOT_TURN_RATE and should not be re-used
 
@@ -743,9 +743,9 @@ ParametersG2::ParametersG2(void)
 #if HAL_PROXIMITY_ENABLED
     proximity(),
 #endif
-#if AP_AVOIDANCE_ENABLED
+
     avoid(),
-#endif
+
 #if AP_FOLLOW_ENABLED
     follow(),
 #endif
@@ -888,14 +888,14 @@ void Rover::load_parameters(void)
 // PARAMETER_CONVERSION - Added: MAR-2022
         { &ais, ais.var_info, 50 },
 #endif
-#if AP_FENCE_ENABLED
+
 // PARAMETER_CONVERSION - Added: Mar-2022
         { &fence, fence.var_info, 17 },
-#endif
-#if AP_STATS_ENABLED
+
+
     // PARAMETER_CONVERSION - Added: Jan-2024 for Rover-4.6
         { &stats, stats.var_info, 1 },
-#endif
+
 #if AP_SCRIPTING_ENABLED
     // PARAMETER_CONVERSION - Added: Jan-2024 for Rover-4.6
         { &scripting, scripting.var_info, 41 },

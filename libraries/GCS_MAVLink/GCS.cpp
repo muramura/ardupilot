@@ -276,7 +276,7 @@ void GCS::update_sensor_status_flags()
     }
 #endif
 
-#if AP_FENCE_ENABLED
+
     const AC_Fence *fence = AP::fence();
     if (fence != nullptr) {
         if (fence->sys_status_enabled()) {
@@ -289,7 +289,7 @@ void GCS::update_sensor_status_flags()
             control_sensors_health |= MAV_SYS_STATUS_GEOFENCE;
         }
     }
-#endif
+
 
     // airspeed
 #if AP_AIRSPEED_ENABLED

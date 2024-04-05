@@ -33,7 +33,7 @@ public:
     float radius;
 };
 
-#if AP_FENCE_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Common/Location.h>
@@ -434,5 +434,3 @@ private:
     bool _failed_sdcard_storage;
 #endif
 };
-
-#endif // AP_FENCE_ENABLED

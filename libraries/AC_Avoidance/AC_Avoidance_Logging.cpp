@@ -69,7 +69,7 @@ void AP_OADijkstra::Write_Visgraph_point(const uint8_t version, const uint8_t po
 }
 #endif
 
-#if AP_AVOIDANCE_ENABLED
+
 void AC_Avoid::Write_SimpleAvoidance(const uint8_t state, const Vector3f& desired_vel, const Vector3f& modified_vel, const bool back_up) const
 {
     const struct log_SimpleAvoid pkt{
@@ -86,6 +86,6 @@ void AC_Avoid::Write_SimpleAvoidance(const uint8_t state, const Vector3f& desire
     };
     AP::logger().WriteBlock(&pkt, sizeof(pkt));
 }
-#endif
+
 
 #endif  // HAL_LOGGING_ENABLED
