@@ -34,7 +34,7 @@ void ModeQLoiter::run()
 {
     const uint32_t now = AP_HAL::millis();
 
-#if AC_PRECLAND_ENABLED
+
     const uint32_t precland_timeout_ms = 250;
     /*
       see if precision landing or precision loiter is active with
@@ -61,7 +61,7 @@ void ModeQLoiter::run()
         quadplane.pos_control->input_vel_accel_xy(target_speed_xy_cms, target_accel);
         quadplane.poscontrol.last_velocity_match_ms = 0;
     }
-#endif // AC_PRECLAND_ENABLED
+
 
     if (quadplane.tailsitter.in_vtol_transition(now)) {
         // Tailsitters in FW pull up phase of VTOL transition run FW controllers
@@ -135,12 +135,12 @@ void ModeQLoiter::run()
         if (poscontrol.get_state() < QuadPlane::QPOS_LAND_FINAL && quadplane.check_land_final()) {
             poscontrol.set_state(QuadPlane::QPOS_LAND_FINAL);
             quadplane.setup_target_position();
-#if AP_ICENGINE_ENABLED
+
             // cut IC engine if enabled
             if (quadplane.land_icengine_cut != 0) {
                 plane.g2.ice_control.engine_control(0, 0, 0, false);
             }
-#endif  // AP_ICENGINE_ENABLED
+
         }
         float height_above_ground = plane.relative_ground_altitude(plane.g.rangefinder_landing);
         float descent_rate_cms = quadplane.landing_descent_rate_cms(height_above_ground);

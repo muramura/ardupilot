@@ -1,6 +1,6 @@
 #include "AC_PrecLand_config.h"
 
-#if AC_PRECLAND_ENABLED
+
 
 #include "AC_PrecLand.h"
 #include <AP_HAL/AP_HAL.h>
@@ -830,5 +830,3 @@ AC_PrecLand *ac_precland()
 }
 
 }
-
-#endif // AC_PRECLAND_ENABLED

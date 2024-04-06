@@ -1079,9 +1079,9 @@ void AR_AttitudeControl::relax_I()
 
 void AR_AttitudeControl::set_notch_sample_rate(float sample_rate)
 {
-#if AP_FILTER_ENABLED
+
     _steer_rate_pid.set_notch_sample_rate(sample_rate);
     _throttle_speed_pid.set_notch_sample_rate(sample_rate);
     _pitch_to_throttle_pid.set_notch_sample_rate(sample_rate);
-#endif
+
 }

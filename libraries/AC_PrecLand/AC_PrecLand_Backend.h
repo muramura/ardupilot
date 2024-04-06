@@ -2,7 +2,7 @@
 
 #include "AC_PrecLand_config.h"
 
-#if AC_PRECLAND_ENABLED
+
 
 #include "AC_PrecLand.h"
 #include <AP_Math/AP_Math.h>
@@ -60,5 +60,3 @@ protected:
     bool                _have_los_meas;         // true if there is a valid measurement from the sensor
     float               _distance_to_target;    // distance from the sensor to landing target in meters
 };
-
-#endif // AC_PRECLAND_ENABLED

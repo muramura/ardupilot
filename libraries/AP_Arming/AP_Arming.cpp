@@ -336,7 +336,7 @@ bool AP_Arming::barometer_checks(bool report)
     return true;
 }
 
-#if AP_AIRSPEED_ENABLED
+
 bool AP_Arming::airspeed_checks(bool report)
 {
     if (check_enabled(ARMING_CHECK_AIRSPEED)) {
@@ -355,7 +355,7 @@ bool AP_Arming::airspeed_checks(bool report)
 
     return true;
 }
-#endif  // AP_AIRSPEED_ENABLED
+
 
 #if HAL_LOGGING_ENABLED
 bool AP_Arming::logging_checks(bool report)
@@ -595,7 +595,7 @@ bool AP_Arming::compass_checks(bool report)
     return true;
 }
 
-#if AP_GPS_ENABLED
+
 bool AP_Arming::gps_checks(bool report)
 {
     const AP_GPS &gps = AP::gps();
@@ -611,11 +611,11 @@ bool AP_Arming::gps_checks(bool report)
         }
 
         for (uint8_t i = 0; i < gps.num_sensors(); i++) {
-#if AP_GPS_BLENDED_ENABLED
+
             if ((i != GPS_BLENDED_INSTANCE) &&
-#else
-            if (
-#endif
+
+
+
                     (gps.get_type(i) == AP_GPS::GPS_Type::GPS_TYPE_NONE)) {
                 if (gps.primary_sensor() == i) {
                     check_failed(ARMING_CHECK_GPS, report, "GPS %i: primary but TYPE 0", i+1);
@@ -649,12 +649,12 @@ bool AP_Arming::gps_checks(bool report)
                          (double)distance_m);
             return false;
         }
-#if AP_GPS_BLENDED_ENABLED
+
         if (!gps.blend_health_check()) {
             check_failed(ARMING_CHECK_GPS, report, "GPS blending unhealthy");
             return false;
         }
-#endif
+
 
         // check AHRS and GPS are within 10m of each other
         if (gps.num_sensors() > 0) {
@@ -686,9 +686,9 @@ bool AP_Arming::gps_checks(bool report)
 
     return true;
 }
-#endif  // AP_GPS_ENABLED
 
-#if AP_BATTERY_ENABLED
+
+
 bool AP_Arming::battery_checks(bool report)
 {
     if (check_enabled(ARMING_CHECK_BATTERY)) {
@@ -701,7 +701,7 @@ bool AP_Arming::battery_checks(bool report)
      }
     return true;
 }
-#endif  // AP_BATTERY_ENABLED
+
 
 bool AP_Arming::hardware_safety_check(bool report) 
 {
@@ -1055,20 +1055,20 @@ bool AP_Arming::system_checks(bool report)
             return false;
         }
 
-#if AP_TERRAIN_AVAILABLE
+
         const AP_Terrain *terrain = AP_Terrain::get_singleton();
         if ((terrain != nullptr) && terrain->init_failed()) {
             check_failed(ARMING_CHECK_SYSTEM, report, "Terrain out of memory");
             return false;
         }
-#endif
-#if AP_SCRIPTING_ENABLED
+
+
         const AP_Scripting *scripting = AP_Scripting::get_singleton();
         if ((scripting != nullptr) && !scripting->arming_checks(sizeof(buffer), buffer)) {
             check_failed(ARMING_CHECK_SYSTEM, report, "%s", buffer);
             return false;
         }
-#endif
+
 #if HAL_ADSB_ENABLED
         AP_ADSB *adsb = AP::ADSB();
         if ((adsb != nullptr) && adsb->enabled() && adsb->init_failed()) {
@@ -1089,25 +1089,25 @@ bool AP_Arming::system_checks(bool report)
     }
 
     if (check_enabled(ARMING_CHECK_PARAMETERS)) {
-#if !AP_GPS_BLENDED_ENABLED
-        if (!blending_auto_switch_checks(report)) {
-            return false;
-        }
-#endif
-#if AP_RPM_ENABLED
+
+
+
+
+
+
         auto *rpm = AP::rpm();
         if (rpm && !rpm->arming_checks(sizeof(buffer), buffer)) {
             check_failed(ARMING_CHECK_PARAMETERS, report, "%s", buffer);
             return false;
         }
-#endif
-#if AP_RELAY_ENABLED
+
+
         auto *relay = AP::relay();
         if (relay && !relay->arming_checks(sizeof(buffer), buffer)) {
             check_failed(ARMING_CHECK_PARAMETERS, report, "%s", buffer);
             return false;
         }
-#endif
+
 #if HAL_PARACHUTE_ENABLED
         auto *chute = AP::parachute();
         if (chute && !chute->arming_checks(sizeof(buffer), buffer)) {
@@ -1153,7 +1153,7 @@ bool AP_Arming::terrain_checks(bool report) const
         return true;
     }
 
-#if AP_TERRAIN_AVAILABLE
+
 
     const AP_Terrain *terrain = AP_Terrain::get_singleton();
     if (terrain == nullptr) {
@@ -1175,10 +1175,10 @@ bool AP_Arming::terrain_checks(bool report) const
 
     return true;
 
-#else
-    check_failed(ARMING_CHECK_PARAMETERS, report, "terrain required but disabled");
-    return false;
-#endif
+
+
+
+
 }
 
 
@@ -1576,12 +1576,12 @@ bool AP_Arming::pre_arm_checks(bool report)
 #if AP_COMPASS_ENABLED
         &  compass_checks(report)
 #endif
-#if AP_GPS_ENABLED
+
         &  gps_checks(report)
-#endif
-#if AP_BATTERY_ENABLED
+
+
         &  battery_checks(report)
-#endif
+
 #if HAL_LOGGING_ENABLED
         &  logging_checks(report)
 #endif
@@ -1591,9 +1591,9 @@ bool AP_Arming::pre_arm_checks(bool report)
 #if AP_MISSION_ENABLED
         &  mission_checks(report)
 #endif
-#if AP_RANGEFINDER_ENABLED
+
         &  rangefinder_checks(report)
-#endif
+
         &  servo_checks(report)
         &  board_voltage_checks(report)
         &  system_checks(report)
@@ -1688,18 +1688,17 @@ bool AP_Arming::arm_checks(AP_Arming::Method method)
     return true;
 }
 
-#if !AP_GPS_BLENDED_ENABLED
-bool AP_Arming::blending_auto_switch_checks(bool report)
-{
-    if (AP::gps().get_auto_switch_type() == 2) {
-        if (report) {
-            check_failed(ARMING_CHECK_GPS, true, "GPS_AUTO_SWITCH==2 but no blending");
-        }
-        return false;
-    }
-    return true;
-}
-#endif
+
+
+
+
+
+
+
+
+
+
+
 
 #if AP_ARMING_CRASHDUMP_ACK_ENABLED
 bool AP_Arming::crashdump_checks(bool report)
@@ -1775,7 +1774,7 @@ bool AP_Arming::arm(AP_Arming::Method method, const bool do_arming_checks)
     }
 #endif
 
-#if AP_TERRAIN_AVAILABLE
+
     if (armed) {
         // tell terrain we have just armed, so it can setup
         // a reference location for terrain adjustment
@@ -1784,7 +1783,7 @@ bool AP_Arming::arm(AP_Arming::Method method, const bool do_arming_checks)
             terrain->set_reference_location();
         }
     }
-#endif
+
 
 
     if (armed) {

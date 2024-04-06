@@ -1,6 +1,6 @@
 #include "AP_ExternalControl.h"
 
-#if AP_EXTERNAL_CONTROL_ENABLED
+
 
 // singleton instance
 AP_ExternalControl *AP_ExternalControl::singleton;
@@ -20,5 +20,3 @@ AP_ExternalControl *externalcontrol()
 }
 
 };
-
-#endif // AP_EXTERNAL_CONTROL_ENABLED

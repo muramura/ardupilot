@@ -56,9 +56,9 @@ void Sub::init_ardupilot()
     init_rc_out();              // sets up motors and output to escs
     init_joystick();            // joystick initialization
 
-#if AP_RELAY_ENABLED
+
     relay.init();
-#endif
+
 
     /*
      *  setup the 'main loop is dead' check. Note that this relies on
@@ -73,9 +73,9 @@ void Sub::init_ardupilot()
     AP::compass().set_log_bit(MASK_LOG_COMPASS);
     AP::compass().init();
 
-#if AP_AIRSPEED_ENABLED
+
     airspeed.set_log_bit(MASK_LOG_IMU);
-#endif
+
 
 
     // initialise optical flow sensor
@@ -134,9 +134,9 @@ void Sub::init_ardupilot()
 #endif
 
     // initialise AP_RPM library
-#if AP_RPM_ENABLED
+
     rpm_sensor.init();
-#endif
+
 
     // initialise mission library
     mission.init();
@@ -257,10 +257,10 @@ bool Sub::should_log(uint32_t mask)
 #include <AP_ADSB/AP_ADSB.h>
 
 // dummy method to avoid linking AFS
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
 bool AP_AdvancedFailsafe::gcs_terminate(bool should_terminate, const char *reason) { return false; }
 AP_AdvancedFailsafe *AP::advancedfailsafe() { return nullptr; }
-#endif
+
 
 #if HAL_ADSB_ENABLED
 // dummy method to avoid linking AP_Avoidance

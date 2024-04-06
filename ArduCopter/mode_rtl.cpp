@@ -28,10 +28,10 @@ bool ModeRTL::init(bool ignore_checks)
     // this will be set true if prec land is later active
     copter.ap.prec_land_active = false;
 
-#if AC_PRECLAND_ENABLED
+
     // initialise precland state machine
     copter.precland_statemachine.init();
-#endif
+
 
     return true;
 }
@@ -251,10 +251,10 @@ void ModeRTL::descent_start()
     // initialise yaw
     auto_yaw.set_mode(AutoYaw::Mode::HOLD);
 
-#if AP_LANDINGGEAR_ENABLED
+
     // optionally deploy landing gear
     copter.landinggear.deploy_for_landing();
-#endif
+
 
 
     // disable the fence on landing
@@ -343,10 +343,10 @@ void ModeRTL::land_start()
     // initialise yaw
     auto_yaw.set_mode(AutoYaw::Mode::HOLD);
 
-#if AP_LANDINGGEAR_ENABLED
+
     // optionally deploy landing gear
     copter.landinggear.deploy_for_landing();
-#endif
+
 
 
     // disable the fence on landing

@@ -83,7 +83,7 @@ const AP_Param::GroupInfo AC_HELI_PID::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("D_FF", 14, AC_HELI_PID, _kdff, 0),
 
-#if AP_FILTER_ENABLED
+
     // @Param: NTF
     // @DisplayName: PID Target notch filter index
     // @Description: PID Target notch filter index
@@ -97,7 +97,7 @@ const AP_Param::GroupInfo AC_HELI_PID::var_info[] = {
     // @Range: 1 8
     // @User: Advanced
     AP_GROUPINFO("NEF", 16, AC_HELI_PID, _notch_E_filter, 0),
-#endif
+
 
     AP_GROUPEND
 };

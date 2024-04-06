@@ -45,17 +45,17 @@
 #include <AC_PrecLand/AC_PrecLand_config.h>
 #include <AP_Follow/AP_Follow_config.h>
 #include <AP_ExternalControl/AP_ExternalControl_config.h>
-#if AP_EXTERNAL_CONTROL_ENABLED
+
 #include "AP_ExternalControl_Rover.h"
-#endif
+
 
 // Configuration
 #include "defines.h"
 #include "config.h"
 
-#if AP_SCRIPTING_ENABLED
+
 #include <AP_Scripting/AP_Scripting.h>
-#endif
+
 
 // Local modules
 #include "AP_Arming.h"
@@ -67,9 +67,9 @@
 #include "GCS_Mavlink.h"
 #include "GCS_Rover.h"
 #include "AP_Rally.h"
-#if AC_PRECLAND_ENABLED
+
 #include <AC_PrecLand/AC_PrecLand.h>
-#endif
+
 #include "RC_Channel.h"                  // RC Channel Library
 
 #include "mode.h"
@@ -84,9 +84,9 @@ public:
 #if ADVANCED_FAILSAFE == ENABLED
     friend class AP_AdvancedFailsafe_Rover;
 #endif
-#if AP_EXTERNAL_CONTROL_ENABLED
+
     friend class AP_ExternalControl_Rover;
-#endif
+
     friend class GCS_Rover;
     friend class Mode;
     friend class ModeAcro;
@@ -140,18 +140,18 @@ private:
     AP_Int8 *modes;
     const uint8_t num_modes = 6;
 
-#if AP_RPM_ENABLED
+
     // AP_RPM Module
     AP_RPM rpm_sensor;
-#endif
+
 
     // Arming/Disarming management class
     AP_Arming_Rover arming;
 
     // external control implementation
-#if AP_EXTERNAL_CONTROL_ENABLED
+
     AP_ExternalControl_Rover external_control;
-#endif
+
 
 
     AP_OpticalFlow optflow;
@@ -160,9 +160,9 @@ private:
 #if OSD_ENABLED || OSD_PARAM_ENABLED
     AP_OSD osd;
 #endif
-#if AC_PRECLAND_ENABLED
+
     AC_PrecLand precland;
-#endif
+
     // GCS handling
     GCS_Rover _gcs;  // avoid using this; use gcs()
     GCS_Rover &gcs() { return _gcs; }
@@ -174,9 +174,9 @@ private:
     Location current_loc;
 
     // Camera
-#if AP_CAMERA_ENABLED
+
     AP_Camera camera{MASK_LOG_CAMERA};
-#endif
+
 
     // Camera/Antenna mount tracking and stabilisation stuff
 #if HAL_MOUNT_ENABLED
@@ -269,7 +269,7 @@ private:
     cruise_learn_t cruise_learn;
 
     // Rover.cpp
-#if AP_SCRIPTING_ENABLED
+
     bool set_target_location(const Location& target_loc) override;
     bool set_target_velocity_NED(const Vector3f& vel_ned) override;
     bool set_steering_and_throttle(float steering, float throttle) override;
@@ -281,7 +281,7 @@ private:
     bool nav_scripting_enable(uint8_t mode) override;
     bool nav_script_time(uint16_t &id, uint8_t &cmd, float &arg1, float &arg2, int16_t &arg3, int16_t &arg4) override;
     void nav_script_time_done(uint16_t id) override;
-#endif // AP_SCRIPTING_ENABLED
+
     void stats_update();
     void ahrs_update();
     void gcs_failsafe_check(void);

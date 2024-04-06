@@ -78,9 +78,9 @@ const AP_Scheduler::Task Rover::scheduler_tasks[] = {
     SCHED_TASK(set_servos,            400,    200,  15),
     SCHED_TASK_CLASS(AP_GPS,              &rover.gps,              update,         50,  300,  18),
     SCHED_TASK_CLASS(AP_Baro,             &rover.barometer,        update,         10,  200,  21),
-#if AP_BEACON_ENABLED
+
     SCHED_TASK_CLASS(AP_Beacon,           &rover.g2.beacon,        update,         50,  200,  24),
-#endif
+
 #if HAL_PROXIMITY_ENABLED
     SCHED_TASK_CLASS(AP_Proximity,        &rover.g2.proximity,     update,         50,  200,  27),
 #endif
@@ -99,18 +99,18 @@ const AP_Scheduler::Task Rover::scheduler_tasks[] = {
 #if AP_SERVORELAYEVENTS_ENABLED
     SCHED_TASK_CLASS(AP_ServoRelayEvents, &rover.ServoRelayEvents, update_events,  50,  200,  66),
 #endif
-#if AC_PRECLAND_ENABLED
+
     SCHED_TASK(update_precland,      400,     50,  70),
-#endif
-#if AP_RPM_ENABLED
+
+
     SCHED_TASK_CLASS(AP_RPM,              &rover.rpm_sensor,       update,         10,  100,  72),
-#endif
+
 #if HAL_MOUNT_ENABLED
     SCHED_TASK_CLASS(AP_Mount,            &rover.camera_mount,     update,         50,  200,  75),
 #endif
-#if AP_CAMERA_ENABLED
+
     SCHED_TASK_CLASS(AP_Camera,           &rover.camera,           update,         50,  200,  78),
-#endif
+
     SCHED_TASK(gcs_failsafe_check,     10,    200,  81),
     SCHED_TASK(fence_check,            10,    200,  84),
     SCHED_TASK(ekf_check,              10,    100,  87),
@@ -157,7 +157,7 @@ Rover::Rover(void) :
 {
 }
 
-#if AP_SCRIPTING_ENABLED
+
 // set target location (for use by scripting)
 bool Rover::set_target_location(const Location& target_loc)
 {
@@ -289,7 +289,7 @@ void Rover::nav_script_time_done(uint16_t id)
 
     return mode_auto.nav_script_time_done(id);
 }
-#endif // AP_SCRIPTING_ENABLED
+
 
 
 /*
@@ -385,9 +385,9 @@ void Rover::update_logging1(void)
 
     if (should_log(MASK_LOG_THR)) {
         Log_Write_Throttle();
-#if AP_BEACON_ENABLED
+
         g2.beacon.log();
-#endif
+
     }
 
     if (should_log(MASK_LOG_NTUN)) {

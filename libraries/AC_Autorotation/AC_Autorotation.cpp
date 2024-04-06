@@ -206,7 +206,7 @@ float AC_Autorotation::get_rpm(bool update_counter)
 {
     float current_rpm = 0.0f;
 
-#if AP_RPM_ENABLED
+
     // Get singleton for RPM library
     const AP_RPM *rpm = AP_RPM::get_singleton();
 
@@ -229,9 +229,9 @@ float AC_Autorotation::get_rpm(bool update_counter)
     } else {
         _flags.bad_rpm = true;
     }
-#else
-    _flags.bad_rpm = true;
-#endif
+
+
+
 
     if (_flags.bad_rpm) {
         //count unhealthy rpm updates and reset healthy rpm counter

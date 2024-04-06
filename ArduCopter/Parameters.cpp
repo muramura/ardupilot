@@ -449,11 +449,11 @@ const AP_Param::Info Copter::var_info[] = {
     GOBJECT(camera, "CAM", AP_Camera),
 
 
-#if AP_RELAY_ENABLED
+
     // @Group: RELAY
     // @Path: ../libraries/AP_Relay/AP_Relay.cpp
     GOBJECT(relay,                  "RELAY", AP_Relay),
-#endif
+
 
 #if PARACHUTE == ENABLED
     // @Group: CHUTE_
@@ -461,11 +461,11 @@ const AP_Param::Info Copter::var_info[] = {
     GOBJECT(parachute, "CHUTE_", AP_Parachute),
 #endif
 
-#if AP_LANDINGGEAR_ENABLED
+
     // @Group: LGR_
     // @Path: ../libraries/AP_LandingGear/AP_LandingGear.cpp
     GOBJECT(landinggear,    "LGR_", AP_LandingGear),
-#endif
+
 
 #if FRAME_CONFIG == HELI_FRAME
     // @Group: IM_
@@ -646,11 +646,11 @@ const AP_Param::Info Copter::var_info[] = {
     GOBJECT(rangefinder,   "RNGFND", RangeFinder),
 #endif
 
-#if AP_TERRAIN_AVAILABLE
+
     // @Group: TERRAIN_
     // @Path: ../libraries/AP_Terrain/AP_Terrain.cpp
     GOBJECT(terrain,                "TERRAIN_", AP_Terrain),
-#endif
+
 
 
     // @Group: FLOW
@@ -658,17 +658,17 @@ const AP_Param::Info Copter::var_info[] = {
     GOBJECT(optflow,   "FLOW", AP_OpticalFlow),
 
 
-#if AC_PRECLAND_ENABLED
+
     // @Group: PLND_
     // @Path: ../libraries/AC_PrecLand/AC_PrecLand.cpp
     GOBJECT(precland, "PLND_", AC_PrecLand),
-#endif
 
-#if AP_RPM_ENABLED
+
+
     // @Group: RPM
     // @Path: ../libraries/AP_RPM/AP_RPM.cpp
     GOBJECT(rpm_sensor, "RPM", AP_RPM),
-#endif
+
 
 #if HAL_ADSB_ENABLED
     // @Group: ADSB_
@@ -784,11 +784,11 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("DEV_OPTIONS", 7, ParametersG2, dev_options, 0),
 
-#if AP_BEACON_ENABLED
+
     // @Group: BCN
     // @Path: ../libraries/AP_Beacon/AP_Beacon.cpp
     AP_SUBGROUPINFO(beacon, "BCN", 14, ParametersG2, AP_Beacon),
-#endif
+
 
 #if HAL_PROXIMITY_ENABLED
     // @Group: PRX
@@ -836,11 +836,11 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
 
     // 18 was used by AP_VisualOdom
 
-#if AP_TEMPCALIBRATION_ENABLED
+
     // @Group: TCAL
     // @Path: ../libraries/AP_TempCalibration/AP_TempCalibration.cpp
     AP_SUBGROUPINFO(temp_calibration, "TCAL", 19, ParametersG2, AP_TempCalibration),
-#endif
+
 
 #if TOY_MODE_ENABLED == ENABLED
     // @Group: TMODE
@@ -854,13 +854,13 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     AP_SUBGROUPINFO(smart_rtl, "SRTL_", 21, ParametersG2, AP_SmartRTL),
 #endif
 
-#if AP_WINCH_ENABLED
+
     // 22 was AP_WheelEncoder
 
     // @Group: WINCH
     // @Path: ../libraries/AP_Winch/AP_Winch.cpp
     AP_SUBGROUPINFO(winch, "WINCH", 23, ParametersG2, AP_Winch),
-#endif
+
 
     // @Param: PILOT_SPEED_DN
     // @DisplayName: Pilot maximum vertical speed descending
@@ -916,11 +916,11 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     // @User: Standard
     AP_GROUPINFO("TUNE_MAX", 32, ParametersG2, tuning_max, 0),
 
-#if AP_OAPATHPLANNER_ENABLED
+
     // @Group: OA_
     // @Path: ../libraries/AC_Avoidance/AP_OAPathPlanner.cpp
     AP_SUBGROUPINFO(oa, "OA_", 33, ParametersG2, AP_OAPathPlanner),
-#endif
+
 
 #if MODE_SYSTEMID_ENABLED == ENABLED
     // @Group: SID
@@ -1241,12 +1241,12 @@ const AP_Param::GroupInfo ParametersG2::var_info2[] = {
  */
 ParametersG2::ParametersG2(void)
     : command_model_pilot(PILOT_Y_RATE_DEFAULT, PILOT_Y_EXPO_DEFAULT, 0.0f)
-#if AP_TEMPCALIBRATION_ENABLED
+
     , temp_calibration()
-#endif
-#if AP_BEACON_ENABLED
+
+
     , beacon()
-#endif
+
 #if HAL_PROXIMITY_ENABLED
     , proximity()
 #endif
@@ -1338,11 +1338,11 @@ void Copter::load_parameters(void)
 
     AP_Param::convert_old_parameters(&conversion_table[0], ARRAY_SIZE(conversion_table));
 
-#if AP_LANDINGGEAR_ENABLED
+
     // convert landing gear parameters
     // PARAMETER_CONVERSION - Added: Nov-2018
     convert_lgr_parameters();
-#endif
+
 
 #if MODE_RTL_ENABLED == ENABLED
     // PARAMETER_CONVERSION - Added: Sep-2021
@@ -1359,14 +1359,14 @@ void Copter::load_parameters(void)
     // PARAMETER_CONVERSION - Added: Jan-2024 for Copter-4.6
         { &stats, stats.var_info, 12 },
 
-#if AP_SCRIPTING_ENABLED
+
     // PARAMETER_CONVERSION - Added: Jan-2024 for Copter-4.6
         { &scripting, scripting.var_info, 30 },
-#endif
-#if AP_GRIPPER_ENABLED
+
+
     // PARAMETER_CONVERSION - Added: Feb-2024 for Copter-4.6
         { &gripper, gripper.var_info, 13 },
-#endif
+
     };
 
     AP_Param::convert_g2_objects(&g2, g2_conversions, ARRAY_SIZE(g2_conversions));
@@ -1377,10 +1377,10 @@ void Copter::load_parameters(void)
 #endif
 
     static const AP_Param::TopLevelObjectConversion toplevel_conversions[] {
-#if AP_SERIALMANAGER_ENABLED
+
         // PARAMETER_CONVERSION - Added: Feb-2024 for Copter-4.6
         { &serial_manager, serial_manager.var_info, Parameters::k_param_serial_manager_old },
-#endif
+
     };
 
     AP_Param::convert_toplevel_objects(toplevel_conversions, ARRAY_SIZE(toplevel_conversions));
@@ -1564,7 +1564,7 @@ void Copter::convert_prx_parameters()
 }
 #endif
 
-#if AP_LANDINGGEAR_ENABLED
+
 /*
   convert landing gear parameters
  */
@@ -1648,7 +1648,7 @@ void Copter::convert_lgr_parameters(void)
         servo_reversed->set_and_save_ifchanged(1);
     }
 }
-#endif
+
 
 #if FRAME_CONFIG == HELI_FRAME
 // handle conversion of tradheli parameters from Copter-3.6 to Copter-3.7

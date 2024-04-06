@@ -2,7 +2,7 @@
 
 #include "AC_Avoidance_config.h"
 
-#if AP_OAPATHPLANNER_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Common/AP_ExpandingArray.h>
@@ -58,5 +58,3 @@ private:
     AP_ExpandingArray<VisGraphItem> _items;
     uint16_t _num_items;
 };
-
-#endif  // AP_OAPATHPLANNER_ENABLED

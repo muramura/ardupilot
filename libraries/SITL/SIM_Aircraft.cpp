@@ -105,7 +105,7 @@ void Aircraft::set_start_location(const Location &start_loc, const float start_y
 */
 float Aircraft::ground_height_difference() const
 {
-#if AP_TERRAIN_AVAILABLE
+
     AP_Terrain *terrain = AP::terrain();
     float h1, h2;
     if (sitl &&
@@ -116,7 +116,7 @@ float Aircraft::ground_height_difference() const
         h2 += local_ground_level;
         return h2 - h1;
     }
-#endif
+
     return local_ground_level;
 }
 

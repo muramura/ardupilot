@@ -16,9 +16,9 @@ static void failsafe_check_static()
 void Copter::init_ardupilot()
 {
     // init winch
-#if AP_WINCH_ENABLED
+
     g2.winch.init();
-#endif
+
 
     // initialise notify system
     notify.init();
@@ -72,9 +72,9 @@ void Copter::init_ardupilot()
     // motors initialised so parameters can be sent
     ap.initialised_params = true;
 
-#if AP_RELAY_ENABLED
+
     relay.init();
-#endif
+
 
     /*
      *  setup the 'main loop is dead' check. Note that this relies on
@@ -89,13 +89,13 @@ void Copter::init_ardupilot()
     AP::compass().set_log_bit(MASK_LOG_COMPASS);
     AP::compass().init();
 
-#if AP_AIRSPEED_ENABLED
-    airspeed.set_log_bit(MASK_LOG_IMU);
-#endif
 
-#if AP_OAPATHPLANNER_ENABLED
+    airspeed.set_log_bit(MASK_LOG_IMU);
+
+
+
     g2.oa.init();
-#endif
+
 
     attitude_control->parameter_sanity_check();
 
@@ -114,15 +114,15 @@ void Copter::init_ardupilot()
     camera.init();
 
 
-#if AC_PRECLAND_ENABLED
+
     // initialise precision landing
     init_precland();
-#endif
 
-#if AP_LANDINGGEAR_ENABLED
+
+
     // initialise landing gear position
     landinggear.init();
-#endif
+
 
 #ifdef USERHOOK_INIT
     USERHOOK_INIT
@@ -143,15 +143,15 @@ void Copter::init_ardupilot()
     g2.proximity.init();
 #endif
 
-#if AP_BEACON_ENABLED
+
     // init beacons used for non-gps position estimation
     g2.beacon.init();
-#endif
 
-#if AP_RPM_ENABLED
+
+
     // initialise AP_RPM library
     rpm_sensor.init();
-#endif
+
 
 #if MODE_AUTO_ENABLED == ENABLED
     // initialise mission library
@@ -449,11 +449,11 @@ void Copter::allocate_motors(void)
     }
     AP_Param::load_object_from_eeprom(pos_control, pos_control->var_info);
 
-#if AP_OAPATHPLANNER_ENABLED
+
     wp_nav = new AC_WPNav_OA(inertial_nav, *ahrs_view, *pos_control, *attitude_control);
-#else
-    wp_nav = new AC_WPNav(inertial_nav, *ahrs_view, *pos_control, *attitude_control);
-#endif
+
+
+
     if (wp_nav == nullptr) {
         AP_BoardConfig::allocation_error("WPNav");
     }

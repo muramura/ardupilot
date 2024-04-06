@@ -1,6 +1,6 @@
 #include "AP_Filter_config.h"
 
-#if AP_FILTER_ENABLED
+
 
 #include "AP_Filter.h"
 #include <AP_Vehicle/AP_Vehicle_Type.h>
@@ -51,5 +51,3 @@ bool AP_NotchFilter_params::setup_notch_filter(NotchFilterFloat& filter, float s
     }
     return true;
 }
-
-#endif // AP_FILTER_ENABLED

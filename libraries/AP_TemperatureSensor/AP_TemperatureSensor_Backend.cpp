@@ -82,14 +82,14 @@ void AP_TemperatureSensor_Backend::update_external_libraries(const float tempera
             break;
 #endif
 
-#if AP_BATTERY_ENABLED
+
         case AP_TemperatureSensor_Params::Source::Battery_Index:
             AP::battery().set_temperature(temperature, _params.source_id-1);
             break;
         case AP_TemperatureSensor_Params::Source::Battery_ID_SerialNumber:
             AP::battery().set_temperature_by_serial_number(temperature, _params.source_id);
             break;
-#endif
+
         case AP_TemperatureSensor_Params::Source::DroneCAN:
             // Label only, used by AP_Periph
             break;

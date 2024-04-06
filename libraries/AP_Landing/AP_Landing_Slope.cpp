@@ -116,7 +116,7 @@ bool AP_Landing::type_slope_verify_land(const Location &prev_WP_loc, Location &n
             
             type_slope_stage = SlopeStage::FINAL;
 
-#if AP_LANDINGGEAR_ENABLED
+
             // Check if the landing gear was deployed before landing
             // If not - go around
             AP_LandingGear *LG_inst = AP_LandingGear::get_singleton();
@@ -124,7 +124,7 @@ bool AP_Landing::type_slope_verify_land(const Location &prev_WP_loc, Location &n
                 type_slope_request_go_around();
                 GCS_SEND_TEXT(MAV_SEVERITY_CRITICAL, "Landing gear was not deployed");
             }
-#endif
+
         }
 
         if (gps.ground_speed() < 3) {

@@ -80,7 +80,7 @@ const AP_Param::GroupInfo AC_PID::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO_FLAGS_DEFAULT_POINTER("D_FF", 14, AC_PID, _kdff, default_kdff),
 
-#if AP_FILTER_ENABLED
+
     // @Param: NTF
     // @DisplayName: PID Target notch filter index
     // @Description: PID Target notch filter index
@@ -94,7 +94,7 @@ const AP_Param::GroupInfo AC_PID::var_info[] = {
     // @Range: 1 8
     // @User: Advanced
     AP_GROUPINFO("NEF", 16, AC_PID, _notch_E_filter, 0),
-#endif
+
 
     AP_GROUPEND
 };
@@ -155,7 +155,7 @@ void AC_PID::slew_limit(float smax)
 
 void AC_PID::set_notch_sample_rate(float sample_rate)
 {
-#if AP_FILTER_ENABLED
+
     if (_notch_T_filter == 0 && _notch_E_filter == 0) {
         return;
     }
@@ -183,7 +183,7 @@ void AC_PID::set_notch_sample_rate(float sample_rate)
             _notch_E_filter.set(0);
         }
     }
-#endif
+
 }
 
 //  update_all - set target and measured inputs to PID controller and calculate outputs
@@ -205,7 +205,7 @@ float AC_PID::update_all(float target, float measurement, float dt, bool limit, 
         _error = _target - measurement;
         _derivative = 0.0f;
         _target_derivative = 0.0f;
-#if AP_FILTER_ENABLED
+
         if (_target_notch != nullptr) {
             _target_notch->reset();
             _target = _target_notch->apply(_target);
@@ -214,12 +214,12 @@ float AC_PID::update_all(float target, float measurement, float dt, bool limit, 
             _error_notch->reset();
             _error = _error_notch->apply(_error);
         }
-#endif
+
     } else {
         float error_last = _error;
         float target_last = _target;
         float error = _target - measurement;
-#if AP_FILTER_ENABLED
+
         // apply notch filters before FTLD/FLTE to avoid shot noise
         if (_target_notch != nullptr) {
             target = _target_notch->apply(target);
@@ -227,7 +227,7 @@ float AC_PID::update_all(float target, float measurement, float dt, bool limit, 
         if (_error_notch != nullptr) {
             error = _error_notch->apply(error);
         }
-#endif
+
         _target += get_filt_T_alpha(dt) * (target - _target);
         _error += get_filt_E_alpha(dt) * (error - _error);
 

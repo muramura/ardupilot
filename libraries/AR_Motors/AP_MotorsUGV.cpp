@@ -527,7 +527,7 @@ bool AP_MotorsUGV::pre_arm_check(bool report) const
     }
 
     // Check relays are configured for brushed with relay outputs
-#if AP_RELAY_ENABLED
+
     AP_Relay*relay = AP::relay();
     if ((_pwm_type == PWM_TYPE_BRUSHED_WITH_RELAY) && (relay != nullptr)) {
         // If a output is configured its relay must be enabled
@@ -552,7 +552,7 @@ bool AP_MotorsUGV::pre_arm_check(bool report) const
             }
         }
     }
-#endif
+
 
     return true;
 }
@@ -979,7 +979,7 @@ void AP_MotorsUGV::output_throttle(SRV_Channel::Aux_servo_function_t function, f
     throttle = get_rate_controlled_throttle(function, throttle, dt);
 
     // set relay if necessary
-#if AP_RELAY_ENABLED
+
     AP_Relay*relay = AP::relay();
     if ((_pwm_type == PWM_TYPE_BRUSHED_WITH_RELAY) && (relay != nullptr)) {
 
@@ -1015,7 +1015,7 @@ void AP_MotorsUGV::output_throttle(SRV_Channel::Aux_servo_function_t function, f
         // invert the output to always have positive value calculated by calc_pwm
         throttle = reverse_multiplier * fabsf(throttle);
     }
-#endif  // AP_RELAY_ENABLED
+
 
     // output to servo channel
     switch (function) {

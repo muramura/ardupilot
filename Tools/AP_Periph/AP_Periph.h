@@ -392,9 +392,9 @@ public:
     uint32_t get_vehicle_state() { return 0.0; }
 #endif
 
-#if AP_SCRIPTING_ENABLED
+
     AP_Scripting scripting;
-#endif
+
 
 #if HAL_LOGGING_ENABLED
     static const struct LogStructure log_structure[];

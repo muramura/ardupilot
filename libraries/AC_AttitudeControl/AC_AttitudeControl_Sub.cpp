@@ -486,9 +486,9 @@ void AC_AttitudeControl_Sub::input_euler_angle_roll_pitch_slew_yaw(float euler_r
 
 void AC_AttitudeControl_Sub::set_notch_sample_rate(float sample_rate)
 {
-#if AP_FILTER_ENABLED
+
     _pid_rate_roll.set_notch_sample_rate(sample_rate);
     _pid_rate_pitch.set_notch_sample_rate(sample_rate);
     _pid_rate_yaw.set_notch_sample_rate(sample_rate);
-#endif
+
 }

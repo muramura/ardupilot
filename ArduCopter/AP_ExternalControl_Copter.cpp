@@ -4,7 +4,7 @@
 
 
 #include "AP_ExternalControl_Copter.h"
-#if AP_EXTERNAL_CONTROL_ENABLED
+
 
 #include "Copter.h"
 
@@ -33,5 +33,3 @@ bool AP_ExternalControl_Copter::ready_for_external_control()
 {
     return copter.flightmode->in_guided_mode() && copter.motors->armed();
 }
-
-#endif // AP_EXTERNAL_CONTROL_ENABLED

@@ -268,7 +268,7 @@ uint32_t RC_Channels::enabled_protocols() const
     return uint32_t(_protocols.get());
 }
 
-#if AP_SCRIPTING_ENABLED
+
 /*
   implement aux function cache for scripting
  */
@@ -305,7 +305,7 @@ void RC_Channels::set_aux_cached(RC_Channel::AUX_FUNC aux_fn, RC_Channel::AuxSwi
         aux_cached.setonoff(aux_idx*2+1, v>>1);
     }
 }
-#endif // AP_SCRIPTING_ENABLED
+
 
 // singleton instance
 RC_Channels *RC_Channels::_singleton;

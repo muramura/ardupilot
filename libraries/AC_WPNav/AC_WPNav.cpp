@@ -133,16 +133,16 @@ AC_WPNav::TerrainSource AC_WPNav::get_terrain_source() const
     if (_rangefinder_available && _rangefinder_use) {
         return AC_WPNav::TerrainSource::TERRAIN_FROM_RANGEFINDER;
     }
-#if AP_TERRAIN_AVAILABLE
+
     const AP_Terrain *terrain = AP::terrain();
     if (terrain != nullptr && terrain->enabled()) {
         return AC_WPNav::TerrainSource::TERRAIN_FROM_TERRAINDATABASE;
     } else {
         return AC_WPNav::TerrainSource::TERRAIN_UNAVAILABLE;
     }
-#else
-    return AC_WPNav::TerrainSource::TERRAIN_UNAVAILABLE;
-#endif
+
+
+
 }
 
 ///
@@ -664,7 +664,7 @@ bool AC_WPNav::get_terrain_offset(float& offset_cm)
         }
         return false;
     case AC_WPNav::TerrainSource::TERRAIN_FROM_TERRAINDATABASE:
-#if AP_TERRAIN_AVAILABLE
+
         float terr_alt = 0.0f;
         AP_Terrain *terrain = AP::terrain();
         if (terrain != nullptr &&
@@ -672,7 +672,7 @@ bool AC_WPNav::get_terrain_offset(float& offset_cm)
             offset_cm = _inav.get_position_z_up_cm() - (terr_alt * 100.0);
             return true;
         }
-#endif
+
         return false;
     }
 

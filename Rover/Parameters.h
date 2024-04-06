@@ -306,9 +306,9 @@ public:
     AP_AdvancedFailsafe_Rover afs;
 #endif
 
-#if AP_BEACON_ENABLED
+
     AP_Beacon beacon;
-#endif
+
 
     // wheel encoders
     AP_WheelEncoder wheel_encoder;
@@ -399,10 +399,10 @@ public:
     // Sailboat functions
     Sailboat sailboat;
 
-#if AP_OAPATHPLANNER_ENABLED
+
     // object avoidance path planning
     AP_OAPathPlanner oa;
-#endif
+
 
     // maximum speed for vehicle
     AP_Float speed_max;

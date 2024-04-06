@@ -15,7 +15,7 @@
 
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL.h>
@@ -338,5 +338,3 @@ void AP_BattMonitor_Backend::update_consumed(AP_BattMonitor::BattMonitor_State &
         state.consumed_wh  += 0.001 * mah * state.voltage;
     }
 }
-
-#endif  // AP_BATTERY_ENABLED

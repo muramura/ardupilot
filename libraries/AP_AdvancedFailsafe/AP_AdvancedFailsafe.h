@@ -22,7 +22,7 @@
 
 #include "AP_AdvancedFailsafe_config.h"
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Param/AP_Param.h>
@@ -180,5 +180,3 @@ private:
 namespace AP {
     AP_AdvancedFailsafe *advancedfailsafe();
 };
-
-#endif  // AP_ADVANCEDFAILSAFE_ENABLED

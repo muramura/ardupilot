@@ -4,7 +4,7 @@
 
 #include "AP_Scripting_config.h"
 
-#if AP_SCRIPTING_ENABLED
+
 
 #include "lua_scripts.h"
 #include <AP_Scripting/lua_generated_bindings.h>
@@ -259,6 +259,3 @@ void lua_scripts::doREPL(lua_State *L) {
     luaL_unref(L, LUA_REGISTRYINDEX, sandbox_ref);
     repl_cleanup();
 }
-
-
-#endif  // AP_SCRIPTING_ENABLED

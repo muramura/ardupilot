@@ -98,7 +98,7 @@ void GCS_Plane::update_vehicle_sensor_status_flags(void)
         control_sensors_health |= MAV_SYS_STATUS_SENSOR_ATTITUDE_STABILIZATION;
     }
 
-#if AP_TERRAIN_AVAILABLE
+
     switch (plane.terrain.status()) {
     case AP_Terrain::TerrainStatusDisabled:
         break;
@@ -112,7 +112,7 @@ void GCS_Plane::update_vehicle_sensor_status_flags(void)
         control_sensors_health  |= MAV_SYS_STATUS_TERRAIN;
         break;
     }
-#endif
+
 
     const RangeFinder *rangefinder = RangeFinder::get_singleton();
     if (rangefinder && rangefinder->has_orientation(ROTATION_PITCH_270)) {

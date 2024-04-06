@@ -18,7 +18,7 @@
 
 #include "AP_Terrain.h"
 
-#if AP_TERRAIN_AVAILABLE
+
 
 #include <AP_AHRS/AP_AHRS.h>
 #include <AP_HAL/AP_HAL.h>
@@ -312,6 +312,3 @@ void AP_Terrain::handle_terrain_data(const mavlink_message_t &msg)
     // see if we need to schedule some disk IO
     update();
 }
-
-
-#endif // AP_TERRAIN_AVAILABLE

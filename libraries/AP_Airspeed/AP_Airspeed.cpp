@@ -18,7 +18,7 @@
 
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_ENABLED
+
 
 #include "AP_Airspeed.h"
 
@@ -962,5 +962,3 @@ AP_Airspeed *airspeed()
 }
 
 };
-
-#endif  // AP_AIRSPEED_ENABLED

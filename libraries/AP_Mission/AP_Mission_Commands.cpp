@@ -35,7 +35,7 @@ bool AP_Mission::start_command_do_aux_function(const AP_Mission::Mission_Command
 }
 #endif  // AP_RC_CHANNEL_ENABLED
 
-#if AP_GRIPPER_ENABLED
+
 bool AP_Mission::start_command_do_gripper(const AP_Mission::Mission_Command& cmd)
 {
     AP_Gripper &gripper = AP::gripper();
@@ -60,7 +60,7 @@ bool AP_Mission::start_command_do_gripper(const AP_Mission::Mission_Command& cmd
         return false;
     }
 }
-#endif  // AP_GRIPPER_ENABLED
+
 
 #if AP_SERVORELAYEVENTS_ENABLED
 bool AP_Mission::start_command_do_servorelayevents(const AP_Mission::Mission_Command& cmd)
@@ -74,10 +74,10 @@ bool AP_Mission::start_command_do_servorelayevents(const AP_Mission::Mission_Com
     case MAV_CMD_DO_SET_SERVO:
         return sre->do_set_servo(cmd.content.servo.channel, cmd.content.servo.pwm);
 
-#if AP_RELAY_ENABLED
+
     case MAV_CMD_DO_SET_RELAY:
         return sre->do_set_relay(cmd.content.relay.num, cmd.content.relay.state);
-#endif
+
 
     case MAV_CMD_DO_REPEAT_SERVO:
         return sre->do_repeat_servo(cmd.content.repeat_servo.channel,
@@ -85,12 +85,12 @@ bool AP_Mission::start_command_do_servorelayevents(const AP_Mission::Mission_Com
                                     cmd.content.repeat_servo.repeat_count,
                                     cmd.content.repeat_servo.cycle_time * 1000.0f);
 
-#if AP_RELAY_ENABLED
+
     case MAV_CMD_DO_REPEAT_RELAY:
         return sre->do_repeat_relay(cmd.content.repeat_relay.num,
                                     cmd.content.repeat_relay.repeat_count,
                                     cmd.content.repeat_relay.cycle_time * 1000.0f);
-#endif
+
 
     default:
 #if CONFIG_HAL_BOARD == HAL_BOARD_SITL
@@ -101,7 +101,7 @@ bool AP_Mission::start_command_do_servorelayevents(const AP_Mission::Mission_Com
 }
 #endif  // AP_SERVORELAYEVENTS_ENABLED
 
-#if AP_CAMERA_ENABLED
+
 bool AP_Mission::start_command_camera(const AP_Mission::Mission_Command& cmd)
 {
     AP_Camera *camera = AP::camera();
@@ -229,7 +229,7 @@ bool AP_Mission::start_command_camera(const AP_Mission::Mission_Command& cmd)
         return false;
     }
 }
-#endif
+
 
 bool AP_Mission::start_command_parachute(const AP_Mission::Mission_Command& cmd)
 {
@@ -289,7 +289,7 @@ bool AP_Mission::start_command_do_sprayer(const AP_Mission::Mission_Command& cmd
 
 bool AP_Mission::start_command_do_scripting(const AP_Mission::Mission_Command& cmd)
 {
-#if AP_SCRIPTING_ENABLED
+
     AP_Scripting *scripting = AP_Scripting::get_singleton();
     if (scripting == nullptr) {
         return false;
@@ -298,9 +298,9 @@ bool AP_Mission::start_command_do_scripting(const AP_Mission::Mission_Command& c
     scripting->handle_mission_command(cmd);
 
     return true;
-#else
-    return false;
-#endif // AP_SCRIPTING_ENABLED
+
+
+
 }
 
 bool AP_Mission::start_command_do_gimbal_manager_pitchyaw(const AP_Mission::Mission_Command& cmd)

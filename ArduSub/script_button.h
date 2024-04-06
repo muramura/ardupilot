@@ -1,6 +1,6 @@
 #pragma once
 
-#if AP_SCRIPTING_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 
@@ -30,5 +30,3 @@ private:
     bool pressed;
     uint8_t count;
 };
-
-#endif // AP_SCRIPTING_ENABLED

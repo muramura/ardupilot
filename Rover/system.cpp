@@ -13,10 +13,10 @@ void Rover::init_ardupilot()
 
     battery.init();
 
-#if AP_RPM_ENABLED
+
     // Initialise RPM sensor
     rpm_sensor.init();
-#endif
+
 
     rssi.init();
 
@@ -36,9 +36,9 @@ void Rover::init_ardupilot()
     AP::compass().set_log_bit(MASK_LOG_COMPASS);
     AP::compass().init();
 
-#if AP_AIRSPEED_ENABLED
+
     airspeed.set_log_bit(MASK_LOG_IMU);
-#endif
+
 
     // initialise rangefinder
     rangefinder.set_log_rfnd_bit(MASK_LOG_RANGEFINDER);
@@ -49,10 +49,10 @@ void Rover::init_ardupilot()
     g2.proximity.init();
 #endif
 
-#if AP_BEACON_ENABLED
+
     // init beacons used for non-gps position estimation
     g2.beacon.init();
-#endif
+
 
     // and baro for EKF
     barometer.set_log_baro_bit(MASK_LOG_IMU);
@@ -81,24 +81,24 @@ void Rover::init_ardupilot()
     optflow.init(MASK_LOG_OPTFLOW);
 
 
-#if AP_RELAY_ENABLED
+
     relay.init();
-#endif
+
 
 #if HAL_MOUNT_ENABLED
     // initialise camera mount
     camera_mount.init();
 #endif
 
-#if AP_CAMERA_ENABLED
+
     // initialise camera
     camera.init();
-#endif
 
-#if AC_PRECLAND_ENABLED
+
+
     // initialise precision landing
     init_precland();
-#endif
+
 
     /*
       setup the 'main loop is dead' check. Note that this relies on
@@ -109,10 +109,10 @@ void Rover::init_ardupilot()
     // initialize SmartRTL
     g2.smart_rtl.init();
 
-#if AP_OAPATHPLANNER_ENABLED
+
     // initialise object avoidance
     g2.oa.init();
-#endif
+
 
     set_mode(mode_initializing, ModeReason::INITIALISED);
 
@@ -236,9 +236,9 @@ bool Rover::set_mode(Mode &new_mode, ModeReason reason)
     fence.manual_recovery_start();
 
 
-#if AP_CAMERA_ENABLED
+
     camera.set_is_auto_mode(control_mode->mode_number() == Mode::Number::AUTO);
-#endif
+
 
     old_mode.exit();
 

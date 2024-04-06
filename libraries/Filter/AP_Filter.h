@@ -19,7 +19,7 @@
 #include "AP_Filter_config.h"
 #include "NotchFilter.h"
 
-#if AP_FILTER_ENABLED
+
 
 class AP_Filter {
 public:
@@ -87,6 +87,3 @@ private:
 namespace AP {
     AP_Filters &filters();
 };
-
-#endif // AP_FILTER_ENABLED
-

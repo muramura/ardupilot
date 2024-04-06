@@ -7,7 +7,7 @@
 
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Math/AP_Math.h>
@@ -191,5 +191,3 @@ void AP_Airspeed::send_airspeed_calibration(const Vector3f &vground)
 #endif // AP_AIRSPEED_AUTOCAL_ENABLE
 }
 #endif  // HAL_GCS_ENABLED
-
-#endif  // AP_AIRSPEED_ENABLED

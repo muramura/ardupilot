@@ -16,7 +16,7 @@
 
 #include "AP_RPM.h"
 
-#if AP_RPM_ENABLED
+
 
 class AP_RPM_Backend
 {
@@ -45,5 +45,3 @@ protected:
     AP_RPM &ap_rpm;
     AP_RPM::RPM_State &state;
 };
-
-#endif   // AP_RPM_ENABLED

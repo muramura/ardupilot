@@ -162,14 +162,14 @@ void AC_Avoid::adjust_velocity_fence(float kP, float accel_cmss, Vector3f &desir
     }
 
 
-#if AP_BEACON_ENABLED
+
     if ((_enabled & AC_AVOID_STOP_AT_BEACON_FENCE) > 0) {
         // Store velocity needed to back away from beacon fence
         Vector2f backup_vel_beacon;
         adjust_velocity_beacon_fence(kP, accel_cmss_limited, desired_velocity_xy_cms, backup_vel_beacon, dt);
         find_max_quadrant_velocity(backup_vel_beacon, quad_1_back_vel, quad_2_back_vel, quad_3_back_vel, quad_4_back_vel);
     }
-#endif // AP_BEACON_ENABLED
+
 
     // check for vertical fence
     float desired_velocity_z_cms = desired_vel_cms.z;
@@ -1099,7 +1099,7 @@ void AC_Avoid::adjust_velocity_exclusion_circles(float kP, float accel_cmss, Vec
 }
 
 
-#if AP_BEACON_ENABLED
+
 /*
  * Adjusts the desired velocity for the beacon fence.
  */
@@ -1128,7 +1128,7 @@ void AC_Avoid::adjust_velocity_beacon_fence(float kP, float accel_cmss, Vector2f
 
     adjust_velocity_polygon(kP, accel_cmss, desired_vel_cms, backup_vel, boundary, num_points, margin, dt, true);
 }
-#endif  // AP_BEACON_ENABLED
+
 
 /*
  * Adjusts the desired velocity based on output from the proximity sensor

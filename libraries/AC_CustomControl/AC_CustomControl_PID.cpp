@@ -398,11 +398,11 @@ void AC_CustomControl_PID::reset(void)
 
 void AC_CustomControl_PID::set_notch_sample_rate(float sample_rate)
 {
-#if AP_FILTER_ENABLED
+
     _pid_atti_rate_roll.set_notch_sample_rate(sample_rate);
     _pid_atti_rate_pitch.set_notch_sample_rate(sample_rate);
     _pid_atti_rate_yaw.set_notch_sample_rate(sample_rate);
-#endif
+
 }
 
 #endif  // AP_CUSTOMCONTROL_PID_ENABLED

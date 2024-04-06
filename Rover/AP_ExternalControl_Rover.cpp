@@ -4,7 +4,7 @@
 
 
 #include "AP_ExternalControl_Rover.h"
-#if AP_EXTERNAL_CONTROL_ENABLED
+
 
 #include "Rover.h"
 
@@ -33,5 +33,3 @@ bool AP_ExternalControl_Rover::ready_for_external_control()
 {
     return rover.control_mode->in_guided_mode() && rover.arming.is_armed();
 }
-
-#endif // AP_EXTERNAL_CONTROL_ENABLED

@@ -138,17 +138,17 @@ bool Plane::suppress_throttle(void)
         // if we have an airspeed sensor, then check it too, and
         // require 5m/s. This prevents throttle up due to spiky GPS
         // groundspeed with bad GPS reception
-#if AP_AIRSPEED_ENABLED
+
         if ((!ahrs.using_airspeed_sensor()) || airspeed.get_airspeed() >= 5) {
             // we're moving at more than 5 m/s
             throttle_suppressed = false;
             return false;        
         }
-#else
+
         // no airspeed sensor, so we trust that the GPS's movement is truthful
         throttle_suppressed = false;
         return false;
-#endif
+
     }
 
 #if HAL_QUADPLANE_ENABLED
@@ -510,10 +510,10 @@ float Plane::apply_throttle_limits(float throttle_in)
     int8_t min_throttle = aparm.throttle_min.get();
     int8_t max_throttle = aparm.throttle_max.get();
 
-#if AP_ICENGINE_ENABLED
+
     // apply idle governor
     g2.ice_control.update_idle_governor(min_throttle);
-#endif
+
 
     if (min_throttle < 0 && !allow_reverse_thrust()) {
         // reverse thrust is available but inhibited.
@@ -682,7 +682,7 @@ void Plane::set_servos_flaps(void)
     flaperon_update();
 }
 
-#if AP_LANDINGGEAR_ENABLED
+
 /*
   setup landing gear state
  */
@@ -702,7 +702,7 @@ void Plane::set_landing_gear(void)
     }
     gear.last_flight_stage = flight_stage;
 }
-#endif // AP_LANDINGGEAR_ENABLED
+
 
 
 /*
@@ -714,12 +714,12 @@ void Plane::servos_twin_engine_mix(void)
     float rud_gain = float(plane.g2.rudd_dt_gain) * 0.01f;
     rudder_dt = rud_gain * SRV_Channels::get_output_scaled(SRV_Channel::k_rudder) / SERVO_MAX;
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
     if (afs.should_crash_vehicle()) {
         // when in AFS failsafe force rudder input for differential thrust to zero
         rudder_dt = 0;
     }
-#endif
+
 
     float throttle_left, throttle_right;
 
@@ -815,14 +815,14 @@ void Plane::set_servos(void)
     // this is to allow the failsafe module to deliberately crash 
     // the plane. Only used in extreme circumstances to meet the
     // OBC rules
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
     if (afs.should_crash_vehicle()) {
         afs.terminate_vehicle();
         if (!afs.terminating_vehicle_via_landing()) {
             return;
         }
     }
-#endif
+
 
     // do any transition updates for quadplane
 #if HAL_QUADPLANE_ENABLED
@@ -856,10 +856,10 @@ void Plane::set_servos(void)
     // setup flap outputs
     set_servos_flaps();
 
-#if AP_LANDINGGEAR_ENABLED
+
     // setup landing gear output
     set_landing_gear();
-#endif
+
 
     // set airbrake outputs
     airbrake_update();
@@ -868,12 +868,12 @@ void Plane::set_servos(void)
     throttle_slew_limit(SRV_Channel::k_throttle);
 
     int8_t min_throttle = 0;
-#if AP_ICENGINE_ENABLED
+
     if (g2.ice_control.allow_throttle_while_disarmed()) {
         min_throttle = MAX(aparm.throttle_min.get(), 0);
     }
     const float base_throttle = SRV_Channels::get_output_scaled(SRV_Channel::k_throttle);
-#endif
+
 
     if (!arming.is_armed()) {
         //Some ESCs get noisy (beep error msgs) if PWM == 0.
@@ -899,7 +899,7 @@ void Plane::set_servos(void)
         }
     }
 
-#if AP_ICENGINE_ENABLED
+
     float override_pct = SRV_Channels::get_output_scaled(SRV_Channel::k_throttle);
     if (g2.ice_control.throttle_override(override_pct, base_throttle)) {
         // the ICE controller wants to override the throttle for starting, idle, or redline
@@ -908,7 +908,7 @@ void Plane::set_servos(void)
         quadplane.vel_forward.integrator = 0;
 #endif
     }
-#endif  // AP_ICENGINE_ENABLED
+
 
     // run output mixer and send values to the hal for output
     servos_output();

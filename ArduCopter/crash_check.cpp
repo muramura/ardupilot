@@ -170,11 +170,11 @@ void Copter::thrust_loss_check()
         motors->set_thrust_boost(true);
         // the motors library disables this when it is no longer needed to achieve the commanded output
 
-#if AP_GRIPPER_ENABLED
+
         if ((copter.g2.flight_options & uint32_t(FlightOptions::RELEASE_GRIPPER_ON_THRUST_LOSS)) != 0) {
             gripper.release();
         }
-#endif
+
     }
 }
 
@@ -333,10 +333,10 @@ void Copter::parachute_release()
     // release parachute
     parachute.release();
 
-#if AP_LANDINGGEAR_ENABLED
+
     // deploy landing gear
     landinggear.set_position(AP_LandingGear::LandingGear_Deploy);
-#endif
+
 }
 
 // parachute_manual_release - trigger the release of the parachute, after performing some checks for pilot error

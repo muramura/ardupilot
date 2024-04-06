@@ -1,6 +1,6 @@
 #include "AP_Gripper_Backend.h"
 
-#if AP_GRIPPER_ENABLED
+
 
 #include <AP_Math/AP_Math.h>
 
@@ -21,5 +21,3 @@ void AP_Gripper_Backend::update()
         grab();
     }
 }
-
-#endif  // AP_GRIPPER_ENABLED

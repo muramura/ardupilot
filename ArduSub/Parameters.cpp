@@ -464,11 +464,11 @@ const AP_Param::Info Sub::var_info[] = {
     GOBJECT(camera, "CAM", AP_Camera),
 
 
-#if AP_RELAY_ENABLED
+
     // @Group: RELAY
     // @Path: ../libraries/AP_Relay/AP_Relay.cpp
     GOBJECT(relay,                  "RELAY", AP_Relay),
-#endif
+
 
     // @Group: COMPASS_
     // @Path: ../libraries/AP_Compass/AP_Compass.cpp
@@ -650,11 +650,11 @@ const AP_Param::Info Sub::var_info[] = {
     GSCALAR(surftrak_depth, "SURFTRAK_DEPTH", SURFTRAK_DEPTH_DEFAULT),
 #endif
 
-#if AP_TERRAIN_AVAILABLE
+
     // @Group: TERRAIN_
     // @Path: ../libraries/AP_Terrain/AP_Terrain.cpp
     GOBJECT(terrain,                "TERRAIN_", AP_Terrain),
-#endif
+
 
 
     // @Group: FLOW
@@ -662,11 +662,11 @@ const AP_Param::Info Sub::var_info[] = {
     GOBJECT(optflow,   "FLOW", AP_OpticalFlow),
 
 
-#if AP_RPM_ENABLED
+
     // @Group: RPM
     // @Path: ../libraries/AP_RPM/AP_RPM.cpp
     GOBJECT(rpm_sensor, "RPM", AP_RPM),
-#endif
+
 
     // @Group: NTF_
     // @Path: ../libraries/AP_Notify/AP_Notify.cpp
@@ -748,22 +748,22 @@ void Sub::load_parameters()
 
 
     static const AP_Param::G2ObjectConversion g2_conversions[] {
-#if AP_AIRSPEED_ENABLED
+
     // PARAMETER_CONVERSION - Added: JAN-2022
         { &airspeed, airspeed.var_info, 19 },
-#endif
+
 
     // PARAMETER_CONVERSION - Added: Jan-2024
         { &stats, stats.var_info, 1 },
 
-#if AP_SCRIPTING_ENABLED
+
     // PARAMETER_CONVERSION - Added: Jan-2024
         { &scripting, scripting.var_info, 18 },
-#endif
-#if AP_GRIPPER_ENABLED
+
+
     // PARAMETER_CONVERSION - Added: Feb-2024
         { &gripper, gripper.var_info, 3 },
-#endif
+
     };
 
     AP_Param::convert_g2_objects(&g2, g2_conversions, ARRAY_SIZE(g2_conversions));
@@ -774,10 +774,10 @@ void Sub::load_parameters()
 #endif
 
     static const AP_Param::TopLevelObjectConversion toplevel_conversions[] {
-#if AP_SERIALMANAGER_ENABLED
+
         // PARAMETER_CONVERSION - Added: Feb-2024
         { &serial_manager, serial_manager.var_info, Parameters::k_param_serial_manager_old },
-#endif
+
     };
 
     AP_Param::convert_toplevel_objects(toplevel_conversions, ARRAY_SIZE(toplevel_conversions));

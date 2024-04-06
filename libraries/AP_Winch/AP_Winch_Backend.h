@@ -17,7 +17,7 @@
 
 #include <AP_Winch/AP_Winch.h>
 
-#if AP_WINCH_ENABLED
+
 
 #include <AP_Logger/AP_Logger_config.h>
 
@@ -69,5 +69,3 @@ protected:
     int16_t previous_radio_in = -1; // previous RC input from pilot, used to ignore small changes
     float previous_rate;            // previous rate used for acceleration limiting
 };
-
-#endif  // AP_WINCH_ENABLED

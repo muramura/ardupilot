@@ -35,13 +35,13 @@ public:
 
     virtual void handle_msg(const mavlink_message_t &msg) { return; }
 
-#if AP_SCRIPTING_ENABLED
+
     void get_state(RangeFinder::RangeFinder_State &state_arg);
 
     // Returns false if scripting backing hasn't been setup.
     virtual bool handle_script_msg(float dist_m) { return false; } // legacy interface
     virtual bool handle_script_msg(const RangeFinder::RangeFinder_State &state_arg) { return false; }
-#endif
+
 
 #if HAL_MSP_RANGEFINDER_ENABLED
     virtual void handle_msp(const MSP::msp_rangefinder_data_message_t &pkt) { return; }

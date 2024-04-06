@@ -18,7 +18,7 @@
 
 #include "AP_Terrain.h"
 
-#if AP_TERRAIN_AVAILABLE
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Common/AP_Common.h>
@@ -172,5 +172,3 @@ void AP_Terrain::update_rally_data(void)
     }
 }
 #endif
-
-#endif // AP_TERRAIN_AVAILABLE

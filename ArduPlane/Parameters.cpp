@@ -304,7 +304,7 @@ const AP_Param::Info Plane::var_info[] = {
     // @User: Standard
     GSCALAR(flybywire_elev_reverse, "FBWB_ELEV_REV",  0),
 
-#if AP_TERRAIN_AVAILABLE
+
     // @Param: TERRAIN_FOLLOW
     // @DisplayName: Use terrain following
     // @Description: This enables terrain following for CRUISE mode, FBWB mode, RTL and for rally points. To use this option you also need to set TERRAIN_ENABLE to 1, which enables terrain data fetching from the GCS, and you need to have a GCS that supports sending terrain data to the aircraft. When terrain following is enabled then CRUISE and FBWB mode will hold height above terrain rather than height above home. In RTL the return to launch altitude will be considered to be a height above the terrain. Rally point altitudes will be taken as height above the terrain. This option does not affect mission items, which have a per-waypoint flag for whether they are height above home or height above the terrain. To use terrain following missions you need a ground station which can set the waypoint type to be a terrain height waypoint when creating the mission.
@@ -320,7 +320,7 @@ const AP_Param::Info Plane::var_info[] = {
     // @Units: m
     // @User: Standard
     GSCALAR(terrain_lookahead, "TERRAIN_LOOKAHD",  2000),
-#endif
+
 
     // @Param: FBWB_CLIMB_RATE
     // @DisplayName: Fly By Wire B altitude change rate
@@ -755,11 +755,11 @@ const AP_Param::Info Plane::var_info[] = {
     // @Path: AP_Arming.cpp,../libraries/AP_Arming/AP_Arming.cpp
     GOBJECT(arming,                 "ARMING_", AP_Arming_Plane),
 
-#if AP_RELAY_ENABLED
+
     // @Group: RELAY
     // @Path: ../libraries/AP_Relay/AP_Relay.cpp
     GOBJECT(relay,                  "RELAY", AP_Relay),
-#endif
+
 
 #if PARACHUTE == ENABLED
 	// @Group: CHUTE_
@@ -778,11 +778,11 @@ const AP_Param::Info Plane::var_info[] = {
     // @User: Standard
     GSCALAR(rangefinder_landing,    "RNGFND_LANDING",   0),
 
-#if AP_TERRAIN_AVAILABLE
+
     // @Group: TERRAIN_
     // @Path: ../libraries/AP_Terrain/AP_Terrain.cpp
     GOBJECT(terrain,                "TERRAIN_", AP_Terrain),
-#endif
+
 
 #if HAL_ADSB_ENABLED
     // @Group: ADSB_
@@ -928,11 +928,11 @@ const AP_Param::Info Plane::var_info[] = {
     GOBJECT(sitl, "SIM_", SITL::SIM),
 #endif
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
     // @Group: AFS_
     // @Path: ../libraries/AP_AdvancedFailsafe/AP_AdvancedFailsafe.cpp
     GOBJECT(afs,  "AFS_", AP_AdvancedFailsafe),
-#endif
+
 
 
     // @Group: FLOW
@@ -962,11 +962,11 @@ const AP_Param::Info Plane::var_info[] = {
     GOBJECTN(ahrs.EKF3, NavEKF3, "EK3_", NavEKF3),
 #endif
 
-#if AP_RPM_ENABLED
+
     // @Group: RPM
     // @Path: ../libraries/AP_RPM/AP_RPM.cpp
     GOBJECT(rpm_sensor, "RPM", AP_RPM),
-#endif
+
 
     // @Group: RSSI_
     // @Path: ../libraries/AP_RSSI/AP_RSSI.cpp
@@ -1012,11 +1012,11 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     AP_SUBGROUPPTR(button_ptr, "BTN_", 1, ParametersG2, AP_Button),
 #endif
 
-#if AP_ICENGINE_ENABLED
+
     // @Group: ICE_
     // @Path: ../libraries/AP_ICEngine/AP_ICEngine.cpp
     AP_SUBGROUPINFO(ice_control, "ICE_", 2, ParametersG2, AP_ICEngine),
-#endif
+
 
     // 3 was used by prototype for servo_channels
     
@@ -1099,11 +1099,11 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     // @User: Standard
     AP_GROUPINFO("TKOFF_ACCEL_CNT", 15, ParametersG2, takeoff_throttle_accel_count, 1),
 
-#if AP_LANDINGGEAR_ENABLED
+
     // @Group: LGR_
     // @Path: ../libraries/AP_LandingGear/AP_LandingGear.cpp
     AP_SUBGROUPINFO(landing_gear, "LGR_", 16, ParametersG2, AP_LandingGear),
-#endif
+
 
     // @Param: DSPOILER_CROW_W1
     // @DisplayName: Differential spoiler crow flaps outer weight
@@ -1243,11 +1243,11 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     // @User: Standard
     AP_GROUPINFO("AUTOTUNE_AXES", 34, ParametersG2, axis_bitmask, 7),
 
-#if AC_PRECLAND_ENABLED
+
     // @Group: PLND_
     // @Path: ../libraries/AC_PrecLand/AC_PrecLand.cpp
     AP_SUBGROUPINFO(precland, "PLND_", 35, ParametersG2, AC_PrecLand),
-#endif
+
 
     AP_GROUPEND
 };
@@ -1466,20 +1466,20 @@ void Plane::load_parameters(void)
     }
 
 
-#if AP_TERRAIN_AVAILABLE
+
     g.terrain_follow.convert_parameter_width(AP_PARAM_INT8);
-#endif
+
 
     g.use_reverse_thrust.convert_parameter_width(AP_PARAM_INT16);
 
-#if AP_AIRSPEED_ENABLED
+
     // PARAMETER_CONVERSION - Added: Jan-2022
     {
         const uint16_t old_key = g.k_param_airspeed;
         const uint16_t old_index = 0;       // Old parameter index in the tree
         AP_Param::convert_class(old_key, &airspeed, airspeed.var_info, old_index, true);
     }
-#endif
+
 
 #if AP_INERTIALSENSOR_HARMONICNOTCH_ENABLED
 #if HAL_INS_NUM_HARMONIC_NOTCH_FILTERS > 1
@@ -1525,14 +1525,14 @@ void Plane::load_parameters(void)
     // PARAMETER_CONVERSION - Added: Jan-2024 for Plane-4.6
         { &stats, stats.var_info, 5 },
 
-#if AP_SCRIPTING_ENABLED
+
     // PARAMETER_CONVERSION - Added: Jan-2024 for Plane-4.6
         { &scripting, scripting.var_info, 14 },
-#endif
-#if AP_GRIPPER_ENABLED
+
+
     // PARAMETER_CONVERSION - Added: Feb-2024 for Plane-4.6
         { &gripper, gripper.var_info, 12 },
-#endif
+
     };
 
     AP_Param::convert_g2_objects(&g2, g2_conversions, ARRAY_SIZE(g2_conversions));
@@ -1543,10 +1543,10 @@ void Plane::load_parameters(void)
 #endif
 
     static const AP_Param::TopLevelObjectConversion toplevel_conversions[] {
-#if AP_SERIALMANAGER_ENABLED
+
         // PARAMETER_CONVERSION - Added: Feb-2024 for Plane-4.6
         { &serial_manager, serial_manager.var_info, Parameters::k_param_serial_manager_old },
-#endif
+
     };
 
     AP_Param::convert_toplevel_objects(toplevel_conversions, ARRAY_SIZE(toplevel_conversions));

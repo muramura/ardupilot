@@ -2,7 +2,7 @@
 
 #include "AC_PrecLand_config.h"
 
-#if AC_PRECLAND_ENABLED
+
 
 #include <AC_PrecLand/AC_PrecLand.h>
 #include <AP_Math/AP_Math.h>
@@ -106,5 +106,3 @@ private:
     uint32_t failsafe_start_ms; // timestamp of when failsafe was triggered
 
 };
-
-#endif // AC_PRECLAND_ENABLED

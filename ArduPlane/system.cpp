@@ -23,9 +23,9 @@ void Plane::init_ardupilot()
 #endif
     rc().init();
 
-#if AP_RELAY_ENABLED
+
     relay.init();
-#endif
+
 
     // initialise notify system
     notify.init();
@@ -45,9 +45,9 @@ void Plane::init_ardupilot()
 
     rssi.init();
 
-#if AP_RPM_ENABLED
+
     rpm_sensor.init();
-#endif
+
 
     // setup telem slots with serial ports
     gcs().setup_uarts();
@@ -60,10 +60,10 @@ void Plane::init_ardupilot()
     AP::compass().set_log_bit(MASK_LOG_COMPASS);
     AP::compass().init();
 
-#if AP_AIRSPEED_ENABLED
+
     airspeed.set_fixedwing_parameters(&aparm);
     airspeed.set_log_bit(MASK_LOG_IMU);
-#endif
+
 
     // GPS Initialization
     gps.set_log_gps_bit(MASK_LOG_GPS);
@@ -81,10 +81,10 @@ void Plane::init_ardupilot()
     camera.init();
 
 
-#if AP_LANDINGGEAR_ENABLED
+
     // initialise landing gear position
     g2.landing_gear.init();
-#endif
+
 
 #if FENCE_TRIGGERED_PIN > 0
     hal.gpio->pinMode(FENCE_TRIGGERED_PIN, HAL_GPIO_OUTPUT);
@@ -156,9 +156,9 @@ void Plane::init_ardupilot()
     }
 
 
-#if AC_PRECLAND_ENABLED
+
     g2.precland.init(scheduler.get_loop_rate_hz());
-#endif
+
 }
 
 

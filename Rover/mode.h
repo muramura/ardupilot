@@ -340,10 +340,10 @@ private:
     void do_set_home(const AP_Mission::Mission_Command& cmd);
     void do_set_reverse(const AP_Mission::Mission_Command& cmd);
     void do_guided_limits(const AP_Mission::Mission_Command& cmd);
-#if AP_SCRIPTING_ENABLED
+
     void do_nav_script_time(const AP_Mission::Mission_Command& cmd);
     bool verify_nav_script_time();
-#endif
+
 
     bool waiting_to_start;  // true if waiting for EKF origin before starting mission
     bool auto_triggered;        // true when auto has been triggered to start
@@ -376,7 +376,7 @@ private:
     uint32_t nav_delay_time_max_ms;  // used for delaying the navigation commands
     uint32_t nav_delay_time_start_ms;
 
-#if AP_SCRIPTING_ENABLED
+
     // nav_script_time command variables
     struct {
         bool done;          // true once lua script indicates it has completed
@@ -389,7 +389,7 @@ private:
         int16_t arg3;       // 3rd argument provided by mission command
         int16_t arg4;       // 4th argument provided by mission command
     } nav_scripting;
-#endif
+
 
     // Mission change detector
     AP_Mission_ChangeDetector mis_change_detector;
@@ -488,9 +488,9 @@ protected:
 class ModeGuided : public Mode
 {
 public:
-#if AP_EXTERNAL_CONTROL_ENABLED
+
     friend class AP_ExternalControl_Rover;
-#endif
+
 
     Number mode_number() const override { return Number::GUIDED; }
     const char *name4() const override { return "GUID"; }

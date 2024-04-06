@@ -55,11 +55,11 @@ const AP_Param::Info ReplayVehicle::var_info[] = {
     // @Path: ../libraries/AP_AHRS/AP_AHRS.cpp
     GOBJECT(ahrs,                   "AHRS_",    AP_AHRS),
 
-#if AP_AIRSPEED_ENABLED
+
     // @Group: ARSPD_
     // @Path: ../libraries/AP_Airspeed/AP_Airspeed.cpp
     GOBJECT(airspeed,                               "ARSP_",   AP_Airspeed),
-#endif
+
 
     // @Group: EK2_
     // @Path: ../libraries/AP_NavEKF2/AP_NavEKF2.cpp
@@ -96,22 +96,22 @@ const struct AP_Param::GroupInfo        GCS_MAVLINK_Parameters::var_info[] = {
 };
 GCS_Dummy _gcs;
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
 AP_AdvancedFailsafe *AP::advancedfailsafe() { return nullptr; }
 bool AP_AdvancedFailsafe::gcs_terminate(bool should_terminate, const char *reason) { return false; }
-#endif
+
 
 // dummy method to avoid linking AP_Avoidance
 // AP_Avoidance *AP::ap_avoidance() { return nullptr; }
 
-#if AP_LTM_TELEM_ENABLED
+
 // avoid building/linking LTM:
 void AP_LTM_Telem::init() {};
-#endif
-#if AP_DEVO_TELEM_ENABLED
+
+
 // avoid building/linking Devo:
 void AP_DEVO_Telem::init() {};
-#endif
+
 
 void ReplayVehicle::init_ardupilot(void)
 {

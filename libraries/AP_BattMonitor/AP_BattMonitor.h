@@ -2,7 +2,7 @@
 
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Param/AP_Param.h>
@@ -318,5 +318,3 @@ private:
 namespace AP {
     AP_BattMonitor &battery();
 };
-
-#endif  // AP_BATTERY_ENABLED

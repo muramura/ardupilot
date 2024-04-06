@@ -71,9 +71,9 @@ const AP_Scheduler::Task Plane::scheduler_tasks[] = {
     SCHED_TASK(calc_airspeed_errors,   10,    100,  42),
     SCHED_TASK(update_alt,             10,    200,  45),
     SCHED_TASK(adjust_altitude_target, 10,    200,  48),
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
     SCHED_TASK(afs_fs_check,           10,    100,  51),
-#endif
+
     SCHED_TASK(ekf_check,              10,     75,  54),
     SCHED_TASK_CLASS(GCS,            (GCS*)&plane._gcs,       update_receive,   300,  500,  57),
     SCHED_TASK_CLASS(GCS,            (GCS*)&plane._gcs,       update_send,      300,  750,  60),
@@ -82,18 +82,18 @@ const AP_Scheduler::Task Plane::scheduler_tasks[] = {
 #endif
     SCHED_TASK_CLASS(AP_BattMonitor, &plane.battery, read,   10, 300,  66),
     SCHED_TASK(read_rangefinder,       50,    100, 78),
-#if AP_ICENGINE_ENABLED
+
     SCHED_TASK_CLASS(AP_ICEngine,      &plane.g2.ice_control, update,     10, 100,  81),
-#endif
+
 
     SCHED_TASK_CLASS(AP_OpticalFlow, &plane.optflow, update,    50,    50,  87),
 
     SCHED_TASK(one_second_loop,         1,    400,  90),
     SCHED_TASK(three_hz_loop,           3,     75,  93),
     SCHED_TASK(check_long_failsafe,     3,    400,  96),
-#if AP_RPM_ENABLED
+
     SCHED_TASK_CLASS(AP_RPM,           &plane.rpm_sensor,     update,     10, 100,  99),
-#endif
+
 #if AP_AIRSPEED_AUTOCAL_ENABLE
     SCHED_TASK(airspeed_ratio_update,   1,    100,  102),
 #endif // AP_AIRSPEED_AUTOCAL_ENABLE
@@ -116,9 +116,9 @@ const AP_Scheduler::Task Plane::scheduler_tasks[] = {
     SCHED_TASK(update_soaring,         50,    400, 126),
 #endif
     SCHED_TASK(parachute_check,        10,    200, 129),
-#if AP_TERRAIN_AVAILABLE
+
     SCHED_TASK_CLASS(AP_Terrain, &plane.terrain, update, 10, 200, 132),
-#endif // AP_TERRAIN_AVAILABLE
+
     SCHED_TASK(update_is_flying_5Hz,    5,    100, 135),
 #if HAL_LOGGING_ENABLED
     SCHED_TASK_CLASS(AP_Logger,         &plane.logger, periodic_tasks, 50, 400, 138),
@@ -131,12 +131,12 @@ const AP_Scheduler::Task Plane::scheduler_tasks[] = {
 #if HAL_BUTTON_ENABLED
     SCHED_TASK_CLASS(AP_Button, &plane.button, update, 5, 100, 150),
 #endif
-#if AP_LANDINGGEAR_ENABLED
+
     SCHED_TASK(landing_gear_update, 5, 50, 159),
-#endif
-#if AC_PRECLAND_ENABLED
+
+
     SCHED_TASK(precland_update, 400, 50, 160),
-#endif
+
 };
 
 void Plane::get_scheduler_tasks(const AP_Scheduler::Task *&tasks,
@@ -298,12 +298,12 @@ void Plane::update_logging25(void)
 /*
   check for AFS failsafe check
  */
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
 void Plane::afs_fs_check(void)
 {
     afs.check(failsafe.AFS_last_valid_rc_ms);
 }
-#endif
+
 
 #if HAL_WITH_IO_MCU
 #include <AP_IOMCU/AP_IOMCU.h>
@@ -563,12 +563,12 @@ void Plane::update_alt()
 
     update_flight_stage();
 
-#if AP_SCRIPTING_ENABLED
+
     if (nav_scripting_active()) {
         // don't call TECS while we are in a trick
         return;
     }
-#endif
+
 
     bool should_run_tecs = control_mode->does_auto_throttle();
 #if HAL_QUADPLANE_ENABLED
@@ -828,7 +828,7 @@ bool Plane::set_target_location(const Location &target_loc)
 }
 #endif //AP_SCRIPTING_ENABLED || AP_EXTERNAL_CONTROL_ENABLED
 
-#if AP_SCRIPTING_ENABLED
+
 // set target location (for use by scripting)
 bool Plane::get_target_location(Location& target_loc)
 {
@@ -904,7 +904,7 @@ bool Plane::set_land_descent_rate(float descent_rate)
 #endif
     return false;
 }
-#endif // AP_SCRIPTING_ENABLED
+
 
 // returns true if vehicle is landing.
 bool Plane::is_landing() const
@@ -963,12 +963,12 @@ bool Plane::flight_option_enabled(FlightOptions flight_option) const
     return g2.flight_options & flight_option;
 }
 
-#if AC_PRECLAND_ENABLED
+
 void Plane::precland_update(void)
 {
     // alt will be unused if we pass false through as the second parameter:
     return g2.precland.update(rangefinder_state.height_estimate*100, rangefinder_state.in_range);
 }
-#endif
+
 
 AP_HAL_MAIN_CALLBACKS(&plane);

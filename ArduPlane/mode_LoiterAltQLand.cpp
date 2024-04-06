@@ -41,15 +41,15 @@ void ModeLoiterAltQLand::switch_qland()
 bool ModeLoiterAltQLand::handle_guided_request(Location target_loc)
 {
     // setup altitude
-#if AP_TERRAIN_AVAILABLE
+
     if (plane.terrain_enabled_in_mode(Mode::Number::QLAND)) {
         target_loc.set_alt_cm(quadplane.qrtl_alt*100UL, Location::AltFrame::ABOVE_TERRAIN);
     } else {
         target_loc.set_alt_cm(quadplane.qrtl_alt*100UL, Location::AltFrame::ABOVE_HOME);
     }
-#else
-    target_loc.set_alt_cm(quadplane.qrtl_alt*100UL, Location::AltFrame::ABOVE_HOME);
-#endif
+
+
+
 
     plane.set_guided_WP(target_loc);
 

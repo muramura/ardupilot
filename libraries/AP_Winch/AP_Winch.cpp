@@ -1,6 +1,6 @@
 #include "AP_Winch.h"
 
-#if AP_WINCH_ENABLED
+
 
 #include <GCS_MAVLink/GCS.h>
 #include "AP_Winch_PWM.h"
@@ -182,5 +182,3 @@ AP_Winch *winch()
 }
 
 };
-
-#endif  // AP_WINCH_ENABLED

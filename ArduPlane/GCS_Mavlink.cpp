@@ -280,11 +280,11 @@ float GCS_MAVLINK_Plane::vfr_hud_airspeed() const
     // will use an airspeed sensor, that value is constrained by the
     // ground speed.  When reporting we should send the true airspeed
     // value if possible:
-#if AP_AIRSPEED_ENABLED
+
     if (plane.airspeed.enabled() && plane.airspeed.healthy()) {
         return plane.airspeed.get_airspeed();
     }
-#endif
+
 
     // airspeed estimates are OK:
     float aspeed;
@@ -424,10 +424,10 @@ bool GCS_MAVLINK_Plane::try_send_message(enum ap_message id)
         break;
 
     case MSG_TERRAIN:
-#if AP_TERRAIN_AVAILABLE
+
         CHECK_PAYLOAD_SIZE(TERRAIN_REQUEST);
         plane.terrain.send_request(chan);
-#endif
+
         break;
 
     case MSG_WIND:
@@ -653,9 +653,9 @@ static const ap_message STREAM_EXTRA1_msgs[] = {
     MSG_SIMSTATE,
 #endif
     MSG_AHRS2,
-#if AP_RPM_ENABLED
+
     MSG_RPM,
-#endif
+
     MSG_AOA_SSA,
     MSG_PID_TUNING,
     MSG_LANDING,
@@ -675,17 +675,17 @@ static const ap_message STREAM_EXTRA2_msgs[] = {
 static const ap_message STREAM_EXTRA3_msgs[] = {
     MSG_AHRS,
     MSG_WIND,
-#if AP_RANGEFINDER_ENABLED
+
     MSG_RANGEFINDER,
-#endif
+
     MSG_DISTANCE_SENSOR,
     MSG_SYSTEM_TIME,
-#if AP_TERRAIN_AVAILABLE
+
     MSG_TERRAIN,
-#endif
-#if AP_BATTERY_ENABLED
+
+
     MSG_BATTERY_STATUS,
-#endif
+
 #if HAL_MOUNT_ENABLED
     MSG_GIMBAL_DEVICE_ATTITUDE_STATUS,
 #endif
@@ -704,9 +704,9 @@ static const ap_message STREAM_PARAMS_msgs[] = {
 };
 static const ap_message STREAM_ADSB_msgs[] = {
     MSG_ADSB_VEHICLE,
-#if AP_AIS_ENABLED
+
     MSG_AIS_VESSEL,
-#endif
+
 };
 
 const struct GCS_MAVLINK::stream_entries GCS_MAVLINK::all_stream_entries[] = {
@@ -753,9 +753,9 @@ void GCS_MAVLINK_Plane::handle_change_alt_request(AP_Mission::Mission_Command &c
 */
 void GCS_MAVLINK_Plane::handle_landing_target(const mavlink_landing_target_t &packet, uint32_t timestamp_ms)
 {
-#if AC_PRECLAND_ENABLED
+
     plane.g2.precland.handle_msg(packet, timestamp_ms);
-#endif
+
 }
 
 MAV_RESULT GCS_MAVLINK_Plane::handle_command_preflight_calibration(const mavlink_command_int_t &packet, const mavlink_message_t &msg)
@@ -1033,13 +1033,13 @@ MAV_RESULT GCS_MAVLINK_Plane::handle_command_int_packet(const mavlink_command_in
         return MAV_RESULT_DENIED;
 #endif
 
-#if AP_ICENGINE_ENABLED
+
     case MAV_CMD_DO_ENGINE_CONTROL:
         if (!plane.g2.ice_control.engine_control(packet.param1, packet.param2, packet.param3, (uint32_t)packet.param4)) {
             return MAV_RESULT_FAILED;
         }
         return MAV_RESULT_ACCEPTED;
-#endif
+
 
     case MAV_CMD_DO_CHANGE_SPEED:
         return handle_command_DO_CHANGE_SPEED(packet);
@@ -1241,9 +1241,9 @@ void GCS_MAVLINK_Plane::handle_message(const mavlink_message_t &msg)
 
     case MAVLINK_MSG_ID_TERRAIN_DATA:
     case MAVLINK_MSG_ID_TERRAIN_CHECK:
-#if AP_TERRAIN_AVAILABLE
+
         plane.terrain.handle_data(chan, msg);
-#endif
+
         break;
 
     case MAVLINK_MSG_ID_SET_ATTITUDE_TARGET:
@@ -1443,9 +1443,9 @@ uint64_t GCS_MAVLINK_Plane::capabilities() const
             MAV_PROTOCOL_CAPABILITY_MISSION_INT |
             MAV_PROTOCOL_CAPABILITY_SET_POSITION_TARGET_GLOBAL_INT |
             MAV_PROTOCOL_CAPABILITY_SET_ATTITUDE_TARGET |
-#if AP_TERRAIN_AVAILABLE
+
             (plane.terrain.enabled() ? MAV_PROTOCOL_CAPABILITY_TERRAIN : 0) |
-#endif
+
             GCS_MAVLINK::capabilities());
 }
 

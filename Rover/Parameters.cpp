@@ -224,11 +224,11 @@ const AP_Param::Info Rover::var_info[] = {
     // @Path: ../libraries/AP_Baro/AP_Baro.cpp
     GOBJECT(barometer, "BARO", AP_Baro),
 
-#if AP_RELAY_ENABLED
+
     // @Group: RELAY
     // @Path: ../libraries/AP_Relay/AP_Relay.cpp
     GOBJECT(relay,                  "RELAY", AP_Relay),
-#endif
+
 
     // @Group: RCMAP_
     // @Path: ../libraries/AP_RCMapper/AP_RCMapper.cpp
@@ -294,17 +294,17 @@ const AP_Param::Info Rover::var_info[] = {
     // @Path: ../libraries/AP_AHRS/AP_AHRS.cpp
     GOBJECT(ahrs,                   "AHRS_",    AP_AHRS),
 
-#if AP_CAMERA_ENABLED
+
     // @Group: CAM
     // @Path: ../libraries/AP_Camera/AP_Camera.cpp
     GOBJECT(camera, "CAM", AP_Camera),
-#endif
 
-#if AC_PRECLAND_ENABLED
+
+
     // @Group: PLND_
     // @Path: ../libraries/AC_PrecLand/AC_PrecLand.cpp
     GOBJECT(precland,                "PLND_", AC_PrecLand),
-#endif
+
 
 #if HAL_MOUNT_ENABLED
     // @Group: MNT
@@ -347,11 +347,11 @@ const AP_Param::Info Rover::var_info[] = {
     GOBJECTN(ahrs.EKF3, NavEKF3, "EK3_", NavEKF3),
 #endif
 
-#if AP_RPM_ENABLED
+
     // @Group: RPM
     // @Path: ../libraries/AP_RPM/AP_RPM.cpp
     GOBJECT(rpm_sensor, "RPM", AP_RPM),
-#endif
+
 
     // @Group: MIS_
     // @Path: ../libraries/AP_Mission/AP_Mission.cpp
@@ -421,11 +421,11 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     AP_SUBGROUPINFO(afs, "AFS_", 5, ParametersG2, AP_AdvancedFailsafe),
 #endif
 
-#if AP_BEACON_ENABLED
+
     // @Group: BCN
     // @Path: ../libraries/AP_Beacon/AP_Beacon.cpp
     AP_SUBGROUPINFO(beacon, "BCN", 6, ParametersG2, AP_Beacon),
-#endif
+
 
     // 7 was used by AP_VisualOdometry
 
@@ -610,11 +610,11 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     // @Path: sailboat.cpp
     AP_SUBGROUPINFO(sailboat, "SAIL_", 44, ParametersG2, Sailboat),
 
-#if AP_OAPATHPLANNER_ENABLED
+
     // @Group: OA_
     // @Path: ../libraries/AC_Avoidance/AP_OAPathPlanner.cpp
     AP_SUBGROUPINFO(oa, "OA_", 45, ParametersG2, AP_OAPathPlanner),
-#endif
+
 
     // @Param: SPEED_MAX
     // @DisplayName: Speed maximum
@@ -730,9 +730,9 @@ ParametersG2::ParametersG2(void)
 #if ADVANCED_FAILSAFE == ENABLED
     afs(),
 #endif
-#if AP_BEACON_ENABLED
+
     beacon(),
-#endif
+
     motors(wheel_rate_control),
     wheel_rate_control(wheel_encoder),
     attitude_control(),
@@ -880,14 +880,14 @@ void Rover::load_parameters(void)
 #endif
 
     static const AP_Param::G2ObjectConversion g2_conversions[] {
-#if AP_AIRSPEED_ENABLED
+
 // PARAMETER_CONVERSION - Added: JAN-2022
         { &airspeed, airspeed.var_info, 37 },
-#endif
-#if AP_AIS_ENABLED
+
+
 // PARAMETER_CONVERSION - Added: MAR-2022
         { &ais, ais.var_info, 50 },
-#endif
+
 
 // PARAMETER_CONVERSION - Added: Mar-2022
         { &fence, fence.var_info, 17 },
@@ -896,14 +896,14 @@ void Rover::load_parameters(void)
     // PARAMETER_CONVERSION - Added: Jan-2024 for Rover-4.6
         { &stats, stats.var_info, 1 },
 
-#if AP_SCRIPTING_ENABLED
+
     // PARAMETER_CONVERSION - Added: Jan-2024 for Rover-4.6
         { &scripting, scripting.var_info, 41 },
-#endif
-#if AP_GRIPPER_ENABLED
+
+
     // PARAMETER_CONVERSION - Added: Feb-2024 for Copter-4.6
         { &gripper, gripper.var_info, 39 },
-#endif
+
     };
 
     AP_Param::convert_g2_objects(&g2, g2_conversions, ARRAY_SIZE(g2_conversions));
@@ -914,10 +914,10 @@ void Rover::load_parameters(void)
 #endif
 
     static const AP_Param::TopLevelObjectConversion toplevel_conversions[] {
-#if AP_SERIALMANAGER_ENABLED
+
         // PARAMETER_CONVERSION - Added: Feb-2024 for Rover-4.6
         { &serial_manager, serial_manager.var_info, Parameters::k_param_serial_manager_old },
-#endif
+
     };
 
     AP_Param::convert_toplevel_objects(toplevel_conversions, ARRAY_SIZE(toplevel_conversions));

@@ -454,10 +454,10 @@ public:
     AP_Int8 takeoff_throttle_slewrate;
     AP_Float takeoff_pitch_limit_reduction_sec;
     AP_Int8 level_roll_limit;
-#if AP_TERRAIN_AVAILABLE
+
     AP_Int32 terrain_follow;
     AP_Int16 terrain_lookahead;
-#endif
+
     AP_Int16 glide_slope_min;
     AP_Float glide_slope_threshold;
     AP_Int8 rangefinder_landing;
@@ -483,10 +483,10 @@ public:
     AP_Button *button_ptr;
 #endif
 
-#if AP_ICENGINE_ENABLED
+
     // internal combustion engine control
     AP_ICEngine ice_control;
-#endif
+
 
     // RC input channels
     RC_Channels_Plane rc_channels;
@@ -516,13 +516,13 @@ public:
     AP_Int8 takeoff_throttle_accel_count;
     AP_Int8 takeoff_timeout;
 
-#if AP_LANDINGGEAR_ENABLED
-    AP_LandingGear landing_gear;
-#endif
 
-#if AC_PRECLAND_ENABLED
+    AP_LandingGear landing_gear;
+
+
+
     AC_PrecLand precland;
-#endif
+
 
     // crow flaps weighting
     AP_Int8 crow_flap_weight_outer;

@@ -17,7 +17,7 @@
 #include "RGBLed.h"
 #include <AP_Common/AP_Common.h>
 
-#if AP_SCRIPTING_ENABLED
+
 
 class ScriptingLED: public RGBLed {
 public:
@@ -43,5 +43,3 @@ private:
     static ScriptingLED *_singleton;
 
 };
-
-#endif

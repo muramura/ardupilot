@@ -16,7 +16,7 @@
 
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_ENABLED
+
 
 #include "AP_BattMonitor.h"
 
@@ -146,5 +146,3 @@ struct BattMonitorScript_State {
     float temperature=nanf(""); // Battery temperature in degrees Celsius
 };
 #endif // AP_BATTERY_SCRIPTING_ENABLED
-
-#endif  // AP_BATTERY_ENABLED

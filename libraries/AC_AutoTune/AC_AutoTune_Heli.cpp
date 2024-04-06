@@ -19,7 +19,7 @@
 
 #include "AC_AutoTune_config.h"
 
-#if AC_AUTOTUNE_ENABLED
+
 
 #include "AC_AutoTune_Heli.h"
 
@@ -1949,5 +1949,3 @@ bool AC_AutoTune_Heli::exceeded_freq_range(float frequency)
     }
     return ret;
 }
-
-#endif  // AC_AUTOTUNE_ENABLED

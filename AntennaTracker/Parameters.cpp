@@ -600,10 +600,10 @@ void Tracker::load_parameters(void)
 #endif
 
     static const AP_Param::TopLevelObjectConversion toplevel_conversions[] {
-#if AP_SERIALMANAGER_ENABLED
+
         // PARAMETER_CONVERSION - Added: Feb-2024 for Tracker-4.6
         { &serial_manager, serial_manager.var_info, Parameters::k_param_serial_manager_old },
-#endif
+
     };
 
     AP_Param::convert_toplevel_objects(toplevel_conversions, ARRAY_SIZE(toplevel_conversions));

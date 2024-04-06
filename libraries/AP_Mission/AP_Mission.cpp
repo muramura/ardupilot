@@ -366,9 +366,9 @@ bool AP_Mission::verify_command(const Mission_Command& cmd)
 {
     switch (cmd.id) {
     // do-commands always return true for verify:
-#if AP_GRIPPER_ENABLED
+
     case MAV_CMD_DO_GRIPPER:
-#endif
+
     case MAV_CMD_DO_SET_SERVO:
     case MAV_CMD_DO_SET_RELAY:
     case MAV_CMD_DO_REPEAT_SERVO:
@@ -416,10 +416,10 @@ bool AP_Mission::start_command(const Mission_Command& cmd)
     case MAV_CMD_DO_AUX_FUNCTION:
         return start_command_do_aux_function(cmd);
 #endif
-#if AP_GRIPPER_ENABLED
+
     case MAV_CMD_DO_GRIPPER:
         return start_command_do_gripper(cmd);
-#endif
+
 #if AP_SERVORELAYEVENTS_ENABLED
     case MAV_CMD_DO_SET_SERVO:
     case MAV_CMD_DO_SET_RELAY:
@@ -1226,12 +1226,12 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
         cmd.p1 = packet.param1;                         // normal=0 inverted=1
         break;
 
-#if AP_GRIPPER_ENABLED
+
     case MAV_CMD_DO_GRIPPER:                            // MAV ID: 211
         cmd.content.gripper.num = packet.param1;        // gripper number
         cmd.content.gripper.action = packet.param2;     // action 0=release, 1=grab.  See GRIPPER_ACTION enum
         break;
-#endif
+
 
     case MAV_CMD_DO_GUIDED_LIMITS:                      // MAV ID: 222
         cmd.p1 = packet.param1;                         // max time in seconds the external controller will be allowed to control the vehicle
@@ -1306,7 +1306,7 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
         cmd.content.scripting.p3 = packet.param4;
         break;
 
-#if AP_SCRIPTING_ENABLED
+
     case MAV_CMD_NAV_SCRIPT_TIME:
         cmd.content.nav_script_time.command = packet.param1;
         cmd.content.nav_script_time.timeout_s = packet.param2;
@@ -1315,7 +1315,7 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
         cmd.content.nav_script_time.arg3 = int16_t(packet.x);
         cmd.content.nav_script_time.arg4 = int16_t(packet.y);
         break;
-#endif
+
 
     case MAV_CMD_NAV_ATTITUDE_TIME:
         cmd.content.nav_attitude_time.time_sec = constrain_float(packet.param1, 0, UINT16_MAX);
@@ -1410,7 +1410,7 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
             cmd.content.location.relative_alt = 1;
             break;
 
-#if AP_TERRAIN_AVAILABLE
+
         case MAV_FRAME_GLOBAL_TERRAIN_ALT:
         case MAV_FRAME_GLOBAL_TERRAIN_ALT_INT:
             // we mark it as a relative altitude, as it doesn't have
@@ -1419,7 +1419,7 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
             // mark altitude as above terrain, not above home
             cmd.content.location.terrain_alt = 1;
             break;
-#endif
+
 
         default:
             return MAV_MISSION_UNSUPPORTED_FRAME;
@@ -1742,12 +1742,12 @@ bool AP_Mission::mission_cmd_to_mavlink_int(const AP_Mission::Mission_Command& c
         packet.param1 = cmd.p1;                         // normal=0 inverted=1
         break;
 
-#if AP_GRIPPER_ENABLED
+
     case MAV_CMD_DO_GRIPPER:                            // MAV ID: 211
         packet.param1 = cmd.content.gripper.num;        // gripper number
         packet.param2 = cmd.content.gripper.action;     // action 0=release, 1=grab.  See GRIPPER_ACTION enum
         break;
-#endif
+
 
     case MAV_CMD_DO_GUIDED_LIMITS:                      // MAV ID: 222
         packet.param1 = cmd.p1;                         // max time in seconds the external controller will be allowed to control the vehicle
@@ -1820,7 +1820,7 @@ bool AP_Mission::mission_cmd_to_mavlink_int(const AP_Mission::Mission_Command& c
         packet.param4 = cmd.content.scripting.p3;
         break;
 
-#if AP_SCRIPTING_ENABLED
+
     case MAV_CMD_NAV_SCRIPT_TIME:
         packet.param1 = cmd.content.nav_script_time.command;
         packet.param2 = cmd.content.nav_script_time.timeout_s;
@@ -1829,7 +1829,7 @@ bool AP_Mission::mission_cmd_to_mavlink_int(const AP_Mission::Mission_Command& c
         packet.x = cmd.content.nav_script_time.arg3;
         packet.y = cmd.content.nav_script_time.arg4;
         break;
-#endif
+
 
     case MAV_CMD_NAV_ATTITUDE_TIME:
         packet.param1 = cmd.content.nav_attitude_time.time_sec;
@@ -1903,7 +1903,7 @@ bool AP_Mission::mission_cmd_to_mavlink_int(const AP_Mission::Mission_Command& c
         } else {
             packet.frame = MAV_FRAME_GLOBAL;
         }
-#if AP_TERRAIN_AVAILABLE
+
         if (cmd.content.location.terrain_alt) {
             // this is a above-terrain altitude
             if (!cmd.content.location.relative_alt) {
@@ -1918,12 +1918,12 @@ bool AP_Mission::mission_cmd_to_mavlink_int(const AP_Mission::Mission_Command& c
             packet.z = cmd.content.location.alt * 0.01f;
             packet.frame = MAV_FRAME_GLOBAL_TERRAIN_ALT;
         }
-#else
-        // don't ever return terrain mission items if no terrain support
-        if (cmd.content.location.terrain_alt) {
-            return false;
-        }
-#endif
+
+
+
+
+
+
     }
 
     // if we got this far then it must have been successful
@@ -2223,7 +2223,7 @@ uint16_t AP_Mission::get_index_of_jump_tag(const uint16_t tag) const
     return 0;
 }
 
-#if AP_SCRIPTING_ENABLED
+
 bool AP_Mission::get_last_jump_tag(uint16_t &tag, uint16_t &age) const
 {
     if (_jump_tag.age == 0) {
@@ -2233,7 +2233,7 @@ bool AP_Mission::get_last_jump_tag(uint16_t &tag, uint16_t &age) const
     age = _jump_tag.age;
     return true;
 }
-#endif
+
 
 // init_jump_tracking - initialise jump_tracking variables
 void AP_Mission::init_jump_tracking()
@@ -2637,10 +2637,10 @@ const char *AP_Mission::Mission_Command::type() const
         return "LandStart";
     case MAV_CMD_NAV_DELAY:
         return "Delay";
-#if AP_GRIPPER_ENABLED
+
     case MAV_CMD_DO_GRIPPER:
         return "Gripper";
-#endif
+
 #if AP_MISSION_NAV_PAYLOAD_PLACE_ENABLED
     case MAV_CMD_NAV_PAYLOAD_PLACE:
         return "PayloadPlace";
@@ -2665,10 +2665,10 @@ const char *AP_Mission::Mission_Command::type() const
         return "Tag";
     case MAV_CMD_DO_GO_AROUND:
         return "Go Around";
-#if AP_SCRIPTING_ENABLED
+
     case MAV_CMD_NAV_SCRIPT_TIME:
         return "NavScriptTime";
-#endif
+
     case MAV_CMD_NAV_ATTITUDE_TIME:
         return "NavAttitudeTime";
     case MAV_CMD_DO_PAUSE_CONTINUE:
@@ -2893,7 +2893,7 @@ bool AP_Mission::calc_rewind_pos(Mission_Command& rewind_cmd)
 void AP_Mission::format_conversion(uint8_t tag_byte, const Mission_Command &cmd, PackedContent &packed_content) const
 {
     // currently only one conversion needed, more can be added
-#if AP_SCRIPTING_ENABLED
+
     if (tag_byte == 0 && cmd.id == MAV_CMD_NAV_SCRIPT_TIME) {
         // PARAMETER_CONVERSION: conversion code added Oct 2022
         struct nav_script_time_Command_tag0 old_fmt;
@@ -2907,11 +2907,11 @@ void AP_Mission::format_conversion(uint8_t tag_byte, const Mission_Command &cmd,
         new_fmt.arg4 = 0;
         memcpy(packed_content.bytes, (void*)&new_fmt, sizeof(new_fmt));
     }
-#endif
+
 }
 
 // Helpers to fill in location for scripting
-#if AP_SCRIPTING_ENABLED
+
 bool AP_Mission::jump_to_landing_sequence(void)
 {
     Location loc;
@@ -2931,7 +2931,7 @@ bool AP_Mission::jump_to_abort_landing_sequence(void)
     GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "Unable to start find a landing abort sequence");
     return false;
 }
-#endif // AP_SCRIPTING_ENABLED
+
 
 
 // singleton instance

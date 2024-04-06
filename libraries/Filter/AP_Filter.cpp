@@ -1,6 +1,6 @@
 #include "AP_Filter_config.h"
 
-#if AP_FILTER_ENABLED
+
 
 #include "AP_Filter.h"
 #include <AP_BoardConfig/AP_BoardConfig.h>
@@ -153,5 +153,3 @@ AP_Filters &filters()
 }
 
 }
-
-#endif // AP_FILTER_ENABLED

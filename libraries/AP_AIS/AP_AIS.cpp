@@ -19,7 +19,7 @@
 
 #include "AP_AIS.h"
 
-#if AP_AIS_ENABLED
+
 
 #include <AP_Vehicle/AP_Vehicle_Type.h>
 
@@ -903,5 +903,3 @@ AP_AIS *AP_AIS::get_singleton() { return nullptr; }
 #endif // AP_AIS_DUMMY_METHODS_ENABLED
 
 AP_AIS *AP_AIS::_singleton;
-
-#endif  // AP_AIS_ENABLED

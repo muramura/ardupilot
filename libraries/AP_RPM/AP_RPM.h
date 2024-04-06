@@ -16,7 +16,7 @@
 
 #include "AP_RPM_config.h"
 
-#if AP_RPM_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL_Boards.h>
@@ -119,5 +119,3 @@ private:
 namespace AP {
     AP_RPM *rpm();
 };
-
-#endif  // AP_RPM_ENABLED

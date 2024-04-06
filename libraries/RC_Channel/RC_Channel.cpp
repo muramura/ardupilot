@@ -681,9 +681,9 @@ void RC_Channel::init_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos 
     case AUX_FUNC::FENCE:
     case AUX_FUNC::GPS_DISABLE:
     case AUX_FUNC::GPS_DISABLE_YAW:
-#if AP_GRIPPER_ENABLED
+
     case AUX_FUNC::GRIPPER:
-#endif
+
 #if AP_INERTIALSENSOR_KILL_IMU_ENABLED
     case AUX_FUNC::KILL_IMU1:
     case AUX_FUNC::KILL_IMU2:
@@ -946,7 +946,7 @@ void RC_Channel::do_aux_function_avoid_proximity(const AuxSwitchPos ch_flag)
 #endif // !APM_BUILD_ArduPlane
 }
 
-#if AP_CAMERA_ENABLED
+
 void RC_Channel::do_aux_function_camera_trigger(const AuxSwitchPos ch_flag)
 {
     if (ch_flag == AuxSwitchPos::HIGH) {
@@ -1047,7 +1047,7 @@ bool RC_Channel::do_aux_function_camera_lens(const AuxSwitchPos ch_flag)
     return false;
 #endif // AP_CAMERA_SET_CAMERA_SOURCE_ENABLED
 }
-#endif // AP_CAMERA_ENABLED
+
 
 void RC_Channel::do_aux_function_runcam_control(const AuxSwitchPos ch_flag)
 {
@@ -1163,7 +1163,7 @@ void RC_Channel::do_aux_function_sprayer(const AuxSwitchPos ch_flag)
 }
 #endif // HAL_SPRAYER_ENABLED
 
-#if AP_GRIPPER_ENABLED
+
 void RC_Channel::do_aux_function_gripper(const AuxSwitchPos ch_flag)
 {
     AP_Gripper &gripper = AP::gripper();
@@ -1180,7 +1180,7 @@ void RC_Channel::do_aux_function_gripper(const AuxSwitchPos ch_flag)
         break;
     }
 }
-#endif  // AP_GRIPPER_ENABLED
+
 
 void RC_Channel::do_aux_function_lost_vehicle_sound(const AuxSwitchPos ch_flag)
 {
@@ -1250,9 +1250,9 @@ void RC_Channel::do_aux_function_fft_notch_tune(const AuxSwitchPos ch_flag)
 
 bool RC_Channel::run_aux_function(AUX_FUNC ch_option, AuxSwitchPos pos, AuxFuncTriggerSource source)
 {
-#if AP_SCRIPTING_ENABLED
+
     rc().set_aux_cached(ch_option, pos);
-#endif
+
     const bool ret = do_aux_function(ch_option, pos);
 
 #if HAL_LOGGING_ENABLED
@@ -1292,11 +1292,11 @@ bool RC_Channel::do_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos ch
         break;
 
 
-#if AP_GRIPPER_ENABLED
+
     case AUX_FUNC::GRIPPER:
         do_aux_function_gripper(ch_flag);
         break;
-#endif
+
 
     case AUX_FUNC::RC_OVERRIDE_ENABLE:
         // Allow or disallow RC_Override
@@ -1359,13 +1359,13 @@ bool RC_Channel::do_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos ch
         break;
 #endif
 
-#if AP_BATTERY_ENABLED
+
     case AUX_FUNC::BATTERY_MPPT_ENABLE:
         if (ch_flag != AuxSwitchPos::MIDDLE) {
             AP::battery().MPPT_set_powered_state_to_all(ch_flag == AuxSwitchPos::HIGH);
         }
         break;
-#endif
+
 
 #if HAL_SPRAYER_ENABLED
     case AUX_FUNC::SPRAYER:
@@ -1394,7 +1394,7 @@ bool RC_Channel::do_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos ch
         }
         break;
 
-#if AP_LANDINGGEAR_ENABLED
+
     case AUX_FUNC::LANDING_GEAR: {
         AP_LandingGear *lg = AP_LandingGear::get_singleton();
         if (lg == nullptr) {
@@ -1413,7 +1413,7 @@ bool RC_Channel::do_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos ch
         }
         break;
     }
-#endif
+
 
     case AUX_FUNC::GPS_DISABLE:
         AP::gps().force_disable(ch_flag == AuxSwitchPos::HIGH);
@@ -1426,7 +1426,7 @@ bool RC_Channel::do_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos ch
         AP::gps().set_force_disable_yaw(ch_flag == AuxSwitchPos::HIGH);
         break;
 
-#if AP_AIRSPEED_ENABLED
+
     case AUX_FUNC::DISABLE_AIRSPEED_USE: {
         AP_Airspeed *airspeed = AP::airspeed();
         if (airspeed == nullptr) {
@@ -1444,7 +1444,7 @@ bool RC_Channel::do_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos ch
         }
         break;
     }
-#endif
+
 
     case AUX_FUNC::MOTOR_ESTOP:
         switch (ch_flag) {
@@ -1524,7 +1524,7 @@ bool RC_Channel::do_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos ch
         break;
 #endif  // AP_INERTIALSENSOR_KILL_IMU_ENABLED
 
-#if AP_CAMERA_ENABLED
+
     case AUX_FUNC::CAMERA_TRIGGER:
         do_aux_function_camera_trigger(ch_flag);
         break;
@@ -1567,7 +1567,7 @@ bool RC_Channel::do_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos ch
     case AUX_FUNC::CAMERA_LENS:
         return do_aux_function_camera_lens(ch_flag);
 #endif // AP_CAMERA_SET_CAMERA_SOURCE_ENABLED
-#endif // AP_CAMERA_ENABLED
+
 
 #if HAL_MOUNT_ENABLED
     case AUX_FUNC::RETRACT_MOUNT1: {

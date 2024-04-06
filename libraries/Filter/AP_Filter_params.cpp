@@ -1,6 +1,6 @@
 #include "AP_Filter_config.h"
 
-#if AP_FILTER_ENABLED
+
 
 #include "AP_Filter.h"
 #include <AP_Vehicle/AP_Vehicle_Type.h>
@@ -23,5 +23,3 @@ AP_Filter_params::AP_Filter_params()
 {
     AP_Param::setup_object_defaults(this, var_info);
 }
-
-#endif // AP_FILTER_ENABLED

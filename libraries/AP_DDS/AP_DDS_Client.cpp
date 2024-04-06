@@ -18,9 +18,9 @@
 #include "ardupilot_msgs/srv/ArmMotors.h"
 #include "ardupilot_msgs/srv/ModeSwitch.h"
 
-#if AP_EXTERNAL_CONTROL_ENABLED
+
 #include "AP_DDS_ExternalControl.h"
-#endif
+
 #include "AP_DDS_Frames.h"
 
 #include "AP_DDS_Client.h"
@@ -557,11 +557,11 @@ void AP_DDS_Client::on_topic(uxrSession* uxr_session, uxrObjectId object_id, uin
             break;
         }
 
-#if AP_EXTERNAL_CONTROL_ENABLED
+
         if (!AP_DDS_External_Control::handle_velocity_control(rx_velocity_control_topic)) {
             // TODO #23430 handle velocity control failure through rosout, throttled.
         }
-#endif // AP_EXTERNAL_CONTROL_ENABLED
+
         break;
     }
     case topics[to_underlying(TopicIndex::GLOBAL_POSITION_SUB)].dr_id.id: {
@@ -570,11 +570,11 @@ void AP_DDS_Client::on_topic(uxrSession* uxr_session, uxrObjectId object_id, uin
             break;
         }
 
-#if AP_EXTERNAL_CONTROL_ENABLED
+
         if (!AP_DDS_External_Control::handle_global_position_control(rx_global_position_control_topic)) {
             // TODO #23430 handle global position control failure through rosout, throttled.
         }
-#endif // AP_EXTERNAL_CONTROL_ENABLED
+
         break;
     }
     }

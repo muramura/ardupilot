@@ -20,7 +20,7 @@
 #define AP_LTM_TELEM_ENABLED 1
 #endif
 
-#if AP_LTM_TELEM_ENABLED
+
 
 static const uint8_t LTM_GFRAME_SIZE = 18;
 static const uint8_t LTM_AFRAME_SIZE = 10;
@@ -50,5 +50,3 @@ private:
     void send_LTM(uint8_t lt_packet[], uint8_t lt_packet_size);
     void tick(void); // tick - main call to send updates to transmitter (called by scheduler at 1kHz)
 };
-
-#endif

@@ -16,7 +16,7 @@
 
 #include "AP_Beacon.h"
 
-#if AP_BEACON_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Math/AP_Math.h>
@@ -65,5 +65,3 @@ protected:
 
     AP_HAL::UARTDriver *uart;
 };
-
-#endif  // AP_BEACON_ENABLED

@@ -128,14 +128,14 @@ float Plane::relative_ground_altitude(bool use_rangefinder_if_available, bool us
    }
 #endif
 
-#if AP_TERRAIN_AVAILABLE
+
     float altitude;
     if (use_terrain_if_available &&
         terrain.status() == AP_Terrain::TerrainStatusOK &&
         terrain.height_above_terrain(altitude, true)) {
         return altitude;
     }
-#endif
+
 
 #if HAL_QUADPLANE_ENABLED
     if (quadplane.in_vtol_land_descent() &&
@@ -154,11 +154,11 @@ float Plane::relative_ground_altitude(bool use_rangefinder_if_available, bool us
 // Helper for above method using terrain if the vehicle is currently terrain following
 float Plane::relative_ground_altitude(bool use_rangefinder_if_available)
 {
-#if AP_TERRAIN_AVAILABLE
+
     return relative_ground_altitude(use_rangefinder_if_available, target_altitude.terrain_following);
-#else
-    return relative_ground_altitude(use_rangefinder_if_available, false);
-#endif
+
+
+
 }
 
 
@@ -176,7 +176,7 @@ void Plane::set_target_altitude_current(void)
     // reset any glide slope offset
     reset_offset_altitude();
 
-#if AP_TERRAIN_AVAILABLE
+
     // also record the terrain altitude if possible
     float terrain_altitude;
     if (terrain_enabled_in_current_mode() && terrain.height_above_terrain(terrain_altitude, true) && !terrain_disabled()) {
@@ -188,7 +188,7 @@ void Plane::set_target_altitude_current(void)
         // terrain follow
         target_altitude.terrain_following = false;        
     }
-#endif
+
 }
 
 /*
@@ -211,7 +211,7 @@ void Plane::set_target_altitude_location(const Location &loc)
     if (loc.relative_alt) {
         target_altitude.amsl_cm += home.alt;
     }
-#if AP_TERRAIN_AVAILABLE
+
     if (target_altitude.terrain_following_pending) {
         /* we didn't get terrain data to init when we started on this
            target, retry
@@ -234,7 +234,7 @@ void Plane::set_target_altitude_location(const Location &loc)
     } else {
         target_altitude.terrain_following = false;
     }
-#endif
+
 }
 
 /*
@@ -243,7 +243,7 @@ void Plane::set_target_altitude_location(const Location &loc)
  */
 int32_t Plane::relative_target_altitude_cm(void)
 {
-#if AP_TERRAIN_AVAILABLE
+
     float relative_home_height;
     if (target_altitude.terrain_following && 
         terrain.height_relative_home_equivalent(target_altitude.terrain_alt_cm*0.01f,
@@ -259,7 +259,7 @@ int32_t Plane::relative_target_altitude_cm(void)
         // current location. Use it.
         return relative_home_height*100;
     }
-#endif
+
     int32_t relative_alt = target_altitude.amsl_cm - home.alt;
     relative_alt += mission_alt_offset()*100;
     relative_alt += rangefinder_correction() * 100;
@@ -273,11 +273,11 @@ int32_t Plane::relative_target_altitude_cm(void)
 void Plane::change_target_altitude(int32_t change_cm)
 {
     target_altitude.amsl_cm += change_cm;
-#if AP_TERRAIN_AVAILABLE
+
     if (target_altitude.terrain_following && !terrain_disabled()) {
         target_altitude.terrain_alt_cm += change_cm;
     }
-#endif
+
 }
 /*
   change target altitude by a proportion of the target altitude offset
@@ -326,13 +326,13 @@ void Plane::constrain_target_altitude_location(const Location &loc1, const Locat
  */
 int32_t Plane::calc_altitude_error_cm(void)
 {
-#if AP_TERRAIN_AVAILABLE
+
     float terrain_height;
     if (target_altitude.terrain_following && 
         terrain.height_above_terrain(terrain_height, true)) {
         return target_altitude.lookahead*100 + target_altitude.terrain_alt_cm - (terrain_height*100);
     }
-#endif
+
     return target_altitude.amsl_cm - adjusted_altitude_cm();
 }
 
@@ -370,7 +370,7 @@ void Plane::check_fbwb_altitude(void)
     }
 
 //check if terrain following (min and max)
-#if AP_TERRAIN_AVAILABLE
+
     if (target_altitude.terrain_following) {
         // set our target terrain height to be at least the min set
         if (should_check_max) {
@@ -381,7 +381,7 @@ void Plane::check_fbwb_altitude(void)
         }
         return;
     }
-#endif
+
 
     if (should_check_max) {
         target_altitude.amsl_cm = MIN(target_altitude.amsl_cm, home.alt + max_alt_cm);
@@ -410,7 +410,7 @@ void Plane::set_offset_altitude_location(const Location &start_loc, const Locati
 {
     target_altitude.offset_cm = destination_loc.alt - start_loc.alt;
 
-#if AP_TERRAIN_AVAILABLE
+
     /*
       if this location has the terrain_alt flag set and we know the
       terrain altitude of our current location then treat it as a
@@ -422,7 +422,7 @@ void Plane::set_offset_altitude_location(const Location &start_loc, const Locati
         terrain.height_above_terrain(height, true)) {
         target_altitude.offset_cm = target_altitude.terrain_alt_cm - (height * 100);
     }
-#endif
+
 
     if (flight_stage != AP_FixedWing::FlightStage::LAND) {
         // if we are within GLIDE_SLOPE_MIN meters of the target altitude
@@ -452,7 +452,7 @@ void Plane::set_offset_altitude_location(const Location &start_loc, const Locati
  */
 bool Plane::above_location_current(const Location &loc)
 {
-#if AP_TERRAIN_AVAILABLE
+
     float terrain_alt;
     if (loc.terrain_alt && 
         terrain.height_above_terrain(terrain_alt, true)) {
@@ -462,7 +462,7 @@ bool Plane::above_location_current(const Location &loc)
         }
         return terrain_alt > loc_alt;
     }
-#endif
+
 
     float loc_alt_cm = loc.alt;
     if (loc.relative_alt) {
@@ -477,7 +477,7 @@ bool Plane::above_location_current(const Location &loc)
  */
 void Plane::setup_terrain_target_alt(Location &loc)
 {
-#if AP_TERRAIN_AVAILABLE
+
     if (terrain_enabled_in_current_mode()) {
         if (!loc.change_alt_frame(Location::AltFrame::ABOVE_TERRAIN)) {
             target_altitude.terrain_following_pending = true;
@@ -485,7 +485,7 @@ void Plane::setup_terrain_target_alt(Location &loc)
         }
     }
     target_altitude.terrain_following_pending = false;
-#endif
+
 }
 
 /*
@@ -537,14 +537,14 @@ float Plane::height_above_target(void)
         target_alt -= ahrs.get_home().alt*0.01f;
     }
 
-#if AP_TERRAIN_AVAILABLE
+
     // also record the terrain altitude if possible
     float terrain_altitude;
     if (next_WP_loc.terrain_alt && 
         terrain.height_above_terrain(terrain_altitude, true)) {
         return terrain_altitude - target_alt;
     }
-#endif
+
 
     return (adjusted_altitude_cm()*0.01f - ahrs.get_home().alt*0.01f) - target_alt;
 }
@@ -554,7 +554,7 @@ float Plane::height_above_target(void)
  */
 float Plane::lookahead_adjustment(void)
 {
-#if AP_TERRAIN_AVAILABLE
+
     int32_t bearing_cd;
     int16_t distance;
     // work out distance and bearing to target
@@ -602,9 +602,9 @@ float Plane::lookahead_adjustment(void)
 
     // constrain lookahead to a reasonable limit
     return constrain_float(lookahead, 0, 1000.0f);
-#else
-    return 0;
-#endif
+
+
+
 }
 
 
@@ -635,7 +635,7 @@ float Plane::rangefinder_correction(void)
  */
 void Plane::rangefinder_terrain_correction(float &height)
 {
-#if AP_TERRAIN_AVAILABLE
+
     if (!g.rangefinder_landing ||
         flight_stage != AP_FixedWing::FlightStage::LAND ||
         !terrain_enabled_in_current_mode()) {
@@ -649,7 +649,7 @@ void Plane::rangefinder_terrain_correction(float &height)
     float correction = (terrain_amsl1 - terrain_amsl2);
     height += correction;
     auto_state.terrain_correction = correction;
-#endif
+
 }
 
 /*
@@ -715,14 +715,14 @@ void Plane::rangefinder_height_update(void)
         // rangefinder estimate
         float correction = adjusted_relative_altitude_cm()*0.01 - rangefinder_state.height_estimate;
 
-#if AP_TERRAIN_AVAILABLE
+
         // if we are terrain following then correction is based on terrain data
         float terrain_altitude;
         if ((target_altitude.terrain_following || terrain_enabled_in_current_mode()) && 
             terrain.height_above_terrain(terrain_altitude, true)) {
             correction = terrain_altitude - rangefinder_state.height_estimate;
         }
-#endif    
+
 
         // remember the last correction. Use a low pass filter unless
         // the old data is more than 5 seconds old
@@ -761,7 +761,7 @@ bool Plane::terrain_disabled()
 /*
   Check if terrain following is enabled for the current mode
  */
-#if AP_TERRAIN_AVAILABLE
+
 const Plane::TerrainLookupTable Plane::Terrain_lookup[] = {
     {Mode::Number::FLY_BY_WIRE_B, terrain_bitmask::FLY_BY_WIRE_B},
     {Mode::Number::CRUISE, terrain_bitmask::CRUISE},
@@ -802,4 +802,3 @@ bool Plane::terrain_enabled_in_mode(Mode::Number num) const
 
     return false;
 }
-#endif

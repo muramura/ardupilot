@@ -16,7 +16,7 @@
 
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_ENABLED
+
 
 #include "AP_Airspeed.h"
 
@@ -142,5 +142,3 @@ AP_Airspeed_Params::AP_Airspeed_Params(void) {};
 const AP_Param::GroupInfo AP_Airspeed_Params::var_info[] = { AP_GROUPEND };
 
 #endif
-
-#endif  // AP_AIRSPEED_ENABLED

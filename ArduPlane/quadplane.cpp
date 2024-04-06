@@ -755,10 +755,10 @@ bool QuadPlane::setup(void)
         motors_var_info = AP_MotorsTailsitter::var_info;
         break;
     case AP_Motors::MOTOR_FRAME_DYNAMIC_SCRIPTING_MATRIX:
-#if AP_SCRIPTING_ENABLED
+
             motors = new AP_MotorsMatrix_Scripting_Dynamic(plane.scheduler.get_loop_rate_hz());
             motors_var_info = AP_MotorsMatrix_Scripting_Dynamic::var_info;
-#endif // AP_SCRIPTING_ENABLED
+
             break;
     default:
         motors = new AP_MotorsMatrix(rc_speed);
@@ -1809,13 +1809,13 @@ void QuadPlane::update(void)
         ahrs_view->set_pitch_trim(_last_ahrs_trim_pitch);
     }
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
     if (plane.afs.should_crash_vehicle() && !plane.afs.terminating_vehicle_via_landing()) {
         set_desired_spool_state(AP_Motors::DesiredSpoolState::SHUT_DOWN);
         motors->output();
         return;
     }
-#endif
+
     
     if (motor_test.running) {
         motor_test_output();
@@ -2048,13 +2048,13 @@ void QuadPlane::motors_output(bool run_rate_controller)
         }
     }
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
     if (!plane.arming.is_armed_and_safety_off() ||
         (plane.afs.should_crash_vehicle() && !plane.afs.terminating_vehicle_via_landing()) ||
          SRV_Channels::get_emergency_stop()) {
-#else
-    if (!plane.arming.is_armed_and_safety_off() || SRV_Channels::get_emergency_stop()) {
-#endif
+
+
+
         set_desired_spool_state(AP_Motors::DesiredSpoolState::SHUT_DOWN);
         motors->output();
         return;
@@ -2905,13 +2905,13 @@ void QuadPlane::vtol_position_controller(void)
                                                          0, 1);
                 }
             }
-#if AP_TERRAIN_AVAILABLE
+
             float terrain_altitude_offset;
             if (plane.next_WP_loc.terrain_alt && plane.terrain.height_terrain_difference_home(terrain_altitude_offset, true)) {
                 // Climb if current terrain is above home, target_altitude_cm is reltive to home
                 target_altitude_cm += MAX(terrain_altitude_offset*100,0);
             }
-#endif
+
             float zero = 0;
             float target_z = target_altitude_cm;
             pos_control->input_pos_vel_accel_z(target_z, zero, 0);
@@ -2974,13 +2974,13 @@ QuadPlane::ActiveFwdThr QuadPlane::get_vfwd_method(void) const
     const bool have_fwd_thr_gain = is_positive(q_fwd_thr_gain);
     const bool have_vfwd_gain = is_positive(vel_forward.gain);
 
-#if AP_ICENGINE_ENABLED
+
     const auto ice_state = plane.g2.ice_control.get_state();
     if (ice_state != AP_ICEngine::ICE_DISABLED && ice_state != AP_ICEngine::ICE_RUNNING) {
         // we need the engine running for fwd throttle
         return ActiveFwdThr::NONE;
     }
-#endif
+
 
 #if QAUTOTUNE_ENABLED
     if (plane.control_mode == &plane.mode_qautotune) {
@@ -3495,13 +3495,13 @@ bool QuadPlane::verify_vtol_takeoff(const AP_Mission::Mission_Command &cmd)
         return false;
     }
 
-#if AP_AIRSPEED_ENABLED
+
     if (is_positive(maximum_takeoff_airspeed) && (plane.airspeed.get_airspeed() > maximum_takeoff_airspeed)) {
         gcs().send_text(MAV_SEVERITY_CRITICAL, "Failed to complete takeoff, excessive wind");
         plane.set_mode(plane.mode_qland, ModeReason::VTOL_FAILED_TAKEOFF);
         return false;
     }
-#endif
+
 
     if (plane.current_loc.alt < plane.next_WP_loc.alt) {
         return false;
@@ -3656,9 +3656,9 @@ bool QuadPlane::verify_vtol_land(void)
 
             plane.fence.auto_disable_fence_for_landing();
 
-#if AP_LANDINGGEAR_ENABLED
+
             plane.g2.landing_gear.deploy_for_landing();
-#endif
+
             last_land_final_agl = plane.relative_ground_altitude(plane.g.rangefinder_landing);
             gcs().send_text(MAV_SEVERITY_INFO,"Land descend started");
             if (plane.control_mode == &plane.mode_auto) {
@@ -3677,12 +3677,12 @@ bool QuadPlane::verify_vtol_land(void)
     if (poscontrol.get_state() == QPOS_LAND_DESCEND && check_land_final()) {
         poscontrol.set_state(QPOS_LAND_FINAL);
 
-#if AP_ICENGINE_ENABLED
+
         // cut IC engine if enabled
         if (land_icengine_cut != 0) {
             plane.g2.ice_control.engine_control(0, 0, 0, false);
         }
-#endif  // AP_ICENGINE_ENABLED
+
         gcs().send_text(MAV_SEVERITY_INFO,"Land final started");
     }
 

@@ -382,7 +382,7 @@ void ModeAuto::start_RTL()
 // lua scripts use this to retrieve the contents of the active command
 bool ModeAuto::nav_script_time(uint16_t &id, uint8_t &cmd, float &arg1, float &arg2, int16_t &arg3, int16_t &arg4)
 {
-#if AP_SCRIPTING_ENABLED
+
     if (_submode == SubMode::NavScriptTime) {
         id = nav_scripting.id;
         cmd = nav_scripting.command;
@@ -392,18 +392,18 @@ bool ModeAuto::nav_script_time(uint16_t &id, uint8_t &cmd, float &arg1, float &a
         arg4 = nav_scripting.arg4;
         return true;
     }
-#endif
+
     return false;
 }
 
 // lua scripts use this to indicate when they have complete the command
 void ModeAuto::nav_script_time_done(uint16_t id)
 {
-#if AP_SCRIPTING_ENABLED
+
     if ((_submode == SubMode::NavScriptTime) && (id == nav_scripting.id)) {
         nav_scripting.done = true;
     }
-#endif
+
 }
 
 // check for triggering of start of auto mode
@@ -546,11 +546,11 @@ bool ModeAuto::start_command(const AP_Mission::Mission_Command& cmd)
         do_nav_delay(cmd);
         break;
 
-#if AP_SCRIPTING_ENABLED
+
     case MAV_CMD_NAV_SCRIPT_TIME:
         do_nav_script_time(cmd);
         break;
-#endif
+
 
     // Conditional commands
     case MAV_CMD_CONDITION_DELAY:
@@ -688,10 +688,10 @@ bool ModeAuto::verify_command(const AP_Mission::Mission_Command& cmd)
     case MAV_CMD_NAV_DELAY:
         return verify_nav_delay(cmd);
 
-#if AP_SCRIPTING_ENABLED
+
     case MAV_CMD_NAV_SCRIPT_TIME:
         return verify_nav_script_time();
-#endif
+
 
     case MAV_CMD_CONDITION_DELAY:
         return verify_wait_delay();
@@ -1026,7 +1026,7 @@ void ModeAuto::do_guided_limits(const AP_Mission::Mission_Command& cmd)
         cmd.content.guided_limits.horiz_max);
 }
 
-#if AP_SCRIPTING_ENABLED
+
 // start accepting position, velocity and acceleration targets from lua scripts
 void ModeAuto::do_nav_script_time(const AP_Mission::Mission_Command& cmd)
 {
@@ -1059,4 +1059,3 @@ bool ModeAuto::verify_nav_script_time()
     }
     return false;
 }
-#endif

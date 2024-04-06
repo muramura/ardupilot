@@ -844,10 +844,10 @@ void Blimp::load_parameters(void)
     // PARAMETER_CONVERSION - Added: Jan-2024 for Copter-4.6
         { &stats, stats.var_info, 12 },
 
-#if AP_SCRIPTING_ENABLED
+
     // PARAMETER_CONVERSION - Added: Jan-2024 for Copter-4.6
         { &scripting, scripting.var_info, 30 },
-#endif
+
     };
     AP_Param::convert_g2_objects(&g2, g2_conversions, ARRAY_SIZE(g2_conversions));
 
@@ -857,10 +857,10 @@ void Blimp::load_parameters(void)
 #endif
 
     static const AP_Param::TopLevelObjectConversion toplevel_conversions[] {
-#if AP_SERIALMANAGER_ENABLED
+
         // PARAMETER_CONVERSION - Added: Feb-2024
         { &serial_manager, serial_manager.var_info, Parameters::k_param_serial_manager_old },
-#endif
+
     };
 
     AP_Param::convert_toplevel_objects(toplevel_conversions, ARRAY_SIZE(toplevel_conversions));

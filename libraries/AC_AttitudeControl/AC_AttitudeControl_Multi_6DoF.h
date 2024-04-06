@@ -1,5 +1,5 @@
 #pragma once
-#if AP_SCRIPTING_ENABLED
+
 
 #include "AC_AttitudeControl_Multi.h"
 
@@ -94,5 +94,3 @@ private:
     static AC_AttitudeControl_Multi_6DoF *_singleton;
 
 };
-
-#endif // AP_SCRIPTING_ENABLED

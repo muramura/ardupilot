@@ -4,7 +4,7 @@
 
 #include "Copter.h"
 
-#if AC_PRECLAND_ENABLED
+
 
 void Copter::init_precland()
 {
@@ -17,4 +17,4 @@ void Copter::update_precland()
     return precland.update(rangefinder_state.alt_cm_glitch_protected,
                            rangefinder_alt_ok());
 }
-#endif
+

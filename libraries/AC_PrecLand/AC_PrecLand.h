@@ -2,7 +2,7 @@
 
 #include "AC_PrecLand_config.h"
 
-#if AC_PRECLAND_ENABLED
+
 
 #include <GCS_MAVLink/GCS_MAVLink.h>
 #include <AP_Math/AP_Math.h>
@@ -260,5 +260,3 @@ private:
 namespace AP {
     AC_PrecLand *ac_precland();
 };
-
-#endif // AC_PRECLAND_ENABLED

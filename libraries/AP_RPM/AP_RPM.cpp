@@ -15,7 +15,7 @@
 
 #include "AP_RPM.h"
 
-#if AP_RPM_ENABLED
+
 
 #include "RPM_Backend.h"
 #include "RPM_Pin.h"
@@ -315,5 +315,3 @@ AP_RPM *rpm()
 }
 
 }
-
-#endif  // AP_RPM_ENABLED

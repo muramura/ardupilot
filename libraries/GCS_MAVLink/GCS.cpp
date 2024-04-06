@@ -200,7 +200,7 @@ void GCS::update_sensor_status_flags()
     }
 #endif
 
-#if AP_GPS_ENABLED
+
     const AP_GPS &gps = AP::gps();
     if (gps.status() > AP_GPS::NO_GPS) {
         control_sensors_present |= MAV_SYS_STATUS_SENSOR_GPS;
@@ -209,9 +209,9 @@ void GCS::update_sensor_status_flags()
     if (gps.is_healthy() && gps.status() >= min_status_for_gps_healthy()) {
         control_sensors_health |= MAV_SYS_STATUS_SENSOR_GPS;
     }
-#endif
 
-#if AP_BATTERY_ENABLED
+
+
     const AP_BattMonitor &battery = AP::battery();
     control_sensors_present |= MAV_SYS_STATUS_SENSOR_BATTERY;
     if (battery.num_instances() > 0) {
@@ -220,7 +220,7 @@ void GCS::update_sensor_status_flags()
     if (battery.healthy() && !battery.has_failsafed()) {
         control_sensors_health |= MAV_SYS_STATUS_SENSOR_BATTERY;
     }
-#endif
+
 
 #if AP_INERTIALSENSOR_ENABLED
     control_sensors_present |= MAV_SYS_STATUS_SENSOR_3D_GYRO;
@@ -242,12 +242,12 @@ void GCS::update_sensor_status_flags()
     bool logging_present = logger.logging_present();
     bool logging_enabled = logger.logging_enabled();
     bool logging_healthy = !logger.logging_failed();
-#if AP_GPS_ENABLED
+
     // some GPS units do logging, so they have to be healthy too:
     logging_present |= gps.logging_present();
     logging_enabled |= gps.logging_enabled();
     logging_healthy &= !gps.logging_failed();
-#endif
+
     if (logging_present) {
         control_sensors_present |= MAV_SYS_STATUS_LOGGING;
     }
@@ -292,7 +292,7 @@ void GCS::update_sensor_status_flags()
 
 
     // airspeed
-#if AP_AIRSPEED_ENABLED
+
     const AP_Airspeed *airspeed = AP_Airspeed::get_singleton();
     if (airspeed && airspeed->enabled()) {
         control_sensors_present |= MAV_SYS_STATUS_SENSOR_DIFFERENTIAL_PRESSURE;
@@ -310,7 +310,7 @@ void GCS::update_sensor_status_flags()
             control_sensors_health |= MAV_SYS_STATUS_SENSOR_DIFFERENTIAL_PRESSURE;
         }
     }
-#endif
+
 
 
     const AP_OpticalFlow *optflow = AP::opticalflow();

@@ -15,7 +15,7 @@
 
 #include <AP_Scripting/AP_Scripting_config.h>
 
-#if AP_SCRIPTING_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include "AP_MotorsMatrix_6DoF_Scripting.h"
@@ -325,5 +325,3 @@ bool AP_MotorsMatrix_6DoF_Scripting::init(uint8_t expected_num_motors) {
 
 // singleton instance
 AP_MotorsMatrix_6DoF_Scripting *AP_MotorsMatrix_6DoF_Scripting::_singleton;
-
-#endif // AP_SCRIPTING_ENABLED

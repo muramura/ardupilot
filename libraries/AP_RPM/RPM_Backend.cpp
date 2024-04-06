@@ -15,7 +15,7 @@
 
 #include "RPM_Backend.h"
 
-#if AP_RPM_ENABLED
+
 
 #include "AP_RPM.h"
 
@@ -50,5 +50,3 @@ void AP_RPM_Backend::update_esc_telem_outbound()
     AP::esc_telem().update_rpm(esc_index-1, state.rate_rpm, 0);
 }
 #endif
-
-#endif  // AP_RPM_ENABLED

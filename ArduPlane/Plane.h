@@ -83,14 +83,14 @@
 #include <AP_LandingGear/AP_LandingGear.h>     // Landing Gear library
 #include <AP_Follow/AP_Follow.h>
 #include <AP_ExternalControl/AP_ExternalControl_config.h>
-#if AP_EXTERNAL_CONTROL_ENABLED
+
 #include "AP_ExternalControl_Plane.h"
-#endif
+
 
 #include <AC_PrecLand/AC_PrecLand_config.h>
-#if AC_PRECLAND_ENABLED
+
  # include <AC_PrecLand/AC_PrecLand.h>
-#endif
+
 
 #include "GCS_Mavlink.h"
 #include "GCS_Plane.h"
@@ -103,17 +103,17 @@
 // Configuration
 #include "config.h"
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
 #include "afs_plane.h"
-#endif
+
 
 // Local modules
 #include "defines.h"
 #include "mode.h"
 
-#if AP_SCRIPTING_ENABLED
+
 #include <AP_Scripting/AP_Scripting.h>
-#endif
+
 
 #include "RC_Channel.h"     // RC Channel Library
 #include "Parameters.h"
@@ -171,9 +171,9 @@ public:
     friend class ModeThermal;
     friend class ModeLoiterAltQLand;
 
-#if AP_EXTERNAL_CONTROL_ENABLED
+
     friend class AP_ExternalControl_Plane;
-#endif
+
 
     Plane(void);
 
@@ -207,9 +207,9 @@ private:
 
     AP_FixedWing::Rangefinder_State rangefinder_state;
 
-#if AP_RPM_ENABLED
+
     AP_RPM rpm_sensor;
-#endif
+
 
     AP_TECS TECS_controller{ahrs, aparm, landing, MASK_LOG_TECS};
     AP_L1_Control L1_controller{ahrs, &TECS_controller};
@@ -256,9 +256,9 @@ private:
     AP_Rally rally;
 #endif
 
-#if AC_PRECLAND_ENABLED
+
     void precland_update(void);
-#endif
+
 
     // returns a Location for a rally point or home; if
     // HAL_RALLY_ENABLED is false, just home.
@@ -517,7 +517,7 @@ private:
         int32_t last_home_alt_cm;
     } auto_state;
 
-#if AP_SCRIPTING_ENABLED
+
     // support for scripting nav commands, with verify
     struct {
         bool enabled;
@@ -531,7 +531,7 @@ private:
         float rudder_offset_pct;
         bool run_yaw_rate_controller;
     } nav_scripting;
-#endif
+
 
     struct {
         // roll pitch yaw commanded from external controller in centidegrees
@@ -565,12 +565,12 @@ private:
 #endif // OFFBOARD_GUIDED == ENABLED
     } guided_state;
 
-#if AP_LANDINGGEAR_ENABLED
+
     // landing gear state
     struct {
         AP_FixedWing::FlightStage last_flight_stage;
     } gear;
-#endif
+
 
     struct {
         // on hard landings, only check once after directly a landing so you
@@ -644,9 +644,9 @@ private:
 #endif
 
     // terrain handling
-#if AP_TERRAIN_AVAILABLE
+
     AP_Terrain terrain;
-#endif
+
 
     AP_Landing landing{mission,ahrs,&TECS_controller,nav_controller,aparm,
             FUNCTOR_BIND_MEMBER(&Plane::set_target_altitude_proportion, void, const Location&, float),
@@ -663,9 +663,9 @@ private:
 #endif
 
     // Outback Challenge Failsafe Support
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
     AP_AdvancedFailsafe_Plane afs;
-#endif
+
 
     /*
       meta data to support counting the number of circles in a loiter
@@ -738,7 +738,7 @@ private:
         // centimeters. Used for glide slope handling
         int32_t offset_cm;
 
-#if AP_TERRAIN_AVAILABLE
+
         // are we trying to follow terrain?
         bool terrain_following;
 
@@ -751,7 +751,7 @@ private:
 
         // lookahead value for height error reporting
         float lookahead;
-#endif
+
 
         // last input for FBWB/CRUISE height control
         float last_elevator_input;
@@ -787,9 +787,9 @@ private:
     AP_Param param_loader {var_info};
 
     // external control library
-#if AP_EXTERNAL_CONTROL_ENABLED
+
     AP_ExternalControl_Plane external_control;
-#endif
+
 
     static const AP_Scheduler::Task scheduler_tasks[];
     static const AP_Param::Info var_info[];
@@ -821,7 +821,7 @@ private:
     // terrain disable for non AUTO modes, set with an RC Option switch
     bool non_auto_terrain_disable;
     bool terrain_disabled();
-#if AP_TERRAIN_AVAILABLE
+
     bool terrain_enabled_in_current_mode() const;
     bool terrain_enabled_in_mode(Mode::Number num) const;
     enum class terrain_bitmask {
@@ -843,7 +843,7 @@ private:
        terrain_bitmask bitmask;
     };
     static const TerrainLookupTable Terrain_lookup[];
-#endif
+
 
     // Attitude.cpp
     void adjust_nav_pitch_throttle(void);
@@ -969,11 +969,11 @@ private:
     */
     bool in_auto_mission_id(uint16_t command) const;
 
-#if AP_SCRIPTING_ENABLED
+
     // nav scripting support
     void do_nav_script_time(const AP_Mission::Mission_Command& cmd);
     bool verify_nav_script_time(const AP_Mission::Mission_Command& cmd);
-#endif
+
 
     // commands.cpp
     void set_guided_WP(const Location &loc);
@@ -1035,9 +1035,9 @@ private:
     void update_GPS_10Hz(void);
     void update_compass(void);
     void update_alt(void);
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
     void afs_fs_check(void);
-#endif
+
     void one_second_loop(void);
     void three_hz_loop(void);
 #if AP_AIRSPEED_AUTOCAL_ENABLE
@@ -1168,7 +1168,7 @@ private:
     float get_throttle_input(bool no_deadzone=false) const;
     float get_adjusted_throttle_input(bool no_deadzone=false) const;
 
-#if AP_SCRIPTING_ENABLED
+
     // support for NAV_SCRIPT_TIME mission command
     bool nav_scripting_active(void);
     bool nav_script_time(uint16_t &id, uint8_t &cmd, float &arg1, float &arg2, int16_t &arg3, int16_t &arg4) override;
@@ -1179,7 +1179,7 @@ private:
     void set_target_throttle_rate_rpy(float throttle_pct, float roll_rate_dps, float pitch_rate_dps, float yaw_rate_dps) override;
     void set_rudder_offset(float rudder_pct, bool run_yaw_rate_controller) override;
     bool nav_scripting_enable(uint8_t mode) override;
-#endif
+
  
     enum Failsafe_Action {
         Failsafe_Action_None      = 0,
@@ -1264,14 +1264,14 @@ public:
 #if AP_SCRIPTING_ENABLED || AP_EXTERNAL_CONTROL_ENABLED
     bool set_target_location(const Location& target_loc) override;
 #endif //AP_SCRIPTING_ENABLED || AP_EXTERNAL_CONTROL_ENABLED
-#if AP_SCRIPTING_ENABLED
+
     bool get_target_location(Location& target_loc) override;
     bool update_target_location(const Location &old_loc, const Location &new_loc) override;
     bool set_velocity_match(const Vector2f &velocity) override;
 
     // allow for landing descent rate to be overridden by a script, may be -ve to climb
     bool set_land_descent_rate(float descent_rate) override;
-#endif // AP_SCRIPTING_ENABLED
+
 
 };
 

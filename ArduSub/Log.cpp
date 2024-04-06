@@ -27,15 +27,15 @@ void Sub::Log_Write_Control_Tuning()
 {
     // get terrain altitude
     float terr_alt = 0.0f;
-#if AP_TERRAIN_AVAILABLE
+
     if (terrain.enabled()) {
         terrain.height_above_terrain(terr_alt, true);
     } else {
         terr_alt = rangefinder_state.rangefinder_terrain_offset_cm * 0.01f;
     }
-#else
-    terr_alt = rangefinder_state.rangefinder_terrain_offset_cm * 0.01f;
-#endif
+
+
+
 
     struct log_Control_Tuning pkt = {
         LOG_PACKET_HEADER_INIT(LOG_CONTROL_TUNING_MSG),

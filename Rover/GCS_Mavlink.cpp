@@ -150,7 +150,7 @@ int16_t GCS_MAVLINK_Rover::vfr_hud_throttle() const
     return rover.g2.motors.get_throttle();
 }
 
-#if AP_RANGEFINDER_ENABLED
+
 void GCS_MAVLINK_Rover::send_rangefinder() const
 {
     float distance = 0;
@@ -180,7 +180,7 @@ void GCS_MAVLINK_Rover::send_rangefinder() const
         distance,
         voltage);
 }
-#endif  // AP_RANGEFINDER_ENABLED
+
 
 /*
   send PID tuning message
@@ -571,14 +571,14 @@ static const ap_message STREAM_EXTRA2_msgs[] = {
 static const ap_message STREAM_EXTRA3_msgs[] = {
     MSG_AHRS,
     MSG_WIND,
-#if AP_RANGEFINDER_ENABLED
+
     MSG_RANGEFINDER,
-#endif
+
     MSG_DISTANCE_SENSOR,
     MSG_SYSTEM_TIME,
-#if AP_BATTERY_ENABLED
+
     MSG_BATTERY_STATUS,
-#endif
+
 #if HAL_MOUNT_ENABLED
     MSG_GIMBAL_DEVICE_ATTITUDE_STATUS,
 #endif
@@ -591,9 +591,9 @@ static const ap_message STREAM_EXTRA3_msgs[] = {
 #endif
     MSG_EKF_STATUS_REPORT,
     MSG_VIBRATION,
-#if AP_RPM_ENABLED
+
     MSG_RPM,
-#endif
+
     MSG_WHEEL_DISTANCE,
 #if HAL_WITH_ESC_TELEM
     MSG_ESC_TELEMETRY,
@@ -607,9 +607,9 @@ static const ap_message STREAM_PARAMS_msgs[] = {
 };
 static const ap_message STREAM_ADSB_msgs[] = {
     MSG_ADSB_VEHICLE,
-#if AP_AIS_ENABLED
+
     MSG_AIS_VESSEL,
-#endif
+
 };
 
 const struct GCS_MAVLINK::stream_entries GCS_MAVLINK::all_stream_entries[] = {
@@ -1060,9 +1060,9 @@ void GCS_MAVLINK_Rover::handle_set_position_target_global_int(const mavlink_mess
 */
 void GCS_MAVLINK_Rover::handle_landing_target(const mavlink_landing_target_t &packet, uint32_t timestamp_ms)
 {
-#if AC_PRECLAND_ENABLED
+
     rover.precland.handle_msg(packet, timestamp_ms);
-#endif
+
 }
 
 uint64_t GCS_MAVLINK_Rover::capabilities() const

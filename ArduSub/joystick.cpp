@@ -374,7 +374,7 @@ void Sub::handle_jsbutton_press(uint8_t _button, bool shift, bool held)
             controls_reset_since_input_hold = !input_hold_engaged;
         }
         break;
-#if AP_RELAY_ENABLED
+
     case JSButton::button_function_t::k_relay_1_on:
         relay.on(0);
         break;
@@ -439,7 +439,7 @@ void Sub::handle_jsbutton_press(uint8_t _button, bool shift, bool held)
             relay.on(3);
         }
         break;
-#endif
+
 
     ////////////////////////////////////////////////
     // Servo functions
@@ -608,7 +608,7 @@ void Sub::handle_jsbutton_press(uint8_t _button, bool shift, bool held)
         // Not implemented
         break;
 
-#if AP_SCRIPTING_ENABLED
+
     case JSButton::button_function_t::k_script_1:
         sub.script_buttons[0].press();
         break;
@@ -621,7 +621,7 @@ void Sub::handle_jsbutton_press(uint8_t _button, bool shift, bool held)
     case JSButton::button_function_t::k_script_4:
         sub.script_buttons[3].press();
         break;
-#endif // AP_SCRIPTING_ENABLED
+
     }
 }
 
@@ -629,7 +629,7 @@ void Sub::handle_jsbutton_release(uint8_t _button, bool shift) {
 
     // Act based on the function assigned to this button
     switch (get_button(_button)->function(shift)) {
-#if AP_RELAY_ENABLED
+
     case JSButton::button_function_t::k_relay_1_momentary:
         relay.off(0);
         break;
@@ -642,7 +642,7 @@ void Sub::handle_jsbutton_release(uint8_t _button, bool shift) {
     case JSButton::button_function_t::k_relay_4_momentary:
         relay.off(3);
         break;
-#endif
+
 #if AP_SERVORELAYEVENTS_ENABLED
     case JSButton::button_function_t::k_servo_1_min_momentary:
     case JSButton::button_function_t::k_servo_1_max_momentary:
@@ -667,7 +667,7 @@ void Sub::handle_jsbutton_release(uint8_t _button, bool shift) {
         break;
 #endif
 
-#if AP_SCRIPTING_ENABLED
+
     case JSButton::button_function_t::k_script_1:
         sub.script_buttons[0].release();
         break;
@@ -680,7 +680,7 @@ void Sub::handle_jsbutton_release(uint8_t _button, bool shift) {
     case JSButton::button_function_t::k_script_4:
         sub.script_buttons[3].release();
         break;
-#endif // AP_SCRIPTING_ENABLED
+
     }
 }
 
@@ -809,7 +809,7 @@ void Sub::clear_input_hold()
     input_hold_engaged = false;
 }
 
-#if AP_SCRIPTING_ENABLED
+
 bool Sub::is_button_pressed(uint8_t index)
 {
     return script_buttons[index - 1].is_pressed();
@@ -819,4 +819,3 @@ uint8_t Sub::get_and_clear_button_count(uint8_t index)
 {
     return script_buttons[index - 1].get_and_clear_count();
 }
-#endif // AP_SCRIPTING_ENABLED

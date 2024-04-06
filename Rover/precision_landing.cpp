@@ -4,7 +4,7 @@
 
 #include "Rover.h"
 
-#if AC_PRECLAND_ENABLED
+
 
 void Rover::init_precland()
 {
@@ -16,4 +16,3 @@ void Rover::update_precland()
     // alt will be unused if we pass false through as the second parameter:
     return precland.update(0, false);
 }
-#endif

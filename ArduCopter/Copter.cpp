@@ -170,9 +170,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #if HAL_PROXIMITY_ENABLED
     SCHED_TASK_CLASS(AP_Proximity,         &copter.g2.proximity,        update,         200,  50,  36),
 #endif
-#if AP_BEACON_ENABLED
+
     SCHED_TASK_CLASS(AP_Beacon,            &copter.g2.beacon,           update,         400,  50,  39),
-#endif
+
     SCHED_TASK(update_altitude,       10,    100,  42),
     SCHED_TASK(run_nav_updates,       50,    100,  45),
     SCHED_TASK(update_throttle_hover,100,     90,  48),
@@ -186,9 +186,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #if AP_SERVORELAYEVENTS_ENABLED
     SCHED_TASK_CLASS(AP_ServoRelayEvents,  &copter.ServoRelayEvents,      update_events, 50,  75,  60),
 #endif
-#if AC_PRECLAND_ENABLED
+
     SCHED_TASK(update_precland,      400,     50,  69),
-#endif
+
 #if FRAME_CONFIG == HELI_FRAME
     SCHED_TASK(check_dynamic_flight,  50,     75,  72),
 #endif
@@ -200,9 +200,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
     SCHED_TASK(check_vibration,       10,     50,  87),
     SCHED_TASK(gpsglitch_check,       10,     50,  90),
     SCHED_TASK(takeoff_check,         50,     50,  91),
-#if AP_LANDINGGEAR_ENABLED
+
     SCHED_TASK(landinggear_update,    10,     75,  93),
-#endif
+
     SCHED_TASK(standby_update,        100,    75,  96),
     SCHED_TASK(lost_vehicle_check,    10,     50,  99),
     SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_receive, 400, 180, 102),
@@ -223,24 +223,24 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #if HAL_LOGGING_ENABLED
     SCHED_TASK_CLASS(AP_Scheduler,         &copter.scheduler,           update_logging, 0.1,  75, 126),
 #endif
-#if AP_RPM_ENABLED
+
     SCHED_TASK_CLASS(AP_RPM,               &copter.rpm_sensor,          update,          40, 200, 129),
-#endif
-#if AP_TEMPCALIBRATION_ENABLED
+
+
     SCHED_TASK_CLASS(AP_TempCalibration,   &copter.g2.temp_calibration, update,          10, 100, 135),
-#endif
+
 #if HAL_ADSB_ENABLED
     SCHED_TASK(avoidance_adsb_update, 10,    100, 138),
 #endif
 #if ADVANCED_FAILSAFE == ENABLED
     SCHED_TASK(afs_fs_check,          10,    100, 141),
 #endif
-#if AP_TERRAIN_AVAILABLE
+
     SCHED_TASK(terrain_update,        10,    100, 144),
-#endif
-#if AP_WINCH_ENABLED
+
+
     SCHED_TASK_CLASS(AP_Winch,             &copter.g2.winch,            update,          50,  50, 150),
-#endif
+
 #ifdef USERHOOK_FASTLOOP
     SCHED_TASK(userhook_FastLoop,    100,     75, 153),
 #endif
@@ -570,18 +570,18 @@ void Copter::ten_hz_logging_loop()
 #if HAL_PROXIMITY_ENABLED
         g2.proximity.log();  // Write proximity sensor distances
 #endif
-#if AP_BEACON_ENABLED
+
         g2.beacon.log();
-#endif
+
     }
 #if FRAME_CONFIG == HELI_FRAME
     Log_Write_Heli();
 #endif
-#if AP_WINCH_ENABLED
+
     if (should_log(MASK_LOG_ANY)) {
         g2.winch.write_log();
     }
-#endif
+
 #if HAL_MOUNT_ENABLED
     if (should_log(MASK_LOG_CAMERA)) {
         camera_mount.write_log();

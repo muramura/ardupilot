@@ -1,6 +1,6 @@
 #include "AP_Gripper.h"
 
-#if AP_GRIPPER_ENABLED
+
 
 #include "AP_Gripper_Servo.h"
 #include "AP_Gripper_EPM.h"
@@ -174,5 +174,3 @@ AP_Gripper &gripper()
 }
 
 };
-
-#endif  // AP_GRIPPER_ENABLED

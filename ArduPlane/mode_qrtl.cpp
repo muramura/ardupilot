@@ -27,24 +27,24 @@ bool ModeQRTL::_enter()
         const float target_alt = MAX(quadplane.qrtl_alt * (dist / MAX(radius, dist)), min_climb);
 
 
-#if AP_TERRAIN_AVAILABLE
+
         const bool use_terrain = plane.terrain_enabled_in_mode(mode_number());
-#else
-        const bool use_terrain = false;
-#endif
+
+
+
 
         const float dist_to_climb = target_alt - plane.relative_ground_altitude(plane.g.rangefinder_landing, use_terrain);
         if (is_positive(dist_to_climb)) {
             // climb before returning, only next waypoint altitude is used
             submode = SubMode::climb;
             plane.next_WP_loc = plane.current_loc;
-#if AP_TERRAIN_AVAILABLE
+
             int32_t curent_alt_terrain_cm;
             if (use_terrain && plane.current_loc.get_alt_cm(Location::AltFrame::ABOVE_TERRAIN, curent_alt_terrain_cm)) {
                 plane.next_WP_loc.set_alt_cm(curent_alt_terrain_cm + dist_to_climb * 100UL, Location::AltFrame::ABOVE_TERRAIN);
                 return true;
             }
-#endif
+
             plane.next_WP_loc.set_alt_cm(plane.current_loc.alt + dist_to_climb * 100UL, plane.current_loc.get_alt_frame());
             return true;
 

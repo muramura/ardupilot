@@ -382,7 +382,7 @@ void SIMState::set_height_agl(void)
         home_alt = _sitl->state.altitude;
     }
 
-#if AP_TERRAIN_AVAILABLE
+
     if (_sitl != nullptr &&
         _sitl->terrain_enable) {
         // get height above terrain from AP_Terrain. This assumes
@@ -399,7 +399,7 @@ void SIMState::set_height_agl(void)
             return;
         }
     }
-#endif
+
 
     if (_sitl != nullptr) {
         // fall back to flat earth model

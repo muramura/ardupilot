@@ -593,10 +593,10 @@ public:
     void calibrating(bool b) { gcs_is_calibrating = b; }
     bool calibrating() { return gcs_is_calibrating; }
 
-#if AP_SCRIPTING_ENABLED
+
     // get last aux cached value for scripting. Returns false if never set, otherwise 0,1,2
     bool get_aux_cached(RC_Channel::AUX_FUNC aux_fn, uint8_t &pos);
-#endif
+
 
     // returns true if we've ever seen RC input, via overrides or via
     // AP_RCProtocol
@@ -640,14 +640,14 @@ private:
     // true if GCS is performing a RC calibration
     bool gcs_is_calibrating;
 
-#if AP_SCRIPTING_ENABLED
+
     // bitmask of last aux function value, 2 bits per function
     // value 0 means never set, otherwise level+1
     HAL_Semaphore aux_cache_sem;
     Bitmask<unsigned(RC_Channel::AUX_FUNC::AUX_FUNCTION_MAX)*2> aux_cached;
 
     void set_aux_cached(RC_Channel::AUX_FUNC aux_fn, RC_Channel::AuxSwitchPos pos);
-#endif
+
 };
 
 RC_Channels &rc();

@@ -513,15 +513,15 @@ public:
     // ground effect compensation enable/disable
     AP_Int8 gndeffect_comp_enabled;
 
-#if AP_TEMPCALIBRATION_ENABLED
+
     // temperature calibration handling
     AP_TempCalibration temp_calibration;
-#endif
 
-#if AP_BEACON_ENABLED
+
+
     // beacon (non-GPS positioning) library
     AP_Beacon beacon;
-#endif
+
 
 #if HAL_PROXIMITY_ENABLED
     // proximity (aka object avoidance) library
@@ -558,9 +558,9 @@ public:
 #endif
 
     // wheel encoder and winch
-#if AP_WINCH_ENABLED
+
     AP_Winch winch;
-#endif
+
 
     // Additional pilot velocity items
     AP_Int16    pilot_speed_dn;
@@ -595,10 +595,10 @@ public:
     AP_Float tuning_min;
     AP_Float tuning_max;
 
-#if AP_OAPATHPLANNER_ENABLED
+
     // object avoidance path planning
     AP_OAPathPlanner oa;
-#endif
+
 
 #if MODE_SYSTEMID_ENABLED == ENABLED
     // we need a pointer to the mode for the G2 table

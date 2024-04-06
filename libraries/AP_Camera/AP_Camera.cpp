@@ -810,7 +810,7 @@ void AP_Camera::convert_params()
     }
 }
 
-#if AP_RELAY_ENABLED
+
 // Return true and the relay index if relay camera backend is selected, used for conversion to relay functions
 bool AP_Camera::get_legacy_relay_index(int8_t &index) const
 {
@@ -830,7 +830,7 @@ bool AP_Camera::get_legacy_relay_index(int8_t &index) const
     }
     return false;
 }
-#endif
+
 
 // singleton instance
 AP_Camera *AP_Camera::_singleton;

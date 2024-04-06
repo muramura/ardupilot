@@ -176,7 +176,7 @@ const AP_Param::GroupInfo AP_OSD::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("_BTN_DELAY", 20, AP_OSD, button_delay_ms, 300),
 #endif
-#if AP_TERRAIN_AVAILABLE
+
     // @Param: _W_TERR
     // @DisplayName: Terrain warn level
     // @Description: Set level below which TER_HGT item will flash. -1 disables.
@@ -184,7 +184,7 @@ const AP_Param::GroupInfo AP_OSD::var_info[] = {
     // @Units: m
     // @User: Standard
     AP_GROUPINFO("_W_TERR", 23, AP_OSD, warn_terr, -1),
-#endif
+
 
     // @Param: _W_AVGCELLV
     // @DisplayName: AVGCELLV warn level
@@ -462,7 +462,7 @@ void AP_OSD::update_stats()
     // maximum altitude
     alt = -alt;
     _stats.max_alt_m = fmaxf(_stats.max_alt_m, alt);
-#if AP_BATTERY_ENABLED
+
     // maximum current
     AP_BattMonitor &battery = AP::battery();
     float amps;
@@ -474,7 +474,7 @@ void AP_OSD::update_stats()
     if (voltage > 0) {
         _stats.min_voltage_v = fminf(_stats.min_voltage_v, voltage);
     }
-#endif
+
 #if AP_RSSI_ENABLED
     // minimum rssi
     AP_RSSI *ap_rssi = AP_RSSI::get_singleton();

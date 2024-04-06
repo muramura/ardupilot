@@ -14,7 +14,7 @@
  */
 #pragma once
 
-#if AP_SCRIPTING_ENABLED
+
 
 #include <GCS_MAVLink/GCS_config.h>
 #include <AP_Common/AP_Common.h>
@@ -192,5 +192,3 @@ private:
 namespace AP {
     AP_Scripting * scripting(void);
 };
-
-#endif // AP_SCRIPTING_ENABLED

@@ -18,7 +18,7 @@
 
 #include "AP_Terrain.h"
 
-#if AP_TERRAIN_AVAILABLE
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Common/AP_Common.h>
@@ -176,5 +176,3 @@ uint16_t AP_Terrain::get_block_crc(struct grid_block &block)
     block.crc = saved_crc;
     return ret;
 }
-
-#endif // AP_TERRAIN_AVAILABLE

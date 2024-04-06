@@ -18,7 +18,7 @@
 
 #include "AP_Terrain.h"
 
-#if AP_TERRAIN_AVAILABLE
+
 
 #include <AP_Filesystem/AP_Filesystem.h>
 #include <AP_HAL/AP_HAL.h>
@@ -377,5 +377,3 @@ void AP_Terrain::io_timer(void)
         break;
     }
 }
-
-#endif // AP_TERRAIN_AVAILABLE

@@ -2,7 +2,7 @@
 
 #include "AC_Avoidance_config.h"
 
-#if AP_OAPATHPLANNER_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Common/Location.h>
@@ -139,5 +139,3 @@ private:
 namespace AP {
     AP_OAPathPlanner *ap_oapathplanner();
 };
-
-#endif  // AP_OAPATHPLANNER_ENABLED

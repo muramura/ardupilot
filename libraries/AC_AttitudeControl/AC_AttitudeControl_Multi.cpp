@@ -326,9 +326,9 @@ AC_AttitudeControl_Multi::AC_AttitudeControl_Multi(AP_AHRS_View &ahrs, const AP_
 {
     AP_Param::setup_object_defaults(this, var_info);
 
-#if AP_FILTER_ENABLED
+
     set_notch_sample_rate(AP::scheduler().get_loop_rate_hz());
-#endif
+
 }
 
 // Update Alt_Hold angle maximum
@@ -494,9 +494,9 @@ void AC_AttitudeControl_Multi::parameter_sanity_check()
 
 void AC_AttitudeControl_Multi::set_notch_sample_rate(float sample_rate)
 {
-#if AP_FILTER_ENABLED
+
     _pid_rate_roll.set_notch_sample_rate(sample_rate);
     _pid_rate_pitch.set_notch_sample_rate(sample_rate);
     _pid_rate_yaw.set_notch_sample_rate(sample_rate);
-#endif
+
 }

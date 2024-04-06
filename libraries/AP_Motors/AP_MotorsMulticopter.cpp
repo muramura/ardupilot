@@ -278,13 +278,13 @@ void AP_MotorsMulticopter::output()
 
 void AP_MotorsMulticopter::update_external_limits()
 {
-#if AP_SCRIPTING_ENABLED
+
     limit.roll |= external_limits.roll;
     limit.pitch |= external_limits.pitch;
     limit.yaw |= external_limits.yaw;
     limit.throttle_lower |= external_limits.throttle_lower;
     limit.throttle_upper |= external_limits.throttle_upper;
-#endif
+
 }
 
 // output booster throttle, if any
@@ -347,7 +347,7 @@ void AP_MotorsMulticopter::update_throttle_filter()
 // return current_limit as a number from 0 ~ 1 in the range throttle_min to throttle_max
 float AP_MotorsMulticopter::get_current_limit_max_throttle()
 {
-#if AP_BATTERY_ENABLED
+
     AP_BattMonitor &battery = AP::battery();
 
     const uint8_t batt_idx = thr_lin.get_battery_index();
@@ -379,9 +379,9 @@ float AP_MotorsMulticopter::get_current_limit_max_throttle()
 
     // limit max throttle
     return get_throttle_hover() + ((1.0 - get_throttle_hover()) * _throttle_limit);
-#else
-    return 1.0;
-#endif
+
+
+
 }
 
 #if HAL_LOGGING_ENABLED

@@ -1818,14 +1818,14 @@ void AP_AHRS::get_relative_position_D_home(float &posD) const
     float originD;
     if (!get_relative_position_D_origin(originD) ||
         !_get_origin(originLLH)) {
-#if AP_GPS_ENABLED
+
         const auto &gps = AP::gps();
         if (_gps_use == GPSUse::EnableWithHeight &&
             gps.status() >= AP_GPS::GPS_OK_FIX_3D) {
             posD = (_home.alt - gps.location().alt) * 0.01;
             return;
         }
-#endif
+
         posD = -AP::baro().get_altitude();
         return;
     }
@@ -3160,7 +3160,7 @@ bool AP_AHRS::get_vel_innovations_and_variances_for_source(uint8_t source, Vecto
 //get the index of the active airspeed sensor, wrt the primary core
 uint8_t AP_AHRS::get_active_airspeed_index() const
 {
-#if AP_AIRSPEED_ENABLED
+
     const auto *airspeed = AP::airspeed();
     if (airspeed == nullptr) {
         return 0;
@@ -3178,10 +3178,10 @@ uint8_t AP_AHRS::get_active_airspeed_index() const
 
     // for the rest, let the primary airspeed sensor be used
     return airspeed->get_primary();
-#else
 
-    return 0;
-#endif // AP_AIRSPEED_ENABLED
+
+
+
 }
 
 // get the index of the current primary IMU

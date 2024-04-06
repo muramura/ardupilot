@@ -17,7 +17,7 @@
 
 #include "AP_Gripper_config.h"
 
-#if AP_GRIPPER_ENABLED
+
 
 #include <AP_Param/AP_Param.h>
 
@@ -90,5 +90,3 @@ private:
 namespace AP {
     AP_Gripper &gripper();
 };
-
-#endif  // AP_GRIPPER_ENABLED

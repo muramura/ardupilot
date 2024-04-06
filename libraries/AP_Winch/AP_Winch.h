@@ -17,7 +17,7 @@
 
 #include "AP_Winch_config.h"
 
-#if AP_WINCH_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Math/AP_Math.h>
@@ -118,5 +118,3 @@ private:
 namespace AP {
     AP_Winch *winch();
 };
-
-#endif  // AP_WINCH_ENABLED

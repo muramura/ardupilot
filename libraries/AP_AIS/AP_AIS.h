@@ -16,7 +16,7 @@
 
 #include "AP_AIS_config.h"
 
-#if AP_AIS_ENABLED
+
 // 0 fully disabled and compiled out
 // 1 compiled in and enabled
 // 2 compiled in with dummy methods, none functional, except rover which never uses dummy methods functionality
@@ -136,5 +136,3 @@ private:
 
     static AP_AIS *_singleton;
 };
-
-#endif  // AP_AIS_ENABLED

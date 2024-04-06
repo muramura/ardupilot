@@ -343,9 +343,9 @@ public:
     void send_distance_sensor();
     // send_rangefinder sends only if a downward-facing instance is
     // found.  Rover overrides this!
-#if AP_RANGEFINDER_ENABLED
+
     virtual void send_rangefinder() const;
-#endif
+
     void send_proximity();
     virtual void send_nav_controller_output() const = 0;
     virtual void send_pid_tuning() = 0;
@@ -389,9 +389,9 @@ public:
     void send_set_position_target_global_int(uint8_t target_system, uint8_t target_component, const Location& loc);
     void send_rpm() const;
     void send_generator_status() const;
-#if AP_WINCH_ENABLED
+
     virtual void send_winch_status() const {};
-#endif
+
     void send_water_depth() const;
     int8_t battery_remaining_pct(const uint8_t instance) const;
 
@@ -1225,15 +1225,15 @@ public:
     class AP_Frsky_Telem *frsky;
 #endif
 
-#if AP_LTM_TELEM_ENABLED
+
     // LTM backend
     AP_LTM_Telem ltm_telemetry;
-#endif
 
-#if AP_DEVO_TELEM_ENABLED
+
+
     // Devo backend
     AP_DEVO_Telem devo_telemetry;
-#endif
+
 
     // install an alternative protocol handler
     bool install_alternative_protocol(mavlink_channel_t chan, GCS_MAVLINK::protocol_handler_fn_t handler);
@@ -1293,12 +1293,12 @@ private:
 
     char statustext_printf_buffer[256+1];
 
-#if AP_GPS_ENABLED
+
     virtual AP_GPS::GPS_Status min_status_for_gps_healthy() const {
         // NO_FIX simply excludes NO_GPS
         return AP_GPS::GPS_Status::NO_FIX;
     }
-#endif
+
 
     void update_sensor_status_flags();
 

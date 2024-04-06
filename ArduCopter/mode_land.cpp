@@ -36,20 +36,20 @@ bool ModeLand::init(bool ignore_checks)
     // initialise yaw
     auto_yaw.set_mode(AutoYaw::Mode::HOLD);
 
-#if AP_LANDINGGEAR_ENABLED
+
     // optionally deploy landing gear
     copter.landinggear.deploy_for_landing();
-#endif
+
 
 
     // disable the fence on landing
     copter.fence.auto_disable_fence_for_landing();
 
 
-#if AC_PRECLAND_ENABLED
+
     // initialise precland state machine
     copter.precland_statemachine.init();
-#endif
+
 
     return true;
 }

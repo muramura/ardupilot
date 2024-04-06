@@ -15,7 +15,7 @@
 
 #include "AC_Avoidance_config.h"
 
-#if AP_OAPATHPLANNER_ENABLED
+
 
 #include "AP_OAPathPlanner.h"
 #include <AP_Math/AP_Math.h>
@@ -436,5 +436,3 @@ AP_OAPathPlanner *ap_oapathplanner()
 }
 
 }
-
-#endif  // AP_OAPATHPLANNER_ENABLED

@@ -234,7 +234,7 @@ void GCS_MAVLINK_Copter::send_nav_controller_output() const
 
 float GCS_MAVLINK_Copter::vfr_hud_airspeed() const
 {
-#if AP_AIRSPEED_ENABLED
+
     // airspeed sensors are best. While the AHRS airspeed_estimate
     // will use an airspeed sensor, that value is constrained by the
     // ground speed. When reporting we should send the true airspeed
@@ -242,7 +242,7 @@ float GCS_MAVLINK_Copter::vfr_hud_airspeed() const
     if (copter.airspeed.enabled() && copter.airspeed.healthy()) {
         return copter.airspeed.get_airspeed();
     }
-#endif
+
     
     Vector3f airspeed_vec_bf;
     if (AP::ahrs().airspeed_vector_true(airspeed_vec_bf)) {
@@ -311,7 +311,7 @@ void GCS_MAVLINK_Copter::send_pid_tuning()
     }
 }
 
-#if AP_WINCH_ENABLED
+
 // send winch status message
 void GCS_MAVLINK_Copter::send_winch_status() const
 {
@@ -321,7 +321,7 @@ void GCS_MAVLINK_Copter::send_winch_status() const
     }
     winch->send_status(*this);
 }
-#endif
+
 
 uint8_t GCS_MAVLINK_Copter::sysid_my_gcs() const
 {
@@ -347,10 +347,10 @@ bool GCS_MAVLINK_Copter::try_send_message(enum ap_message id)
     switch(id) {
 
     case MSG_TERRAIN:
-#if AP_TERRAIN_AVAILABLE
+
         CHECK_PAYLOAD_SIZE(TERRAIN_REQUEST);
         copter.terrain.send_request(chan);
-#endif
+
         break;
 
     case MSG_WIND:
@@ -369,7 +369,7 @@ bool GCS_MAVLINK_Copter::try_send_message(enum ap_message id)
         CHECK_PAYLOAD_SIZE(ADSB_VEHICLE);
         copter.adsb.send_adsb_vehicle(chan);
 #endif
-#if AP_OAPATHPLANNER_ENABLED
+
         AP_OADatabase *oadb = AP_OADatabase::get_singleton();
         if (oadb != nullptr) {
             CHECK_PAYLOAD_SIZE(ADSB_VEHICLE);
@@ -378,7 +378,7 @@ bool GCS_MAVLINK_Copter::try_send_message(enum ap_message id)
                 oadb->send_adsb_vehicle(chan, interval_ms);
             }
         }
-#endif
+
         break;
     }
 
@@ -544,16 +544,16 @@ static const ap_message STREAM_EXTRA3_msgs[] = {
     MSG_AHRS,
     MSG_SYSTEM_TIME,
     MSG_WIND,
-#if AP_RANGEFINDER_ENABLED
+
     MSG_RANGEFINDER,
-#endif
+
     MSG_DISTANCE_SENSOR,
-#if AP_TERRAIN_AVAILABLE
+
     MSG_TERRAIN,
-#endif
-#if AP_BATTERY_ENABLED
+
+
     MSG_BATTERY_STATUS,
-#endif
+
 #if HAL_MOUNT_ENABLED
     MSG_GIMBAL_DEVICE_ATTITUDE_STATUS,
 #endif
@@ -566,18 +566,18 @@ static const ap_message STREAM_EXTRA3_msgs[] = {
 #endif
     MSG_EKF_STATUS_REPORT,
     MSG_VIBRATION,
-#if AP_RPM_ENABLED
+
     MSG_RPM,
-#endif
+
 #if HAL_WITH_ESC_TELEM
     MSG_ESC_TELEMETRY,
 #endif
 #if HAL_GENERATOR_ENABLED
     MSG_GENERATOR_STATUS,
 #endif
-#if AP_WINCH_ENABLED
+
     MSG_WINCH_STATUS,
-#endif
+
 #if HAL_EFI_ENABLED
     MSG_EFI_STATUS,
 #endif
@@ -587,9 +587,9 @@ static const ap_message STREAM_PARAMS_msgs[] = {
 };
 static const ap_message STREAM_ADSB_msgs[] = {
     MSG_ADSB_VEHICLE,
-#if AP_AIS_ENABLED
+
     MSG_AIS_VESSEL,
-#endif
+
 };
 
 const struct GCS_MAVLINK::stream_entries GCS_MAVLINK::all_stream_entries[] = {
@@ -674,9 +674,9 @@ void GCS_MAVLINK_Copter::handle_command_ack(const mavlink_message_t &msg)
 */
 void GCS_MAVLINK_Copter::handle_landing_target(const mavlink_landing_target_t &packet, uint32_t timestamp_ms)
 {
-#if AC_PRECLAND_ENABLED
+
     copter.precland.handle_msg(packet, timestamp_ms);
-#endif
+
 }
 
 MAV_RESULT GCS_MAVLINK_Copter::_handle_command_preflight_calibration(const mavlink_command_int_t &packet, const mavlink_message_t &msg)
@@ -811,10 +811,10 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_packet(const mavlink_command_i
         return handle_MAV_CMD_MISSION_START(packet);
 #endif
 
-#if AP_WINCH_ENABLED
+
     case MAV_CMD_DO_WINCH:
         return handle_MAV_CMD_DO_WINCH(packet);
-#endif
+
 
     case MAV_CMD_NAV_LOITER_UNLIM:
         if (!copter.set_mode(Mode::Number::LOITER, ModeReason::GCS_COMMAND)) {
@@ -997,7 +997,7 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_DO_MOTOR_TEST(const mavlink_comman
                                                (uint8_t)packet.x);
 }
 
-#if AP_WINCH_ENABLED
+
 MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_DO_WINCH(const mavlink_command_int_t &packet)
 {
         // param1 : winch number (ignored)
@@ -1021,7 +1021,7 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_DO_WINCH(const mavlink_command_int
         }
         return MAV_RESULT_FAILED;
 }
-#endif  // AP_WINCH_ENABLED
+
 
 #if AC_MAVLINK_SOLO_BUTTON_COMMAND_HANDLING_ENABLED
 MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_SOLO_BTN_FLY_CLICK(const mavlink_command_int_t &packet)
@@ -1535,9 +1535,9 @@ uint64_t GCS_MAVLINK_Copter::capabilities() const
             MAV_PROTOCOL_CAPABILITY_SET_POSITION_TARGET_GLOBAL_INT |
             MAV_PROTOCOL_CAPABILITY_FLIGHT_TERMINATION |
             MAV_PROTOCOL_CAPABILITY_SET_ATTITUDE_TARGET |
-#if AP_TERRAIN_AVAILABLE
+
             (copter.terrain.enabled() ? MAV_PROTOCOL_CAPABILITY_TERRAIN : 0) |
-#endif
+
             GCS_MAVLINK::capabilities());
 }
 

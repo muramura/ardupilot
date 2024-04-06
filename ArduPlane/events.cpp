@@ -301,13 +301,13 @@ void Plane::handle_battery_failsafe(const char *type_str, const int8_t action)
         }
 
         case Failsafe_Action_Terminate:
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
             char battery_type_str[17];
             snprintf(battery_type_str, 17, "%s battery", type_str);
             afs.gcs_terminate(true, battery_type_str);
-#else
-            arming.disarm(AP_Arming::Method::FAILSAFE_ACTION_TERMINATE);
-#endif
+
+
+
             break;
 
         case Failsafe_Action_Parachute:

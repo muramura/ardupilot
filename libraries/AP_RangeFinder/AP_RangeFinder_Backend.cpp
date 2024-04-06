@@ -80,12 +80,10 @@ void AP_RangeFinder_Backend::set_status(RangeFinder::RangeFinder_State &state_ar
     }
 }
 
-#if AP_SCRIPTING_ENABLED
+
 // get a copy of state structure
 void AP_RangeFinder_Backend::get_state(RangeFinder::RangeFinder_State &state_arg)
 {
     WITH_SEMAPHORE(_sem);
     state_arg = state;
 }
-#endif
-

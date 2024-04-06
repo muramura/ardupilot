@@ -318,9 +318,9 @@ AC_AttitudeControl_Heli::AC_AttitudeControl_Heli(AP_AHRS_View &ahrs, const AP_Mu
     _flags_heli.leaky_i = true;
     _flags_heli.flybar_passthrough = false;
     _flags_heli.tail_passthrough = false;
-#if AP_FILTER_ENABLED
+
     set_notch_sample_rate(AP::scheduler().get_loop_rate_hz());
-#endif
+
 }
 
 // passthrough_bf_roll_pitch_rate_yaw - passthrough the pilots roll and pitch inputs directly to swashplate for flybar acro mode
@@ -584,11 +584,11 @@ void AC_AttitudeControl_Heli::input_euler_angle_roll_pitch_yaw(float euler_roll_
 
 void AC_AttitudeControl_Heli::set_notch_sample_rate(float sample_rate)
 {
-#if AP_FILTER_ENABLED
+
     _pid_rate_roll.set_notch_sample_rate(sample_rate);
     _pid_rate_pitch.set_notch_sample_rate(sample_rate);
     _pid_rate_yaw.set_notch_sample_rate(sample_rate);
-#endif
+
 }
 
 // enable/disable inverted flight

@@ -20,7 +20,7 @@
 
 #include "AC_AutoTune_config.h"
 
-#if AC_AUTOTUNE_ENABLED
+
 
 #include <AC_AttitudeControl/AC_AttitudeControl.h>
 #include <AC_AttitudeControl/AC_PosControl.h>
@@ -336,5 +336,3 @@ private:
     uint32_t last_pilot_override_warning;
 
 };
-
-#endif  // AC_AUTOTUNE_ENABLED

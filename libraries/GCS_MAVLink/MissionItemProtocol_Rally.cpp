@@ -82,12 +82,12 @@ MAV_MISSION_RESULT MissionItemProtocol_Rally::convert_MISSION_ITEM_INT_to_RallyL
             ret.alt_frame = uint8_t(Location::AltFrame::ABOVE_HOME);
             break;
 
-#if AP_TERRAIN_AVAILABLE
+
         case MAV_FRAME_GLOBAL_TERRAIN_ALT:
         case MAV_FRAME_GLOBAL_TERRAIN_ALT_INT:
             ret.alt_frame = uint8_t(Location::AltFrame::ABOVE_TERRAIN);
             break;
-#endif
+
 
         default:
             return MAV_MISSION_UNSUPPORTED_FRAME;

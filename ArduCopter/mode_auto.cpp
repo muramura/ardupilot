@@ -56,10 +56,10 @@ bool ModeAuto::init(bool ignore_checks)
         // reset flag indicating if pilot has applied roll or pitch inputs during landing
         copter.ap.land_repo_active = false;
 
-#if AC_PRECLAND_ENABLED
+
         // initialise precland state machine
         copter.precland_statemachine.init();
-#endif
+
 
         return true;
     } else {
@@ -429,10 +429,10 @@ void ModeAuto::land_start()
     // initialise yaw
     auto_yaw.set_mode(AutoYaw::Mode::HOLD);
 
-#if AP_LANDINGGEAR_ENABLED
+
     // optionally deploy landing gear
     copter.landinggear.deploy_for_landing();
-#endif
+
 
 
     // disable the fence on landing
@@ -752,11 +752,11 @@ bool ModeAuto::start_command(const AP_Mission::Mission_Command& cmd)
         break;
 #endif
 
-#if AP_WINCH_ENABLED
+
     case MAV_CMD_DO_WINCH:                             // Mission command to control winch
         do_winch(cmd);
         break;
-#endif
+
 
     case MAV_CMD_DO_LAND_START:
         break;
@@ -1233,7 +1233,7 @@ void PayloadPlace::run()
         }
     }
 
-#if AP_GRIPPER_ENABLED == ENABLED
+
     // if pilot releases load manually:
     if (AP::gripper().valid() && AP::gripper().released()) {
         switch (state) {
@@ -1255,7 +1255,7 @@ void PayloadPlace::run()
             break;
         }
     }
-#endif
+
 
     auto &inertial_nav = copter.inertial_nav;
     auto &g2 = copter.g2;
@@ -1332,7 +1332,7 @@ void PayloadPlace::run()
     case State::Release:
         // Reinitialise vertical position controller to remove discontinuity due to touch down of payload
         pos_control->init_z_controller_no_descent();
-#if AP_GRIPPER_ENABLED == ENABLED
+
         if (AP::gripper().valid()) {
             gcs().send_text(MAV_SEVERITY_INFO, "%s Releasing the gripper", prefix_str);
             AP::gripper().release();
@@ -1340,17 +1340,17 @@ void PayloadPlace::run()
         } else {
             state = State::Delay;
         }
-#else
-        state = State::Delay;
-#endif
+
+
+
         break;
 
     case State::Releasing:
-#if AP_GRIPPER_ENABLED
+
         if (AP::gripper().valid() && !AP::gripper().released()) {
             break;
         }
-#endif
+
         state = State::Delay;
         FALLTHROUGH;
 
@@ -1922,7 +1922,7 @@ void ModeAuto::do_mount_control(const AP_Mission::Mission_Command& cmd)
 #endif
 }
 
-#if AP_WINCH_ENABLED
+
 // control winch based on mission command
 void ModeAuto::do_winch(const AP_Mission::Mission_Command& cmd)
 {
@@ -1942,7 +1942,7 @@ void ModeAuto::do_winch(const AP_Mission::Mission_Command& cmd)
             break;
     }
 }
-#endif
+
 
 #if AP_MISSION_NAV_PAYLOAD_PLACE_ENABLED && AC_PAYLOAD_PLACE_ENABLED
 // do_payload_place - initiate placing procedure
@@ -1992,13 +1992,13 @@ void ModeAuto::do_RTL(void)
 // verify_takeoff - check if we have completed the takeoff
 bool ModeAuto::verify_takeoff()
 {
-#if AP_LANDINGGEAR_ENABLED
+
     // if we have reached our destination
     if (auto_takeoff.complete) {
         // retract the landing gear
         copter.landinggear.retract_after_takeoff();
     }
-#endif
+
 
     return auto_takeoff.complete;
 }

@@ -21,7 +21,7 @@
 #define AP_TERRAIN_AVAILABLE AP_FILESYSTEM_FILE_READING_ENABLED
 #endif
 
-#if AP_TERRAIN_AVAILABLE
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Common/Location.h>
@@ -472,6 +472,3 @@ private:
 namespace AP {
     AP_Terrain *terrain();
 };
-
-#endif // AP_TERRAIN_AVAILABLE
-

@@ -16,9 +16,9 @@
 class AP_ServoRelayEvents {
 public:
     AP_ServoRelayEvents()
-#if AP_RELAY_ENABLED
+
         : type(EVENT_TYPE_RELAY)
-#endif
+
     {
         _singleton = this;
     }
@@ -32,9 +32,9 @@ public:
     }
 
     bool do_set_servo(uint8_t channel, uint16_t pwm);
-#if AP_RELAY_ENABLED
+
     bool do_set_relay(uint8_t relay_num, uint8_t state);
-#endif
+
     bool do_repeat_servo(uint8_t channel, uint16_t servo_value, int16_t repeat, uint16_t delay_time_ms);
     bool do_repeat_relay(uint8_t relay_num, int16_t count, uint32_t period_ms);
     void update_events(void);
@@ -45,9 +45,9 @@ private:
 
     // event control state
     enum event_type { 
-#if AP_RELAY_ENABLED
+
         EVENT_TYPE_RELAY=0,
-#endif
+
         EVENT_TYPE_SERVO=1
     };
 

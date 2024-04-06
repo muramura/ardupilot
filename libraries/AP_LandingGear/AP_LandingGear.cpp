@@ -1,6 +1,6 @@
 #include "AP_LandingGear.h"
 
-#if AP_LANDINGGEAR_ENABLED
+
 
 #include <AP_Math/AP_Math.h>
 #include <SRV_Channel/SRV_Channel.h>
@@ -339,5 +339,3 @@ void AP_LandingGear::deploy_for_landing()
         deploy();
     }
 }
-
-#endif

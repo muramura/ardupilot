@@ -21,7 +21,7 @@
 
 #include "AP_Devo_Telem.h"
 
-#if AP_DEVO_TELEM_ENABLED
+
 
 #include <AP_AHRS/AP_AHRS.h>
 #include <AP_GPS/AP_GPS.h>
@@ -136,4 +136,3 @@ void AP_DEVO_Telem::tick(void)
         send_frames();
     }
 }
-#endif

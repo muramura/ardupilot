@@ -15,7 +15,7 @@
 
 #include "AC_Avoidance_config.h"
 
-#if AP_OAPATHPLANNER_ENABLED
+
 
 #include "AP_OAVisGraph.h"
 
@@ -43,5 +43,3 @@ bool AP_OAVisGraph::add_item(const OAItemID &id1, const OAItemID &id2, float dis
     _num_items++;
     return true;
 }
-
-#endif  // AP_OAPATHPLANNER_ENABLED

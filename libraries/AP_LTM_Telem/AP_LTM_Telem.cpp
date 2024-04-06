@@ -17,7 +17,7 @@
 
 #include "AP_LTM_Telem.h"
 
-#if AP_LTM_TELEM_ENABLED
+
 
 #include <AP_AHRS/AP_AHRS.h>
 #include <AP_GPS/AP_GPS.h>
@@ -116,7 +116,7 @@ void AP_LTM_Telem::send_Gframe(void)
 // Sensors frame
 void AP_LTM_Telem::send_Sframe(void)
 {
-#if AP_BATTERY_ENABLED
+
     const AP_BattMonitor &battery = AP::battery();
     const uint16_t volt = (uint16_t) roundf(battery.voltage() * 1000.0f);              // battery voltage (expects value in mV)
     float current;
@@ -125,19 +125,19 @@ void AP_LTM_Telem::send_Sframe(void)
     }
     // note: max. current value we can send is 65.536 A
     const uint16_t amp = (uint16_t) roundf(current * 100.0f);                          // current sensor (expects value in hundredth of A)
-#else
-    const uint16_t volt = 0;
-    const uint16_t amp = 0;
-#endif
+
+
+
+
 
     // airspeed in m/s if available and enabled - even if not used - otherwise send 0
     uint8_t airspeed = 0; // airspeed sensor (m/s)
-#if AP_AIRSPEED_ENABLED
+
     const AP_Airspeed *aspeed = AP::airspeed();
     if (aspeed && aspeed->enabled()) {
         airspeed = (uint8_t) roundf(aspeed->get_airspeed());
     }
-#endif
+
 
     const uint8_t flightmode = AP_Notify::flags.flight_mode; // flight mode
 
@@ -232,5 +232,3 @@ void AP_LTM_Telem::tick(void)
         generate_LTM();
     }
 }
-
-#endif  // AP_LTM_TELEM_ENABLED

@@ -1,6 +1,6 @@
 #include "AP_Scripting_config.h"
 
-#if AP_SCRIPTING_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/HAL.h>
@@ -1001,5 +1001,3 @@ void lua_abort()
     }
 #endif
 }
-
-#endif  // AP_SCRIPTING_ENABLED

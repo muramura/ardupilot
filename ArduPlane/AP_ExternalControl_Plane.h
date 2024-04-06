@@ -6,7 +6,7 @@
 
 #include <AP_ExternalControl/AP_ExternalControl.h>
 
-#if AP_EXTERNAL_CONTROL_ENABLED
+
 
 #include <AP_Common/Location.h>
 
@@ -17,5 +17,3 @@ public:
     */
     bool set_global_position(const Location& loc) override WARN_IF_UNUSED;
 };
-
-#endif // AP_EXTERNAL_CONTROL_ENABLED

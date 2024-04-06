@@ -166,11 +166,11 @@ public:
     Canard::Publisher<com_xacti_GimbalControlData> xacti_gimbal_control_data{canard_iface};
     Canard::Publisher<com_xacti_GnssStatus> xacti_gnss_status{canard_iface};
 
-#if AP_RELAY_DRONECAN_ENABLED
+
     // Hardpoint for relay
     // Needs to be public so relay can edge trigger as well as streaming
     Canard::Publisher<uavcan_equipment_hardpoint_Command> relay_hardpoint{canard_iface};
-#endif
+
 
 private:
     void loop(void);
@@ -279,14 +279,14 @@ private:
     uint32_t _last_notify_state_ms;
     uavcan_protocol_NodeStatus node_status_msg;
 
-#if AP_RELAY_DRONECAN_ENABLED
+
     void relay_hardpoint_send();
     struct {
         AP_Int16 rate_hz;
         uint32_t last_send_ms;
         uint8_t last_index;
     } _relay;
-#endif
+
 
     CanardInterface canard_iface;
 

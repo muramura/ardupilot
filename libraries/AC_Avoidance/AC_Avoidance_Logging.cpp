@@ -54,7 +54,7 @@ void AP_OADijkstra::Write_OADijkstra(const uint8_t state, const uint8_t error_id
 }
 #endif
 
-#if AP_OAPATHPLANNER_ENABLED
+
 void AP_OADijkstra::Write_Visgraph_point(const uint8_t version, const uint8_t point_num, const int32_t Lat, const int32_t Lon) const
 {
     const struct log_OD_Visgraph pkt{
@@ -67,7 +67,7 @@ void AP_OADijkstra::Write_Visgraph_point(const uint8_t version, const uint8_t po
     };
     AP::logger().WriteBlock(&pkt, sizeof(pkt));
 }
-#endif
+
 
 
 void AC_Avoid::Write_SimpleAvoidance(const uint8_t state, const Vector3f& desired_vel, const Vector3f& modified_vel, const bool back_up) const

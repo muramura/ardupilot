@@ -16,7 +16,7 @@
 #include "AP_Notify/AP_Notify.h"
 #include "ScriptingLED.h"
 
-#if AP_SCRIPTING_ENABLED
+
 
 ScriptingLED *ScriptingLED::_singleton;
 
@@ -35,5 +35,3 @@ void ScriptingLED::get_rgb(uint8_t& red, uint8_t& green, uint8_t& blue)
     green = _green_curr;
     blue = _blue_curr;
 }
-
-#endif

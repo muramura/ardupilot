@@ -31,10 +31,10 @@ void Plane::parachute_release()
     // release parachute
     parachute.release();
 
-#if AP_LANDINGGEAR_ENABLED
+
     // deploy landing gear
     g2.landing_gear.set_position(AP_LandingGear::LandingGear_Deploy);
-#endif
+
 }
 
 /*
@@ -59,10 +59,10 @@ bool Plane::parachute_manual_release()
     // if we get this far release parachute
     parachute_release();
 
-#if AP_LANDINGGEAR_ENABLED
+
     // deploy landing gear
     g2.landing_gear.set_position(AP_LandingGear::LandingGear_Deploy);
-#endif
+
     return true;    
 }
 #endif

@@ -47,13 +47,13 @@ void Plane::failsafe_check(void)
 
         rc().read_input();
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
         if (in_calibration) {
             // tell the failsafe system that we are calibrating
             // sensors, so don't trigger failsafe
             afs.heartbeat();
         }
-#endif
+
 
         if (RC_Channels::get_valid_channel_count() < 5) {
             // we don't have any RC input to pass through
@@ -83,14 +83,14 @@ void Plane::failsafe_check(void)
         // this is to allow the failsafe module to deliberately crash 
         // the plane. Only used in extreme circumstances to meet the
         // OBC rules
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
         if (afs.should_crash_vehicle()) {
             afs.terminate_vehicle();
             if (!afs.terminating_vehicle_via_landing()) {
                 return;
             }
         }
-#endif
+
 
         // setup secondary output channels that do have
         // corresponding input channels

@@ -1,6 +1,6 @@
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_ENABLED
+
 
 #include "AP_BattMonitor.h"
 
@@ -1122,5 +1122,3 @@ AP_BattMonitor &battery()
 }
 
 };
-
-#endif  // AP_BATTERY_ENABLED

@@ -15,7 +15,7 @@
 
 #include "AP_ICEngine.h"
 
-#if AP_ICENGINE_ENABLED
+
 
 #include <SRV_Channel/SRV_Channel.h>
 #include <GCS_MAVLink/GCS.h>
@@ -64,14 +64,14 @@ const AP_Param::GroupInfo AP_ICEngine::var_info[] = {
     // @Range: 1 10
     AP_GROUPINFO("START_DELAY", 3, AP_ICEngine, starter_delay, 2),
 
-#if AP_RPM_ENABLED
+
     // @Param: RPM_THRESH
     // @DisplayName: RPM threshold
     // @Description: This is the measured RPM above which the engine is considered to be running
     // @User: Standard
     // @Range: 100 100000
     AP_GROUPINFO("RPM_THRESH", 4, AP_ICEngine, rpm_threshold, 100),
-#endif
+
 
     // @Param: PWM_IGN_ON
     // @DisplayName: PWM value for ignition on
@@ -101,14 +101,14 @@ const AP_Param::GroupInfo AP_ICEngine::var_info[] = {
     // @Range: 1000 2000
     AP_GROUPINFO("PWM_STRT_OFF", 8, AP_ICEngine, pwm_starter_off, 1000),
 
-#if AP_RPM_ENABLED
+
     // @Param: RPM_CHAN
     // @DisplayName: RPM instance channel to use
     // @Description: This is which of the RPM instances to use for detecting the RPM of the engine
     // @User: Standard
     // @Values: 0:None,1:RPM1,2:RPM2
     AP_GROUPINFO("RPM_CHAN",  9, AP_ICEngine, rpm_instance, 0),
-#endif
+
 
     // @Param: START_PCT
     // @DisplayName: Throttle percentage for engine start
@@ -124,7 +124,7 @@ const AP_Param::GroupInfo AP_ICEngine::var_info[] = {
     // @Range: 0 100
     AP_GROUPINFO("IDLE_PCT", 11, AP_ICEngine, idle_percent, 0),
 
-#if AP_RPM_ENABLED
+
     // @Param: IDLE_RPM
     // @DisplayName: RPM Setpoint for Idle Governor
     // @Description: This configures the RPM that will be commanded by the idle governor. Set to -1 to disable
@@ -140,7 +140,7 @@ const AP_Param::GroupInfo AP_ICEngine::var_info[] = {
     // @DisplayName: Slew Rate for idle control
     // @Description: This configures the slewrate used to adjust the idle setpoint in percentage points per second
     AP_GROUPINFO("IDLE_SLEW", 14, AP_ICEngine, idle_slew, 1),
-#endif
+
 
     // @Param: OPTIONS
     // @DisplayName: ICE options
@@ -155,7 +155,7 @@ const AP_Param::GroupInfo AP_ICEngine::var_info[] = {
     // @Range: 0 1300
     AP_GROUPINFO("STARTCHN_MIN", 16, AP_ICEngine, start_chan_min_pwm, 0),
 
-#if AP_RPM_ENABLED
+
     // @Param: REDLINE_RPM
     // @DisplayName: RPM of the redline limit for the engine
     // @Description: Maximum RPM for the engine provided by the manufacturer. A value of 0 disables this feature. See ICE_OPTIONS to enable or disable the governor.
@@ -163,7 +163,7 @@ const AP_Param::GroupInfo AP_ICEngine::var_info[] = {
     // @Range: 0 2000000
     // @Units: RPM
     AP_GROUPINFO("REDLINE_RPM", 17, AP_ICEngine, redline_rpm, 0),
-#endif
+
 
     // 18 was IGNITION_RLY
 
@@ -181,10 +181,10 @@ AP_ICEngine::AP_ICEngine()
     }
     _singleton = this;
 
-#if AP_RPM_ENABLED
+
     // ICEngine runs at 10Hz
     _rpm_filter.set_cutoff_frequency(10, 0.5f);
-#endif
+
 }
 
 /*
@@ -326,7 +326,7 @@ void AP_ICEngine::update(void)
             state = ICE_OFF;
             GCS_SEND_TEXT(MAV_SEVERITY_INFO, "Stopped engine");
         }
-#if AP_RPM_ENABLED
+
         else if (rpm_instance > 0) {
             // check RPM to see if still running
             float rpm_value;
@@ -337,7 +337,7 @@ void AP_ICEngine::update(void)
                 GCS_SEND_TEXT(MAV_SEVERITY_INFO, "Uncommanded engine stop");
             }
         }
-#endif
+
         break;
     }
 
@@ -355,7 +355,7 @@ void AP_ICEngine::update(void)
         }
     }
 
-#if AP_RPM_ENABLED
+
     // check against redline RPM
     float rpm_value;
     if (rpm_instance > 0 && redline_rpm > 0 && AP::rpm()->get_rpm(rpm_instance-1, rpm_value)) {
@@ -375,7 +375,7 @@ void AP_ICEngine::update(void)
     } else {
         redline.flag = false;
     }
-#endif // AP_RPM_ENABLED
+
 
     /* now set output channels */
     switch (state) {
@@ -445,7 +445,7 @@ bool AP_ICEngine::throttle_override(float &percentage, const float base_throttle
         return true;
     }
 
-#if AP_RPM_ENABLED
+
     if (redline.flag && !option_set(Options::DISABLE_REDLINE_GOVERNOR)) {
         // limit the throttle from increasing above what the current output is
         if (redline.throttle_percentage < 1.0f) {
@@ -469,7 +469,7 @@ bool AP_ICEngine::throttle_override(float &percentage, const float base_throttle
         percentage = redline.throttle_percentage - redline.governor_integrator;
         return true;
     }
-#endif // AP_RPM_ENABLED
+
 
     // if THROTTLE_WHILE_DISARMED is set then we use the base_throttle, allowing the pilot to control throttle while disarmed
     if (option_set(Options::THROTTLE_WHILE_DISARMED) && !hal.util->get_soft_armed() &&
@@ -531,7 +531,7 @@ void AP_ICEngine::update_idle_governor(int8_t &min_throttle)
     if (!enable) {
         return;
     }
-#if AP_RPM_ENABLED
+
     const int8_t min_throttle_base = min_throttle;
 
     // Initialize idle point to min_throttle on the first run
@@ -593,7 +593,7 @@ void AP_ICEngine::update_idle_governor(int8_t &min_throttle)
     idle_governor_integrator = constrain_float(idle_governor_integrator, min_throttle_base, 40.0f);
 
     min_throttle = roundf(idle_governor_integrator);
-#endif // AP_RPM_ENABLED
+
 }
 
 /*
@@ -603,12 +603,12 @@ void AP_ICEngine::set_ignition(bool on)
 {
     SRV_Channels::set_output_pwm(SRV_Channel::k_ignition, on? pwm_ignition_on : pwm_ignition_off);
 
-#if AP_RELAY_ENABLED
+
     AP_Relay *relay = AP::relay();
     if (relay != nullptr) {
         relay->set(AP_Relay_Params::FUNCTION::IGNITION, on);
     }
-#endif // AP_RELAY_ENABLED
+
 
 }
 
@@ -623,12 +623,12 @@ void AP_ICEngine::set_starter(bool on)
     tca9554_starter.set_starter(on);
 #endif
 
-#if AP_RELAY_ENABLED
+
     AP_Relay *relay = AP::relay();
     if (relay != nullptr) {
         relay->set(AP_Relay_Params::FUNCTION::ICE_STARTER, on);
     }
-#endif // AP_RELAY_ENABLED
+
 }
 
 
@@ -638,7 +638,7 @@ bool AP_ICEngine::allow_throttle_while_disarmed() const
         hal.util->safety_switch_state() != AP_HAL::Util::SAFETY_DISARMED;
 }
 
-#if AP_RELAY_ENABLED
+
 bool AP_ICEngine::get_legacy_ignition_relay_index(int8_t &num) 
 {
     // PARAMETER_CONVERSION - Added: Dec-2023
@@ -649,7 +649,7 @@ bool AP_ICEngine::get_legacy_ignition_relay_index(int8_t &num)
     num -= 1;
     return true;
 }
-#endif
+
 
 // singleton instance. Should only ever be set in the constructor.
 AP_ICEngine *AP_ICEngine::_singleton;
@@ -658,5 +658,3 @@ AP_ICEngine *ice() {
         return AP_ICEngine::get_singleton();
     }
 }
-
-#endif  // AP_ICENGINE_ENABLED

@@ -16,7 +16,7 @@
 
 #include "AP_Beacon_config.h"
 
-#if AP_BEACON_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Param/AP_Param.h>
@@ -152,5 +152,3 @@ private:
 namespace AP {
     AP_Beacon *beacon();
 };
-
-#endif  // AP_BEACON_ENABLED

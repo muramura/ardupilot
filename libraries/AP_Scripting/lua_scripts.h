@@ -16,7 +16,7 @@
 
 #include "AP_Scripting_config.h"
 
-#if AP_SCRIPTING_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Param/AP_Param.h>
@@ -147,5 +147,3 @@ public:
     static uint32_t get_running_checksum();
 
 };
-
-#endif  // AP_SCRIPTING_ENABLED

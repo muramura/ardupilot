@@ -55,9 +55,9 @@
 #include "AP_DroneCAN_serial.h"
 #endif
 
-#if AP_RELAY_DRONECAN_ENABLED
+
 #include <AP_Relay/AP_Relay.h>
-#endif
+
 
 #include <AP_TemperatureSensor/AP_TemperatureSensor_DroneCAN.h>
 
@@ -159,7 +159,7 @@ const AP_Param::GroupInfo AP_DroneCAN::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("ESC_RV", 9, AP_DroneCAN, _esc_rv, 0),
 
-#if AP_RELAY_DRONECAN_ENABLED
+
     // @Param: RLY_RT
     // @DisplayName: DroneCAN relay output rate
     // @Description: Maximum transmit rate for relay outputs, note that this rate is per message each message does 1 relay, so if with more relays will take longer to update at the same rate, a extra message will be sent when a relay changes state
@@ -167,7 +167,7 @@ const AP_Param::GroupInfo AP_DroneCAN::var_info[] = {
     // @Units: Hz
     // @User: Advanced
     AP_GROUPINFO("RLY_RT", 23, AP_DroneCAN, _relay.rate_hz, 0),
-#endif
+
 
 #if AP_DRONECAN_SERIAL_ENABLED
     /*
@@ -455,10 +455,10 @@ void AP_DroneCAN::init(uint8_t driver_index, bool enable_filters)
     xacti_gnss_status.set_priority(CANARD_TRANSFER_PRIORITY_LOW);
 #endif
 
-#if AP_RELAY_DRONECAN_ENABLED
+
     relay_hardpoint.set_timeout_ms(20);
     relay_hardpoint.set_priority(CANARD_TRANSFER_PRIORITY_LOW);
-#endif
+
 
     param_save_client.set_timeout_ms(20);
     param_save_client.set_priority(CANARD_TRANSFER_PRIORITY_LOW);
@@ -556,9 +556,9 @@ void AP_DroneCAN::loop(void)
         serial.update();
 #endif
 
-#if AP_RELAY_DRONECAN_ENABLED
+
         relay_hardpoint_send();
-#endif
+
     }
 }
 
@@ -1240,7 +1240,7 @@ void AP_DroneCAN::safety_state_send()
 }
 
 // Send relay outputs with hardpoint msg
-#if AP_RELAY_DRONECAN_ENABLED
+
 void AP_DroneCAN::relay_hardpoint_send()
 {
     const uint32_t now = AP_HAL::millis();
@@ -1264,7 +1264,7 @@ void AP_DroneCAN::relay_hardpoint_send()
     }
 
 }
-#endif // AP_RELAY_DRONECAN_ENABLED
+
 
 /*
   handle Button message

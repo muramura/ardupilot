@@ -8,9 +8,9 @@ bool Plane::start_command(const AP_Mission::Mission_Command& cmd)
     // default to non-VTOL loiter
     auto_state.vtol_loiter = false;
 
-#if AP_TERRAIN_AVAILABLE
+
     plane.target_altitude.terrain_following_pending = false;
-#endif
+
 
 #if HAL_LOGGING_ENABLED
     // log when new commands start
@@ -193,14 +193,14 @@ bool Plane::start_command(const AP_Mission::Mission_Command& cmd)
         break;
 #endif
 
-#if AP_ICENGINE_ENABLED
+
     case MAV_CMD_DO_ENGINE_CONTROL:
         plane.g2.ice_control.engine_control(cmd.content.do_engine_control.start_control,
                                             cmd.content.do_engine_control.cold_start,
                                             cmd.content.do_engine_control.height_delay_cm*0.01f,
                                             cmd.content.do_engine_control.allow_disarmed_start);
         break;
-#endif
+
 
 
     case MAV_CMD_NAV_SCRIPT_TIME:
@@ -554,9 +554,9 @@ void ModeAuto::do_nav_delay(const AP_Mission::Mission_Command& cmd)
 bool Plane::verify_takeoff()
 {
     bool trust_ahrs_yaw = AP::ahrs().initialised();
-#if AP_AHRS_DCM_ENABLED
+
     trust_ahrs_yaw |= ahrs.dcm_yaw_initialised();
-#endif
+
     if (trust_ahrs_yaw && steer_state.hold_course_cd == -1) {
         const float min_gps_speed = 5;
         if (auto_state.takeoff_speed_time_ms == 0 && 

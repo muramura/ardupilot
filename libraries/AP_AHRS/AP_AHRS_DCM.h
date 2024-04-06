@@ -23,7 +23,7 @@
 
 #include "AP_AHRS_config.h"
 
-#if AP_AHRS_DCM_ENABLED
+
 
 #include "AP_AHRS_Backend.h"
 
@@ -289,5 +289,3 @@ private:
 
     uint32_t last_log_ms;
 };
-
-#endif  // AP_AHRS_DCM_ENABLED

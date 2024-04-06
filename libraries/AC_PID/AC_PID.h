@@ -168,10 +168,10 @@ protected:
     AP_Float _filt_D_hz;         // PID derivative filter frequency in Hz
     AP_Float _slew_rate_max;
     AP_Float _kdff;
-#if AP_FILTER_ENABLED
+
     AP_Int8 _notch_T_filter;
     AP_Int8 _notch_E_filter;
-#endif
+
 
     // the time constant tau is not currently configurable, but is set
     // as an AP_Float to make it easy to make it configurable for a
@@ -194,10 +194,10 @@ protected:
     float _derivative;        // derivative value to enable filtering
     int8_t _slew_limit_scale;
     float _target_derivative; // target derivative value to enable dff
-#if AP_FILTER_ENABLED
+
     NotchFilterFloat* _target_notch;
     NotchFilterFloat* _error_notch;
-#endif
+
 
     AP_PIDInfo _pid_info;
 

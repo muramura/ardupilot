@@ -20,7 +20,7 @@
 
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL_Boards.h>
@@ -133,5 +133,3 @@ private:
     AP_Airspeed &frontend;
     uint8_t instance;
 };
-
-#endif  // AP_AIRSPEED_ENABLED

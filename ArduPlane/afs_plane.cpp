@@ -4,7 +4,7 @@
 
 #include "Plane.h"
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
 
 /*
   setup radio_out values for all channels to termination values
@@ -109,5 +109,3 @@ AP_AdvancedFailsafe::control_mode AP_AdvancedFailsafe_Plane::afs_mode(void)
  {
     plane.set_mode(plane.mode_auto,ModeReason::GCS_FAILSAFE);
  }
-
-#endif // AP_ADVANCEDFAILSAFE_ENABLED

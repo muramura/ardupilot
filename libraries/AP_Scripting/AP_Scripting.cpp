@@ -15,7 +15,7 @@
 
 #include "AP_Scripting_config.h"
 
-#if AP_SCRIPTING_ENABLED
+
 
 #include <AP_Scripting/AP_Scripting.h>
 #include <AP_HAL/AP_HAL.h>
@@ -522,5 +522,3 @@ namespace AP {
         return AP_Scripting::get_singleton();
     }
 }
-
-#endif  // AP_SCRIPTING_ENABLED

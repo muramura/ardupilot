@@ -168,12 +168,12 @@ void AP_EFI_Serial_Hirth::send_request()
         // send new throttle value, only when ARMED
         bool allow_throttle = hal.util->get_soft_armed();
         if (!allow_throttle) {
-#if AP_ICENGINE_ENABLED
+
             const auto *ice = AP::ice();
             if (ice != nullptr) {
                 allow_throttle = ice->allow_throttle_while_disarmed();
             }
-#endif  // AP_ICENGINE_ENABLED
+
         }
         if (allow_throttle) {
             request_was_sent = send_target_values(new_throttle);

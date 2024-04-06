@@ -296,7 +296,7 @@ return_zero:
     return 0;
 }
 
-#if AP_LANDINGGEAR_ENABLED
+
 /*
   update landing gear
  */
@@ -304,7 +304,7 @@ void Plane::landing_gear_update(void)
 {
     g2.landing_gear.update(relative_ground_altitude(g.rangefinder_landing));
 }
-#endif
+
 
 /*
  check takeoff_timeout; checks time after the takeoff start time; returns true if timeout has occurred and disarms on timeout

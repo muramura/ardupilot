@@ -1,6 +1,6 @@
 #include "AP_DAL_Beacon.h"
 
-#if AP_BEACON_ENABLED
+
 
 #include <AP_Logger/AP_Logger.h>
 #include "AP_DAL.h"
@@ -47,5 +47,3 @@ void AP_DAL_Beacon::start_frame()
         WRITE_REPLAY_BLOCK_IFCHANGED(RBCI, RBCI, old_RBCI);
     }
 }
-
-#endif

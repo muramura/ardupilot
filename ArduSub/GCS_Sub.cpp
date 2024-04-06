@@ -56,7 +56,7 @@ void GCS_Sub::update_vehicle_sensor_status_flags()
         control_sensors_health |= MAV_SYS_STATUS_SENSOR_ABSOLUTE_PRESSURE;
     }
 
-#if AP_TERRAIN_AVAILABLE
+
     switch (sub.terrain.status()) {
     case AP_Terrain::TerrainStatusDisabled:
         break;
@@ -71,7 +71,7 @@ void GCS_Sub::update_vehicle_sensor_status_flags()
         control_sensors_health  |= MAV_SYS_STATUS_TERRAIN;
         break;
     }
-#endif
+
 
 #if RANGEFINDER_ENABLED == ENABLED
     const RangeFinder *rangefinder = RangeFinder::get_singleton();
@@ -85,11 +85,10 @@ void GCS_Sub::update_vehicle_sensor_status_flags()
 #endif
 }
 
-#if AP_LTM_TELEM_ENABLED
+
 // avoid building/linking LTM:
 void AP_LTM_Telem::init() {};
-#endif
-#if AP_DEVO_TELEM_ENABLED
+
+
 // avoid building/linking Devo:
 void AP_DEVO_Telem::init() {};
-#endif

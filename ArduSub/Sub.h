@@ -84,9 +84,9 @@
 
 #include <AP_RPM/AP_RPM_config.h>
 
-#if AP_RPM_ENABLED
+
 #include <AP_RPM/AP_RPM.h>
-#endif
+
 
 #if AVOIDANCE_ENABLED == ENABLED
 #include <AC_Avoidance/AC_Avoid.h>           // Stop at fence library
@@ -94,9 +94,9 @@
 
 #include <AP_Camera/AP_Camera.h>          // Photo or video camera
 
-#if AP_SCRIPTING_ENABLED
+
 #include <AP_Scripting/AP_Scripting.h>
-#endif
+
 
 class Sub : public AP_Vehicle {
 public:
@@ -156,9 +156,9 @@ private:
         LowPassFilterFloat alt_cm_filt;         // altitude filter
     } rangefinder_state = { false, false, 0, 0, 0, 0, 0, 0 };
 
-#if AP_RPM_ENABLED
+
     AP_RPM rpm_sensor;
-#endif
+
 
     // Mission library
     AP_Mission mission{
@@ -354,9 +354,9 @@ private:
 #endif
 
     // terrain handling
-#if AP_TERRAIN_AVAILABLE
+
     AP_Terrain terrain;
-#endif
+
 
     // used to allow attitude and depth control without a position system
     struct attitude_no_gps_struct {
@@ -593,9 +593,9 @@ private:
     AutoSubMode auto_mode;   // controls which auto controller is run
     GuidedSubMode guided_mode;
 
-#if AP_SCRIPTING_ENABLED
+
     ScriptButton script_buttons[4];
-#endif // AP_SCRIPTING_ENABLED
+
 
 public:
     void mainloop_failsafe_check();
@@ -607,7 +607,7 @@ public:
         return _singleton;
     }
 
-#if AP_SCRIPTING_ENABLED
+
     // For Lua scripting, so index is 1..4, not 0..3
     bool is_button_pressed(uint8_t index);
 
@@ -618,7 +618,7 @@ public:
     float get_rangefinder_target_cm() const WARN_IF_UNUSED { return mode_surftrak.get_rangefinder_target_cm(); }
     bool set_rangefinder_target_cm(float new_target_cm) { return mode_surftrak.set_rangefinder_target_cm(new_target_cm); }
 #endif // RANGEFINDER_ENABLED
-#endif // AP_SCRIPTING_ENABLED
+
 };
 
 extern const AP_HAL::HAL& hal;

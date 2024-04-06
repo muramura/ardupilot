@@ -27,11 +27,11 @@ void Copter::Log_Write_Control_Tuning()
 {
     // get terrain altitude
     float terr_alt = 0.0f;
-#if AP_TERRAIN_AVAILABLE
+
     if (!terrain.height_above_terrain(terr_alt, true)) {
         terr_alt = logger.quiet_nan();
     }
-#endif
+
     float des_alt_m = 0.0f;
     int16_t target_climb_rate_cms = 0;
     if (!flightmode->has_manual_throttle()) {

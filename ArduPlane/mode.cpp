@@ -25,10 +25,10 @@ void Mode::exit()
 
 bool Mode::enter()
 {
-#if AP_SCRIPTING_ENABLED
+
     // reset nav_scripting.enabled
     plane.nav_scripting.enabled = false;
-#endif
+
 
     // cancel inverted flight
     plane.auto_state.inverted_flight = false;
@@ -97,9 +97,9 @@ bool Mode::enter()
     quadplane.mode_enter();
 #endif
 
-#if AP_TERRAIN_AVAILABLE
+
     plane.target_altitude.terrain_following_pending = false;
-#endif
+
 
     bool enter_result = _enter();
 
@@ -277,11 +277,11 @@ void Mode::output_pilot_throttle()
 // true if throttle min/max limits should be applied
 bool Mode::use_throttle_limits() const
 {
-#if AP_SCRIPTING_ENABLED
+
     if (plane.nav_scripting_active()) {
         return false;
     }
-#endif
+
 
     if (this == &plane.mode_stabilize ||
         this == &plane.mode_training ||
@@ -309,11 +309,11 @@ bool Mode::use_throttle_limits() const
 // true if voltage correction should be applied to throttle
 bool Mode::use_battery_compensation() const
 {
-#if AP_SCRIPTING_ENABLED
+
     if (plane.nav_scripting_active()) {
         return false;
     }
-#endif
+
 
     if (this == &plane.mode_stabilize ||
         this == &plane.mode_training ||

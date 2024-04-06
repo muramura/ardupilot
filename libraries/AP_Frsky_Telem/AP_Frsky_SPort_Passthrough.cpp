@@ -224,22 +224,22 @@ bool AP_Frsky_SPort_Passthrough::is_packet_ready(uint8_t idx, bool queue_empty)
     case RPM:
         {
             packet_ready = false;
-#if AP_RPM_ENABLED
+
             const AP_RPM *rpm = AP::rpm();
             if (rpm == nullptr) {
                 break;
             }
             packet_ready = rpm->num_sensors() > 0;
-#endif
+
         }
         break;
     case TERRAIN:
         {
             packet_ready = false;
-#if AP_TERRAIN_AVAILABLE
+
             const AP_Terrain *terrain = AP::terrain();
             packet_ready = terrain && terrain->enabled();
-#endif
+
         }
         break;
     case WIND:
@@ -488,9 +488,9 @@ uint32_t AP_Frsky_SPort_Passthrough::calc_param(void)
 #if HAL_WITH_FRSKY_TELEM_BIDIRECTIONAL
         BIT_SET(param_value,PassthroughFeatures::BIDIR);
 #endif
-#if AP_SCRIPTING_ENABLED
+
         BIT_SET(param_value,PassthroughFeatures::SCRIPTING);
-#endif
+
         _paramID = FRAME_TYPE;
         break;
     }
@@ -703,7 +703,7 @@ uint32_t AP_Frsky_SPort_Passthrough::calc_attiandrng(void)
  */
 uint32_t AP_Frsky_SPort_Passthrough::calc_rpm(void)
 {
-#if AP_RPM_ENABLED
+
     const AP_RPM *ap_rpm = AP::rpm();
     if (ap_rpm == nullptr) {
         return 0;
@@ -720,9 +720,9 @@ uint32_t AP_Frsky_SPort_Passthrough::calc_rpm(void)
         value |= (int16_t)roundf(rpm * 0.1) << 16;
     }
     return value;
-#else
-    return 0;
-#endif
+
+
+
 }
 
 /*
@@ -732,7 +732,7 @@ uint32_t AP_Frsky_SPort_Passthrough::calc_rpm(void)
 uint32_t AP_Frsky_SPort_Passthrough::calc_terrain(void)
 {
     uint32_t value = 0;
-#if AP_TERRAIN_AVAILABLE
+
     AP_Terrain *terrain = AP::terrain();
     if (terrain == nullptr || !terrain->enabled()) {
         return value;
@@ -744,7 +744,7 @@ uint32_t AP_Frsky_SPort_Passthrough::calc_terrain(void)
     }
     // terrain unhealthy flag
     value |= (uint8_t)(terrain->status() == AP_Terrain::TerrainStatus::TerrainStatusUnhealthy) << TERRAIN_UNHEALTHY_OFFSET;
-#endif
+
     return value;
 }
 

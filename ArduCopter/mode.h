@@ -217,7 +217,7 @@ protected:
     // pause_descent is true if vehicle should not descend
     void land_run_normal_or_precland(bool pause_descent = false);
 
-#if AC_PRECLAND_ENABLED
+
     // Go towards a position commanded by prec land state machine in order to retry landing
     // The passed in location is expected to be NED and in meters
     void precland_retry_position(const Vector3f &retry_pos);
@@ -225,7 +225,7 @@ protected:
     // Run precland statemachine. This function should be called from any mode that wants to do precision landing.
     // This handles everything from prec landing, to prec landing failures, to retries and failsafe measures
     void precland_run();
-#endif
+
 
     // return expected input throttle setting to hover:
     virtual float throttle_hover() const;
@@ -636,9 +636,9 @@ private:
 #if PARACHUTE == ENABLED
     void do_parachute(const AP_Mission::Mission_Command& cmd);
 #endif
-#if AP_WINCH_ENABLED
+
     void do_winch(const AP_Mission::Mission_Command& cmd);
-#endif
+
     void do_payload_place(const AP_Mission::Mission_Command& cmd);
     void do_RTL(void);
 
@@ -1012,9 +1012,9 @@ private:
 class ModeGuided : public Mode {
 
 public:
-#if AP_EXTERNAL_CONTROL_ENABLED
+
     friend class AP_ExternalControl_Copter;
-#endif
+
 
     // inherit constructor
     using Mode::Mode;
@@ -1237,9 +1237,9 @@ public:
     bool has_user_takeoff(bool must_navigate) const override { return true; }
     bool allows_autotune() const override { return true; }
 
-#if AC_PRECLAND_ENABLED
+
     void set_precision_loiter_enabled(bool value) { _precision_loiter_enabled = value; }
-#endif
+
 
 protected:
 
@@ -1250,17 +1250,17 @@ protected:
     int32_t wp_bearing() const override;
     float crosstrack_error() const override { return pos_control->crosstrack_error();}
 
-#if AC_PRECLAND_ENABLED
+
     bool do_precision_loiter();
     void precision_loiter_xy();
-#endif
+
 
 private:
 
-#if AC_PRECLAND_ENABLED
+
     bool _precision_loiter_enabled;
     bool _precision_loiter_active; // true if user has switched on prec loiter
-#endif
+
 
 };
 

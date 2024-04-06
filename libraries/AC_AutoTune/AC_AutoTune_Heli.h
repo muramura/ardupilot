@@ -20,7 +20,7 @@
 
 #include "AC_AutoTune_config.h"
 
-#if AC_AUTOTUNE_ENABLED
+
 
 #include "AC_AutoTune.h"
 #include <AP_Math/chirp.h>
@@ -302,5 +302,3 @@ private:
 
     Chirp chirp_input;
 };
-
-#endif  // AC_AUTOTUNE_ENABLED

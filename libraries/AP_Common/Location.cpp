@@ -124,7 +124,7 @@ bool Location::get_alt_cm(AltFrame desired_frame, int32_t &ret_alt_cm) const
     // check for terrain altitude
     float alt_terr_cm = 0;
     if (frame == AltFrame::ABOVE_TERRAIN || desired_frame == AltFrame::ABOVE_TERRAIN) {
-#if AP_TERRAIN_AVAILABLE
+
         AP_Terrain *terrain = AP::terrain();
         if (terrain == nullptr) {
             return false;
@@ -134,9 +134,9 @@ bool Location::get_alt_cm(AltFrame desired_frame, int32_t &ret_alt_cm) const
         }
         // convert terrain alt to cm
         alt_terr_cm *= 100.0f;
-#else
-        return false;
-#endif
+
+
+
     }
 
     // convert alt to absolute

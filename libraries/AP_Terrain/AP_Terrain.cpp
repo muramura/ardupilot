@@ -15,7 +15,7 @@
 
 #include "AP_Terrain.h"
 
-#if AP_TERRAIN_AVAILABLE
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Common/AP_Common.h>
@@ -578,5 +578,3 @@ AP_Terrain *terrain()
 }
 
 };
-
-#endif // AP_TERRAIN_AVAILABLE

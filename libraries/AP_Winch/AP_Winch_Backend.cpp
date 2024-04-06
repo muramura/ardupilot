@@ -1,6 +1,6 @@
 #include <AP_Winch/AP_Winch_Backend.h>
 
-#if AP_WINCH_ENABLED
+
 
 #include <RC_Channel/RC_Channel.h>
 #include <SRV_Channel/SRV_Channel.h>
@@ -69,5 +69,3 @@ float AP_Winch_Backend::get_rate_limited_by_accel(float rate, float dt)
 
     return rate_limited;
 }
-
-#endif  // AP_WINCH_ENABLED

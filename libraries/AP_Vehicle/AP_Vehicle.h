@@ -71,14 +71,14 @@
 #include <AP_KDECAN/AP_KDECAN.h>
 #include <Filter/AP_Filter.h>
 #include <AP_Stats/AP_Stats.h>              // statistics library
-#if AP_SCRIPTING_ENABLED
+
 #include <AP_Scripting/AP_Scripting.h>
-#endif
+
 
 #include <AP_Gripper/AP_Gripper_config.h>
-#if AP_GRIPPER_ENABLED
+
 #include <AP_Gripper/AP_Gripper.h>
-#endif
+
 
 class AP_DDS_Client;
 
@@ -169,11 +169,11 @@ public:
     // returns true if the vehicle has crashed
     virtual bool is_crashed() const;
 
-#if AP_EXTERNAL_CONTROL_ENABLED
+
     // Method to control vehicle position for use by external control
     virtual bool set_target_location(const Location& target_loc) { return false; }
-#endif // AP_EXTERNAL_CONTROL_ENABLED
-#if AP_SCRIPTING_ENABLED
+
+
     /*
       methods to control vehicle for use by scripting
     */
@@ -239,7 +239,7 @@ public:
     // returns true on success and control_value is set to a value in the range -1 to +1
     virtual bool get_control_output(AP_Vehicle::ControlOutput control_output, float &control_value) { return false; }
 
-#endif // AP_SCRIPTING_ENABLED
+
 
     // returns true if vehicle is in the process of landing
     virtual bool is_landing() const { return false; }
@@ -320,9 +320,9 @@ protected:
     float G_Dt;
 
     // sensor drivers
-#if AP_GPS_ENABLED
+
     AP_GPS gps;
-#endif
+
     AP_Baro barometer;
 #if AP_COMPASS_ENABLED
     Compass compass;
@@ -344,9 +344,9 @@ protected:
     virtual uint8_t get_num_log_structures() const { return 0; }
 #endif
 
-#if AP_GRIPPER_ENABLED
+
     AP_Gripper gripper;
-#endif
+
 
 #if AP_RSSI_ENABLED
     AP_RSSI rssi;
@@ -362,13 +362,13 @@ protected:
     AP_VideoTX vtx;
 #endif
 
-#if AP_SERIALMANAGER_ENABLED
-    AP_SerialManager serial_manager;
-#endif
 
-#if AP_RELAY_ENABLED
+    AP_SerialManager serial_manager;
+
+
+
     AP_Relay relay;
-#endif
+
 
 #if AP_SERVORELAYEVENTS_ENABLED
     AP_ServoRelayEvents ServoRelayEvents;
@@ -428,19 +428,19 @@ protected:
     AP_EFI efi;
 #endif
 
-#if AP_AIRSPEED_ENABLED
+
     AP_Airspeed airspeed;
-#endif
+
 
 
     // vehicle statistics
     AP_Stats stats;
 
 
-#if AP_AIS_ENABLED
+
     // Automatic Identification System - for tracking sea-going vehicles
     AP_AIS ais;
-#endif
+
 
 #if HAL_NMEA_OUTPUT_ENABLED
     AP_NMEA_Output nmea;
@@ -458,9 +458,9 @@ protected:
     AP_TemperatureSensor temperature_sensor;
 #endif
 
-#if AP_SCRIPTING_ENABLED
+
     AP_Scripting scripting;
-#endif
+
 
     static const struct AP_Param::GroupInfo var_info[];
 #if AP_SCHEDULER_ENABLED
@@ -545,9 +545,9 @@ private:
     AP_CustomRotations custom_rotations;
 #endif
 
-#if AP_FILTER_ENABLED
+
     AP_Filters filters;
-#endif
+
 
     // Bitmask of modes to disable from gcs
     AP_Int32 flight_mode_GCS_block;

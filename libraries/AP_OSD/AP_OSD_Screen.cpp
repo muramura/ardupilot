@@ -929,7 +929,7 @@ const AP_Param::GroupInfo AP_OSD_Screen::var_info[] = {
     AP_SUBGROUPINFO(vtx_power, "VTX_PWR", 55, AP_OSD_Screen, AP_OSD_Setting),
 #endif  // AP_VIDEOTX_ENABLED
 
-#if AP_TERRAIN_AVAILABLE
+
     // @Param: TER_HGT_EN
     // @DisplayName: TER_HGT_EN
     // @Description: Displays Height above terrain
@@ -945,7 +945,7 @@ const AP_Param::GroupInfo AP_OSD_Screen::var_info[] = {
     // @Description: Vertical position on screen
     // @Range: 0 21
     AP_SUBGROUPINFO(hgt_abvterr, "TER_HGT", 56, AP_OSD_Screen, AP_OSD_Setting),
-#endif
+
 
     // @Param: AVGCELLV_EN
     // @DisplayName: AVGCELLV_EN
@@ -1027,7 +1027,7 @@ const AP_Param::GroupInfo AP_OSD_Screen::var_info[] = {
     // @Range: 0 21
     AP_SUBGROUPINFO(avgcellrestvolt, "ACRVOLT", 61, AP_OSD_Screen, AP_OSD_Setting),
 
-#if AP_RPM_ENABLED
+
 	// @Param: RPM_EN
 	// @DisplayName: RPM_EN
 	// @Description: Displays main rotor revs/min
@@ -1043,7 +1043,7 @@ const AP_Param::GroupInfo AP_OSD_Screen::var_info[] = {
 	// @Description: Vertical position on screen
 	// @Range: 0 15
 	AP_SUBGROUPINFO(rrpm, "RPM", 62, AP_OSD_Screen, AP_OSD_Setting),
-#endif
+
 
     AP_GROUPEND
 };
@@ -1441,7 +1441,7 @@ void AP_OSD_Screen::draw_altitude(uint8_t x, uint8_t y)
     backend->write(x, y, false, "%4d%c", (int)u_scale(ALTITUDE, alt), u_icon(ALTITUDE));
 }
 
-#if AP_BATTERY_ENABLED
+
 void AP_OSD_Screen::draw_bat_volt(uint8_t instance, VoltageType type, uint8_t x, uint8_t y)
 {
     AP_BattMonitor &battery = AP::battery();
@@ -1517,7 +1517,7 @@ void AP_OSD_Screen::draw_restvolt(uint8_t x, uint8_t y)
 {
     draw_bat_volt(0,VoltageType::RESTING_VOLTAGE,x,y);
 }
-#endif  // AP_BATTERY_ENABLED
+
 
 #if AP_RSSI_ENABLED
 void AP_OSD_Screen::draw_rssi(uint8_t x, uint8_t y)
@@ -1543,7 +1543,7 @@ void AP_OSD_Screen::draw_link_quality(uint8_t x, uint8_t y)
 }
 #endif  // AP_RSSI_ENABLED
 
-#if AP_BATTERY_ENABLED
+
 void AP_OSD_Screen::draw_current(uint8_t instance, uint8_t x, uint8_t y)
 {
     float amps;
@@ -1564,7 +1564,7 @@ void AP_OSD_Screen::draw_current(uint8_t x, uint8_t y)
 {
     draw_current(0, x, y);
 }
-#endif
+
 
 void AP_OSD_Screen::draw_fltmode(uint8_t x, uint8_t y)
 {
@@ -1588,7 +1588,7 @@ void AP_OSD_Screen::draw_sats(uint8_t x, uint8_t y)
     backend->write(x, y, flash, "%c%c%2u", SYMBOL(SYM_SAT_L), SYMBOL(SYM_SAT_R), nsat);
 }
 
-#if AP_BATTERY_ENABLED
+
 void AP_OSD_Screen::draw_batused(uint8_t instance, uint8_t x, uint8_t y)
 {
     float mah;
@@ -1607,7 +1607,7 @@ void AP_OSD_Screen::draw_batused(uint8_t x, uint8_t y)
 {
     draw_batused(0, x, y);
 }
-#endif
+
 
 //Autoscroll message is the same as in minimosd-extra.
 //Thanks to night-ghost for the approach.
@@ -1799,7 +1799,7 @@ void AP_OSD_Screen::draw_heading(uint8_t x, uint8_t y)
     backend->write(x, y, false, "%3d%c", yaw, SYMBOL(SYM_DEGR));
 }
 
-#if AP_RPM_ENABLED
+
 void AP_OSD_Screen::draw_rrpm(uint8_t x, uint8_t y)
 {
     float _rrpm;
@@ -1816,7 +1816,7 @@ void AP_OSD_Screen::draw_rrpm(uint8_t x, uint8_t y)
     int r_rpm = static_cast<int>(_rrpm);
     backend->write(x, y, false, "%4d%c", (int)r_rpm, SYMBOL(SYM_RPM));
 }
-#endif
+
 
 void AP_OSD_Screen::draw_throttle(uint8_t x, uint8_t y)
 {
@@ -2284,7 +2284,7 @@ void  AP_OSD_Screen::draw_flightime(uint8_t x, uint8_t y)
     }
 }
 
-#if AP_BATTERY_ENABLED
+
 void AP_OSD_Screen::draw_eff(uint8_t x, uint8_t y)
 {
     AP_BattMonitor &battery = AP::battery();
@@ -2302,9 +2302,9 @@ void AP_OSD_Screen::draw_eff(uint8_t x, uint8_t y)
         backend->write(x, y, false, "%c---%c", SYMBOL(SYM_EFF),SYMBOL(SYM_MAH));
     }
 }
-#endif  // AP_BATTERY_ENABLED
 
-#if AP_BATTERY_ENABLED
+
+
 void AP_OSD_Screen::draw_climbeff(uint8_t x, uint8_t y)
 {
     char unit_icon = u_icon(DISTANCE);
@@ -2334,7 +2334,7 @@ void AP_OSD_Screen::draw_climbeff(uint8_t x, uint8_t y)
         backend->write(x, y, false,"%c%c---%c",SYMBOL(SYM_PTCHUP),SYMBOL(SYM_EFF),unit_icon);
     }
 }
-#endif
+
 
 #if BARO_MAX_INSTANCES > 1
 void AP_OSD_Screen::draw_btemp(uint8_t x, uint8_t y)
@@ -2347,7 +2347,7 @@ void AP_OSD_Screen::draw_btemp(uint8_t x, uint8_t y)
 
 void AP_OSD_Screen::draw_atemp(uint8_t x, uint8_t y)
 {
-#if AP_AIRSPEED_ENABLED
+
     AP_Airspeed *airspeed = AP_Airspeed::get_singleton();
     if (!airspeed) {
         return;
@@ -2359,7 +2359,7 @@ void AP_OSD_Screen::draw_atemp(uint8_t x, uint8_t y)
     } else {
         backend->write(x, y, false, "--%c", u_icon(TEMPERATURE));
     }
-#endif
+
 }
 
 void AP_OSD_Screen::draw_bat2_vlt(uint8_t x, uint8_t y)
@@ -2374,7 +2374,7 @@ void AP_OSD_Screen::draw_bat2used(uint8_t x, uint8_t y)
 
 void AP_OSD_Screen::draw_aspd1(uint8_t x, uint8_t y)
 {
-#if AP_AIRSPEED_ENABLED
+
     AP_Airspeed *airspeed = AP_Airspeed::get_singleton();
     if (!airspeed) {
         return;
@@ -2385,12 +2385,12 @@ void AP_OSD_Screen::draw_aspd1(uint8_t x, uint8_t y)
     } else {
         backend->write(x, y, false, "%c ---%c", SYMBOL(SYM_ASPD), u_icon(SPEED));
     }
-#endif
+
 }
 
 void AP_OSD_Screen::draw_aspd2(uint8_t x, uint8_t y)
 {
-#if AP_AIRSPEED_ENABLED
+
     AP_Airspeed *airspeed = AP_Airspeed::get_singleton();
     if (!airspeed) {
         return;
@@ -2401,7 +2401,7 @@ void AP_OSD_Screen::draw_aspd2(uint8_t x, uint8_t y)
     } else {
         backend->write(x, y, false, "%c ---%c", SYMBOL(SYM_ASPD), u_icon(SPEED));
     }
-#endif
+
 }
 
 #if AP_RTC_ENABLED
@@ -2479,7 +2479,7 @@ void AP_OSD_Screen::draw_vtx_power(uint8_t x, uint8_t y)
 }
 #endif  // AP_VIDEOTX_ENABLED
 
-#if AP_TERRAIN_AVAILABLE
+
 void AP_OSD_Screen::draw_hgt_abvterr(uint8_t x, uint8_t y)
 {
     AP_Terrain *terrain = AP::terrain();
@@ -2492,7 +2492,7 @@ void AP_OSD_Screen::draw_hgt_abvterr(uint8_t x, uint8_t y)
         backend->write(x, y, false, " ---%c%c", u_icon(ALTITUDE),SYMBOL(SYM_TERALT));
      }
 }
-#endif
+
 
 
 void AP_OSD_Screen::draw_fence(uint8_t x, uint8_t y)
@@ -2543,9 +2543,9 @@ void AP_OSD_Screen::draw(void)
     DRAW_SETTING(compass);
     DRAW_SETTING(altitude);
 
-#if AP_TERRAIN_AVAILABLE
+
     DRAW_SETTING(hgt_abvterr);
-#endif
+
 
     DRAW_SETTING(rngf);
     DRAW_SETTING(waypoint);
@@ -2571,9 +2571,9 @@ void AP_OSD_Screen::draw(void)
     DRAW_SETTING(heading);
     DRAW_SETTING(wind);
     DRAW_SETTING(home);
-#if AP_RPM_ENABLED
+
     DRAW_SETTING(rrpm);
-#endif
+
 
     DRAW_SETTING(fence);
 

@@ -2,7 +2,7 @@
 
 #include <AP_Beacon/AP_Beacon.h>
 
-#if AP_BEACON_ENABLED
+
 
 #include <AP_Logger/LogStructure.h>
 
@@ -75,5 +75,3 @@ private:
     struct log_RBCH _RBCH;
     struct log_RBCI _RBCI[AP_BEACON_MAX_BEACONS];
 };
-
-#endif  // AP_BEACON_ENABLED

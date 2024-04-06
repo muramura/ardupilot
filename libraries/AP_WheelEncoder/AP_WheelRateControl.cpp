@@ -276,8 +276,8 @@ AC_PID& AP_WheelRateControl::get_pid(uint8_t instance)
 
 void AP_WheelRateControl::set_notch_sample_rate(float sample_rate)
 {
-#if AP_FILTER_ENABLED
+
     _rate_pid0.set_notch_sample_rate(sample_rate);
     _rate_pid1.set_notch_sample_rate(sample_rate);
-#endif
+
 }

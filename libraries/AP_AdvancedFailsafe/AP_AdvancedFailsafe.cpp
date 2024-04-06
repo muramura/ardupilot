@@ -21,7 +21,7 @@
 */
 #include "AP_AdvancedFailsafe.h"
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <RC_Channel/RC_Channel.h>
@@ -497,5 +497,3 @@ AP_AdvancedFailsafe *advancedfailsafe()
 }
 
 };
-
-#endif  // AP_ADVANCEDFAILSAFE_ENABLED

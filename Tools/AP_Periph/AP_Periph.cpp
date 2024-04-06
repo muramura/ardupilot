@@ -299,9 +299,9 @@ void AP_Periph_FW::init()
     relay.init();
 #endif
 
-#if AP_SCRIPTING_ENABLED
+
     scripting.init();
-#endif
+
     start_ms = AP_HAL::millis();
 }
 

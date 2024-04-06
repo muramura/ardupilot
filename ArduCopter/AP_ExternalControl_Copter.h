@@ -5,7 +5,7 @@
 
 #include <AP_ExternalControl/AP_ExternalControl.h>
 
-#if AP_EXTERNAL_CONTROL_ENABLED
+
 
 class AP_ExternalControl_Copter : public AP_ExternalControl {
 public:
@@ -22,5 +22,3 @@ private:
     */
     bool ready_for_external_control() WARN_IF_UNUSED;
 };
-
-#endif // AP_EXTERNAL_CONTROL_ENABLED

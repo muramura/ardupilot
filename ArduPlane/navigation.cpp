@@ -45,7 +45,7 @@ void Plane::loiter_angle_update(void)
         // once we reach the position target we start checking the
         // altitude target
         bool terrain_status_ok = false;
-#if AP_TERRAIN_AVAILABLE
+
         /*
           if doing terrain following then we check against terrain
           target, fetch the terrain information
@@ -61,7 +61,7 @@ void Plane::loiter_angle_update(void)
             fabsF(altitude_agl - target_altitude.terrain_alt_cm*0.01) < 5) {
             reached_target_alt = true;
         } else
-#endif
+
         if (!terrain_status_ok && labs(current_loc.alt - target_altitude.amsl_cm) < 500) {
             reached_target_alt = true;
         }

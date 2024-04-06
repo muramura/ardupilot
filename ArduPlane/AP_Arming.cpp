@@ -32,11 +32,11 @@ const AP_Param::GroupInfo AP_Arming_Plane::var_info[] = {
 // all data loaded
 bool AP_Arming_Plane::terrain_database_required() const
 {
-#if AP_TERRAIN_AVAILABLE
+
     if (plane.g.terrain_follow) {
         return true;
     }
-#endif
+
     return AP_Arming::terrain_database_required();
 }
 
@@ -66,10 +66,10 @@ bool AP_Arming_Plane::pre_arm_checks(bool display_failure)
     // call parent class checks
     bool ret = AP_Arming::pre_arm_checks(display_failure);
 
-#if AP_AIRSPEED_ENABLED
+
     // Check airspeed sensor
     ret &= AP_Arming::airspeed_checks(display_failure);
-#endif
+
 
     if (plane.g.fs_timeout_long < plane.g.fs_timeout_short && plane.g.fs_action_short != FS_ACTION_SHORT_DISABLED) {
         check_failed(display_failure, "FS_LONG_TIMEOUT < FS_SHORT_TIMEOUT");

@@ -67,9 +67,9 @@ bool AP_Arming_Copter::run_pre_arm_checks(bool display_failure)
         & winch_checks(display_failure)
         & rc_throttle_failsafe_checks(display_failure)
         & alt_checks(display_failure)
-#if AP_AIRSPEED_ENABLED
+
         & AP_Arming::airspeed_checks(display_failure)
-#endif
+
         & AP_Arming::pre_arm_checks(display_failure);
 }
 
@@ -299,7 +299,7 @@ bool AP_Arming_Copter::parameter_checks(bool display_failure)
 
 bool AP_Arming_Copter::oa_checks(bool display_failure)
 {
-#if AP_OAPATHPLANNER_ENABLED
+
     char failure_msg[50] = {};
     if (copter.g2.oa.pre_arm_check(failure_msg, ARRAY_SIZE(failure_msg))) {
         return true;
@@ -311,9 +311,9 @@ bool AP_Arming_Copter::oa_checks(bool display_failure)
         check_failed(display_failure, "%s", failure_msg);
     }
     return false;
-#else
-    return true;
-#endif
+
+
+
 }
 
 bool AP_Arming_Copter::rc_calibration_checks(bool display_failure)

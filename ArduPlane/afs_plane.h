@@ -18,7 +18,7 @@
   advanced failsafe support for plane
  */
 
-#if AP_ADVANCEDFAILSAFE_ENABLED
+
 #include <AP_AdvancedFailsafe/AP_AdvancedFailsafe.h>
 
 /*
@@ -43,5 +43,3 @@ protected:
     //to force entering auto mode when datalink loss 
     void set_mode_auto(void) override;
 };
-
-#endif // AP_ADVANCEDFAILSAFE_ENABLED

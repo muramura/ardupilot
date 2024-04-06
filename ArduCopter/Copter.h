@@ -94,32 +94,32 @@
 #include "AP_Arming.h"
 
 #include <AP_ExternalControl/AP_ExternalControl_config.h>
-#if AP_EXTERNAL_CONTROL_ENABLED
+
 #include "AP_ExternalControl_Copter.h"
-#endif
+
 
 #include <AP_Beacon/AP_Beacon_config.h>
-#if AP_BEACON_ENABLED
+
  #include <AP_Beacon/AP_Beacon.h>
-#endif
+
 
 
  #include <AC_Avoidance/AC_Avoid.h>
 
-#if AP_OAPATHPLANNER_ENABLED
+
  #include <AC_WPNav/AC_WPNav_OA.h>
  #include <AC_Avoidance/AP_OAPathPlanner.h>
-#endif
-#if AC_PRECLAND_ENABLED
+
+
  # include <AC_PrecLand/AC_PrecLand.h>
  # include <AC_PrecLand/AC_PrecLand_StateMachine.h>
-#endif
+
 #if MODE_FOLLOW_ENABLED == ENABLED
  # include <AP_Follow/AP_Follow.h>
 #endif
-#if AP_TERRAIN_AVAILABLE
+
  # include <AP_Terrain/AP_Terrain.h>
-#endif
+
 #if RANGEFINDER_ENABLED == ENABLED
  # include <AP_RangeFinder/AP_RangeFinder.h>
 #endif
@@ -142,9 +142,9 @@
 #if TOY_MODE_ENABLED == ENABLED
  # include "toy_mode.h"
 #endif
-#if AP_WINCH_ENABLED
+
  # include <AP_Winch/AP_Winch.h>
-#endif
+
 #include <AP_RPM/AP_RPM.h>
 
 
@@ -186,9 +186,9 @@ public:
     friend class AP_AdvancedFailsafe_Copter;
 #endif
     friend class AP_Arming_Copter;
-#if AP_EXTERNAL_CONTROL_ENABLED
+
     friend class AP_ExternalControl_Copter;
-#endif
+
     friend class ToyMode;
     friend class RC_Channel_Copter;
     friend class RC_Channels_Copter;
@@ -302,9 +302,9 @@ private:
         bool reset_target;          // true if target should be reset because of change in surface being tracked
     } surface_tracking;
 
-#if AP_RPM_ENABLED
+
     AP_RPM rpm_sensor;
-#endif
+
 
     // Inertial Navigation EKF - different viewpoint
     AP_AHRS_View *ahrs_view;
@@ -318,9 +318,9 @@ private:
 
 
     // external control library
-#if AP_EXTERNAL_CONTROL_ENABLED
+
     AP_ExternalControl_Copter external_control;
-#endif
+
 
 
     // system time in milliseconds of last recorded yaw reset from ekf
@@ -533,20 +533,20 @@ private:
 #endif
 
     // Landing Gear Controller
-#if AP_LANDINGGEAR_ENABLED
+
     AP_LandingGear landinggear;
-#endif
+
 
     // terrain handling
-#if AP_TERRAIN_AVAILABLE
+
     AP_Terrain terrain;
-#endif
+
 
     // Precision Landing
-#if AC_PRECLAND_ENABLED
+
     AC_PrecLand precland;
     AC_PrecLand_StateMachine precland_statemachine;
-#endif
+
 
     // Pilot Input Management Library
     // Only used for Helicopter for now
@@ -666,7 +666,7 @@ private:
     void get_scheduler_tasks(const AP_Scheduler::Task *&tasks,
                              uint8_t &task_count,
                              uint32_t &log_bit) override;
-#if AP_SCRIPTING_ENABLED
+
 #if MODE_GUIDED_ENABLED == ENABLED
     bool start_takeoff(float alt) override;
     bool set_target_location(const Location& target_loc) override;
@@ -690,7 +690,7 @@ private:
     // lua scripts use this to retrieve EKF failsafe state
     // returns true if the EKF failsafe has triggered
     bool has_ekf_failsafed() const override;
-#endif // AP_SCRIPTING_ENABLED
+
     bool is_landing() const override;
     bool is_taking_off() const override;
     void rc_loop();
@@ -826,10 +826,10 @@ private:
     void set_land_complete_maybe(bool b);
     void update_throttle_mix();
 
-#if AP_LANDINGGEAR_ENABLED
+
     // landing_gear.cpp
     void landinggear_update();
-#endif
+
 
     // standby.cpp
     void standby_update();

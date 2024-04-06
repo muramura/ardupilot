@@ -88,11 +88,11 @@ const AP_Param::GroupInfo AP_Vehicle::var_info[] = {
     AP_SUBGROUPINFO(efi, "EFI", 9, AP_Vehicle, AP_EFI),
 #endif
 
-#if AP_AIRSPEED_ENABLED
+
     // @Group: ARSPD
     // @Path: ../AP_Airspeed/AP_Airspeed.cpp
     AP_SUBGROUPINFO(airspeed, "ARSPD", 10, AP_Vehicle, AP_Airspeed),
-#endif
+
 
 #if AP_CUSTOMROTATIONS_ENABLED
     // @Group: CUST_ROT
@@ -106,11 +106,11 @@ const AP_Param::GroupInfo AP_Vehicle::var_info[] = {
     AP_SUBGROUPINFO(esc_telem, "ESC_TLM", 12, AP_Vehicle, AP_ESC_Telem),
 #endif
 
-#if AP_AIS_ENABLED
+
     // @Group: AIS_
     // @Path: ../AP_AIS/AP_AIS.cpp
     AP_SUBGROUPINFO(ais, "AIS_",  13, AP_Vehicle, AP_AIS),
-#endif
+
 
 
     // @Group: FENCE_
@@ -248,11 +248,11 @@ const AP_Param::GroupInfo AP_Vehicle::var_info[] = {
 #endif
 #endif // AP_NETWORKING_ENABLED
 
-#if AP_FILTER_ENABLED
+
     // @Group: FILT
     // @Path: ../Filter/AP_Filter.cpp
     AP_SUBGROUPINFO(filters, "FILT", 26, AP_Vehicle, AP_Filters),
-#endif
+
 
 
     // @Group: STAT
@@ -260,11 +260,11 @@ const AP_Param::GroupInfo AP_Vehicle::var_info[] = {
     AP_SUBGROUPINFO(stats, "STAT", 27, AP_Vehicle, AP_Stats),
 
 
-#if AP_SCRIPTING_ENABLED
+
     // @Group: SCR_
     // @Path: ../AP_Scripting/AP_Scripting.cpp
     AP_SUBGROUPINFO(scripting, "SCR_", 28, AP_Vehicle, AP_Scripting),
-#endif
+
 
 #if HAL_LOGGING_ENABLED
     // @Group: LOG
@@ -272,17 +272,17 @@ const AP_Param::GroupInfo AP_Vehicle::var_info[] = {
     AP_SUBGROUPINFO(logger, "LOG",  29, AP_Vehicle, AP_Logger),
 #endif
 
-#if AP_GRIPPER_ENABLED
+
     // @Group: GRIP_
     // @Path: ../AP_Gripper/AP_Gripper.cpp
     AP_SUBGROUPINFO(gripper, "GRIP_", 30, AP_Vehicle, AP_Gripper),
-#endif
 
-#if AP_SERIALMANAGER_ENABLED
+
+
     // @Group: SERIAL
     // @Path: ../AP_SerialManager/AP_SerialManager.cpp
     AP_SUBGROUPINFO(serial_manager, "SERIAL", 31, AP_Vehicle, AP_SerialManager),
-#endif
+
 
     AP_GROUPEND
 };
@@ -302,10 +302,10 @@ void AP_Vehicle::setup()
     // load the default values of variables listed in var_info[]
     AP_Param::setup_sketch_defaults();
 
-#if AP_SERIALMANAGER_ENABLED
+
     // initialise serial port
     serial_manager.init_console();
-#endif
+
 
     DEV_PRINTF("\n\nInit %s"
                         "\n\nFree RAM: %u\n",
@@ -355,10 +355,10 @@ void AP_Vehicle::setup()
     gcs().init();
 #endif
 
-#if AP_SERIALMANAGER_ENABLED
+
     // initialise serial ports
     serial_manager.init();
-#endif
+
 #if HAL_GCS_ENABLED
     gcs().setup_console();
 #endif
@@ -403,18 +403,18 @@ void AP_Vehicle::setup()
 #endif
 
     // init cargo gripper
-#if AP_GRIPPER_ENABLED
+
     AP::gripper().init();
-#endif
+
 
     // init_ardupilot is where the vehicle does most of its initialisation.
     init_ardupilot();
 
-#if AP_SCRIPTING_ENABLED
-    scripting.init();
-#endif // AP_SCRIPTING_ENABLED
 
-#if AP_AIRSPEED_ENABLED
+    scripting.init();
+
+
+
     airspeed.init();
     if (airspeed.enabled()) {
         airspeed.calibrate(true);
@@ -424,7 +424,7 @@ void AP_Vehicle::setup()
         GCS_SEND_TEXT(MAV_SEVERITY_INFO, "No airspeed sensor");
     }
 #endif
-#endif  // AP_AIRSPEED_ENABLED
+
 
 
 #if AP_SRV_CHANNELS_ENABLED
@@ -485,9 +485,9 @@ void AP_Vehicle::setup()
     kdecan.init();
 #endif
 
-#if AP_AIS_ENABLED
+
     ais.init();
-#endif
+
 
 #if HAL_NMEA_OUTPUT_ENABLED
     nmea.init();
@@ -501,9 +501,9 @@ void AP_Vehicle::setup()
     custom_rotations.init();
 #endif
 
-#if AP_FILTER_ENABLED
+
     filters.init();
-#endif
+
 
 #if HAL_WITH_ESC_TELEM && HAL_GYROFFT_ENABLED
     for (uint8_t i = 0; i<ESC_TELEM_MAX_ESCS; i++) {
@@ -590,9 +590,9 @@ const AP_Scheduler::Task AP_Vehicle::scheduler_tasks[] = {
 #if HAL_GYROFFT_ENABLED
     FAST_TASK_CLASS(AP_GyroFFT,    &vehicle.gyro_fft,       sample_gyros),
 #endif
-#if AP_AIRSPEED_ENABLED
+
     SCHED_TASK_CLASS(AP_Airspeed,  &vehicle.airspeed,       update,                   10, 100, 41),    // NOTE: the priority number here should be right before Plane's calc_airspeed_errors
-#endif
+
 #if COMPASS_CAL_ENABLED
     SCHED_TASK_CLASS(Compass,      &vehicle.compass,        cal_update,     100, 200, 75),
 #endif
@@ -641,22 +641,22 @@ const AP_Scheduler::Task AP_Vehicle::scheduler_tasks[] = {
 
     SCHED_TASK_CLASS(AC_Fence,     &vehicle.fence,          update,                   10, 100, 248),
 
-#if AP_AIS_ENABLED
+
     SCHED_TASK_CLASS(AP_AIS,       &vehicle.ais,            update,                    5, 100, 249),
-#endif
+
 #if HAL_EFI_ENABLED
     SCHED_TASK_CLASS(AP_EFI,       &vehicle.efi,            update,                   50, 200, 250),
 #endif
-#if AP_GRIPPER_ENABLED
+
     SCHED_TASK_CLASS(AP_Gripper,   &vehicle.gripper,        update,                   10,  75, 251),
-#endif
+
     SCHED_TASK(one_Hz_update,                                                         1, 100, 252),
 #if HAL_WITH_ESC_TELEM && HAL_GYROFFT_ENABLED
     SCHED_TASK(check_motor_noise,      5,     50, 252),
 #endif
-#if AP_FILTER_ENABLED
+
     SCHED_TASK_CLASS(AP_Filters,   &vehicle.filters,        update,                   1, 100, 252),
-#endif
+
 
     SCHED_TASK_CLASS(AP_Stats,             &vehicle.stats,            update,           1, 100, 252),
 
@@ -802,7 +802,7 @@ void AP_Vehicle::update_dynamic_notch(AP_InertialSensor::HarmonicNotch &notch)
             update_throttle_notch(notch);
             break;
 
-#if AP_RPM_ENABLED
+
         case HarmonicNotchDynamicMode::UpdateRPM: // rpm sensor based tracking
         case HarmonicNotchDynamicMode::UpdateRPM2: {
             const auto *rpm_sensor = AP::rpm();
@@ -816,7 +816,7 @@ void AP_Vehicle::update_dynamic_notch(AP_InertialSensor::HarmonicNotch &notch)
             }
             break;
         }
-#endif  // AP_RPM_ENABLED
+
 #if HAL_WITH_ESC_TELEM
         case HarmonicNotchDynamicMode::UpdateBLHeli: // BLHeli based tracking
             // set the harmonic notch filter frequency scaled on measured frequency
@@ -1036,9 +1036,9 @@ void AP_Vehicle::one_Hz_update(void)
 #endif
     }
 
-#if AP_SCRIPTING_ENABLED
+
     scripting.update();
-#endif
+
 
 #if HAL_LOGGING_ENABLED
     hal.util->uart_log();

@@ -1,6 +1,6 @@
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_ENABLED
+
 
 #include "AP_Airspeed.h"
 
@@ -124,5 +124,3 @@ void AP_Airspeed::check_sensor_ahrs_wind_max_failures(uint8_t i)
     }
 #endif // HAL_BUILD_AP_PERIPH
 }
-
-#endif  // AP_AIRSPEED_ENABLED

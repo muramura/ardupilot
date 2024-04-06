@@ -412,16 +412,16 @@ void Display::update_all()
        update_mode(1);
     }
 
-#if AP_BATTERY_ENABLED
+
     if(!BIT_IS_SET(_send_text_scr_override, 2)) {
         update_battery(2);
     }
-#endif
-#if AP_GPS_ENABLED
+
+
     if(!BIT_IS_SET(_send_text_scr_override, 3)) {
         update_gps(3);
     }
-#endif
+
 
     if(!BIT_IS_SET(_send_text_scr_override, 4)) {
         //update_gps_sats(4);
@@ -515,7 +515,7 @@ void Display::update_prearm(uint8_t r)
     }
 }
 
-#if AP_GPS_ENABLED
+
 void Display::update_gps(uint8_t r)
 {
     static const char * gpsfixname[] = {"Other", "NoGPS","NoFix","2D","3D","DGPS", "RTK f", "RTK F"};
@@ -557,7 +557,7 @@ void Display::update_gps_sats(uint8_t r)
     draw_char(COLUMN(8), ROW(r), (AP_Notify::flags.gps_num_sats / 10) + '0');
     draw_char(COLUMN(9), ROW(r), (AP_Notify::flags.gps_num_sats % 10) + '0');
 }
-#endif
+
 
 void Display::update_ekf(uint8_t r)
 {
@@ -568,7 +568,7 @@ void Display::update_ekf(uint8_t r)
     }
 }
 
-#if AP_BATTERY_ENABLED
+
 void Display::update_battery(uint8_t r)
 {
     char msg [DISPLAY_MESSAGE_SIZE];
@@ -581,7 +581,7 @@ void Display::update_battery(uint8_t r)
     }
     draw_text(COLUMN(0), ROW(r), msg);
 }
-#endif  // AP_BATTERY_ENABLED
+
 
 void Display::update_mode(uint8_t r)
 {
