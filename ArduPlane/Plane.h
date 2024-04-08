@@ -96,9 +96,9 @@
 #include "GCS_Plane.h"
 #include "quadplane.h"
 #include <AP_Tuning/AP_Tuning_config.h>
-#if AP_TUNING_ENABLED
+
 #include "tuning.h"
-#endif
+
 
 // Configuration
 #include "config.h"
@@ -543,7 +543,7 @@ private:
         float forced_throttle;
         uint32_t last_forced_throttle_ms;
 
-#if OFFBOARD_GUIDED == ENABLED
+
         // airspeed adjustments
         float target_airspeed_cm = -1;  // don't default to zero here, as zero is a valid speed.
         float target_airspeed_accel;
@@ -562,7 +562,7 @@ private:
         uint32_t target_heading_time_ms;
         guided_heading_type_t target_heading_type;
         bool target_heading_limit;
-#endif // OFFBOARD_GUIDED == ENABLED
+
     } guided_state;
 
 
@@ -639,9 +639,9 @@ private:
             FUNCTOR_BIND_MEMBER(&Plane::exit_mission_callback, void)};
 
 
-#if PARACHUTE == ENABLED
+
     AP_Parachute parachute;
-#endif
+
 
     // terrain handling
 
@@ -805,10 +805,10 @@ private:
     QuadPlane quadplane{ahrs};
 #endif
 
-#if AP_TUNING_ENABLED
+
     // support for transmitter tuning
     AP_Tuning_Plane tuning;
-#endif
+
 
     static const struct LogStructure log_structure[];
 
@@ -1141,11 +1141,11 @@ private:
 
     // parachute.cpp
     void parachute_check();
-#if PARACHUTE == ENABLED
+
     void do_parachute(const AP_Mission::Mission_Command& cmd);
     void parachute_release();
     bool parachute_manual_release();
-#endif
+
 
     // soaring.cpp
 #if HAL_SOARING_ENABLED

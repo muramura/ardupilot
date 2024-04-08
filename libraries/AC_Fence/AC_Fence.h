@@ -159,11 +159,11 @@ public:
 
     static const struct AP_Param::GroupInfo var_info[];
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     bool failed_sdcard_storage(void) const {
         return _poly_loader.failed_sdcard_storage();
     }
-#endif
+
 
 private:
     static AC_Fence *_singleton;

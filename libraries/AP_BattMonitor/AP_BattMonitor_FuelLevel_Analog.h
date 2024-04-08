@@ -19,7 +19,7 @@
 
 #include "AP_BattMonitor_Backend.h"
 
-#if AP_BATTERY_FUELLEVEL_ANALOG_ENABLED
+
 
 #include <Filter/LowPassFilter.h>
 #include "AP_BattMonitor.h"
@@ -60,5 +60,3 @@ private:
     LowPassFilterFloat _voltage_filter;
 
 };
-
-#endif  // AP_BATTERY_FUELLEVEL_ANALOG_ENABLED

@@ -1,6 +1,6 @@
 #include <AP_Tuning/AP_Tuning_config.h>
 
-#if AP_TUNING_ENABLED
+
 
 #include "Plane.h"
 
@@ -312,5 +312,3 @@ void AP_Tuning_Plane::reload_value(uint8_t parm)
         break;
     }
 }
-
-#endif  // AP_TUNING_ENABLED

@@ -1024,13 +1024,13 @@ MSPCommandResult AP_MSP_Telem_Backend::msp_process_out_rtc(sbuf_t *dst)
 {
     tm localtime_tm {}; // year is relative to 1900
     uint64_t time_usec = 0;
-#if AP_RTC_ENABLED
+
     if (AP::rtc().get_utc_usec(time_usec)) { // may fail, leaving time_unix at 0
         const time_t time_sec = time_usec / 1000000;
         struct tm tmd {};
         localtime_tm = *gmtime_r(&time_sec, &tmd);
     }
-#endif
+
     const struct PACKED {
         uint16_t year;
         uint8_t mon;
@@ -1053,7 +1053,7 @@ MSPCommandResult AP_MSP_Telem_Backend::msp_process_out_rtc(sbuf_t *dst)
     return MSP_RESULT_ACK;
 }
 
-#if AP_RC_CHANNEL_ENABLED
+
 MSPCommandResult AP_MSP_Telem_Backend::msp_process_out_rc(sbuf_t *dst)
 {
 #if AP_RCMAPPER_ENABLED
@@ -1087,7 +1087,7 @@ MSPCommandResult AP_MSP_Telem_Backend::msp_process_out_rc(sbuf_t *dst)
     return MSP_RESULT_ERROR;
 #endif
 }
-#endif  // AP_RC_CHANNEL_ENABLED
+
 
 MSPCommandResult AP_MSP_Telem_Backend::msp_process_out_board_info(sbuf_t *dst)
 {
@@ -1199,14 +1199,14 @@ void AP_MSP_Telem_Backend::hide_osd_items(void)
         }
 
         // flash rtc if no time available
-#if AP_RTC_ENABLED
+
         uint64_t time_usec;
         if (!AP::rtc().get_utc_usec(time_usec)) {
             BIT_SET(osd_hidden_items_bitmask, OSD_RTC_DATETIME);
         }
-#else
-            BIT_SET(osd_hidden_items_bitmask, OSD_RTC_DATETIME);
-#endif
+
+
+
         // flash rssi if disabled
         float rssi;
         if (!get_rssi(rssi)) {

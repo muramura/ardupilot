@@ -186,11 +186,11 @@ public:
     }
 
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     bool failed_sdcard_storage(void) const {
         return _failed_sdcard_storage;
     }
-#endif
+
 
 private:
     // multi-thread access support
@@ -429,8 +429,8 @@ private:
 
     uint16_t fence_storage_space_required(const AC_PolyFenceItem *new_items, uint16_t count);
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     // true if we failed to load SDCard storage on init
     bool _failed_sdcard_storage;
-#endif
+
 };

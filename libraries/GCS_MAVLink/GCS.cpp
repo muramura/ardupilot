@@ -189,7 +189,7 @@ void GCS::update_sensor_status_flags()
     }
 #endif
 
-#if AP_BARO_ENABLED
+
     const AP_Baro &barometer = AP::baro();
     if (barometer.num_instances() > 0) {
         control_sensors_present |= MAV_SYS_STATUS_SENSOR_ABSOLUTE_PRESSURE;
@@ -198,7 +198,7 @@ void GCS::update_sensor_status_flags()
             control_sensors_health |= MAV_SYS_STATUS_SENSOR_ABSOLUTE_PRESSURE;
         }
     }
-#endif
+
 
 
     const AP_GPS &gps = AP::gps();
@@ -346,7 +346,7 @@ void GCS::update_sensor_status_flags()
     }
 #endif
 
-#if AP_RC_CHANNEL_ENABLED
+
     if (rc().has_ever_seen_rc_input()) {
         control_sensors_present |= MAV_SYS_STATUS_SENSOR_RC_RECEIVER;
         control_sensors_enabled |= MAV_SYS_STATUS_SENSOR_RC_RECEIVER;
@@ -354,7 +354,7 @@ void GCS::update_sensor_status_flags()
             control_sensors_health |= MAV_SYS_STATUS_SENSOR_RC_RECEIVER;
         }
     }
-#endif
+
 
     update_vehicle_sensor_status_flags();
 }

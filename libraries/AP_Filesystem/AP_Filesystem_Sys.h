@@ -19,7 +19,7 @@
 
 #include "AP_Filesystem_config.h"
 
-#if AP_FILESYSTEM_SYS_ENABLED
+
 
 class ExpandingString;
 
@@ -52,5 +52,3 @@ private:
         ExpandingString *str;
     } file[max_open_file];
 };
-
-#endif  // AP_FILESYSTEM_SYS_ENABLED

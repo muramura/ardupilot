@@ -18,7 +18,7 @@
 
 #include "AP_Baro_FBM320.h"
 
-#if AP_BARO_FBM320_ENABLED
+
 
 #include <utility>
 #include <stdio.h>
@@ -224,5 +224,3 @@ void AP_Baro_FBM320::update(void)
     temperature_sum = 0;
     count=0;
 }
-
-#endif  // AP_BARO_FBM320_ENABLED

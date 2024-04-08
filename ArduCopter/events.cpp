@@ -286,10 +286,10 @@ void Copter::failsafe_terrain_on_event()
 
     if (should_disarm_on_failsafe()) {
         arming.disarm(AP_Arming::Method::TERRAINFAILSAFE);
-#if MODE_RTL_ENABLED == ENABLED
+
     } else if (flightmode->mode_number() == Mode::Number::RTL) {
         mode_rtl.restart_without_terrain();
-#endif
+
     } else {
         set_mode_RTL_or_land_with_pause(ModeReason::TERRAIN_FAILSAFE);
     }
@@ -420,12 +420,12 @@ void Copter::set_mode_SmartRTL_or_RTL(ModeReason reason)
 // This can come from failsafe or RC option
 void Copter::set_mode_auto_do_land_start_or_RTL(ModeReason reason)
 {
-#if MODE_AUTO_ENABLED == ENABLED
+
     if (set_mode(Mode::Number::AUTO_RTL, reason)) {
         AP_Notify::events.failsafe_mode_change = 1;
         return;
     }
-#endif
+
 
     gcs().send_text(MAV_SEVERITY_WARNING, "Trying RTL Mode");
     set_mode_RTL_or_land_with_pause(reason);
@@ -435,12 +435,12 @@ void Copter::set_mode_auto_do_land_start_or_RTL(ModeReason reason)
 // This can come from failsafe or RC option
 void Copter::set_mode_brake_or_land_with_pause(ModeReason reason)
 {
-#if MODE_BRAKE_ENABLED == ENABLED
+
     if (set_mode(Mode::Number::BRAKE, reason)) {
         AP_Notify::events.failsafe_mode_change = 1;
         return;
     }
-#endif
+
 
     gcs().send_text(MAV_SEVERITY_WARNING, "Trying Land Mode");
     set_mode_land_with_pause(reason);

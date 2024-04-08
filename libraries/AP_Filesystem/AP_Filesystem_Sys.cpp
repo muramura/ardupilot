@@ -20,7 +20,7 @@
 #include "AP_Filesystem.h"
 #include "AP_Filesystem_Sys.h"
 
-#if AP_FILESYSTEM_SYS_ENABLED
+
 
 #include <AP_Math/AP_Math.h>
 #include <AP_CANManager/AP_CANManager.h>
@@ -294,5 +294,3 @@ int AP_Filesystem_Sys::stat(const char *pathname, struct stat *stbuf)
     }
     return 0;
 }
-
-#endif  // AP_FILESYSTEM_SYS_ENABLED

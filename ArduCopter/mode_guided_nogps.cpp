@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_GUIDED_NOGPS_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for guided_nogps flight mode
@@ -21,5 +21,3 @@ void ModeGuidedNoGPS::run()
     // run angle controller
     ModeGuided::angle_control_run();
 }
-
-#endif

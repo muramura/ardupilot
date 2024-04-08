@@ -1,6 +1,6 @@
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_INA2XX_ENABLED
+
 
 /*
   supports INA226, INA228 and INA238 I2C battery monitors
@@ -369,5 +369,3 @@ bool AP_BattMonitor_INA2XX::get_temperature(float &temp) const
     temp = temperature;
     return has_temp;
 }
-
-#endif // AP_BATTERY_INA2XX_ENABLED

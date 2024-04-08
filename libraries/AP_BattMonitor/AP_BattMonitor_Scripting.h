@@ -2,7 +2,7 @@
 
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_SCRIPTING_ENABLED
+
 
 #include "AP_BattMonitor_Backend.h"
 
@@ -29,5 +29,3 @@ protected:
 
     HAL_Semaphore sem;
 };
-
-#endif // AP_BATTERY_SCRIPTING_ENABLED

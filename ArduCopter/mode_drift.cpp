@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_DRIFT_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for drift flight mode
@@ -140,4 +140,3 @@ float ModeDrift::get_throttle_assist(float velz, float pilot_throttle_scaled)
     
     return constrain_float(pilot_throttle_scaled + thr_assist, 0.0f, 1.0f);
 }
-#endif

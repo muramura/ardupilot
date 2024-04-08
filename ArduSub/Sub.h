@@ -78,9 +78,9 @@
 #include <AP_OpticalFlow/AP_OpticalFlow.h>     // Optical Flow library
 
 // libraries which are dependent on #defines in defines.h and/or config.h
-#if RCMAP_ENABLED == ENABLED
+
 #include <AP_RCMapper/AP_RCMapper.h>        // RC input mapping library
-#endif
+
 
 #include <AP_RPM/AP_RPM_config.h>
 
@@ -206,9 +206,9 @@ private:
 
     Mode::Number prev_control_mode;
 
-#if RCMAP_ENABLED == ENABLED
+
     RCMapper rcmap;
-#endif
+
 
     // Failsafe
     struct {
@@ -614,10 +614,10 @@ public:
     // For Lua scripting, so index is 1..4, not 0..3
     uint8_t get_and_clear_button_count(uint8_t index);
 
-#if RANGEFINDER_ENABLED == ENABLED
+
     float get_rangefinder_target_cm() const WARN_IF_UNUSED { return mode_surftrak.get_rangefinder_target_cm(); }
     bool set_rangefinder_target_cm(float new_target_cm) { return mode_surftrak.set_rangefinder_target_cm(new_target_cm); }
-#endif // RANGEFINDER_ENABLED
+
 
 };
 

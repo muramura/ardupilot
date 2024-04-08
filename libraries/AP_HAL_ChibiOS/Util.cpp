@@ -543,12 +543,12 @@ bool Util::get_persistent_params(ExpandingString &str) const
         ins->get_persistent_params(str);
     }
 #endif
-#if AP_OPENDRONEID_ENABLED
+
     const auto *odid = AP_OpenDroneID::get_singleton();
     if (odid) {
         odid->get_persistent_params(str);
     }
-#endif
+
     if (str.has_failed_allocation() || str.get_length() <= strlen(persistent_header)) {
         // no data
         return false;

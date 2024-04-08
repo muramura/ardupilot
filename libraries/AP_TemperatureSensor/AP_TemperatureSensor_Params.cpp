@@ -16,7 +16,7 @@
 #include "AP_TemperatureSensor_Params.h"
 #include "AP_TemperatureSensor.h"
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
 
 #ifndef AP_TEMPERATURE_SENSOR_I2C_ADDR_DEFAULT
 #define AP_TEMPERATURE_SENSOR_I2C_ADDR_DEFAULT 0
@@ -73,5 +73,3 @@ const AP_Param::GroupInfo AP_TemperatureSensor_Params::var_info[] = {
 AP_TemperatureSensor_Params::AP_TemperatureSensor_Params(void) {
     AP_Param::setup_object_defaults(this, var_info);
 }
-
-#endif // AP_TEMPERATURE_SENSOR_ENABLED

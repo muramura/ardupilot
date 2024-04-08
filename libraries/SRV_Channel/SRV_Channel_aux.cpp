@@ -390,7 +390,7 @@ SRV_Channels::set_trim_to_servo_out_for(SRV_Channel::Aux_servo_function_t functi
     }
 }
 
-#if AP_RC_CHANNEL_ENABLED
+
 /*
   copy radio_in to radio_out for a given function
  */
@@ -431,7 +431,7 @@ SRV_Channels::copy_radio_in_out_mask(uint32_t mask)
     }
 
 }
-#endif  // AP_RC_CHANNEL_ENABLED
+
 
 /*
   setup failsafe value for an auxiliary function type to a Limit
@@ -482,7 +482,7 @@ SRV_Channels::set_output_limit(SRV_Channel::Aux_servo_function_t function, SRV_C
         if (c.function == function) {
             uint16_t pwm = c.get_limit_pwm(limit);
             c.set_output_pwm(pwm);
-#if AP_RC_CHANNEL_ENABLED
+
             if (c.function == SRV_Channel::k_manual) {
                 RC_Channel *cin = rc().channel(c.ch_num);
                 if (cin != nullptr) {
@@ -491,7 +491,7 @@ SRV_Channels::set_output_limit(SRV_Channel::Aux_servo_function_t function, SRV_C
                     cin->set_radio_in(pwm);
                 }
             }
-#endif
+
         }
     }
 }

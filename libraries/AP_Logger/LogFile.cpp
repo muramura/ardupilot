@@ -133,7 +133,7 @@ bool AP_Logger_Backend::Write_Parameter(const AP_Param *ap,
     return Write_Parameter(name, ap->cast_to_float(type), default_val);
 }
 
-#if AP_RC_CHANNEL_ENABLED
+
 // Write an RCIN packet
 void AP_Logger::Write_RCIN(void)
 {
@@ -177,7 +177,7 @@ void AP_Logger::Write_RCIN(void)
     };
     WriteBlock(&pkt2, sizeof(pkt2));
 }
-#endif  // AP_RC_CHANNEL_ENABLED
+
 
 // Write an SERVO packet
 void AP_Logger::Write_RCOUT(void)
@@ -318,13 +318,13 @@ bool AP_Logger_Backend::Write_Mission_Cmd(const AP_Mission &mission,
     return WriteBlock(&pkt, sizeof(pkt));
 }
 
-#if AP_MISSION_ENABLED
+
 bool AP_Logger_Backend::Write_EntireMission()
 {
     // kick off asynchronous write:
     return _startup_messagewriter->writeentiremission();
 }
-#endif
+
 
 // Write a text message to the log
 bool AP_Logger_Backend::Write_Message(const char *message)

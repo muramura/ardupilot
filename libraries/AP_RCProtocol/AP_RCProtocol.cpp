@@ -92,9 +92,9 @@ void AP_RCProtocol::init()
 #if AP_RCPROTOCOL_GHST_ENABLED
     backend[AP_RCProtocol::GHST] = new AP_RCProtocol_GHST(*this);
 #endif
-#if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+
     backend[AP_RCProtocol::MAVLINK_RADIO] = new AP_RCProtocol_MAVLinkRadio(*this);
-#endif
+
 #if AP_RCPROTOCOL_JOYSTICK_SFML_ENABLED
     backend[AP_RCProtocol::JOYSTICK_SFML] = new AP_RCProtocol_Joystick_SFML(*this);
 #endif
@@ -150,9 +150,9 @@ void AP_RCProtocol::process_pulse(uint32_t width_s0, uint32_t width_s1)
     uint32_t now = AP_HAL::millis();
     bool searching = should_search(now);
 
-#if AP_RC_CHANNEL_ENABLED
+
     rc_protocols_mask = rc().enabled_protocols();
-#endif
+
 
     if (_detected_protocol != AP_RCProtocol::NONE &&
         !protocol_enabled(_detected_protocol)) {
@@ -234,9 +234,9 @@ bool AP_RCProtocol::process_byte(uint8_t byte, uint32_t baudrate)
     uint32_t now = AP_HAL::millis();
     bool searching = should_search(now);
 
-#if AP_RC_CHANNEL_ENABLED
+
     rc_protocols_mask = rc().enabled_protocols();
-#endif
+
 
     if (_detected_protocol != AP_RCProtocol::NONE &&
         !protocol_enabled(_detected_protocol)) {
@@ -359,9 +359,9 @@ void AP_RCProtocol::check_added_uart(void)
         added.last_config_change_ms = AP_HAL::millis();
         serial_configs[added.config_num].apply_to_uart(added.uart);
     }
-#if AP_RC_CHANNEL_ENABLED
+
     rc_protocols_mask = rc().enabled_protocols();
-#endif
+
     const uint32_t current_baud = serial_configs[added.config_num].baud;
     process_handshake(current_baud);
 
@@ -424,9 +424,9 @@ bool AP_RCProtocol::detect_async_protocol(rcprotocol_t protocol)
         return false;
     }
 
-#if AP_RC_CHANNEL_ENABLED
+
     rc_protocols_mask = rc().enabled_protocols();
-#endif
+
 
     if (!protocol_enabled(protocol)) {
         return false;
@@ -461,9 +461,9 @@ bool AP_RCProtocol::new_input()
 #if AP_RCPROTOCOL_DRONECAN_ENABLED
         AP_RCProtocol::DRONECAN,
 #endif
-#if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+
         AP_RCProtocol::MAVLINK_RADIO,
-#endif
+
 #if AP_RCPROTOCOL_JOYSTICK_SFML_ENABLED
         AP_RCProtocol::JOYSTICK_SFML,
 #endif
@@ -605,10 +605,10 @@ const char *AP_RCProtocol::protocol_name_from_protocol(rcprotocol_t protocol)
     case GHST:
         return "GHST";
 #endif
-#if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+
     case MAVLINK_RADIO:
         return "MAVRadio";
-#endif
+
 #if AP_RCPROTOCOL_JOYSTICK_SFML_ENABLED
     case JOYSTICK_SFML:
         return "SFML";
@@ -655,7 +655,7 @@ bool AP_RCProtocol::protocol_enabled(rcprotocol_t protocol) const
     return ((1U<<(uint8_t(protocol)+1)) & rc_protocols_mask) != 0;
 }
 
-#if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+
 void AP_RCProtocol::handle_radio_rc_channels(const mavlink_radio_rc_channels_t* packet)
 {
     if (backend[AP_RCProtocol::MAVLINK_RADIO] == nullptr) {
@@ -664,7 +664,7 @@ void AP_RCProtocol::handle_radio_rc_channels(const mavlink_radio_rc_channels_t* 
 
     backend[AP_RCProtocol::MAVLINK_RADIO]->update_radio_rc_channels(packet);
 };
-#endif // AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+
 
 namespace AP {
     AP_RCProtocol &RC()

@@ -362,11 +362,11 @@ bool RC_Channel_Plane::do_aux_function(const AUX_FUNC ch_option, const AuxSwitch
         break;
 
     case AUX_FUNC::PARACHUTE_RELEASE:
-#if PARACHUTE == ENABLED
+
         if (ch_flag == AuxSwitchPos::HIGH) {
             plane.parachute_manual_release();
         }
-#endif
+
         break;
 
     case AUX_FUNC::MODE_SWITCH_RESET:

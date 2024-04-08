@@ -6,7 +6,7 @@
 #include <AP_Param/AP_Param.h>
 #include <utility>
 
-#if AP_BATTERY_INA2XX_ENABLED
+
 
 class AP_BattMonitor_INA2XX : public AP_BattMonitor_Backend
 {
@@ -69,5 +69,3 @@ private:
 
     bool has_temp;
 };
-
-#endif // AP_BATTERY_INA2XX_ENABLED

@@ -1,6 +1,6 @@
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_LTC2946_ENABLED
+#if AP_BATTERY_LTC2946_ENABLED && !defined(HAL_LINUX)
 
 #include <GCS_MAVLink/GCS.h>
 #include <AP_HAL/utility/sparse-endian.h>

@@ -151,7 +151,7 @@ void GCS_MAVLINK_Copter::send_position_target_global_int()
 
 void GCS_MAVLINK_Copter::send_position_target_local_ned()
 {
-#if MODE_GUIDED_ENABLED == ENABLED
+
     if (!copter.flightmode->in_guided_mode()) {
         return;
     }
@@ -210,7 +210,7 @@ void GCS_MAVLINK_Copter::send_position_target_local_ned()
         -target_accel.z,// afz in m/s/s NED frame
         0.0f, // yaw
         0.0f); // yaw_rate
-#endif
+
 }
 
 void GCS_MAVLINK_Copter::send_nav_controller_output() const
@@ -615,11 +615,11 @@ MISSION_STATE GCS_MAVLINK_Copter::mission_state(const class AP_Mission &mission)
 
 bool GCS_MAVLINK_Copter::handle_guided_request(AP_Mission::Mission_Command &cmd)
 {
-#if MODE_AUTO_ENABLED == ENABLED
+
     return copter.mode_auto.do_guided(cmd);
-#else
-    return false;
-#endif
+
+
+
 }
 
 void GCS_MAVLINK_Copter::packetReceived(const mavlink_status_t &status,
@@ -632,10 +632,10 @@ void GCS_MAVLINK_Copter::packetReceived(const mavlink_status_t &status,
         copter.avoidance_adsb.handle_msg(msg);
     }
 #endif
-#if MODE_FOLLOW_ENABLED == ENABLED
+
     // pass message to follow library
     copter.g2.follow.handle_msg(msg);
-#endif
+
     GCS_MAVLINK::packetReceived(status, msg);
 }
 
@@ -713,7 +713,7 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_preflight_reboot(const mavlink_command_int
 
 MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_do_reposition(const mavlink_command_int_t &packet)
 {
-#if MODE_GUIDED_ENABLED == ENABLED
+
     const bool change_modes = ((int32_t)packet.param2 & MAV_DO_REPOSITION_FLAGS_CHANGE_MODE) == MAV_DO_REPOSITION_FLAGS_CHANGE_MODE;
     if (!copter.flightmode->in_guided_mode() && !change_modes) {
         return MAV_RESULT_DENIED;
@@ -750,9 +750,9 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_do_reposition(const mavlink_co
     }
 
     return MAV_RESULT_ACCEPTED;
-#else
-    return MAV_RESULT_UNSUPPORTED;
-#endif
+
+
+
 }
 
 MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_packet(const mavlink_command_int_t &packet, const mavlink_message_t &msg)
@@ -765,7 +765,7 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_packet(const mavlink_command_i
     case MAV_CMD_DO_CHANGE_SPEED:
         return handle_MAV_CMD_DO_CHANGE_SPEED(packet);
 
-#if MODE_FOLLOW_ENABLED == ENABLED
+
     case MAV_CMD_DO_FOLLOW:
         // param1: sysid of target to follow
         if ((packet.param1 > 0) && (packet.param1 <= 255)) {
@@ -773,7 +773,7 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_packet(const mavlink_command_i
             return MAV_RESULT_ACCEPTED;
         }
         return MAV_RESULT_DENIED;
-#endif
+
 
     case MAV_CMD_DO_REPOSITION:
         return handle_command_int_do_reposition(packet);
@@ -789,10 +789,10 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_packet(const mavlink_command_i
     case MAV_CMD_NAV_VTOL_TAKEOFF:
         return handle_MAV_CMD_NAV_TAKEOFF(packet);
 
-#if PARACHUTE == ENABLED
+
     case MAV_CMD_DO_PARACHUTE:
         return handle_MAV_CMD_DO_PARACHUTE(packet);
-#endif
+
 
 #if AC_MAVLINK_SOLO_BUTTON_COMMAND_HANDLING_ENABLED
     // Solo user presses pause button
@@ -806,10 +806,10 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_packet(const mavlink_command_i
         return handle_MAV_CMD_SOLO_BTN_FLY_CLICK(packet);
 #endif
 
-#if MODE_AUTO_ENABLED == ENABLED
+
     case MAV_CMD_MISSION_START:
         return handle_MAV_CMD_MISSION_START(packet);
-#endif
+
 
 
     case MAV_CMD_DO_WINCH:
@@ -835,13 +835,13 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_int_packet(const mavlink_command_i
         }
         return MAV_RESULT_ACCEPTED;
 
-#if MODE_AUTO_ENABLED == ENABLED
+
     case MAV_CMD_DO_LAND_START:
         if (copter.mode_auto.jump_to_landing_sequence_auto_RTL(ModeReason::GCS_COMMAND)) {
             return MAV_RESULT_ACCEPTED;
         }
         return MAV_RESULT_FAILED;
-#endif
+
 
     default:
         return GCS_MAVLINK::handle_command_int_packet(packet, msg);
@@ -945,7 +945,7 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_DO_CHANGE_SPEED(const mavlink_comm
         return MAV_RESULT_FAILED;
 }
 
-#if MODE_AUTO_ENABLED == ENABLED
+
 MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_MISSION_START(const mavlink_command_int_t &packet)
 {
         if (copter.set_mode(Mode::Number::AUTO, ModeReason::GCS_COMMAND)) {
@@ -957,11 +957,11 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_MISSION_START(const mavlink_comman
         }
         return MAV_RESULT_FAILED;
 }
-#endif
 
 
 
-#if PARACHUTE == ENABLED
+
+
 MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_DO_PARACHUTE(const mavlink_command_int_t &packet)
 {
         // configure or release parachute
@@ -979,7 +979,7 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_DO_PARACHUTE(const mavlink_command
         }
         return MAV_RESULT_FAILED;
 }
-#endif
+
 
 MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_DO_MOTOR_TEST(const mavlink_command_int_t &packet)
 {
@@ -1074,15 +1074,15 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_SOLO_BTN_PAUSE_CLICK(const mavlink
                 bool shot_mode = (!is_zero(packet.param1) && (copter.flightmode->mode_number() == Mode::Number::GUIDED || copter.flightmode->mode_number() == Mode::Number::GUIDED_NOGPS));
 
                 if (!shot_mode) {
-#if MODE_BRAKE_ENABLED == ENABLED
+
                     if (copter.set_mode(Mode::Number::BRAKE, ModeReason::GCS_COMMAND)) {
                         copter.mode_brake.timeout_to_loiter_ms(2500);
                     } else {
                         copter.set_mode(Mode::Number::ALT_HOLD, ModeReason::GCS_COMMAND);
                     }
-#else
-                    copter.set_mode(Mode::Number::ALT_HOLD, ModeReason::GCS_COMMAND);
-#endif
+
+
+
                 } else {
                     // SoloLink is expected to handle pause in shots
                 }

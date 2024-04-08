@@ -968,14 +968,14 @@ void AP_GPS::update_instance(uint8_t instance)
     (void)data_should_be_logged;
 #endif
 
-#if AP_RTC_ENABLED
+
     if (state[instance].status >= GPS_OK_FIX_3D) {
         const uint64_t now = time_epoch_usec(instance);
         if (now != 0) {
             AP::rtc().set_utc_usec(now, AP_RTC::SOURCE_GPS);
         }
     }
-#endif
+
 }
 
 

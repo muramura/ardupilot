@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_SPORT_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for sport flight mode
@@ -122,5 +122,3 @@ void ModeSport::run()
     // run the vertical position controller and set output throttle
     pos_control->update_z_controller();
 }
-
-#endif

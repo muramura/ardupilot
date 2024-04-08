@@ -395,9 +395,9 @@ protected:
     AP_ESC_Telem esc_telem;
 #endif
 
-#if AP_OPENDRONEID_ENABLED
+
     AP_OpenDroneID opendroneid;
-#endif
+
 
 #if HAL_MSP_ENABLED
     AP_MSP msp;
@@ -454,9 +454,9 @@ protected:
     AC_Fence fence;
 
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
     AP_TemperatureSensor temperature_sensor;
-#endif
+
 
 
     AP_Scripting scripting;

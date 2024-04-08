@@ -1155,7 +1155,7 @@ class chibios(Board):
             ]
 
         if cfg.env.COMPILER_CXX == "g++":
-            if not self.cc_version_gte(cfg, 10, 2):
+            if not self.cc_version_gte(cfg, 9, 3):
                 # require at least 10.2 compiler
                 cfg.fatal("ChibiOS build requires g++ version 10.2.1 or later, found %s" % '.'.join(cfg.env.CC_VERSION))
             

@@ -101,7 +101,7 @@ float GCS_MAVLINK_Sub::vfr_hud_alt() const
 // Work around to get temperature sensor data out
 void GCS_MAVLINK_Sub::send_scaled_pressure3()
 {
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
     float temperature;
     if (!sub.temperature_sensor.get_temperature(temperature)) {
         return;
@@ -113,7 +113,7 @@ void GCS_MAVLINK_Sub::send_scaled_pressure3()
         0,
         temperature * 100,
         0); // TODO: use differential pressure temperature
-#endif
+
 }
 
 bool GCS_MAVLINK_Sub::send_info()

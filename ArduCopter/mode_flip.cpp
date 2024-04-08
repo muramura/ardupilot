@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_FLIP_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for flip flight mode
@@ -213,5 +213,3 @@ void ModeFlip::run()
     // output pilot's throttle without angle boost
     attitude_control->set_throttle_out(throttle_out, false, g.throttle_filt);
 }
-
-#endif

@@ -238,11 +238,11 @@ const AP_Param::GroupInfo AP_BoardConfig::var_info[] = {
     // @User: Standard
     AP_GROUPINFO("SAFETYOPTION",   13, AP_BoardConfig, state.safety_option, BOARD_SAFETY_OPTION_DEFAULT),
 
-#if AP_RTC_ENABLED
+
     // @Group: RTC
     // @Path: ../AP_RTC/AP_RTC.cpp
     AP_SUBGROUPINFO(rtc, "RTC", 14, AP_BoardConfig, AP_RTC),
-#endif
+
 
 #if HAL_HAVE_BOARD_VOLTAGE
     // @Param: VBUS_MIN
@@ -346,7 +346,7 @@ const AP_Param::GroupInfo AP_BoardConfig::var_info[] = {
     AP_GROUPINFO("HEAT_LOWMGN", 23, AP_BoardConfig, heater.imu_arming_temperature_margin_low, HAL_IMU_TEMP_MARGIN_LOW_DEFAULT),
 #endif
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     // @Param: SD_MISSION
     // @DisplayName:  SDCard Mission size
     // @Description: This sets the amount of storage in kilobytes reserved on the microsd card in mission.stg for waypoint storage. Each waypoint uses 15 bytes.
@@ -362,7 +362,7 @@ const AP_Param::GroupInfo AP_BoardConfig::var_info[] = {
     // @RebootRequired: True
     // @User: Advanced
     AP_GROUPINFO("SD_FENCE", 29, AP_BoardConfig, sdcard_storage.fence_kb, 0),
-#endif
+
 
     // index 25 used by SER5_RTSCTS
     // index 26 used by SER3_RTSCTS
@@ -388,9 +388,9 @@ void AP_BoardConfig::init()
 
     board_setup();
 
-#if AP_RTC_ENABLED
+
     AP::rtc().set_utc_usec(hal.util->get_hw_rtc(), AP_RTC::SOURCE_HW);
-#endif
+
 
     if (_boot_delay_ms > 0) {
         uint16_t delay_ms = uint16_t(_boot_delay_ms.get());

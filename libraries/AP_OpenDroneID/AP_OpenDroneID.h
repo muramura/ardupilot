@@ -29,7 +29,7 @@
 
 #include "AP_OpenDroneID_config.h"
 
-#if AP_OPENDRONEID_ENABLED
+
 
 #include <AP_Math/AP_Math.h>
 #include <AP_Param/AP_Param.h>
@@ -212,5 +212,3 @@ namespace AP
 {
 AP_OpenDroneID &opendroneid();
 };
-
-#endif // AP_OPENDRONEID_ENABLED

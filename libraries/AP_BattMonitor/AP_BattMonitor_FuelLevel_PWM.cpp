@@ -1,6 +1,6 @@
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_FUELLEVEL_PWM_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 
@@ -66,5 +66,3 @@ void AP_BattMonitor_FuelLevel_PWM::read()
     // map consumed_wh using fixed voltage of 1
     _state.consumed_wh = _state.consumed_mah;
 }
-
-#endif  // AP_BATTERY_FUELLEVEL_PWM_ENABLED

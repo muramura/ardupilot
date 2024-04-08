@@ -3,7 +3,7 @@
 
 #include "AP_Mission_ChangeDetector.h"
 
-#if AP_MISSION_ENABLED
+
 
 // detect external changes to mission
 bool AP_Mission_ChangeDetector::check_for_mission_change()
@@ -58,5 +58,3 @@ bool AP_Mission_ChangeDetector::check_for_mission_change()
     // mission has changed if upcoming command contents have changed without the current command index changing
     return cmds_changed && !curr_cmd_idx_changed;
 }
-
-#endif  // AP_MISSION_ENABLED

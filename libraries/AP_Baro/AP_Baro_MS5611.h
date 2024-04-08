@@ -2,7 +2,7 @@
 
 #include "AP_Baro_Backend.h"
 
-#if AP_BARO_MS56XX_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/Semaphores.h>
@@ -106,5 +106,3 @@ private:
 
     enum MS56XX_TYPE _ms56xx_type;
 };
-
-#endif  // AP_BARO_MS56XX_ENABLED

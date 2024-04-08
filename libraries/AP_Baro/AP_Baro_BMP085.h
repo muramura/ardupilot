@@ -2,7 +2,7 @@
 
 #include "AP_Baro_Backend.h"
 
-#if AP_BARO_BMP085_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/I2CDevice.h>
@@ -64,5 +64,3 @@ private:
     uint8_t _vers;
     uint8_t _type;
 };
-
-#endif  // AP_BARO_BMP085_ENABLED

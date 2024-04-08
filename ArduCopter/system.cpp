@@ -133,10 +133,10 @@ void Copter::init_ardupilot()
     barometer.set_log_baro_bit(MASK_LOG_IMU);
     barometer.calibrate();
 
-#if RANGEFINDER_ENABLED == ENABLED
+
     // initialise rangefinder
     init_rangefinder();
-#endif
+
 
 #if HAL_PROXIMITY_ENABLED
     // init proximity sensor
@@ -153,15 +153,15 @@ void Copter::init_ardupilot()
     rpm_sensor.init();
 
 
-#if MODE_AUTO_ENABLED == ENABLED
+
     // initialise mission library
     mode_auto.mission.init();
-#endif
 
-#if MODE_SMARTRTL_ENABLED == ENABLED
+
+
     // initialize SmartRTL
     g2.smart_rtl.init();
-#endif
+
 
 #if HAL_LOGGING_ENABLED
     // initialise AP_Logger library
@@ -465,13 +465,13 @@ void Copter::allocate_motors(void)
     }
     AP_Param::load_object_from_eeprom(loiter_nav, loiter_nav->var_info);
 
-#if MODE_CIRCLE_ENABLED == ENABLED
+
     circle_nav = new AC_Circle(inertial_nav, *ahrs_view, *pos_control);
     if (circle_nav == nullptr) {
         AP_BoardConfig::allocation_error("CircleNav");
     }
     AP_Param::load_object_from_eeprom(circle_nav, circle_nav->var_info);
-#endif
+
 
     // reload lines from the defaults file that may now be accessible
     AP_Param::reload_defaults_file(true);

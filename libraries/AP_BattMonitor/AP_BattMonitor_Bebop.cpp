@@ -15,7 +15,7 @@
 
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_BEBOP_ENABLED
+#if AP_BATTERY_BEBOP_ENABLED && (CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_BEBOP)
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL_Linux/RCOutput_Bebop.h>

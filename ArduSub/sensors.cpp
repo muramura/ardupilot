@@ -17,18 +17,18 @@ void Sub::read_barometer()
 
 void Sub::init_rangefinder()
 {
-#if RANGEFINDER_ENABLED == ENABLED
+
     rangefinder.set_log_rfnd_bit(MASK_LOG_CTUN);
     rangefinder.init(ROTATION_PITCH_270);
     rangefinder_state.alt_cm_filt.set_cutoff_frequency(RANGEFINDER_WPNAV_FILT_HZ);
     rangefinder_state.enabled = rangefinder.has_orientation(ROTATION_PITCH_270);
-#endif
+
 }
 
 // return rangefinder altitude in centimeters
 void Sub::read_rangefinder()
 {
-#if RANGEFINDER_ENABLED == ENABLED
+
     rangefinder.update();
 
     // signal quality ranges from 0 (worst) to 100 (perfect), -1 means n/a
@@ -74,13 +74,13 @@ void Sub::read_rangefinder()
             rangefinder_state.enabled && wp_nav.rangefinder_used(),
             rangefinder_state.alt_healthy,
             rangefinder_state.rangefinder_terrain_offset_cm);
-#else
-    rangefinder_state.enabled = false;
-    rangefinder_state.alt_healthy = false;
-    rangefinder_state.alt_cm = 0;
-    rangefinder_state.inertial_alt_cm = 0;
-    rangefinder_state.rangefinder_terrain_offset_cm = 0;
-#endif
+
+
+
+
+
+
+
 }
 
 // return true if rangefinder_alt can be used

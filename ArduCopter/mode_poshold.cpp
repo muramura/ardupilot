@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_POSHOLD_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for PosHold flight mode
@@ -634,5 +634,3 @@ void ModePosHold::pitch_controller_to_pilot_override()
     // store final loiter outputs for mixing with pilot input
     controller_final_pitch = pitch;
 }
-
-#endif

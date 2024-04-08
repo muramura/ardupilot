@@ -2,7 +2,7 @@
 
 #include "AP_Baro_Backend.h"
 
-#if AP_BARO_LPS2XH_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/Device.h>
@@ -54,5 +54,3 @@ private:
 
     enum LPS2XH_TYPE _lps2xh_type;
 };
-
-#endif  // AP_BARO_LPS2XH_ENABLED

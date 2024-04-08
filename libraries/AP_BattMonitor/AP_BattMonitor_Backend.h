@@ -104,9 +104,9 @@ public:
         return (uint16_t(_params._options.get()) & uint16_t(option)) != 0;
     }
     
-#if AP_BATTERY_SCRIPTING_ENABLED
+
     virtual bool handle_scripting(const BattMonitorScript_State &battmon_state) { return false; }
-#endif
+
 
 protected:
     AP_BattMonitor                      &_mon;      // reference to front-end
@@ -127,7 +127,7 @@ private:
     float       _resistance_current_ref; // current used for maximum resistance calculation
 };
 
-#if AP_BATTERY_SCRIPTING_ENABLED
+
 struct BattMonitorScript_State {
     float voltage; // Battery voltage in volts
     bool healthy; // True if communicating properly
@@ -145,4 +145,4 @@ struct BattMonitorScript_State {
     float consumed_wh=nanf(""); // Total energy drawn since start-up in watt hours
     float temperature=nanf(""); // Battery temperature in degrees Celsius
 };
-#endif // AP_BATTERY_SCRIPTING_ENABLED
+

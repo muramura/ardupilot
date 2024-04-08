@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_SMARTRTL_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for Smart_RTL flight mode
@@ -198,5 +198,3 @@ bool ModeSmartRTL::use_pilot_yaw() const
     const bool final_landing = smart_rtl_state == SubMode::LAND;
     return g2.smart_rtl.use_pilot_yaw() || land_repositioning || final_landing;
 }
-
-#endif

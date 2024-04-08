@@ -2,7 +2,7 @@
 
 #include "AP_BattMonitor_Backend.h"
 
-#if AP_BATTERY_EFI_ENABLED
+
 
 class AP_BattMonitor_EFI : public AP_BattMonitor_Backend
 {
@@ -22,4 +22,3 @@ public:
         return true;
     }
 };
-#endif // AP_BATTERY_EFI_ENABLED

@@ -3,7 +3,7 @@
 
 #include "AP_Mission_config.h"
 
-#if AP_MISSION_ENABLED
+
 
 #include <AP_AHRS/AP_AHRS.h>
 #include <AP_BoardConfig/AP_BoardConfig.h>
@@ -61,7 +61,7 @@ HAL_Semaphore AP_Mission::_rsem;
 /// init - initialises this library including checks the version in eeprom matches this library
 void AP_Mission::init()
 {
-#if AP_SDCARD_STORAGE_ENABLED
+
     // check for extra storage on microsd
     const auto *bc = AP::boardConfig();
     if (bc != nullptr) {
@@ -74,7 +74,7 @@ void AP_Mission::init()
             }
         }
     }
-#endif
+
 
     // work out maximum index for our storage size
     if (_storage.size() >= AP_MISSION_EEPROM_COMMAND_SIZE+4) {
@@ -412,10 +412,10 @@ bool AP_Mission::start_command(const Mission_Command& cmd)
     }
 
     switch (cmd.id) {
-#if AP_RC_CHANNEL_ENABLED
+
     case MAV_CMD_DO_AUX_FUNCTION:
         return start_command_do_aux_function(cmd);
-#endif
+
 
     case MAV_CMD_DO_GRIPPER:
         return start_command_do_gripper(cmd);
@@ -2946,5 +2946,3 @@ AP_Mission *mission()
 }
 
 }
-
-#endif  // AP_MISSION_ENABLED

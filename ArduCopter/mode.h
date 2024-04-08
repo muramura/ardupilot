@@ -185,9 +185,9 @@ public:
     virtual bool resume() { return false; };
 
     // true if weathervaning is allowed in the current mode
-#if WEATHERVANE_ENABLED == ENABLED
+
     virtual bool allows_weathervaning() const { return false; }
-#endif
+
 
 protected:
 
@@ -327,9 +327,9 @@ public:
 
         bool reached_fixed_yaw_target();
 
-#if WEATHERVANE_ENABLED == ENABLED
+
         void update_weathervane(const int16_t pilot_yaw_cds);
-#endif
+
 
         AC_AttitudeControl::HeadingCommand get_heading();
 
@@ -386,7 +386,7 @@ public:
 };
 
 
-#if MODE_ACRO_ENABLED == ENABLED
+
 class ModeAcro : public Mode {
 
 public:
@@ -432,7 +432,7 @@ protected:
 private:
     bool disable_air_mode_reset;
 };
-#endif
+
 
 #if FRAME_CONFIG == HELI_FRAME
 class ModeAcro_Heli : public ModeAcro {
@@ -566,9 +566,9 @@ public:
     AP_Mission_ChangeDetector mis_change_detector;
 
     // true if weathervaning is allowed in auto
-#if WEATHERVANE_ENABLED == ENABLED
+
     bool allows_weathervaning(void) const override;
-#endif
+
 
 protected:
 
@@ -633,9 +633,9 @@ private:
     void do_set_home(const AP_Mission::Mission_Command& cmd);
     void do_roi(const AP_Mission::Mission_Command& cmd);
     void do_mount_control(const AP_Mission::Mission_Command& cmd);
-#if PARACHUTE == ENABLED
+
     void do_parachute(const AP_Mission::Mission_Command& cmd);
-#endif
+
 
     void do_winch(const AP_Mission::Mission_Command& cmd);
 
@@ -732,7 +732,7 @@ private:
     } desired_speed_override;
 };
 
-#if AUTOTUNE_ENABLED == ENABLED
+
 /*
   wrapper class for AC_AutoTune
  */
@@ -789,7 +789,7 @@ private:
     AutoTune autotune;
 
 };
-#endif
+
 
 
 class ModeBrake : public Mode {
@@ -920,7 +920,7 @@ private:
 };
 
 
-#if MODE_FLOWHOLD_ENABLED == ENABLED
+
 /*
   class to support FLOWHOLD mode, which is a position hold mode using
   optical flow directly, avoiding the need for a rangefinder
@@ -1006,7 +1006,7 @@ private:
     // last time there was significant stick input
     uint32_t last_stick_input_ms;
 };
-#endif // MODE_FLOWHOLD_ENABLED
+
 
 
 class ModeGuided : public Mode {
@@ -1101,9 +1101,9 @@ public:
     bool resume() override;
 
     // true if weathervaning is allowed in guided
-#if WEATHERVANE_ENABLED == ENABLED
+
     bool allows_weathervaning(void) const override;
-#endif
+
 
 protected:
 
@@ -1718,7 +1718,7 @@ private:
     float free_fall_start_velz;     // vertical velocity when free fall was detected
 };
 
-#if MODE_TURTLE_ENABLED == ENABLED
+
 class ModeTurtle : public Mode {
 
 public:
@@ -1749,7 +1749,7 @@ private:
     Vector2f motors_input;
     uint32_t last_throttle_warning_output_ms;
 };
-#endif
+
 
 // modes below rely on Guided mode so must be declared at the end (instead of in alphabetical order)
 
@@ -1779,7 +1779,7 @@ private:
 
 };
 
-#if MODE_FOLLOW_ENABLED == ENABLED
+
 class ModeFollow : public ModeGuided {
 
 public:
@@ -1809,7 +1809,7 @@ protected:
 
     uint32_t last_log_ms;   // system time of last time desired velocity was logging
 };
-#endif
+
 
 class ModeZigZag : public Mode {        
 

@@ -2,7 +2,7 @@
 
 #include "AP_BattMonitor_Backend.h"
 
-#if AP_BATTERY_SUM_ENABLED
+
 
 #include "AP_BattMonitor.h"
 
@@ -32,5 +32,3 @@ private:
     uint8_t _instance;
     bool _has_current;
 };
-
-#endif  // AP_BATTERY_SUM_ENABLED

@@ -45,9 +45,9 @@ public:
     virtual void update(void) {}
 
     // update from mavlink messages
-#if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+
     virtual void update_radio_rc_channels(const mavlink_radio_rc_channels_t* packet) {}
-#endif
+
 
     // get number of frames, ignoring failsafe
     uint32_t get_rc_frame_count(void) const {

@@ -15,7 +15,7 @@
 
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_EFI_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Math/AP_Math.h>
@@ -50,5 +50,3 @@ void AP_BattMonitor_EFI::read()
     _state.healthy = true;
     _state.last_time_micros = AP_HAL::micros();
 }
-
-#endif // AP_BATTERY_EFI_ENABLED

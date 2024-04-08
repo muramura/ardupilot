@@ -121,9 +121,9 @@ StorageAccess::StorageAccess(StorageManager::StorageType _type) :
 {
     // calculate available bytes
     total_size = 0;
-#if AP_SDCARD_STORAGE_ENABLED
+
     file = nullptr;
-#endif
+
     for (uint8_t i=0; i<STORAGE_NUM_AREAS; i++) {
         const StorageManager::StorageArea &area = StorageManager::layout[i];
         if (area.type == type) {
@@ -140,7 +140,7 @@ bool StorageAccess::read_block(void *data, uint16_t addr, size_t n) const
 {
     uint8_t *b = (uint8_t *)data;
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     if (file != nullptr) {
         // using microSD data
         if (addr > file->bufsize) {
@@ -150,7 +150,7 @@ bool StorageAccess::read_block(void *data, uint16_t addr, size_t n) const
         memcpy(b, &file->buffer[addr], n2);
         return n == n2;
     }
-#endif
+
 
     for (uint8_t i=0; i<STORAGE_NUM_AREAS; i++) {
         const StorageManager::StorageArea &area = StorageManager::layout[i];
@@ -194,7 +194,7 @@ bool StorageAccess::write_block(uint16_t addr, const void *data, size_t n) const
 {
     const uint8_t *b = (const uint8_t *)data;
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     if (file != nullptr) {
         if (addr > file->bufsize) {
             return false;
@@ -208,7 +208,7 @@ bool StorageAccess::write_block(uint16_t addr, const void *data, size_t n) const
         }
         return n == n2;
     }
-#endif
+
 
     for (uint8_t i=0; i<STORAGE_NUM_AREAS; i++) {
         const StorageManager::StorageArea &area = StorageManager::layout[i];
@@ -337,7 +337,7 @@ bool StorageAccess::copy_area(const StorageAccess &source) const
     return true;
 }
 
-#if AP_SDCARD_STORAGE_ENABLED
+
 /*
   attach a file to a storage region
  */
@@ -446,5 +446,3 @@ void StorageAccess::flush_file(void)
         file->last_io_fail_ms = now_ms;
     }
 }
-#endif // AP_SDCARD_STORAGE_ENABLED
-

@@ -369,7 +369,7 @@ void AP_Scripting::thread(void) {
 
 void AP_Scripting::handle_mission_command(const AP_Mission::Mission_Command& cmd_in)
 {
-#if AP_MISSION_ENABLED
+
     if (!_enable) {
         return;
     }
@@ -394,7 +394,7 @@ void AP_Scripting::handle_mission_command(const AP_Mission::Mission_Command& cmd
                                       AP_HAL::millis()};
 
     mission_data->push(cmd);
-#endif
+
 }
 
 bool AP_Scripting::arming_checks(size_t buflen, char *buffer) const

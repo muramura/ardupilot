@@ -16,7 +16,7 @@
 
 #include "AP_TemperatureSensor_config.h"
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
 
 #include "AP_TemperatureSensor_Params.h"
 
@@ -95,5 +95,3 @@ private:
 namespace AP {
     AP_TemperatureSensor &temperature_sensor();
 };
-
-#endif // AP_TEMPERATURE_SENSOR_ENABLED

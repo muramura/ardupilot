@@ -123,7 +123,7 @@ private:
     const StorageManager::StorageType type;
     uint16_t total_size;
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     /*
       support for storage regions on microSD. Only the StorageMission
       for now
@@ -140,5 +140,5 @@ private:
     } *file;
 
     void flush_file(void);
-#endif
+
 };

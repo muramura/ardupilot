@@ -17,7 +17,7 @@
  *
  */
 
-#if AP_BATTERY_AD7091R5_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Common/AP_Common.h>
@@ -232,5 +232,3 @@ float AP_BattMonitor_AD7091R5::_data_to_volt(uint32_t data)
 {
     return (AD7091R5_REF/AD7091R5_RESOLUTION)*data;
 }
-
-#endif // AP_BATTERY_AD7091R5_ENABLED

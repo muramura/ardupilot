@@ -216,7 +216,7 @@ public:
     bool get_board_heater_arming_temperature(int8_t &temperature) const;
 #endif
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     // return number of kb of mission storage to use on microSD
     static uint16_t get_sdcard_mission_kb(void) {
         return _singleton? _singleton->sdcard_storage.mission_kb.get() : 0;
@@ -226,7 +226,7 @@ public:
     static uint16_t get_sdcard_fence_kb(void) {
         return _singleton? _singleton->sdcard_storage.fence_kb.get() : 0;
     }
-#endif
+
 
 private:
     static AP_BoardConfig *_singleton;
@@ -246,12 +246,12 @@ private:
         AP_Int8 io_dshot;
     } state;
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     struct {
         AP_Int16 mission_kb;
         AP_Int16 fence_kb;
     } sdcard_storage;
-#endif
+
 
 #if AP_FEATURE_BOARD_DETECT
     static enum px4_board_type px4_configured_board;
@@ -297,10 +297,10 @@ private:
     AP_Radio _radio;
 #endif
 
-#if AP_RTC_ENABLED
+
     // real-time-clock; private because access is via the singleton
     AP_RTC rtc;
-#endif
+
 
 #if HAL_HAVE_BOARD_VOLTAGE
     AP_Float _vbus_min;

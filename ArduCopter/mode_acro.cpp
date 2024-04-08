@@ -2,7 +2,7 @@
 
 #include "mode.h"
 
-#if MODE_ACRO_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for acro flight mode
@@ -197,4 +197,3 @@ void ModeAcro::get_pilot_desired_angle_rates(float roll_in, float pitch_in, floa
     pitch_out = rate_bf_request_cd.y;
     yaw_out = rate_bf_request_cd.z;
 }
-#endif

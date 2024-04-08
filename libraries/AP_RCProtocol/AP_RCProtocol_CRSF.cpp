@@ -373,10 +373,10 @@ void AP_RCProtocol_CRSF::update(void)
         _last_frame_time_us = now;
     }
 
-#if AP_RC_CHANNEL_ENABLED
+
     //Check if LQ is to be reported in place of RSSI
     _use_lq_for_rssi = rc().option_is_enabled(RC_Channels::Option::USE_CRSF_LQ_AS_RSSI);
-#endif
+
 }
 
 // write out a frame of any type

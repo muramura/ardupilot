@@ -38,7 +38,7 @@ static StorageAccess fence_storage(StorageManager::StorageFence);
 
 void AC_PolyFence_loader::init()
 {
-#if AP_SDCARD_STORAGE_ENABLED
+
     // check for extra storage on microsd
     const auto *bc = AP::boardConfig();
     if (bc != nullptr) {
@@ -53,7 +53,7 @@ void AC_PolyFence_loader::init()
             }
         }
     }
-#endif
+
     if (!check_indexed()) {
         // tell the user, perhaps?
     }

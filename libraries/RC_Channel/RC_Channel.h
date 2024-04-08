@@ -4,7 +4,7 @@
 
 #include "RC_Channel_config.h"
 
-#if AP_RC_CHANNEL_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_Param/AP_Param.h>
@@ -651,5 +651,3 @@ private:
 };
 
 RC_Channels &rc();
-
-#endif  // AP_RC_CHANNEL_ENABLED

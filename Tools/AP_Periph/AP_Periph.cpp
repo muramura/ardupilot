@@ -279,9 +279,9 @@ void AP_Periph_FW::init()
     }
 #endif
     
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
     temperature_sensor.init();
-#endif
+
 
 #if HAL_NMEA_OUTPUT_ENABLED
     nmea.init();
@@ -509,9 +509,9 @@ void AP_Periph_FW::update()
     nmea.update();
 #endif
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
     temperature_sensor.update();
-#endif
+
 
 #ifdef HAL_PERIPH_ENABLE_RPM
     if (now - rpm_last_update_ms >= 100) {

@@ -6,7 +6,7 @@
 #define AP_BATTERY_AD7091R5_ENABLED (BOARD_FLASH_SIZE > 1024)
 #endif
 
-#if AP_BATTERY_AD7091R5_ENABLED
+
 
 #include <AP_HAL/utility/OwnPtr.h>
 #include <AP_HAL/I2CDevice.h>
@@ -71,5 +71,3 @@ protected:
     AP_Int8  _volt_pin;                 // board pin used to measure battery voltage
     AP_Int8  _curr_pin;                 // board pin used to measure battery current
 };
-
-#endif // AP_BATTERY_AD7091R5_ENABLED

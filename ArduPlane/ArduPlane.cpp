@@ -557,9 +557,9 @@ void Plane::update_alt()
 
     // low pass the sink rate to take some of the noise out
     auto_state.sink_rate = 0.8f * auto_state.sink_rate + 0.2f*sink_rate;
-#if PARACHUTE == ENABLED
+
     parachute.set_sink_rate(auto_state.sink_rate);
-#endif
+
 
     update_flight_stage();
 

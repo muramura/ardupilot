@@ -1,6 +1,6 @@
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_SYNTHETIC_CURRENT_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include "AP_BattMonitor_Synthetic_Current.h"
@@ -71,5 +71,3 @@ AP_BattMonitor_Synthetic_Current::read()
     _state.last_time_micros = tnow;
  
 }
-
-#endif  // AP_BATTERY_SYNTHETIC_CURRENT_ENABLED

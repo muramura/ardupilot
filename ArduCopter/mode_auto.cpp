@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_AUTO_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for auto flight mode
@@ -206,12 +206,12 @@ bool ModeAuto::allows_arming(AP_Arming::Method method) const
     return ((copter.g2.auto_options & (uint32_t)Options::AllowArming) != 0) && !auto_RTL;
 };
 
-#if WEATHERVANE_ENABLED == ENABLED
+
 bool ModeAuto::allows_weathervaning() const
 {
     return (copter.g2.auto_options & (uint32_t)Options::AllowWeatherVaning) != 0;
 }
-#endif
+
 
 // Go straight to landing sequence via DO_LAND_START, if succeeds pretend to be Auto RTL mode
 bool ModeAuto::jump_to_landing_sequence_auto_RTL(ModeReason reason)
@@ -1798,11 +1798,11 @@ void ModeAuto::do_nav_delay(const AP_Mission::Mission_Command& cmd)
         nav_delay_time_max_ms = cmd.content.nav_delay.seconds * 1000; // convert seconds to milliseconds
     } else {
         // absolute delay to utc time
-#if AP_RTC_ENABLED
+
         nav_delay_time_max_ms = AP::rtc().get_time_utc(cmd.content.nav_delay.hour_utc, cmd.content.nav_delay.min_utc, cmd.content.nav_delay.sec_utc, 0);
-#else
-        nav_delay_time_max_ms = 0;
-#endif
+
+
+
     }
     gcs().send_text(MAV_SEVERITY_INFO, "Delaying %u sec", (unsigned)(nav_delay_time_max_ms/1000));
 }
@@ -2283,5 +2283,3 @@ bool ModeAuto::paused() const
 {
     return wp_nav->paused();
 }
-
-#endif

@@ -542,14 +542,14 @@ void AP_SerialManager::init()
                                          AP_SERIALMANAGER_SLCAN_BUFSIZE_TX);
                     break;
 
-#if AP_RCPROTOCOL_ENABLED
+
                 case SerialProtocol_RCIN:
                     if (!AP::RC().has_uart()) {
                         AP::RC().add_uart(uart);
                     }
 
                     break;
-#endif
+
                     
                 case SerialProtocol_EFI:
                     state[i].baud.set_default(AP_SERIALMANAGER_EFI_MS_BAUD);

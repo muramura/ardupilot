@@ -755,11 +755,11 @@ public:
 
     bool is_valid_index(const uint16_t index) const { return index < _cmd_total; }
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     bool failed_sdcard_storage(void) const {
         return _failed_sdcard_storage;
     }
-#endif
+
 
 private:
     static AP_Mission *_singleton;
@@ -893,9 +893,9 @@ private:
     // maximum number of commands that will fit in storage
     uint16_t _commands_max;
 
-#if AP_SDCARD_STORAGE_ENABLED
+
     bool _failed_sdcard_storage;
-#endif
+
 
     // fast call to get command ID of a mission index
     uint16_t get_command_id(uint16_t index) const;

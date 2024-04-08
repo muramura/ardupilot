@@ -18,7 +18,7 @@
 
 #include "AP_Filesystem_config.h"
 
-#if AP_FILESYSTEM_MISSION_ENABLED
+
 
 #include "AP_Filesystem.h"
 #include "AP_Filesystem_Mission.h"
@@ -212,12 +212,12 @@ int AP_Filesystem_Mission::stat(const char *name, struct stat *stbuf)
  */
 bool AP_Filesystem_Mission::check_file_name(const char *name, enum MAV_MISSION_TYPE &mtype)
 {
-#if AP_MISSION_ENABLED
+
     if (strcmp(name, "mission.dat") == 0) {
         mtype = MAV_MISSION_TYPE_MISSION;
         return true;
     }
-#endif
+
 
     if (strcmp(name, "fence.dat") == 0) {
         mtype = MAV_MISSION_TYPE_FENCE;
@@ -264,7 +264,7 @@ bool AP_Filesystem_Mission::get_item(uint32_t idx, enum MAV_MISSION_TYPE mtype, 
 uint32_t AP_Filesystem_Mission::get_num_items(enum MAV_MISSION_TYPE mtype) const
 {
     switch (mtype) {
-#if AP_MISSION_ENABLED
+
     case MAV_MISSION_TYPE_MISSION: {
         auto *mission = AP::mission();
         if (!mission) {
@@ -272,7 +272,7 @@ uint32_t AP_Filesystem_Mission::get_num_items(enum MAV_MISSION_TYPE mtype) const
         }
         return mission->num_commands();
     }
-#endif
+
 
 
     case MAV_MISSION_TYPE_FENCE: {
@@ -385,10 +385,10 @@ bool AP_Filesystem_Mission::finish_upload(const rfile &r)
     }
 
     switch (r.mtype) {
-#if AP_MISSION_ENABLED
+
     case MAV_MISSION_TYPE_MISSION:
         return finish_upload_mission(hdr, r, b);
-#endif
+
 #if HAL_RALLY_ENABLED
     case MAV_MISSION_TYPE_RALLY:
         return finish_upload_rally(hdr, r, b);
@@ -405,7 +405,7 @@ bool AP_Filesystem_Mission::finish_upload(const rfile &r)
     return false;
 }
 
-#if AP_MISSION_ENABLED
+
 bool AP_Filesystem_Mission::finish_upload_mission(const struct header &hdr, const rfile &r, const uint8_t *b)
 {
     auto *mission = AP::mission();
@@ -442,7 +442,7 @@ bool AP_Filesystem_Mission::finish_upload_mission(const struct header &hdr, cons
     }
     return true;
 }
-#endif  // AP_MISSION_ENABLED
+
 
 
 bool AP_Filesystem_Mission::finish_upload_fence(const struct header &hdr, const rfile &r, const uint8_t *b)
@@ -529,5 +529,3 @@ OUT:
     return success;
 }
 #endif  // HAL_RALLY_ENABLED
-
-#endif  // AP_FILESYSTEM_MISSION_ENABLED

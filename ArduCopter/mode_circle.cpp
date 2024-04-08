@@ -1,7 +1,7 @@
 #include "Copter.h"
 #include <AP_Mount/AP_Mount.h>
 
-#if MODE_CIRCLE_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for circle flight mode
@@ -134,5 +134,3 @@ int32_t ModeCircle::wp_bearing() const
 {
     return copter.circle_nav->get_bearing_to_target();
 }
-
-#endif

@@ -164,9 +164,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #endif
     SCHED_TASK(auto_disarm_check,     10,     50,  27),
     SCHED_TASK(auto_trim,             10,     75,  30),
-#if RANGEFINDER_ENABLED == ENABLED
+
     SCHED_TASK(read_rangefinder,      20,    100,  33),
-#endif
+
 #if HAL_PROXIMITY_ENABLED
     SCHED_TASK_CLASS(AP_Proximity,         &copter.g2.proximity,        update,         200,  50,  36),
 #endif
@@ -176,9 +176,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
     SCHED_TASK(update_altitude,       10,    100,  42),
     SCHED_TASK(run_nav_updates,       50,    100,  45),
     SCHED_TASK(update_throttle_hover,100,     90,  48),
-#if MODE_SMARTRTL_ENABLED == ENABLED
+
     SCHED_TASK_CLASS(ModeSmartRTL,         &copter.mode_smartrtl,       save_position,    3, 100,  51),
-#endif
+
 #if HAL_SPRAYER_ENABLED
     SCHED_TASK_CLASS(AC_Sprayer,           &copter.sprayer,               update,         3,  90,  54),
 #endif
@@ -273,7 +273,7 @@ void Copter::get_scheduler_tasks(const AP_Scheduler::Task *&tasks,
 constexpr int8_t Copter::_failsafe_priorities[7];
 
 
-#if MODE_GUIDED_ENABLED == ENABLED
+
 // start takeoff to given altitude (for use by scripting)
 bool Copter::start_takeoff(float alt)
 {
@@ -384,9 +384,9 @@ bool Copter::set_target_angle_and_climbrate(float roll_deg, float pitch_deg, flo
     mode_guided.set_angle(q, Vector3f{}, climb_rate_ms*100, false);
     return true;
 }
-#endif
 
-#if MODE_CIRCLE_ENABLED == ENABLED
+
+
 // circle mode controls
 bool Copter::get_circle_radius(float &radius_m)
 {
@@ -399,7 +399,7 @@ bool Copter::set_circle_rate(float rate_dps)
     circle_nav->set_rate(rate_dps);
     return true;
 }
-#endif
+
 
 // set desired speed (m/s). Used for scripting.
 bool Copter::set_desired_speed(float speed)
@@ -407,7 +407,7 @@ bool Copter::set_desired_speed(float speed)
     return flightmode->set_speed_xy(speed * 100.0f);
 }
 
-#if MODE_AUTO_ENABLED == ENABLED
+
 // returns true if mode supports NAV_SCRIPT_TIME mission commands
 bool Copter::nav_scripting_enable(uint8_t mode)
 {
@@ -433,7 +433,7 @@ void Copter::nav_script_time_done(uint16_t id)
 
     return mode_auto.nav_script_time_done(id);
 }
-#endif
+
 
 // returns true if the EKF failsafe has triggered.  Only used by Lua scripts
 bool Copter::has_ekf_failsafed() const
@@ -457,11 +457,11 @@ bool Copter::is_taking_off() const
 
 bool Copter::current_mode_requires_mission() const
 {
-#if MODE_AUTO_ENABLED == ENABLED
+
         return flightmode == &mode_auto;
-#else
-        return false;
-#endif
+
+
+
 }
 
 // rc_loops - reads user input from transmitter/receiver

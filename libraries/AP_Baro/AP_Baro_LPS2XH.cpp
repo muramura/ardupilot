@@ -14,7 +14,7 @@
  */
 #include "AP_Baro_LPS2XH.h"
 
-#if AP_BARO_LPS2XH_ENABLED
+
 
 #include <utility>
 #include <stdio.h>
@@ -278,5 +278,3 @@ void AP_Baro_LPS2XH::_update_pressure(void)
     _pressure_sum += Pressure_mb;
     _pressure_count++;
 }
-
-#endif  // AP_BARO_LPS2XH_ENABLED

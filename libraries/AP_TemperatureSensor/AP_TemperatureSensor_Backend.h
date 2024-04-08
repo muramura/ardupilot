@@ -16,7 +16,7 @@
 
 #include "AP_TemperatureSensor.h"
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
 #include <AP_HAL/Semaphores.h>
 #include <AP_ESC_Telem/AP_ESC_Telem.h>
 
@@ -56,5 +56,3 @@ protected:
 private:
     HAL_Semaphore _sem; // used to copy from backend to frontend
 };
-
-#endif // AP_TEMPERATURE_SENSOR_ENABLED

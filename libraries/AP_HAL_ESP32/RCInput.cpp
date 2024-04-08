@@ -25,9 +25,9 @@ void RCInput::init()
     if (_init) {
         return;
     }
-#if AP_RCPROTOCOL_ENABLED
+
     AP::RC().init();
-#endif
+
 
 #ifdef HAL_ESP32_RCIN
     sig_reader.init();
@@ -89,7 +89,7 @@ uint8_t RCInput::read(uint16_t* periods, uint8_t len)
 
 void RCInput::_timer_tick(void)
 {
-#if AP_RCPROTOCOL_ENABLED
+
     if (!_init) {
         return;
     }
@@ -126,5 +126,5 @@ void RCInput::_timer_tick(void)
 #endif
 
 #endif
-#endif // AP_RCPROTOCOL_ENABLED
+
 }

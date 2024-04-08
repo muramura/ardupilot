@@ -72,7 +72,7 @@ void AP_Mount_Siyi::update()
             request_configuration();
         }
 
-#if AP_RTC_ENABLED
+
         // send UTC time to the camera
         if (sent_time_count < 5) {
             uint64_t utc_usec;
@@ -81,7 +81,7 @@ void AP_Mount_Siyi::update()
                 sent_time_count++;
             }
         }
-#endif
+
     }
 
     // request attitude at regular intervals

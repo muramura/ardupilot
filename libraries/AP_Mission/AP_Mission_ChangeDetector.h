@@ -14,7 +14,7 @@
 
 #include "AP_Mission.h"
 
-#if AP_MISSION_ENABLED
+
 
 /// @class    AP_Mission_ChangeDetector
 /// @brief    Mission command change detector
@@ -37,5 +37,3 @@ private:
         AP_Mission::Mission_Command cmd[mis_change_detect_cmd_max]; // local copy of the next few mission commands
     } mis_change_detect;
 };
-
-#endif // AP_MISSION_ENABLED

@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_BRAKE_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for brake flight mode
@@ -84,5 +84,3 @@ void ModeBrake::timeout_to_loiter_ms(uint32_t timeout_ms)
     _timeout_start = millis();
     _timeout_ms = timeout_ms;
 }
-
-#endif

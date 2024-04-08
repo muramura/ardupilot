@@ -52,9 +52,9 @@ void LoggerMessageWriter_DFLogStart::reset()
     _fmt_done = false;
     _params_done = false;
     _writesysinfo.reset();
-#if AP_MISSION_ENABLED
+
     _writeentiremission.reset();
-#endif
+
 #if HAL_LOGGER_RALLY_ENABLED
     _writeallrallypoints.reset();
 #endif
@@ -184,14 +184,14 @@ void LoggerMessageWriter_DFLogStart::process()
                 return;
             }
         }
-#if AP_MISSION_ENABLED
+
         if (!_writeentiremission.finished()) {
             _writeentiremission.process();
             if (!_writeentiremission.finished()) {
                 return;
             }
         }
-#endif
+
 #if HAL_LOGGER_RALLY_ENABLED
         if (!_writeallrallypoints.finished()) {
             _writeallrallypoints.process();
@@ -231,7 +231,7 @@ void LoggerMessageWriter_DFLogStart::process()
     _finished = true;
 }
 
-#if AP_MISSION_ENABLED
+
 bool LoggerMessageWriter_DFLogStart::writeentiremission()
 {
     if (stage != Stage::DONE) {
@@ -242,7 +242,7 @@ bool LoggerMessageWriter_DFLogStart::writeentiremission()
     _writeentiremission.reset();
     return true;
 }
-#endif
+
 
 #if HAL_LOGGER_RALLY_ENABLED
 bool LoggerMessageWriter_DFLogStart::writeallrallypoints()

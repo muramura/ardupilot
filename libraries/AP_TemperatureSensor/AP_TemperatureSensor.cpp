@@ -15,7 +15,7 @@
 
 #include "AP_TemperatureSensor.h"
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
 
 #include <AP_Vehicle/AP_Vehicle_Type.h>
 
@@ -302,5 +302,3 @@ AP_TemperatureSensor &temperature_sensor() {
     return *AP_TemperatureSensor::get_singleton();
 }
 };
-
-#endif // AP_TEMPERATURE_SENSOR_ENABLED

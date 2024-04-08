@@ -15,7 +15,7 @@
 
 #include "AP_TemperatureSensor.h"
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
 #include "AP_TemperatureSensor_Backend.h"
 
 #include <AP_Logger/AP_Logger.h>
@@ -101,5 +101,3 @@ void AP_TemperatureSensor_Backend::update_external_libraries(const float tempera
     }
 
 }
-
-#endif // AP_TEMPERATURE_SENSOR_ENABLED

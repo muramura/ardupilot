@@ -17,7 +17,7 @@
 
 #include "AP_Filesystem_config.h"
 
-#if AP_FILESYSTEM_ROMFS_ENABLED
+
 
 #include "AP_Filesystem_backend.h"
 
@@ -72,5 +72,3 @@ private:
         struct dirent de;
     } dir[max_open_dir];
 };
-
-#endif  // AP_FILESYSTEM_ROMFS_ENABLED

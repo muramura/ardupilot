@@ -10,7 +10,7 @@ void Copter::read_barometer(void)
 
 void Copter::init_rangefinder(void)
 {
-#if RANGEFINDER_ENABLED == ENABLED
+
    rangefinder.set_log_rfnd_bit(MASK_LOG_CTUN);
    rangefinder.init(ROTATION_PITCH_270);
    rangefinder_state.alt_cm_filt.set_cutoff_frequency(g2.rangefinder_filt);
@@ -19,13 +19,13 @@ void Copter::init_rangefinder(void)
    // upward facing range finder
    rangefinder_up_state.alt_cm_filt.set_cutoff_frequency(g2.rangefinder_filt);
    rangefinder_up_state.enabled = rangefinder.has_orientation(ROTATION_PITCH_90);
-#endif
+
 }
 
 // return rangefinder altitude in centimeters
 void Copter::read_rangefinder(void)
 {
-#if RANGEFINDER_ENABLED == ENABLED
+
     rangefinder.update();
 
 #if RANGEFINDER_TILT_CORRECTION == ENABLED
@@ -113,17 +113,17 @@ void Copter::read_rangefinder(void)
 #endif
     }
 
-#else
-    // downward facing rangefinder
-    rangefinder_state.enabled = false;
-    rangefinder_state.alt_healthy = false;
-    rangefinder_state.alt_cm = 0;
 
-    // upward facing rangefinder
-    rangefinder_up_state.enabled = false;
-    rangefinder_up_state.alt_healthy = false;
-    rangefinder_up_state.alt_cm = 0;
-#endif
+
+
+
+
+
+
+
+
+
+
 }
 
 // return true if rangefinder_alt can be used
@@ -150,9 +150,9 @@ void Copter::update_rangefinder_terrain_offset()
 
     if (rangefinder_state.alt_healthy || (AP_HAL::millis() - rangefinder_state.last_healthy_ms > RANGEFINDER_TIMEOUT_MS)) {
         wp_nav->set_rangefinder_terrain_offset(rangefinder_state.enabled, rangefinder_state.alt_healthy, rangefinder_state.terrain_offset_cm);
-#if MODE_CIRCLE_ENABLED
+
         circle_nav->set_rangefinder_terrain_offset(rangefinder_state.enabled && wp_nav->rangefinder_used(), rangefinder_state.alt_healthy, rangefinder_state.terrain_offset_cm);
-#endif
+
     }
 }
 

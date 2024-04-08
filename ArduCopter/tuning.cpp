@@ -142,11 +142,11 @@ void Copter::tuning()
         compass.set_declination(ToRad(tuning_value), false);     // 2nd parameter is false because we do not want to save to eeprom because this would have a performance impact
         break;
 
-#if MODE_CIRCLE_ENABLED == ENABLED
+
     case TUNING_CIRCLE_RATE:
         circle_nav->set_rate(tuning_value);
         break;
-#endif
+
 
     case TUNING_RC_FEEL_RP:
         attitude_control->set_input_tc(tuning_value);

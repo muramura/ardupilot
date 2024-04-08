@@ -1,6 +1,6 @@
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_SCRIPTING_ENABLED
+
 
 #include "AP_BattMonitor_Scripting.h"
 
@@ -81,5 +81,3 @@ bool AP_BattMonitor_Scripting::handle_scripting(const BattMonitorScript_State &b
     last_update_us = now_us;
     return true;
 }
-
-#endif // AP_BATTERY_SCRIPTING_ENABLED

@@ -53,11 +53,11 @@ public:
     bool change_baud_rate(uint32_t baudrate);
     // bootstrap baudrate
     uint32_t get_bootstrap_baud_rate() const {
-#if AP_RC_CHANNEL_ENABLED
+
         return rc().option_is_enabled(RC_Channels::Option::ELRS_420KBAUD) ? ELRS_BAUDRATE : CRSF_BAUDRATE;
-#else
-        return CRSF_BAUDRATE;
-#endif
+
+
+
     }
 
     // is the receiver active, used to detect power loss and baudrate changes

@@ -488,7 +488,7 @@ AP_BattMonitor::init()
                 drivers[instance] = new AP_BattMonitor_SMBus_NeoDesign(*this, state[instance], _params[instance]);
                 break;
 #endif
-#if AP_BATTERY_BEBOP_ENABLED
+#if AP_BATTERY_BEBOP_ENABLED && (CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_BEBOP)
             case Type::BEBOP:
                 drivers[instance] = new AP_BattMonitor_Bebop(*this, state[instance], _params[instance]);
                 break;
@@ -498,31 +498,31 @@ AP_BattMonitor::init()
                 drivers[instance] = new AP_BattMonitor_DroneCAN(*this, state[instance], AP_BattMonitor_DroneCAN::UAVCAN_BATTERY_INFO, _params[instance]);
                 break;
 #endif
-#if AP_BATTERY_ESC_ENABLED
+#if AP_BATTERY_ESC_ENABLED && !defined(HAL_LINUX)
             case Type::BLHeliESC:
                 drivers[instance] = new AP_BattMonitor_ESC(*this, state[instance], _params[instance]);
                 break;
 #endif
-#if AP_BATTERY_SUM_ENABLED
+
             case Type::Sum:
                 drivers[instance] = new AP_BattMonitor_Sum(*this, state[instance], _params[instance], instance);
                 break;
-#endif
-#if AP_BATTERY_FUELFLOW_ENABLED
+
+
             case Type::FuelFlow:
                 drivers[instance] = new AP_BattMonitor_FuelFlow(*this, state[instance], _params[instance]);
                 break;
-#endif // AP_BATTERY_FUELFLOW_ENABLED
-#if AP_BATTERY_FUELLEVEL_PWM_ENABLED
+
+
             case Type::FuelLevel_PWM:
                 drivers[instance] = new AP_BattMonitor_FuelLevel_PWM(*this, state[instance], _params[instance]);
                 break;
-#endif // AP_BATTERY_FUELLEVEL_PWM_ENABLED
-#if AP_BATTERY_FUELLEVEL_ANALOG_ENABLED
+
+
             case Type::FuelLevel_Analog:
                 drivers[instance] = new AP_BattMonitor_FuelLevel_Analog(*this, state[instance], _params[instance]);
                 break;
-#endif // AP_BATTERY_FUELLEVEL_ANALOG_ENABLED
+
 #if HAL_GENERATOR_ENABLED
             case Type::GENERATOR_ELEC:
                 drivers[instance] = new AP_BattMonitor_Generator_Elec(*this, state[instance], _params[instance]);
@@ -531,12 +531,12 @@ AP_BattMonitor::init()
                 drivers[instance] = new AP_BattMonitor_Generator_FuelLevel(*this, state[instance], _params[instance]);
                 break;
 #endif // HAL_GENERATOR_ENABLED
-#if AP_BATTERY_INA2XX_ENABLED
+
             case Type::INA2XX:
                 drivers[instance] = new AP_BattMonitor_INA2XX(*this, state[instance], _params[instance]);
                 break;
-#endif
-#if AP_BATTERY_LTC2946_ENABLED
+
+#if AP_BATTERY_LTC2946_ENABLED && !defined(HAL_LINUX)
             case Type::LTC2946:
                 drivers[instance] = new AP_BattMonitor_LTC2946(*this, state[instance], _params[instance]);
                 break;
@@ -546,31 +546,31 @@ AP_BattMonitor::init()
                 drivers[instance] = new AP_BattMonitor_Torqeedo(*this, state[instance], _params[instance]);
                 break;
 #endif
-#if AP_BATTERY_SYNTHETIC_CURRENT_ENABLED
+
             case Type::Analog_Volt_Synthetic_Current:
                 drivers[instance] = new AP_BattMonitor_Synthetic_Current(*this, state[instance], _params[instance]);
                 break;
-#endif
-#if AP_BATTERY_INA239_ENABLED
+
+#if AP_BATTERY_INA239_ENABLED && !defined(HAL_LINUX)
             case Type::INA239_SPI:
                 drivers[instance] = new AP_BattMonitor_INA239(*this, state[instance], _params[instance]);
                 break;
 #endif
-#if AP_BATTERY_EFI_ENABLED
+
             case Type::EFI:
                 drivers[instance] = new AP_BattMonitor_EFI(*this, state[instance], _params[instance]);
                 break;
-#endif // AP_BATTERY_EFI_ENABLED
-#if AP_BATTERY_AD7091R5_ENABLED
+
+
             case Type::AD7091R5:
                 drivers[instance] = new AP_BattMonitor_AD7091R5(*this, state[instance], _params[instance]);
                 break;
-#endif// AP_BATTERY_AD7091R5_ENABLED
-#if AP_BATTERY_SCRIPTING_ENABLED
+
+
             case Type::Scripting:
                 drivers[instance] = new AP_BattMonitor_Scripting(*this, state[instance], _params[instance]);
                 break;
-#endif // AP_BATTERY_SCRIPTING_ENABLED
+
             case Type::NONE:
             default:
                 break;
@@ -919,7 +919,7 @@ bool AP_BattMonitor::get_temperature(float &temperature, const uint8_t instance)
     return drivers[instance]->get_temperature(temperature);
 }
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
 // return true when successfully setting a battery temperature from an external source by instance
 bool AP_BattMonitor::set_temperature(const float temperature, const uint8_t instance)
 {
@@ -942,7 +942,7 @@ bool AP_BattMonitor::set_temperature_by_serial_number(const float temperature, c
     }
     return success;
 }
-#endif // AP_TEMPERATURE_SENSOR_ENABLED
+
 
 // return true if cycle count can be provided and fills in cycles argument
 bool AP_BattMonitor::get_cycle_count(uint8_t instance, uint16_t &cycles) const
@@ -1101,7 +1101,7 @@ bool AP_BattMonitor::healthy() const
     return true;
 }
 
-#if AP_BATTERY_SCRIPTING_ENABLED
+
 /*
   handle state update from a lua script
  */
@@ -1112,7 +1112,7 @@ bool AP_BattMonitor::handle_scripting(uint8_t idx, const BattMonitorScript_State
     }
     return drivers[idx]->handle_scripting(_state);
 }
-#endif
+
 
 namespace AP {
 

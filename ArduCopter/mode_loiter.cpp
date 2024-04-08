@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_LOITER_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for loiter flight mode
@@ -212,5 +212,3 @@ int32_t ModeLoiter::wp_bearing() const
 {
     return loiter_nav->get_bearing_to_target();
 }
-
-#endif

@@ -869,7 +869,7 @@ MAV_RESULT GCS_MAVLINK_Plane::handle_command_int_guided_slew_commands(const mavl
 {
   switch(packet.command) {
     
-#if OFFBOARD_GUIDED == ENABLED
+
     case MAV_CMD_GUIDED_CHANGE_SPEED: {
         // command is only valid in guided mode
         if (plane.control_mode != &plane.mode_guided) {
@@ -998,7 +998,7 @@ MAV_RESULT GCS_MAVLINK_Plane::handle_command_int_guided_slew_commands(const mavl
         plane.guided_state.target_heading_time_ms = AP_HAL::millis();
         return MAV_RESULT_ACCEPTED;
     }
-#endif // OFFBOARD_GUIDED == ENABLED
+
 
 
   }
@@ -1044,10 +1044,10 @@ MAV_RESULT GCS_MAVLINK_Plane::handle_command_int_packet(const mavlink_command_in
     case MAV_CMD_DO_CHANGE_SPEED:
         return handle_command_DO_CHANGE_SPEED(packet);
 
-#if PARACHUTE == ENABLED
+
     case MAV_CMD_DO_PARACHUTE:
         return handle_MAV_CMD_DO_PARACHUTE(packet);
-#endif
+
 
 #if HAL_QUADPLANE_ENABLED
     case MAV_CMD_DO_MOTOR_TEST:
@@ -1166,7 +1166,7 @@ MAV_RESULT GCS_MAVLINK_Plane::handle_MAV_CMD_DO_AUTOTUNE_ENABLE(const mavlink_co
         return MAV_RESULT_ACCEPTED;
 }
 
-#if PARACHUTE == ENABLED
+
 MAV_RESULT GCS_MAVLINK_Plane::handle_MAV_CMD_DO_PARACHUTE(const mavlink_command_int_t &packet)
 {
         // configure or release parachute
@@ -1196,7 +1196,7 @@ MAV_RESULT GCS_MAVLINK_Plane::handle_MAV_CMD_DO_PARACHUTE(const mavlink_command_
         }
         return MAV_RESULT_FAILED;
 }
-#endif
+
 
 
 #if HAL_QUADPLANE_ENABLED

@@ -19,7 +19,7 @@
 
 #include "RC_Channel_config.h"
 
-#if AP_RC_CHANNEL_ENABLED
+
 
 #include <stdlib.h>
 #include <cmath>
@@ -1104,7 +1104,7 @@ void RC_Channel::do_aux_function_fence(const AuxSwitchPos ch_flag)
 }
 
 
-#if AP_MISSION_ENABLED
+
 void RC_Channel::do_aux_function_clear_wp(const AuxSwitchPos ch_flag)
 {
     if (ch_flag == AuxSwitchPos::HIGH) {
@@ -1115,7 +1115,7 @@ void RC_Channel::do_aux_function_clear_wp(const AuxSwitchPos ch_flag)
         mission->clear();
     }
 }
-#endif  // AP_MISSION_ENABLED
+
 
 #if AP_SERVORELAYEVENTS_ENABLED && AP_RELAY_ENABLED
 void RC_Channel::do_aux_function_relay(const uint8_t relay, bool val)
@@ -1214,7 +1214,7 @@ void RC_Channel::do_aux_function_rc_override_enable(const AuxSwitchPos ch_flag)
     }
 }
 
-#if AP_MISSION_ENABLED
+
 void RC_Channel::do_aux_function_mission_reset(const AuxSwitchPos ch_flag)
 {
     if (ch_flag != AuxSwitchPos::HIGH) {
@@ -1226,7 +1226,7 @@ void RC_Channel::do_aux_function_mission_reset(const AuxSwitchPos ch_flag)
     }
     mission->reset();
 }
-#endif
+
 
 void RC_Channel::do_aux_function_fft_notch_tune(const AuxSwitchPos ch_flag)
 {
@@ -1837,5 +1837,3 @@ void RC_Channels::convert_options(const RC_Channel::AUX_FUNC old_option, const R
         }
     }
 }
-
-#endif  // AP_RC_CHANNEL_ENABLED

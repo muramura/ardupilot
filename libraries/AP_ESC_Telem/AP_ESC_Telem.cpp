@@ -434,17 +434,17 @@ void AP_ESC_Telem::update_telem_data(const uint8_t esc_index, const AP_ESC_Telem
     _have_data = true;
     volatile AP_ESC_Telem_Backend::TelemetryData &telemdata = _telem_data[esc_index];
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
     // always allow external data. Block "internal" if external has ever its ever been set externally then ignore normal "internal" updates
     const bool has_temperature = (data_mask & AP_ESC_Telem_Backend::TelemetryType::TEMPERATURE_EXTERNAL) ||
         ((data_mask & AP_ESC_Telem_Backend::TelemetryType::TEMPERATURE) && !(telemdata.types & AP_ESC_Telem_Backend::TelemetryType::TEMPERATURE_EXTERNAL));
 
     const bool has_motor_temperature = (data_mask & AP_ESC_Telem_Backend::TelemetryType::MOTOR_TEMPERATURE_EXTERNAL) ||
         ((data_mask & AP_ESC_Telem_Backend::TelemetryType::MOTOR_TEMPERATURE) && !(telemdata.types & AP_ESC_Telem_Backend::TelemetryType::MOTOR_TEMPERATURE_EXTERNAL));
-#else
-    const bool has_temperature = (data_mask & AP_ESC_Telem_Backend::TelemetryType::TEMPERATURE);
-    const bool has_motor_temperature = (data_mask & AP_ESC_Telem_Backend::TelemetryType::MOTOR_TEMPERATURE);
-#endif
+
+
+
+
 
     if (has_temperature) {
         telemdata.temperature_cdeg = new_data.temperature_cdeg;

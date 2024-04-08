@@ -37,43 +37,43 @@ static AP_Filesystem_Backend fs_local;
 int errno;
 #endif
 
-#if AP_FILESYSTEM_ROMFS_ENABLED
+
 #include "AP_Filesystem_ROMFS.h"
 static AP_Filesystem_ROMFS fs_romfs;
-#endif
 
-#if AP_FILESYSTEM_PARAM_ENABLED
+
+
 #include "AP_Filesystem_Param.h"
 static AP_Filesystem_Param fs_param;
-#endif
 
-#if AP_FILESYSTEM_SYS_ENABLED
+
+
 #include "AP_Filesystem_Sys.h"
 static AP_Filesystem_Sys fs_sys;
-#endif
 
-#if AP_FILESYSTEM_MISSION_ENABLED
+
+
 #include "AP_Filesystem_Mission.h"
 static AP_Filesystem_Mission fs_mission;
-#endif
+
 
 /*
   mapping from filesystem prefix to backend
  */
 const AP_Filesystem::Backend AP_Filesystem::backends[] = {
     { nullptr, fs_local },
-#if AP_FILESYSTEM_ROMFS_ENABLED
+
     { "@ROMFS", fs_romfs },
-#endif
-#if AP_FILESYSTEM_PARAM_ENABLED
+
+
     { "@PARAM", fs_param },
-#endif
-#if AP_FILESYSTEM_SYS_ENABLED
+
+
     { "@SYS", fs_sys },
-#endif
-#if AP_FILESYSTEM_MISSION_ENABLED
+
+
     { "@MISSION", fs_mission },
-#endif
+
 };
 
 extern const AP_HAL::HAL& hal;

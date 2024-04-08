@@ -5,7 +5,7 @@
 #include "AP_BattMonitor_Backend.h"
 #include <utility>
 
-#if AP_BATTERY_INA239_ENABLED
+#if AP_BATTERY_INA239_ENABLED && !defined(HAL_LINUX)
 
 class AP_BattMonitor_INA239 : public AP_BattMonitor_Backend
 {

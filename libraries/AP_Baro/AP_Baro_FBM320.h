@@ -2,7 +2,7 @@
 
 #include "AP_Baro_Backend.h"
 
-#if AP_BARO_FBM320_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/Device.h>
@@ -48,5 +48,3 @@ private:
         uint32_t C4, C5, C7;
     } calibration;
 };
-
-#endif  // AP_BARO_FBM320_ENABLED

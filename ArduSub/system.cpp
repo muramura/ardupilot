@@ -39,10 +39,10 @@ void Sub::init_ardupilot()
     AP_Param::set_default_by_name("BARO_EXT_BUS", 1);
 #endif
 
-#if AP_TEMPERATURE_SENSOR_ENABLED
+
     // In order to preserve Sub's previous AP_TemperatureSensor Behavior we set the Default I2C Bus Here
     AP_Param::set_default_by_name("TEMP1_BUS", barometer.external_bus());
-#endif
+
 
     // setup telem slots with serial ports
     gcs().setup_uarts();
@@ -129,9 +129,9 @@ void Sub::init_ardupilot()
     last_pilot_heading = ahrs.yaw_sensor;
 
     // initialise rangefinder
-#if RANGEFINDER_ENABLED == ENABLED
+
     init_rangefinder();
-#endif
+
 
     // initialise AP_RPM library
 

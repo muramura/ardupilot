@@ -2,7 +2,7 @@
 
 #include "AP_Baro_Backend.h"
 
-#if AP_BARO_BMP388_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/Device.h>
@@ -82,5 +82,3 @@ private:
     void scale_calibration_data(void);
     bool read_registers(uint8_t reg, uint8_t *data, uint8_t len);
 };
-
-#endif  // AP_BARO_BMP388_ENABLED

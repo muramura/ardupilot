@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_TURTLE_ENABLED == ENABLED
+
 
 #define CRASH_FLIP_EXPO 35.0f
 #define CRASH_FLIP_STICK_MINF 0.15f
@@ -203,5 +203,3 @@ void ModeTurtle::output_to_motors()
         motors->rc_write(i, pwm);
     }
 }
-
-#endif

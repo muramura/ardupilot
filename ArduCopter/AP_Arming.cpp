@@ -247,7 +247,7 @@ bool AP_Arming_Copter::parameter_checks(bool display_failure)
         #endif // HELI_FRAME
 
         // checks when using range finder for RTL
-#if MODE_RTL_ENABLED == ENABLED
+
         if (copter.mode_rtl.get_alt_type() == ModeRTL::RTLAltType::RTL_ALTTYPE_TERRAIN) {
             // get terrain source from wpnav
             const char *failure_template = "RTL_ALT_TYPE is above-terrain but %s";
@@ -272,7 +272,7 @@ bool AP_Arming_Copter::parameter_checks(bool display_failure)
                 break;
             }
         }
-#endif
+
 
         // check adsb avoidance failsafe
 #if HAL_ADSB_ENABLED
@@ -722,9 +722,9 @@ bool AP_Arming_Copter::arm(const AP_Arming::Method method, const bool do_arming_
     copter.update_super_simple_bearing(false);
 
     // Reset SmartRTL return location. If activated, SmartRTL will ultimately try to land at this point
-#if MODE_SMARTRTL_ENABLED == ENABLED
+
     copter.g2.smart_rtl.set_home(copter.position_ok());
-#endif
+
 
     hal.util->set_soft_armed(true);
 
@@ -802,14 +802,14 @@ bool AP_Arming_Copter::disarm(const AP_Arming::Method method, bool do_disarm_che
         }
     }
 
-#if AUTOTUNE_ENABLED == ENABLED
+
     // save auto tuned parameters
     if (copter.flightmode == &copter.mode_autotune) {
         copter.mode_autotune.save_tuning_gains();
     } else {
         copter.mode_autotune.reset();
     }
-#endif
+
 
     // we are not in the air
     copter.set_land_complete(true);
@@ -818,10 +818,10 @@ bool AP_Arming_Copter::disarm(const AP_Arming::Method method, bool do_disarm_che
     // send disarm command to motors
     copter.motors->armed(false);
 
-#if MODE_AUTO_ENABLED == ENABLED
+
     // reset the mission
     copter.mode_auto.mission.reset();
-#endif
+
 
 #if HAL_LOGGING_ENABLED
     AP::logger().set_vehicle_armed(false);

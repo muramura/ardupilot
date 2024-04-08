@@ -1,7 +1,7 @@
 #include "Copter.h"
 #include <utility>
 
-#if MODE_FLOWHOLD_ENABLED == ENABLED
+
 
 /*
   implement FLOWHOLD mode, for position hold using optical flow
@@ -513,5 +513,3 @@ void ModeFlowHold::update_height_estimate(void)
     delta_velocity_ne.zero();
     last_ins_height = ins_height;
 }
-
-#endif // MODE_FLOWHOLD_ENABLED

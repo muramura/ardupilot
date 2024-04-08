@@ -2,7 +2,7 @@
 
 #include "AP_BattMonitor_Analog.h"
 
-#if AP_BATTERY_FUELLEVEL_PWM_ENABLED
+
 
 #include "AP_BattMonitor.h"
 
@@ -28,5 +28,3 @@ private:
 
     AP_HAL::PWMSource pwm_source;
 };
-
-#endif  // AP_BATTERY_FUELLEVEL_PWM_ENABLED

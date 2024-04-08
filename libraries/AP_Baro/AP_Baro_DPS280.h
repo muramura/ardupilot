@@ -2,7 +2,7 @@
 
 #include "AP_Baro_Backend.h"
 
-#if AP_BARO_DPS280_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/Device.h>
@@ -71,6 +71,3 @@ public:
     using AP_Baro_DPS280::AP_Baro_DPS280;
     static AP_Baro_Backend *probe(AP_Baro &baro, AP_HAL::OwnPtr<AP_HAL::Device> dev);
 };
-
-
-#endif  // AP_BARO_DPS280_ENABLED

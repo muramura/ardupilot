@@ -5,7 +5,7 @@
 #include "AP_BattMonitor_Backend.h"
 #include <utility>
 
-#if AP_BATTERY_LTC2946_ENABLED
+#if AP_BATTERY_LTC2946_ENABLED && !defined(HAL_LINUX)
 
 class AP_BattMonitor_LTC2946 : public AP_BattMonitor_Backend
 {

@@ -18,7 +18,7 @@
 
 #include "AP_Filesystem_config.h"
 
-#if AP_FILESYSTEM_ROMFS_ENABLED
+
 
 #include "AP_Filesystem.h"
 #include "AP_Filesystem_ROMFS.h"
@@ -261,5 +261,3 @@ void AP_Filesystem_ROMFS::unload_file(FileData *fd)
 {
     AP_ROMFS::free(fd->data);
 }
-
-#endif // AP_FILESYSTEM_ROMFS_ENABLED

@@ -1,6 +1,6 @@
 #include "Copter.h"
 
-#if MODE_RTL_ENABLED == ENABLED
+
 
 /*
  * Init and run calls for RTL flight mode
@@ -571,5 +571,3 @@ bool ModeRTL::set_speed_down(float speed_down_cms)
     copter.wp_nav->set_speed_down(speed_down_cms);
     return true;
 }
-
-#endif

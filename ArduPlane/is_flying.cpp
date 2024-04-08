@@ -162,9 +162,9 @@ void Plane::update_is_flying_5Hz(void)
 #if HAL_ADSB_ENABLED
     adsb.set_is_flying(new_is_flying);
 #endif
-#if PARACHUTE == ENABLED
+
     parachute.set_is_flying(new_is_flying);
-#endif
+
 
     AP::stats()->set_flying(new_is_flying);
 

@@ -1,7 +1,7 @@
 
 #include "AP_RCProtocol_config.h"
 
-#if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+
 
 #include "AP_RCProtocol_MAVLinkRadio.h"
 
@@ -20,6 +20,3 @@ void AP_RCProtocol_MAVLinkRadio::update_radio_rc_channels(const mavlink_radio_rc
 
     add_input(count, rc_chan, failsafe);
 }
-
-#endif // AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
-
