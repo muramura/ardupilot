@@ -355,9 +355,9 @@ void AP_Airspeed::allocate()
             // nothing to do
             break;
         case TYPE_I2C_MS4525:
-#if AP_AIRSPEED_MS4525_ENABLED
+
             sensor[i] = new AP_Airspeed_MS4525(*this, i);
-#endif
+
             break;
         case TYPE_SITL:
 #if AP_AIRSPEED_SITL_ENABLED
@@ -370,19 +370,19 @@ void AP_Airspeed::allocate()
 #endif
             break;
         case TYPE_I2C_MS5525:
-#if AP_AIRSPEED_MS5525_ENABLED
+
             sensor[i] = new AP_Airspeed_MS5525(*this, i, AP_Airspeed_MS5525::MS5525_ADDR_AUTO);
-#endif
+
             break;
         case TYPE_I2C_MS5525_ADDRESS_1:
-#if AP_AIRSPEED_MS5525_ENABLED
+
             sensor[i] = new AP_Airspeed_MS5525(*this, i, AP_Airspeed_MS5525::MS5525_ADDR_1);
-#endif
+
             break;
         case TYPE_I2C_MS5525_ADDRESS_2:
-#if AP_AIRSPEED_MS5525_ENABLED
+
             sensor[i] = new AP_Airspeed_MS5525(*this, i, AP_Airspeed_MS5525::MS5525_ADDR_2);
-#endif
+
             break;
         case TYPE_I2C_SDP3X:
 #if AP_AIRSPEED_SDP3X_ENABLED
@@ -390,34 +390,34 @@ void AP_Airspeed::allocate()
 #endif
             break;
         case TYPE_I2C_DLVR_5IN:
-#if AP_AIRSPEED_DLVR_ENABLED
+
             sensor[i] = new AP_Airspeed_DLVR(*this, i, 5);
-#endif
+
             break;
         case TYPE_I2C_DLVR_10IN:
-#if AP_AIRSPEED_DLVR_ENABLED
+
             sensor[i] = new AP_Airspeed_DLVR(*this, i, 10);
-#endif
+
             break;
         case TYPE_I2C_DLVR_20IN:
-#if AP_AIRSPEED_DLVR_ENABLED
+
             sensor[i] = new AP_Airspeed_DLVR(*this, i, 20);
-#endif
+
             break;
         case TYPE_I2C_DLVR_30IN:
-#if AP_AIRSPEED_DLVR_ENABLED
+
             sensor[i] = new AP_Airspeed_DLVR(*this, i, 30);
-#endif
+
             break;
         case TYPE_I2C_DLVR_60IN:
-#if AP_AIRSPEED_DLVR_ENABLED
+
             sensor[i] = new AP_Airspeed_DLVR(*this, i, 60);
-#endif  // AP_AIRSPEED_DLVR_ENABLED
+
             break;
         case TYPE_I2C_ASP5033:
-#if AP_AIRSPEED_ASP5033_ENABLED
+
             sensor[i] = new AP_Airspeed_ASP5033(*this, i);
-#endif
+
             break;
         case TYPE_UAVCAN:
 #if AP_AIRSPEED_DRONECAN_ENABLED

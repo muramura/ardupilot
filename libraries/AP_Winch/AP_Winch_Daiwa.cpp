@@ -1,6 +1,6 @@
 #include <AP_Winch/AP_Winch_Daiwa.h>
 
-#if AP_WINCH_DAIWA_ENABLED
+
 
 #include <AP_Logger/AP_Logger.h>
 #include <GCS_MAVLink/GCS.h>
@@ -378,5 +378,3 @@ void AP_Winch_Daiwa::update_user()
         user_update.last_ms = now_ms;
     }
 }
-
-#endif  // AP_WINCH_DAIWA_ENABLED

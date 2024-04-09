@@ -15,7 +15,7 @@
 
 #include "AP_Generator_IE_2400.h"
 
-#if AP_GENERATOR_IE_2400_ENABLED
+
 
 #include <AP_Logger/AP_Logger.h>
 #include <GCS_MAVLink/GCS.h>
@@ -575,5 +575,3 @@ MAV_SEVERITY AP_Generator_IE_2400::get_mav_severity(uint32_t err_code) const
     return MAV_SEVERITY_CRITICAL;
 }
 #endif // HAL_GCS_ENABLED
-
-#endif  // AP_GENERATOR_IE_2400_ENABLED

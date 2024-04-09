@@ -82,15 +82,15 @@ private:
 
     enum class Type {
         GEN_DISABLED = 0,
-#if AP_GENERATOR_IE_650_800_ENABLED
+
         IE_650_800 = 1,
-#endif
-#if AP_GENERATOR_IE_2400_ENABLED
+
+
         IE_2400 = 2,
-#endif
-#if AP_GENERATOR_RICHENPOWER_ENABLED
+
+
         RICHENPOWER = 3,
-#endif
+
         // LOWEHEISER = 4,
     };
 

@@ -20,7 +20,7 @@
 
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_MS5525_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/utility/OwnPtr.h>
@@ -79,5 +79,3 @@ private:
     
     AP_HAL::OwnPtr<AP_HAL::I2CDevice> dev;
 };
-
-#endif  // AP_AIRSPEED_MS5525_ENABLED

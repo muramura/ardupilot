@@ -3,7 +3,7 @@
 
 #include "AP_Generator_config.h"
 
-#if AP_GENERATOR_RICHENPOWER_ENABLED
+
 
 #include "AP_Generator_Backend.h"
 
@@ -214,4 +214,3 @@ private:
     // maintenamce, this is the last time we sent the warning:
     uint32_t last_maintenance_warning_ms;
 };
-#endif  // AP_GENERATOR_RICHENPOWER_ENABLED

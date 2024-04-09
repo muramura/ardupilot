@@ -30,7 +30,7 @@
 
 #include <AP_Winch/AP_Winch_Backend.h>
 
-#if AP_WINCH_DAIWA_ENABLED
+
 
 class AP_Winch_Daiwa : public AP_Winch_Backend {
 public:
@@ -134,5 +134,3 @@ private:
         bool user_notified;             // true if user has been notified that winch is stuck
     } stuck_protection;
 };
-
-#endif  // AP_WINCH_DAIWA_ENABLED

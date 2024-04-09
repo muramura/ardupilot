@@ -18,7 +18,7 @@
  */
 #include "AP_Airspeed_MS4525.h"
 
-#if AP_AIRSPEED_MS4525_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL.h>
@@ -284,5 +284,3 @@ bool AP_Airspeed_MS4525::get_temperature(float &temperature)
     temperature = _temperature;
     return true;
 }
-
-#endif  // AP_AIRSPEED_MS4525_ENABLED

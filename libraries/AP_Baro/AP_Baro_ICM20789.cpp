@@ -15,7 +15,7 @@
 
 #include "AP_Baro_ICM20789.h"
 
-#if AP_BARO_ICM20789_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/I2CDevice.h>
@@ -362,5 +362,3 @@ void AP_Baro_ICM20789::update()
         accum.count = 0;
     }
 }
-
-#endif  // AP_BARO_ICM20789_ENABLED

@@ -1095,7 +1095,7 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_MAV_CMD_SOLO_BTN_PAUSE_CLICK(const mavlink
 MAV_RESULT GCS_MAVLINK_Copter::handle_command_pause_continue(const mavlink_command_int_t &packet)
 {
     // requested pause
-    if ((uint8_t) packet.param1 == 0) {
+    if (packet.param1 < 0.9) {
         if (copter.flightmode->pause()) {
             return MAV_RESULT_ACCEPTED;
         }
@@ -1104,7 +1104,7 @@ MAV_RESULT GCS_MAVLINK_Copter::handle_command_pause_continue(const mavlink_comma
     }
 
     // requested resume
-    if ((uint8_t) packet.param1 == 1) {
+    if (packet.param1 >= 0.9) {
         if (copter.flightmode->resume()) {
             return MAV_RESULT_ACCEPTED;
         }

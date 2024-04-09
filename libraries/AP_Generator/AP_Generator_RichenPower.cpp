@@ -15,7 +15,7 @@
 
 #include "AP_Generator_config.h"
 
-#if AP_GENERATOR_RICHENPOWER_ENABLED
+
 
 #include "AP_Generator_RichenPower.h"
 
@@ -522,4 +522,3 @@ bool AP_Generator_RichenPower::run()
     set_pilot_desired_runstate(RunState::RUN);
     return true;
 }
-#endif  // AP_GENERATOR_RICHENPOWER_ENABLED

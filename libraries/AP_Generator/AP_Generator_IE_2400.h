@@ -2,7 +2,7 @@
 
 #include "AP_Generator_IE_FuelCell.h"
 
-#if AP_GENERATOR_IE_2400_ENABLED
+
 
 #include <AP_Logger/AP_Logger_config.h>
 
@@ -132,5 +132,3 @@ private:
     static const Lookup_State_V2 lookup_state_V2[];
 
 };
-#endif  // AP_GENERATOR_IE_2400_ENABLED
-

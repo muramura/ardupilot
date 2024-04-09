@@ -20,7 +20,7 @@
 
 #include "AP_Airspeed_ASP5033.h"
 
-#if AP_AIRSPEED_ASP5033_ENABLED
+
 
 #include <AP_HAL/I2CDevice.h>
 
@@ -177,5 +177,3 @@ bool AP_Airspeed_ASP5033::get_temperature(float &temperature)
 
     return true;
 }
-
-#endif
