@@ -1718,7 +1718,7 @@ private:
     float free_fall_start_velz;     // vertical velocity when free fall was detected
 };
 
-
+#if MODE_TURTLE_ENABLED == ENABLED
 class ModeTurtle : public Mode {
 
 public:
@@ -1749,7 +1749,7 @@ private:
     Vector2f motors_input;
     uint32_t last_throttle_warning_output_ms;
 };
-
+#endif
 
 // modes below rely on Guided mode so must be declared at the end (instead of in alphabetical order)
 

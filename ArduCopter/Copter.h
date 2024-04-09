@@ -221,7 +221,9 @@ public:
     friend class ModeThrow;
     friend class ModeZigZag;
     friend class ModeAutorotate;
+#if MODE_TURTLE_ENABLED == ENABLED    
     friend class ModeTurtle;
+#endif
 
     friend class _AutoTakeoff;
 
@@ -1044,8 +1046,9 @@ private:
 #if MODE_AUTOROTATE_ENABLED == ENABLED
     ModeAutorotate mode_autorotate;
 #endif
-
+#if MODE_TURTLE_ENABLED == ENABLED
     ModeTurtle mode_turtle;
+#endif
 
 
     // mode.cpp
