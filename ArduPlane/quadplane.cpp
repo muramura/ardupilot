@@ -847,6 +847,7 @@ bool QuadPlane::setup(void)
     }
     if (!transition) {
         AP_BoardConfig::allocation_error("transition");
+        return false;
     }
 
     // init wp_nav variables after detaults are setup
