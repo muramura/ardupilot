@@ -18,7 +18,7 @@
  */
 #include "AP_Compass_IST8310.h"
 
-#if AP_COMPASS_IST8310_ENABLED
+
 
 #include <stdio.h>
 #include <utility>
@@ -238,5 +238,3 @@ void AP_Compass_IST8310::read()
 {
     drain_accumulated_samples(_instance);
 }
-
-#endif  // AP_COMPASS_IST8310_ENABLED

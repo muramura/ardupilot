@@ -16,7 +16,7 @@
 
 #include "AP_Compass_config.h"
 
-#if AP_COMPASS_LIS3MDL_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL.h>
@@ -62,5 +62,3 @@ private:
     bool force_external;
     enum Rotation rotation;
 };
-
-#endif  // AP_COMPASS_LIS3MDL_ENABLED

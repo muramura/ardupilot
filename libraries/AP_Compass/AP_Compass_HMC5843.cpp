@@ -23,7 +23,7 @@
  */
 #include "AP_Compass_HMC5843.h"
 
-#if AP_COMPASS_HMC5843_ENABLED
+
 
 #include <assert.h>
 #include <utility>
@@ -587,5 +587,3 @@ uint32_t AP_HMC5843_BusDriver_Auxiliary::get_bus_id(void) const
     return _bus->get_bus_id();
 }
 #endif  // AP_INERTIALSENSOR_ENABLED
-
-#endif  // AP_COMPASS_HMC5843_ENABLED

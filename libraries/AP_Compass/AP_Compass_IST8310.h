@@ -18,7 +18,7 @@
 
 #include "AP_Compass_config.h"
 
-#if AP_COMPASS_IST8310_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL.h>
@@ -63,5 +63,3 @@ private:
     bool _ignore_next_sample;
     bool _force_external;
 };
-
-#endif  // AP_COMPASS_IST8310_ENABLED

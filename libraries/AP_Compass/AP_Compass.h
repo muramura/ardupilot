@@ -428,36 +428,36 @@ private:
 
     // enum of drivers for COMPASS_DISBLMSK
     enum DriverType {
-#if AP_COMPASS_HMC5843_ENABLED
+
         DRIVER_HMC5843  =0,
-#endif
-#if AP_COMPASS_LSM303D_ENABLED
+
+
         DRIVER_LSM303D  =1,
-#endif
-#if AP_COMPASS_AK8963_ENABLED
+
+
         DRIVER_AK8963   =2,
-#endif
-#if AP_COMPASS_BMM150_ENABLED
+
+
         DRIVER_BMM150   =3,
-#endif
-#if AP_COMPASS_LSM9DS1_ENABLED
+
+
         DRIVER_LSM9DS1  =4,
-#endif
-#if AP_COMPASS_LIS3MDL_ENABLED
+
+
         DRIVER_LIS3MDL  =5,
-#endif
-#if AP_COMPASS_AK09916_ENABLED
+
+
         DRIVER_AK09916  =6,
-#endif
-#if AP_COMPASS_IST8310_ENABLED
+
+
         DRIVER_IST8310  =7,
-#endif
-#if AP_COMPASS_ICM20948_ENABLED
+
+
         DRIVER_ICM20948 =8,
-#endif
-#if AP_COMPASS_MMC3416_ENABLED
+
+
         DRIVER_MMC3416  =9,
-#endif
+
 #if AP_COMPASS_DRONECAN_ENABLED
         DRIVER_UAVCAN   =11,
 #endif

@@ -2,7 +2,7 @@
 
 #include "AP_Compass_config.h"
 
-#if AP_COMPASS_LSM9DS1_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL.h>
@@ -48,5 +48,3 @@ private:
         int16_t val[3];
     };
 };
-
-#endif

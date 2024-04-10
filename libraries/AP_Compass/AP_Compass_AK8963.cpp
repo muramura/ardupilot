@@ -15,7 +15,7 @@
 
 #include "AP_Compass_AK8963.h"
 
-#if AP_COMPASS_AK8963_ENABLED
+
 
 #include <assert.h>
 #include <utility>
@@ -399,5 +399,3 @@ uint32_t AP_AK8963_BusDriver_Auxiliary::get_bus_id(void) const
 {
     return _bus->get_bus_id();
 }
-
-#endif  // AP_COMPASS_AK8963_ENABLED

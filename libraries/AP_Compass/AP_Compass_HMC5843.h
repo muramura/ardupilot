@@ -2,7 +2,7 @@
 
 #include "AP_Compass_config.h"
 
-#if AP_COMPASS_HMC5843_ENABLED
+
 
 #ifndef HAL_COMPASS_HMC5843_I2C_ADDR
 #define HAL_COMPASS_HMC5843_I2C_ADDR 0x1E
@@ -158,5 +158,3 @@ private:
     bool _started;
 };
 #endif  // AP_INERTIALSENSOR_ENABLED
-
-#endif // AP_COMPASS_HMC5843_ENABLED

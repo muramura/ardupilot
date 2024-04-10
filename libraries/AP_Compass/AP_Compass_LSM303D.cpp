@@ -15,7 +15,7 @@
 
 #include "AP_Compass_LSM303D.h"
 
-#if AP_COMPASS_LSM303D_ENABLED
+
 
 #include <utility>
 
@@ -431,5 +431,3 @@ bool AP_Compass_LSM303D::_mag_set_samplerate(uint16_t frequency)
 
     return true;
 }
-
-#endif  // AP_COMPASS_LSM303D_ENABLED
