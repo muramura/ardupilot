@@ -617,12 +617,12 @@ void AP_Baro::init(void)
     }
 #endif
 
-#if AP_BARO_EXTERNALAHRS_ENABLED
+
     const int8_t serial_port = AP::externalAHRS().get_port(AP_ExternalAHRS::AvailableSensor::BARO);
     if (serial_port >= 0) {
         ADD_BACKEND(new AP_Baro_ExternalAHRS(*this, serial_port));
     }
-#endif
+
 
 // macro for use by HAL_INS_PROBE_LIST
 #define GET_I2C_DEVICE(bus, address) _have_i2c_driver(bus, address)?nullptr:hal.i2c_mgr->get_device(bus, address)
@@ -1096,7 +1096,7 @@ void AP_Baro::handle_msp(const MSP::msp_baro_data_message_t &pkt)
 }
 #endif
 
-#if AP_BARO_EXTERNALAHRS_ENABLED
+
 /*
   handle ExternalAHRS barometer data
  */
@@ -1106,7 +1106,7 @@ void AP_Baro::handle_external(const AP_ExternalAHRS::baro_data_message_t &pkt)
         drivers[i]->handle_external(pkt);
     }
 }
-#endif  // AP_BARO_EXTERNALAHRS_ENABLED
+
 
 // returns false if we fail arming checks, in which case the buffer will be populated with a failure message
 bool AP_Baro::arming_checks(size_t buflen, char *buffer) const

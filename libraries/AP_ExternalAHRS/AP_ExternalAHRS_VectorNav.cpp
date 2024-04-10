@@ -481,7 +481,7 @@ void AP_ExternalAHRS_VectorNav::process_packet1(const uint8_t *b)
         state.have_location = true;
     }
 
-#if AP_BARO_EXTERNALAHRS_ENABLED
+
     {
         AP_ExternalAHRS::baro_data_message_t baro;
         baro.instance = 0;
@@ -490,9 +490,9 @@ void AP_ExternalAHRS_VectorNav::process_packet1(const uint8_t *b)
 
         AP::baro().handle_external(baro);
     }
-#endif
 
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
+
     {
         AP_ExternalAHRS::mag_data_message_t mag;
         mag.field = Vector3f{pkt1.mag[0], pkt1.mag[1], pkt1.mag[2]};
@@ -500,7 +500,7 @@ void AP_ExternalAHRS_VectorNav::process_packet1(const uint8_t *b)
 
         AP::compass().handle_external(mag);
     }
-#endif
+
 
     {
         AP_ExternalAHRS::ins_data_message_t ins;
@@ -586,7 +586,7 @@ void AP_ExternalAHRS_VectorNav::process_packet_VN_100(const uint8_t *b)
         state.have_quaternion = true;
     }
 
-#if AP_BARO_EXTERNALAHRS_ENABLED
+
     {
         AP_ExternalAHRS::baro_data_message_t baro;
         baro.instance = 0;
@@ -595,9 +595,9 @@ void AP_ExternalAHRS_VectorNav::process_packet_VN_100(const uint8_t *b)
 
         AP::baro().handle_external(baro);
     }
-#endif
 
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
+
     {
         AP_ExternalAHRS::mag_data_message_t mag;
         if (use_uncomp) {
@@ -609,7 +609,7 @@ void AP_ExternalAHRS_VectorNav::process_packet_VN_100(const uint8_t *b)
 
         AP::compass().handle_external(mag);
     }
-#endif
+
 
     {
         AP_ExternalAHRS::ins_data_message_t ins;

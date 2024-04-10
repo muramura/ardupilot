@@ -355,9 +355,9 @@ public:
     void handle_msp(const MSP::msp_compass_data_message_t &pkt);
 #endif
 
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
     void handle_external(const AP_ExternalAHRS::mag_data_message_t &pkt);
-#endif
+
 
     // force save of current calibration as valid
     void force_save_calibration(void);
@@ -461,33 +461,33 @@ private:
 #if AP_COMPASS_DRONECAN_ENABLED
         DRIVER_UAVCAN   =11,
 #endif
-#if AP_COMPASS_QMC5883L_ENABLED
+
         DRIVER_QMC5883L =12,
-#endif
+
 #if AP_COMPASS_SITL_ENABLED
         DRIVER_SITL     =13,
 #endif
-#if AP_COMPASS_MAG3110_ENABLED
+
         DRIVER_MAG3110  =14,
-#endif
-#if AP_COMPASS_IST8308_ENABLED
+
+
         DRIVER_IST8308  =15,
-#endif
-#if AP_COMPASS_RM3100_ENABLED
+
+
 		DRIVER_RM3100   =16,
-#endif
+
 #if AP_COMPASS_MSP_ENABLED
         DRIVER_MSP      =17,
 #endif
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
         DRIVER_EXTERNALAHRS   =18,
-#endif
-#if AP_COMPASS_MMC5XX3_ENABLED
+
+
         DRIVER_MMC5XX3  =19,
-#endif
-#if AP_COMPASS_QMC5883P_ENABLED
+
+
         DRIVER_QMC5883P =20,
-#endif
+
 };
 
     bool _driver_enabled(enum DriverType driver_type);

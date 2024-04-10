@@ -1,6 +1,6 @@
 #include "AP_Baro_ExternalAHRS.h"
 
-#if AP_BARO_EXTERNALAHRS_ENABLED
+
 
 AP_Baro_ExternalAHRS::AP_Baro_ExternalAHRS(AP_Baro &baro, uint8_t port) :
     AP_Baro_Backend(baro)
@@ -31,5 +31,3 @@ void AP_Baro_ExternalAHRS::handle_external(const AP_ExternalAHRS::baro_data_mess
     sum_temp += pkt.temperature;
     count++;
 }
-
-#endif // AP_BARO_EXTERNALAHRS_ENABLED

@@ -21,9 +21,9 @@
 
 #include "AP_Compass_config.h"
 
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
 #include <AP_ExternalAHRS/AP_ExternalAHRS.h>
-#endif
+
 
 #if AP_COMPASS_MSP_ENABLED
 #include <AP_MSP/msp.h>
@@ -80,9 +80,9 @@ public:
     virtual void handle_msp(const MSP::msp_compass_data_message_t &pkt) {}
 #endif
 
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
     virtual void handle_external(const AP_ExternalAHRS::mag_data_message_t &pkt) {}
-#endif
+
     
 protected:
 

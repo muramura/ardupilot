@@ -34,9 +34,9 @@ class DummyVehicle {
 public:
     AP_AHRS ahrs;  // Need since https://github.com/ArduPilot/ardupilot/pull/10890
     AP_Baro baro; // Compass tries to set magnetic model based on location.
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
     AP_ExternalAHRS eAHRS;
-#endif  // AP_COMPASS_EXTERNALAHRS_ENABLED
+
 };
 
 static DummyVehicle vehicle;

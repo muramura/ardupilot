@@ -18,7 +18,7 @@
 
 #include "AP_Compass_config.h"
 
-#if AP_COMPASS_IST8308_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL.h>
@@ -55,5 +55,3 @@ private:
     uint8_t _instance;
     bool _force_external;
 };
-
-#endif  // AP_COMPASS_IST8308_ENABLED

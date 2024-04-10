@@ -161,7 +161,7 @@ void AP_ExternalAHRS_MicroStrain7::post_imu() const
         AP::ins().handle_external(ins);
     }
 
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
     {
         // *INDENT-OFF*
         AP_ExternalAHRS::mag_data_message_t mag {
@@ -170,9 +170,9 @@ void AP_ExternalAHRS_MicroStrain7::post_imu() const
         // *INDENT-ON*
         AP::compass().handle_external(mag);
     }
-#endif
 
-#if AP_BARO_EXTERNALAHRS_ENABLED
+
+
     {
         // *INDENT-OFF*
         const AP_ExternalAHRS::baro_data_message_t baro {
@@ -184,7 +184,7 @@ void AP_ExternalAHRS_MicroStrain7::post_imu() const
         // *INDENT-ON*
         AP::baro().handle_external(baro);
     }
-#endif
+
 }
 
 void AP_ExternalAHRS_MicroStrain7::post_filter() const

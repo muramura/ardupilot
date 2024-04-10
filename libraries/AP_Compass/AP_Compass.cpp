@@ -39,9 +39,9 @@
 #if AP_COMPASS_MSP_ENABLED
 #include "AP_Compass_MSP.h"
 #endif
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
 #include "AP_Compass_ExternalAHRS.h"
-#endif
+
 #include "AP_Compass.h"
 #include "Compass_learn.h"
 #include <stdio.h>
@@ -1117,7 +1117,7 @@ void Compass::_probe_external_i2c_compasses(void)
 #endif  // !defined(HAL_SKIP_AUTO_INTERNAL_I2C_PROBE)
 
 
-#if AP_COMPASS_QMC5883L_ENABLED
+
     //external i2c bus
     FOREACH_I2C_EXTERNAL(i) {
         ADD_BACKEND(DRIVER_QMC5883L, AP_Compass_QMC5883L::probe(GET_I2C_DEVICE(i, HAL_COMPASS_QMC5883L_I2C_ADDR),
@@ -1135,9 +1135,9 @@ void Compass::_probe_external_i2c_compasses(void)
         }
     }
 #endif
-#endif  // AP_COMPASS_QMC5883L_ENABLED
 
-#if AP_COMPASS_QMC5883P_ENABLED
+
+
     //external i2c bus
     FOREACH_I2C_EXTERNAL(i) {
         ADD_BACKEND(DRIVER_QMC5883P, AP_Compass_QMC5883P::probe(GET_I2C_DEVICE(i, HAL_COMPASS_QMC5883P_I2C_ADDR),
@@ -1155,7 +1155,7 @@ void Compass::_probe_external_i2c_compasses(void)
         }
     }
 #endif
-#endif  // AP_COMPASS_QMC5883P_ENABLED
+
 
 #ifndef HAL_BUILD_AP_PERIPH
     // AK09916 on ICM20948
@@ -1250,7 +1250,7 @@ void Compass::_probe_external_i2c_compasses(void)
     }
 
 
-#if AP_COMPASS_IST8308_ENABLED
+
     // external i2c bus
     FOREACH_I2C_EXTERNAL(i) {
         ADD_BACKEND(DRIVER_IST8308, AP_Compass_IST8308::probe(GET_I2C_DEVICE(i, HAL_COMPASS_IST8308_I2C_ADDR),
@@ -1262,7 +1262,7 @@ void Compass::_probe_external_i2c_compasses(void)
                     all_external, ROTATION_NONE));
     }
 #endif
-#endif  // AP_COMPASS_IST8308_ENABLED
+
 
 
     // external i2c bus
@@ -1278,7 +1278,7 @@ void Compass::_probe_external_i2c_compasses(void)
 #endif
 
 
-#if AP_COMPASS_RM3100_ENABLED
+
 #ifdef HAL_COMPASS_RM3100_I2C_ADDR
     const uint8_t rm3100_addresses[] = { HAL_COMPASS_RM3100_I2C_ADDR };
 #else
@@ -1302,7 +1302,7 @@ void Compass::_probe_external_i2c_compasses(void)
         }
     }
 #endif
-#endif  // AP_COMPASS_RM3100_ENABLED
+
 
 #if AP_COMPASS_BMM150_DETECT_BACKENDS_ENABLED
     // BMM150 on I2C
@@ -1320,12 +1320,12 @@ void Compass::_probe_external_i2c_compasses(void)
  */
 void Compass::_detect_backends(void)
 {
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
     const int8_t serial_port = AP::externalAHRS().get_port(AP_ExternalAHRS::AvailableSensor::COMPASS);
     if (serial_port >= 0) {
         ADD_BACKEND(DRIVER_EXTERNALAHRS, new AP_Compass_ExternalAHRS(serial_port));
     }
-#endif
+
     
 #if AP_FEATURE_BOARD_DETECT
     if (AP_BoardConfig::get_board_type() == AP_BoardConfig::PX4_BOARD_PIXHAWK2) {
@@ -2206,7 +2206,7 @@ void Compass::handle_msp(const MSP::msp_compass_data_message_t &pkt)
 }
 #endif // AP_COMPASS_MSP_ENABLED
 
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
 void Compass::handle_external(const AP_ExternalAHRS::mag_data_message_t &pkt)
 {
     if (!_driver_enabled(DRIVER_EXTERNALAHRS)) {
@@ -2216,7 +2216,7 @@ void Compass::handle_external(const AP_ExternalAHRS::mag_data_message_t &pkt)
         _backends[i]->handle_external(pkt);
     }
 }
-#endif // AP_COMPASS_EXTERNALAHRS_ENABLED
+
 
 // force save of current calibration as valid
 void Compass::force_save_calibration(void)

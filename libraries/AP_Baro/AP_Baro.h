@@ -191,9 +191,9 @@ public:
 #if AP_BARO_MSP_ENABLED
     void handle_msp(const MSP::msp_baro_data_message_t &pkt);
 #endif
-#if AP_BARO_EXTERNALAHRS_ENABLED
+
     void handle_external(const AP_ExternalAHRS::baro_data_message_t &pkt);
-#endif
+
 
     enum Options : uint16_t {
         TreatMS5611AsMS5607     = (1U << 0U),

@@ -21,7 +21,7 @@
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Math/AP_Math.h>
 
-#if AP_COMPASS_QMC5883P_ENABLED
+
 
 //Register Address
 #define QMC5883P_REG_ID                 0x00
@@ -217,5 +217,3 @@ void AP_Compass_QMC5883P::_dump_registers()
         }
     }
 }
-
-#endif //AP_COMPASS_QMC5883P_ENABLED

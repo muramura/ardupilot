@@ -1633,7 +1633,7 @@ bool AP_Arming::pre_arm_checks(bool report)
 
 
         &  opendroneid_checks(report)
-#endif
+
 #if AP_ARMING_CRASHDUMP_ACK_ENABLED
         & crashdump_checks(report)
 #endif

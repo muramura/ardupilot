@@ -132,16 +132,16 @@ void AP_ExternalAHRS_MicroStrain5::post_imu() const
         AP::ins().handle_external(ins);
     }
 
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
     {
         AP_ExternalAHRS::mag_data_message_t mag {
             field: imu_data.mag
         };
         AP::compass().handle_external(mag);
     }
-#endif
 
-#if AP_BARO_EXTERNALAHRS_ENABLED
+
+
     {
         const AP_ExternalAHRS::baro_data_message_t baro {
             instance: 0,
@@ -151,7 +151,7 @@ void AP_ExternalAHRS_MicroStrain5::post_imu() const
         };        
         AP::baro().handle_external(baro);
     }
-#endif
+
 }
 
 void AP_ExternalAHRS_MicroStrain5::post_filter() const

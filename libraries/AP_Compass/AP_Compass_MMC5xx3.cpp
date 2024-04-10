@@ -15,7 +15,7 @@
 
 #include "AP_Compass_MMC5xx3.h"
 
-#if AP_COMPASS_MMC5XX3_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <stdio.h>
@@ -308,6 +308,3 @@ void AP_Compass_MMC5XX3::read()
 {
     drain_accumulated_samples(compass_instance);
 }
-
-#endif  // AP_COMPASS_MMC5XX3_ENABLED
-

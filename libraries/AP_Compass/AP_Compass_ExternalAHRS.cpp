@@ -16,7 +16,7 @@
 #include <AP_HAL/AP_HAL.h>
 #include "AP_Compass_ExternalAHRS.h"
 
-#if AP_COMPASS_EXTERNALAHRS_ENABLED
+
 
 AP_Compass_ExternalAHRS::AP_Compass_ExternalAHRS(uint8_t port)
 {
@@ -37,5 +37,3 @@ void AP_Compass_ExternalAHRS::read(void)
 {
     drain_accumulated_samples(instance);
 }
-
-#endif // AP_COMPASS_EXTERNALAHRS_ENABLED

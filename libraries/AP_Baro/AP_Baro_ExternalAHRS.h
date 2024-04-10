@@ -5,7 +5,7 @@
 
 #include "AP_Baro_Backend.h"
 
-#if AP_BARO_EXTERNALAHRS_ENABLED
+
 
 class AP_Baro_ExternalAHRS : public AP_Baro_Backend
 {
@@ -20,5 +20,3 @@ private:
     float sum_temp;
     uint16_t count;
 };
-
-#endif // AP_BARO_EXTERNALAHRS_ENABLED

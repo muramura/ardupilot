@@ -14,7 +14,7 @@
  */
 #include "AP_Compass_MAG3110.h"
 
-#if AP_COMPASS_MAG3110_ENABLED
+
 
 #include <utility>
 
@@ -221,5 +221,3 @@ void AP_Compass_MAG3110::read()
 
     drain_accumulated_samples(_compass_instance);
 }
-
-#endif  // AP_COMPASS_MAG3110_ENABLED
