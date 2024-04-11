@@ -18,7 +18,7 @@
 
 #include "AP_Radio_config.h"
 
-#if AP_RADIO_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include "AP_Radio_backend.h"
@@ -31,5 +31,3 @@ AP_Radio_backend::AP_Radio_backend(AP_Radio &_radio) :
 AP_Radio_backend::~AP_Radio_backend(void)
 {
 }
-
-#endif  // AP_RADIO_ENABLED

@@ -16,7 +16,7 @@
 
 #include "AP_Radio_config.h"
 
-#if AP_RADIO_ENABLED
+
 
 /*
  * base class for direct attached radios
@@ -132,5 +132,3 @@ private:
 
     static AP_Radio *_singleton;
 };
-
-#endif  // AP_RADIO_ENABLED

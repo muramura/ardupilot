@@ -66,17 +66,17 @@ AP_Notify *AP_Notify::_singleton;
 #define ALL_NCP5623_I2C 0
 #endif
 
-#if AP_NOTIFY_LP5562_ENABLED
-#define ALL_LP5562_I2C (Notify_LED_LP5562_I2C_Internal | Notify_LED_LP5562_I2C_External)
-#else
-#define ALL_LP5562_I2C 0
-#endif
 
-#if AP_NOTIFY_IS31FL3195_ENABLED
+#define ALL_LP5562_I2C (Notify_LED_LP5562_I2C_Internal | Notify_LED_LP5562_I2C_External)
+
+
+
+
+
 #define ALL_IS31FL3195_I2C (Notify_LED_IS31FL3195_I2C_Internal | Notify_LED_IS31FL3195_I2C_External)
-#else
-#define ALL_IS31FL3195_I2C 0
-#endif
+
+
+
 
 // all I2C_LEDS
 #define I2C_LEDS (ALL_TOSHIBALED_I2C | ALL_NCP5623_I2C | ALL_LP5562_I2C | ALL_IS31FL3195_I2C)
@@ -382,7 +382,7 @@ void AP_Notify::add_backends(void)
                 ADD_BACKEND(new DShotLED());
                 break;
 #endif
-#if AP_NOTIFY_LP5562_ENABLED
+
             case Notify_LED_LP5562_I2C_External:
                 FOREACH_I2C_EXTERNAL(b) {
                     ADD_BACKEND(new LP5562(b, 0x30));
@@ -393,8 +393,8 @@ void AP_Notify::add_backends(void)
                     ADD_BACKEND(new LP5562(b, 0x30));
                 }
                 break;
-#endif
-#if AP_NOTIFY_IS31FL3195_ENABLED
+
+
             case Notify_LED_IS31FL3195_I2C_External:
                 FOREACH_I2C_EXTERNAL(b) {
                     ADD_BACKEND(new IS31FL3195(b, 0x54));
@@ -405,7 +405,7 @@ void AP_Notify::add_backends(void)
                     ADD_BACKEND(new IS31FL3195(b, 0x54));
                 }
                 break;
-#endif
+
 #if AP_NOTIFY_DISCRETE_RGB_ENABLED
             case Notify_LED_DiscreteRGB:
                 ADD_BACKEND(new DiscreteRGBLed(DISCRETE_RGB_RED_PIN,

@@ -20,7 +20,7 @@
 
 #include "LP5562.h"
 
-#if AP_NOTIFY_LP5562_ENABLED
+
 
 #include <utility>
 
@@ -143,5 +143,3 @@ void LP5562::_timer(void)
         last_sent_bgr[i] = new_colour;
     }
 }
-
-#endif  // AP_NOTIFY_LP5562_ENABLED

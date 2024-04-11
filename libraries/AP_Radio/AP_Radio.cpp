@@ -1,6 +1,6 @@
 #include "AP_Radio_config.h"
 
-#if AP_RADIO_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 
@@ -257,7 +257,7 @@ void AP_Radio::handle_data_packet(mavlink_channel_t chan, const mavlink_data96_t
 void AP_Radio::play_tune(const char *tune_str)
 {
     mavlink_data96_t pkt {};
-    uint8_t len = MIN(strlen(tune_str), 92);
+    uint8_t len = MIN(strlen(tune_str), 92u);
     pkt.len = len;
     pkt.type = 43;
     memcpy(&pkt.data[0], tune_str, len);
@@ -298,5 +298,3 @@ void AP_Radio::change_txmode(void)
         stick_mode.set_and_save_ifchanged(2);
     }
 }
-
-#endif  // AP_RADIO_ENABLED

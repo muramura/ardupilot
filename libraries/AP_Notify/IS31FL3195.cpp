@@ -20,7 +20,7 @@
 
 #include "IS31FL3195.h"
 
-#if AP_NOTIFY_IS31FL3195_ENABLED
+
 
 #include <utility>
 
@@ -118,5 +118,3 @@ void IS31FL3195::_timer(void)
     _dev->write_register(uint8_t(Register::OUT3), rgb[2]);
     _dev->write_register(uint8_t(Register::COLOR_UPDATE), REGISTER_MAGIC_VLAUE);
 }
-
-#endif  // AP_NOTIFY_IS31FL3195_ENABLED

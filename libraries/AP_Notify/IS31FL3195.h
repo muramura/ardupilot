@@ -21,7 +21,7 @@
 
 #include "AP_Notify_config.h"
 
-#if AP_NOTIFY_IS31FL3195_ENABLED
+
 
 #include <AP_HAL/I2CDevice.h>
 #include "RGBLed.h"
@@ -43,5 +43,3 @@ private:
     bool _need_update;
     uint8_t rgb[3];
 };
-
-#endif  // AP_NOTIFY_IS31FL3195_ENABLED
