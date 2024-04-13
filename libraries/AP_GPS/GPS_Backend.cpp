@@ -375,7 +375,7 @@ bool AP_GPS_Backend::calculate_moving_base_yaw(AP_GPS::GPS_State &interim_state,
             goto bad_yaw;
         }
 
-#if AP_AHRS_ENABLED
+
         {
             // get vehicle rotation, projected back in time using the gyro
             // this is not 100% accurate, but it is good enough for
@@ -403,7 +403,7 @@ bool AP_GPS_Backend::calculate_moving_base_yaw(AP_GPS::GPS_State &interim_state,
                 goto bad_yaw;
             }
         }
-#endif // AP_AHRS_ENABLED
+
 
         {
             // at this point the offsets are looking okay, go ahead and actually calculate a useful heading

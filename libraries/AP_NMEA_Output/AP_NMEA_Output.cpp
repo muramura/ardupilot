@@ -32,9 +32,9 @@
 #include <time.h>
 #include <AP_AHRS/AP_AHRS_config.h>
 
-#if AP_AHRS_ENABLED
+
 #include <AP_AHRS/AP_AHRS.h>
-#endif
+
 
 #ifndef AP_NMEA_OUTPUT_MESSAGE_ENABLED_DEFAULT
 #define AP_NMEA_OUTPUT_MESSAGE_ENABLED_DEFAULT      3   // GPGGA and GPRMC
@@ -119,14 +119,14 @@ void AP_NMEA_Output::update()
     const auto &gps = AP::gps();
     const AP_GPS::GPS_Status gps_status = gps.status();
 
-#if AP_AHRS_ENABLED
+
     auto &ahrs = AP::ahrs();
     // NOTE: ahrs.get_location() always returns true after having GPS position once because it will be dead-reckoning
     const bool pos_valid = ahrs.get_location(loc);
-#else
-    const bool pos_valid = (gps_status >= AP_GPS::GPS_OK_FIX_3D);
-    loc = gps.location();
-#endif
+
+
+
+
 
     // format latitude
     char lat_string[13];
@@ -223,14 +223,14 @@ void AP_NMEA_Output::update()
         hal.util->snprintf(dstring, sizeof(dstring), "%02u%02u%02u", tm->tm_mday, tm->tm_mon+1, tm->tm_year % 100);
 
         // get speed
-#if AP_AHRS_ENABLED
+
         const Vector2f speed = ahrs.groundspeed_vector();
         const float speed_knots = speed.length() * M_PER_SEC_TO_KNOTS;
         const float heading = wrap_360(degrees(atan2f(speed.x, speed.y)));
-#else
-        const float speed_knots = gps.ground_speed() * M_PER_SEC_TO_KNOTS;
-        const float heading = gps.ground_course();
-#endif
+
+
+
+
 
         // format RMC message
         rmc_length = nmea_printf_buffer(rmc, sizeof(rmc),
@@ -248,7 +248,7 @@ void AP_NMEA_Output::update()
 
     uint16_t pashr_length = 0;
     char pashr[100];
-#if AP_AHRS_ENABLED
+
     if ((_message_enable_bitmask.get() & static_cast<int16_t>(Enabled_Messages::PASHR)) != 0) {
         // get roll, pitch, yaw
         const float roll_deg = wrap_180(degrees(ahrs.get_roll()));
@@ -289,7 +289,7 @@ void AP_NMEA_Output::update()
 
         space_required += pashr_length;
     }
-#endif
+
 
     // send to all NMEA output ports
     for (uint8_t i = 0; i < _num_outputs; i++) {

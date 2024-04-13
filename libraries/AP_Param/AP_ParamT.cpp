@@ -33,9 +33,9 @@ void AP_ParamT<T, PT>::set_enable(const T &v) {
 // Sets if the parameter is unconfigured
 template<typename T, ap_var_type PT>
 void AP_ParamT<T, PT>::set_default(const T &v) {
-#if AP_PARAM_DEFAULTS_ENABLED
+
     add_default(this, (float)v);
-#endif
+
     if (!configured()) {
         set(v);
     }
@@ -44,9 +44,9 @@ void AP_ParamT<T, PT>::set_default(const T &v) {
 // Sets parameter and default
 template<typename T, ap_var_type PT>
 void AP_ParamT<T, PT>::set_and_default(const T &v) {
-#if AP_PARAM_DEFAULTS_ENABLED
+
     add_default(this, (float)v);
-#endif
+
     set(v);
 }
 

@@ -1718,12 +1718,12 @@ AP_Param *AP_Param::first(ParamToken *token, enum ap_var_type *ptype, float *def
     if (ptype != nullptr) {
         *ptype = (enum ap_var_type)var_info(0).type;
     }
-#if AP_PARAM_DEFAULTS_ENABLED
+
     if (default_val != nullptr) {
         *default_val = get_default_value((AP_Param *)base, var_info(0));
     }
     check_default((AP_Param *)base, default_val);
-#endif
+
     return (AP_Param *)base;
 }
 
@@ -1787,11 +1787,11 @@ AP_Param *AP_Param::next_group(const uint16_t vindex, const struct GroupInfo *gr
                     ((AP_Int8 *)ret)->get() == 0) {
                     token->last_disabled = 1;
                 }
-#if AP_PARAM_DEFAULTS_ENABLED
+
                 if (default_val != nullptr) {
                     *default_val = get_default_value(ret, group_info[i]);
                 }
-#endif
+
                 return ret;
             }
             if (group_id(group_info, group_base, i, group_shift) == token->group_element) {
@@ -1813,11 +1813,11 @@ AP_Param *AP_Param::next_group(const uint16_t vindex, const struct GroupInfo *gr
                     }
                     ptrdiff_t ofs = base + group_info[i].offset + group_offset;
                     ofs += sizeof(float)*(token->idx - 1u);
-#if AP_PARAM_DEFAULTS_ENABLED
+
                     if (default_val != nullptr) {
                         *default_val = get_default_value((AP_Param *)ofs, group_info[i]);
                     }
-#endif
+
                     return (AP_Param *)ofs;
                 }
             }
@@ -1846,11 +1846,11 @@ AP_Param *AP_Param::next(ParamToken *token, enum ap_var_type *ptype, bool skip_d
             *ptype = AP_PARAM_FLOAT;
         }
         AP_Param *ret = (AP_Param *)(((token->idx - 1u)*sizeof(float))+(ptrdiff_t)var_info(i).ptr);
-#if AP_PARAM_DEFAULTS_ENABLED
+
         if (default_val != nullptr) {
             *default_val = get_default_value(ret, var_info(i));
         }
-#endif
+
         return ret;
     }
 
@@ -1881,11 +1881,11 @@ AP_Param *AP_Param::next(ParamToken *token, enum ap_var_type *ptype, bool skip_d
             if (ptype != nullptr) {
                 *ptype = type;
             }
-#if AP_PARAM_DEFAULTS_ENABLED
+
             if (default_val != nullptr) {
                 *default_val = get_default_value((AP_Param *)info.ptr, info);
             }
-#endif
+
             return (AP_Param *)(info.ptr);
         }
     }
@@ -1905,9 +1905,9 @@ AP_Param *AP_Param::next_scalar(ParamToken *token, enum ap_var_type *ptype, floa
             *ptype = type;
         }
     }
-#if AP_PARAM_DEFAULTS_ENABLED
+
     check_default(ap, default_val);
-#endif
+
     return ap;
 }
 
@@ -2847,7 +2847,7 @@ bool AP_Param::set_and_save_by_name_ifchanged(const char *name, float value)
     return false;
 }
 
-#if AP_PARAM_DEFAULTS_ENABLED
+
 void AP_Param::check_default(AP_Param *ap, float *default_value)
 {
     if (default_value == nullptr || ap == nullptr) {
@@ -2893,7 +2893,7 @@ void AP_Param::add_default(AP_Param *ap, float v)
     new_item->next = default_list;
     default_list = new_item;
 }
-#endif // AP_PARAM_DEFAULTS_ENABLED
+
 
 
 #if AP_PARAM_KEY_DUMP
@@ -2953,7 +2953,7 @@ void AP_Param::show_all(AP_HAL::BetterStream *port, bool showKeyValues)
         hal.scheduler->delay(1);
     }
 
-#if AP_PARAM_DEFAULTS_ENABLED
+
     uint16_t list_len = 0;
     if (default_list != nullptr) {
         for (defaults_list *item = default_list; item; item = item->next) {
@@ -2961,7 +2961,7 @@ void AP_Param::show_all(AP_HAL::BetterStream *port, bool showKeyValues)
         }
     }
     ::printf("Defaults list containts %i params (%li bytes)\n", list_len, list_len*sizeof(defaults_list));
-#endif
+
 }
 #endif // AP_PARAM_KEY_DUMP
 

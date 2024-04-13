@@ -451,10 +451,10 @@ bool GCS_MAVLINK_Plane::try_send_message(enum ap_message id)
         break;
 
     case MSG_HYGROMETER:
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
         CHECK_PAYLOAD_SIZE(HYGROMETER_SENSOR);
         send_hygrometer();
-#endif
+
         break;
 
     default:
@@ -463,7 +463,7 @@ bool GCS_MAVLINK_Plane::try_send_message(enum ap_message id)
     return true;
 }
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
 void GCS_MAVLINK_Plane::send_hygrometer()
 {
     if (!HAVE_PAYLOAD_SPACE(chan, HYGROMETER_SENSOR)) {
@@ -499,7 +499,7 @@ void GCS_MAVLINK_Plane::send_hygrometer()
         last_hygrometer_send_idx = idx;
     }
 }
-#endif // AP_AIRSPEED_HYGROMETER_ENABLE
+
 
 
 /*
@@ -665,9 +665,9 @@ static const ap_message STREAM_EXTRA1_msgs[] = {
 #if HAL_EFI_ENABLED
     MSG_EFI_STATUS,
 #endif
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
     MSG_HYGROMETER,
-#endif
+
 };
 static const ap_message STREAM_EXTRA2_msgs[] = {
     MSG_VFR_HUD

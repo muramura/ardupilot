@@ -27,7 +27,7 @@
  */
 #pragma once
 
-#if AP_MODULE_SUPPORTED
+
 
 #include <AP_AHRS/AP_AHRS.h>
 
@@ -86,4 +86,4 @@ private:
     static void module_scan(const char *path);
 };
 
-#endif // AP_MODULE_SUPPORTED
+

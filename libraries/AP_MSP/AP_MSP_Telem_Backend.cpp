@@ -569,21 +569,21 @@ void AP_MSP_Telem_Backend::msp_handle_gps(const MSP::msp_gps_data_message_t &pkt
 
 void AP_MSP_Telem_Backend::msp_handle_compass(const MSP::msp_compass_data_message_t &pkt)
 {
-#if AP_COMPASS_MSP_ENABLED
+
     AP::compass().handle_msp(pkt);
-#endif
+
 }
 
 void AP_MSP_Telem_Backend::msp_handle_baro(const MSP::msp_baro_data_message_t &pkt)
 {
-#if AP_BARO_MSP_ENABLED
+
     AP::baro().handle_msp(pkt);
-#endif
+
 }
 
 void AP_MSP_Telem_Backend::msp_handle_airspeed(const MSP::msp_airspeed_data_message_t &pkt)
 {
-#if AP_AIRSPEED_MSP_ENABLED && AP_AIRSPEED_ENABLED
+#if AP_AIRSPEED_ENABLED
     auto *airspeed = AP::airspeed();
     if (airspeed) {
         airspeed->handle_msp(pkt);

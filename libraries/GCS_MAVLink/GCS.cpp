@@ -160,11 +160,11 @@ void GCS::update_sensor_status_flags()
     control_sensors_enabled = 0;
     control_sensors_health = 0;
 
-#if AP_INERTIALSENSOR_ENABLED
-    const AP_InertialSensor &ins = AP::ins();
-#endif
 
-#if AP_AHRS_ENABLED && AP_INERTIALSENSOR_ENABLED
+    const AP_InertialSensor &ins = AP::ins();
+
+
+
     AP_AHRS &ahrs = AP::ahrs();
 
     control_sensors_present |= MAV_SYS_STATUS_AHRS;
@@ -176,9 +176,9 @@ void GCS::update_sensor_status_flags()
             }
         }
     }
-#endif
 
-#if AP_COMPASS_ENABLED
+
+
     const Compass &compass = AP::compass();
     if (AP::compass().available()) {
         control_sensors_present |= MAV_SYS_STATUS_SENSOR_3D_MAG;
@@ -187,7 +187,7 @@ void GCS::update_sensor_status_flags()
     if (compass.available() && compass.healthy()) {
         control_sensors_health |= MAV_SYS_STATUS_SENSOR_3D_MAG;
     }
-#endif
+
 
 
     const AP_Baro &barometer = AP::baro();
@@ -222,7 +222,7 @@ void GCS::update_sensor_status_flags()
     }
 
 
-#if AP_INERTIALSENSOR_ENABLED
+
     control_sensors_present |= MAV_SYS_STATUS_SENSOR_3D_GYRO;
     control_sensors_present |= MAV_SYS_STATUS_SENSOR_3D_ACCEL;
     if (!ins.calibrating()) {
@@ -235,7 +235,7 @@ void GCS::update_sensor_status_flags()
             control_sensors_health |= MAV_SYS_STATUS_SENSOR_3D_GYRO;
         }
     }
-#endif
+
 
 #if HAL_LOGGING_ENABLED
     const AP_Logger &logger = AP::logger();
@@ -297,12 +297,12 @@ void GCS::update_sensor_status_flags()
     if (airspeed && airspeed->enabled()) {
         control_sensors_present |= MAV_SYS_STATUS_SENSOR_DIFFERENTIAL_PRESSURE;
         const bool use = airspeed->use();
-#if AP_AHRS_ENABLED
+
         const bool enabled = AP::ahrs().airspeed_sensor_enabled();
-#else
-        const AP_Airspeed *_airspeed = AP::airspeed();
-        const bool enabled = (_airspeed != nullptr && _airspeed->use());
-#endif
+
+
+
+
         if (use) {
             control_sensors_enabled |= MAV_SYS_STATUS_SENSOR_DIFFERENTIAL_PRESSURE;
         }

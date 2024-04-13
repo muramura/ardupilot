@@ -98,10 +98,10 @@ private:
     uint8_t high_latency_wind_direction() const override;
 #endif // HAL_HIGH_LATENCY2_ENABLED
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
     void send_hygrometer();
     uint8_t last_hygrometer_send_idx;
-#endif
+
 
     MAV_VTOL_STATE vtol_state() const override;
     MAV_LANDED_STATE landed_state() const override;

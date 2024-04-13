@@ -39,10 +39,10 @@ static const ap_message STREAM_EXTENDED_STATUS_msgs[] = {
 };
 
 static const ap_message STREAM_POSITION_msgs[] = {
-#if AP_AHRS_ENABLED
+
     MSG_LOCATION,
     MSG_LOCAL_POSITION
-#endif
+
 };
 
 static const ap_message STREAM_PARAMS_msgs[] = {

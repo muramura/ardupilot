@@ -955,13 +955,13 @@ void AP_Vehicle::publish_osd_info()
 
 void AP_Vehicle::get_osd_roll_pitch_rad(float &roll, float &pitch) const
 {
-#if AP_AHRS_ENABLED
+
     roll = ahrs.get_roll();
     pitch = ahrs.get_pitch();
-#else
-    roll = 0.0;
-    pitch = 0.0;
-#endif
+
+
+
+
 }
 
 #if HAL_INS_ACCELCAL_ENABLED
@@ -981,13 +981,13 @@ void AP_Vehicle::accel_cal_update()
     }
     ins.acal_update();
 
-#if AP_AHRS_ENABLED
+
     // check if new trim values, and set them
     Vector3f trim_rad;
     if (ins.get_new_trim(trim_rad)) {
         ahrs.set_trim(trim_rad);
     }
-#endif
+
 
 #if HAL_CAL_ALWAYS_REBOOT
     if (ins.accel_cal_requires_reboot() &&

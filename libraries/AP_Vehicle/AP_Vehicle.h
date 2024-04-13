@@ -289,10 +289,10 @@ public:
      */
     virtual bool get_rate_ef_targets(Vector3f& rate_ef_targets) const { return false; }
 
-#if AP_AHRS_ENABLED
+
     virtual bool set_home_to_current_location(bool lock) WARN_IF_UNUSED { return false; }
     virtual bool set_home(const Location& loc, bool lock) WARN_IF_UNUSED { return false; }
-#endif
+
 
 protected:
 
@@ -324,12 +324,12 @@ protected:
     AP_GPS gps;
 
     AP_Baro barometer;
-#if AP_COMPASS_ENABLED
+
     Compass compass;
-#endif
-#if AP_INERTIALSENSOR_ENABLED
+
+
     AP_InertialSensor ins;
-#endif
+
 #if HAL_BUTTON_ENABLED
     AP_Button button;
 #endif
@@ -378,10 +378,10 @@ protected:
     // false disables external leds)
     AP_Notify notify;
 
-#if AP_AHRS_ENABLED
+
     // Inertial Navigation EKF
     AP_AHRS ahrs;
-#endif
+
 
 #if HAL_HOTT_TELEM_ENABLED
     AP_Hott_Telem hott_telem;

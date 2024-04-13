@@ -332,11 +332,11 @@ void _usage(void)
     printf("\tcustom storage path:\n");
     printf("\t                   --storage-directory /var/APM/storage\n");
     printf("\t                   -s /var/APM/storage\n");
-#if AP_MODULE_SUPPORTED
+
     printf("\tmodule support:\n");
     printf("\t                   --module-directory %s\n", AP_MODULE_DEFAULT_DIRECTORY);
     printf("\t                   -M %s\n", AP_MODULE_DEFAULT_DIRECTORY);
-#endif
+
     printf("\tcpu affinity:\n");
     printf("\t                   --cpu-affinity 1 (single cpu) or 1,3 (multiple cpus) or 1-3 (range of cpus)\n");
     printf("\t                   -c 1 (single cpu) or 1,3 (multiple cpus) or 1-3 (range of cpus)\n");
@@ -344,9 +344,9 @@ void _usage(void)
 
 void HAL_Linux::run(int argc, char* const argv[], Callbacks* callbacks) const
 {
-#if AP_MODULE_SUPPORTED
+
     const char *module_path = AP_MODULE_DEFAULT_DIRECTORY;
-#endif
+
 
     enum long_options {
         CMDLINE_SERIAL0 = 1, // must be in 0-9 order and numbered consecutively
@@ -442,11 +442,11 @@ void HAL_Linux::run(int argc, char* const argv[], Callbacks* callbacks) const
         case 's':
             utilInstance.set_custom_storage_directory(gopt.optarg);
             break;
-#if AP_MODULE_SUPPORTED
+
         case 'M':
             module_path = gopt.optarg;
             break;
-#endif
+
         case 'd':
             utilInstance.set_custom_defaults_path(gopt.optarg);
             break;
@@ -487,19 +487,19 @@ void HAL_Linux::run(int argc, char* const argv[], Callbacks* callbacks) const
     scheduler->set_system_initialized();
 
     // possibly load external modules
-#if AP_MODULE_SUPPORTED
+
     if (module_path != nullptr) {
         AP_Module::init(module_path);
     }
-#endif
 
-#if AP_MODULE_SUPPORTED
+
+
     AP_Module::call_hook_setup_start();
-#endif
+
     callbacks->setup();
-#if AP_MODULE_SUPPORTED
+
     AP_Module::call_hook_setup_complete();
-#endif
+
 
     setup_signal_handlers();
 
