@@ -654,9 +654,9 @@ void RC_Channel::init_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos 
     case AUX_FUNC::SCRIPTING_6:
     case AUX_FUNC::SCRIPTING_7:
     case AUX_FUNC::SCRIPTING_8:
-#if AP_VIDEOTX_ENABLED
+
     case AUX_FUNC::VTX_POWER:
-#endif
+
     case AUX_FUNC::OPTFLOW_CAL:
     case AUX_FUNC::TURBINE_START:
     case AUX_FUNC::MOUNT1_ROLL:
@@ -722,7 +722,7 @@ void RC_Channel::init_aux_function(const AUX_FUNC ch_option, const AuxSwitchPos 
     }
 }
 
-#if AP_RC_CHANNEL_AUX_FUNCTION_STRINGS_ENABLED
+
 
 const RC_Channel::LookupTable RC_Channel::lookuptable[] = {
     { AUX_FUNC::SAVE_WP,"SaveWaypoint"},
@@ -804,7 +804,7 @@ const char *RC_Channel::string_for_aux_pos(AuxSwitchPos pos) const
     return "";
 }
 
-#endif // AP_RC_CHANNEL_AUX_FUNCTION_STRINGS_ENABLED
+
 
 /*
   read an aux channel. Return true if a switch has changed
@@ -816,7 +816,7 @@ bool RC_Channel::read_aux()
         // may wish to add special cases for other "AUXSW" things
         // here e.g. RCMAP_ROLL etc once they become options
         return false;
-#if AP_VIDEOTX_ENABLED
+
     } else if (_option == AUX_FUNC::VTX_POWER) {
         int8_t position;
         if (read_6pos_switch(position)) {
@@ -824,7 +824,7 @@ bool RC_Channel::read_aux()
             return true;
         }
         return false;
-#endif  // AP_VIDEOTX_ENABLED
+
     }
 
     AuxSwitchPos new_position;
@@ -844,13 +844,13 @@ bool RC_Channel::read_aux()
         return false;
     }
 
-#if AP_RC_CHANNEL_AUX_FUNCTION_STRINGS_ENABLED
+
     // announce the change to the GCS:
     const char *aux_string = string_for_aux_function(_option);
     if (aux_string != nullptr) {
         GCS_SEND_TEXT(MAV_SEVERITY_INFO, "RC%i: %s %s", ch_in+1, aux_string, string_for_aux_pos(new_position));
     }
-#endif
+
 
     // debounced; undertake the action:
     run_aux_function(_option, new_position, AuxFuncTriggerSource::RC);

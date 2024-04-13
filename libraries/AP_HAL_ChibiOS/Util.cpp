@@ -832,7 +832,7 @@ void Util::log_stack_info(void)
 #endif
 }
 
-#if AP_CRASHDUMP_ENABLED
+
 size_t Util::last_crash_dump_size() const
 {
     // get dump size
@@ -856,7 +856,7 @@ void* Util::last_crash_dump_ptr() const
     }
     return (void*)stm32_crash_dump_addr();
 }
-#endif // AP_CRASHDUMP_ENABLED
+
 
 #if HAL_ENABLE_DFU_BOOT && !defined(HAL_BOOTLOADER_BUILD)
 void Util::boot_to_dfu()

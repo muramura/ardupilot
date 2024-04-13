@@ -309,10 +309,10 @@ public:
     // wrapper function around do_aux_function which allows us to log
     bool run_aux_function(AUX_FUNC ch_option, AuxSwitchPos pos, AuxFuncTriggerSource source);
 
-#if AP_RC_CHANNEL_AUX_FUNCTION_STRINGS_ENABLED
+
     const char *string_for_aux_function(AUX_FUNC function) const;
     const char *string_for_aux_pos(AuxSwitchPos pos) const;
-#endif
+
     // pwm value under which we consider that Radio value is invalid
     static const uint16_t RC_MIN_LIMIT_PWM = 800;
     // pwm value above which we consider that Radio value is invalid
@@ -422,7 +422,7 @@ private:
     // switch high!
     bool init_position_on_first_radio_read(AUX_FUNC func) const;
 
-#if AP_RC_CHANNEL_AUX_FUNCTION_STRINGS_ENABLED
+
     // Structure to lookup switch change announcements
     struct LookupTable{
        AUX_FUNC option;
@@ -430,7 +430,7 @@ private:
     };
 
     static const LookupTable lookuptable[];
-#endif
+
 };
 
 

@@ -1040,9 +1040,9 @@ private:
 
     void one_second_loop(void);
     void three_hz_loop(void);
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
     void airspeed_ratio_update(void);
-#endif
+
     void compass_save(void);
     void update_logging10(void);
     void update_logging25(void);

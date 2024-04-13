@@ -23,9 +23,9 @@
 #include "hwdef/common/watchdog.h"
 #include "hwdef/common/stm32_util.h"
 #include <AP_Vehicle/AP_Vehicle_Type.h>
-#if AP_CRASHDUMP_ENABLED
+
 #include <CrashCatcher.h>
-#endif
+
 #include <ch.h>
 #include "hal.h"
 #include <hrt.h>

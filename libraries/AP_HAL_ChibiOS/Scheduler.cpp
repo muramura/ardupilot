@@ -468,7 +468,7 @@ void Scheduler::_monitor_thread(void *arg)
             try_force_mutex();
         }
 
-#if AP_CRASHDUMP_ENABLED
+
         if (loop_delay >= 1800 && using_watchdog) {
             // we are about to watchdog, better to trigger a hardfault
             // now and get a crash dump file
@@ -477,7 +477,7 @@ void Scheduler::_monitor_thread(void *arg)
             fptr gptr = (fptr) (void *)ptr;
             gptr();
         }
-#endif
+
 
 #if HAL_LOGGING_ENABLED
     if (log_wd_counter++ == 10 && hal.util->was_watchdog_reset()) {

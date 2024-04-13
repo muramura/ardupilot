@@ -212,10 +212,10 @@ public:
     // log info on stack usage
     virtual void log_stack_info(void) {}
 
-#if AP_CRASHDUMP_ENABLED
+
     virtual size_t last_crash_dump_size() const { return 0; }
     virtual void* last_crash_dump_ptr() const { return nullptr; }
-#endif
+
 
 #if HAL_ENABLE_DFU_BOOT
     virtual void boot_to_dfu(void) {}

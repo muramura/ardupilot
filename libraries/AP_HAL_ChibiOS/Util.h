@@ -159,11 +159,11 @@ private:
     // log info on stack usage
     void log_stack_info(void) override;
 
-#if AP_CRASHDUMP_ENABLED
+
     // get last crash dump
     size_t last_crash_dump_size() const override;
     void* last_crash_dump_ptr() const override;
-#endif
+
 
 #if HAL_ENABLE_DFU_BOOT
     void boot_to_dfu() override;

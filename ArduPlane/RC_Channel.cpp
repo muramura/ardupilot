@@ -186,9 +186,9 @@ void RC_Channel_Plane::init_aux_function(const RC_Channel::AUX_FUNC ch_option,
     case AUX_FUNC::AIRMODE:
     case AUX_FUNC::WEATHER_VANE_ENABLE:
 #endif
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
     case AUX_FUNC::ARSPD_CALIBRATE:
-#endif
+
     case AUX_FUNC::TER_DISABLE:
     case AUX_FUNC::CROW_SELECT:
         run_aux_function(ch_option, ch_flag, AuxFuncTriggerSource::INIT);
@@ -343,7 +343,7 @@ bool RC_Channel_Plane::do_aux_function(const AUX_FUNC ch_option, const AuxSwitch
 #endif
 
     case AUX_FUNC::ARSPD_CALIBRATE:
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
         switch (ch_flag) {
         case AuxSwitchPos::HIGH:
             plane.airspeed.set_calibration_enabled(true);
@@ -354,7 +354,7 @@ bool RC_Channel_Plane::do_aux_function(const AUX_FUNC ch_option, const AuxSwitch
             plane.airspeed.set_calibration_enabled(false);
             break;
         }
-#endif
+
         break;
 
     case AUX_FUNC::LANDING_FLARE:
