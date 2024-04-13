@@ -2,7 +2,7 @@
 
 #include "AC_CustomControl_config.h"
 
-#if AP_CUSTOMCONTROL_ENABLED
+
 
 #include "AC_CustomControl.h"
 
@@ -35,5 +35,3 @@ protected:
     AP_MotorsMulticopter*& _motors;
     AC_CustomControl& _frontend;
 };
-
-#endif  // AP_CUSTOMCONTROL_ENABLED

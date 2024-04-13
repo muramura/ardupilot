@@ -1,6 +1,6 @@
 #include "AP_Camera_Scripting.h"
 
-#if AP_CAMERA_SCRIPTING_ENABLED
+
 
 extern const AP_HAL::HAL& hal;
 
@@ -56,4 +56,4 @@ bool AP_Camera_Scripting::get_state(AP_Camera::camera_state_t& cam_state)
     return true;
 }
 
-#endif // AP_CAMERA_SCRIPTING_ENABLED
+

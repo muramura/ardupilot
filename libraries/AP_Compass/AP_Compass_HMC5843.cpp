@@ -126,7 +126,7 @@ AP_Compass_Backend *AP_Compass_HMC5843::probe(AP_HAL::OwnPtr<AP_HAL::Device> dev
     return sensor;
 }
 
-#if AP_INERTIALSENSOR_ENABLED
+
 AP_Compass_Backend *AP_Compass_HMC5843::probe_mpu6000(enum Rotation rotation)
 {
     AP_InertialSensor &ins = *AP_InertialSensor::get_singleton();
@@ -146,7 +146,7 @@ AP_Compass_Backend *AP_Compass_HMC5843::probe_mpu6000(enum Rotation rotation)
 
     return sensor;
 }
-#endif
+
 
 bool AP_Compass_HMC5843::init()
 {
@@ -490,7 +490,7 @@ AP_HAL::Device::PeriodicHandle AP_HMC5843_BusDriver_HALDevice::register_periodic
 }
 
 
-#if AP_INERTIALSENSOR_ENABLED
+
 /* HMC5843 on an auxiliary bus of IMU driver */
 AP_HMC5843_BusDriver_Auxiliary::AP_HMC5843_BusDriver_Auxiliary(AP_InertialSensor &ins, uint8_t backend_id,
                                                                uint8_t addr)
@@ -586,4 +586,4 @@ uint32_t AP_HMC5843_BusDriver_Auxiliary::get_bus_id(void) const
 {
     return _bus->get_bus_id();
 }
-#endif  // AP_INERTIALSENSOR_ENABLED
+

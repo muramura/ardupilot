@@ -365,9 +365,9 @@ void AP_Airspeed::allocate()
 #endif
             break;
         case TYPE_ANALOG:
-#if AP_AIRSPEED_ANALOG_ENABLED
+
             sensor[i] = new AP_Airspeed_Analog(*this, i);
-#endif
+
             break;
         case TYPE_I2C_MS5525:
 
@@ -385,9 +385,9 @@ void AP_Airspeed::allocate()
 
             break;
         case TYPE_I2C_SDP3X:
-#if AP_AIRSPEED_SDP3X_ENABLED
+
             sensor[i] = new AP_Airspeed_SDP3X(*this, i);
-#endif
+
             break;
         case TYPE_I2C_DLVR_5IN:
 
@@ -432,14 +432,14 @@ void AP_Airspeed::allocate()
 
             break;
         case TYPE_MSP:
-#if AP_AIRSPEED_MSP_ENABLED
+
             sensor[i] = new AP_Airspeed_MSP(*this, i, 0);
-#endif
+
             break;
         case TYPE_EXTERNAL:
-#if AP_AIRSPEED_EXTERNAL_ENABLED
+
             sensor[i] = new AP_Airspeed_External(*this, i);
-#endif
+
             break;
         }
         if (sensor[i] && !sensor[i]->init()) {
@@ -719,7 +719,7 @@ void AP_Airspeed::update()
 #endif
 }
 
-#if AP_AIRSPEED_MSP_ENABLED
+
 /*
   handle MSP airspeed data
  */
@@ -739,9 +739,9 @@ void AP_Airspeed::handle_msp(const MSP::msp_airspeed_data_message_t &pkt)
         }
     }
 }
-#endif 
 
-#if AP_AIRSPEED_EXTERNAL_ENABLED
+
+
 /*
   handle airspeed airspeed data
  */
@@ -757,7 +757,7 @@ void AP_Airspeed::handle_external(const AP_ExternalAHRS::airspeed_data_message_t
         }
     }
 }
-#endif 
+
 
 #if HAL_LOGGING_ENABLED
 // @LoggerMessage: HYGR
@@ -795,7 +795,7 @@ void AP_Airspeed::Log_Airspeed()
         };
         AP::logger().WriteBlock(&pkt, sizeof(pkt));
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
         struct {
             uint32_t sample_ms;
             float temperature;
@@ -814,7 +814,7 @@ void AP_Airspeed::Log_Airspeed()
                                         hygrometer.temperature);
             state[i].last_hygrometer_log_ms = hygrometer.sample_ms;
         }
-#endif
+
     }
 }
 #endif
@@ -918,7 +918,7 @@ float AP_Airspeed::get_corrected_pressure(uint8_t i) const {
     return state[i].corrected_pressure;
 }
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
 bool AP_Airspeed::get_hygrometer(uint8_t i, uint32_t &last_sample_ms, float &temperature, float &humidity) const
 {
     if (!enabled(i) || sensor[i] == nullptr) {
@@ -926,7 +926,7 @@ bool AP_Airspeed::get_hygrometer(uint8_t i, uint32_t &last_sample_ms, float &tem
     }
     return sensor[i]->get_hygrometer(last_sample_ms, temperature, humidity);
 }
-#endif // AP_AIRSPEED_HYGROMETER_ENABLE
+
 
 #else  // build type is not appropriate; provide a dummy implementation:
 const AP_Param::GroupInfo AP_Airspeed::var_info[] = { AP_GROUPEND };
@@ -941,9 +941,9 @@ bool AP_Airspeed::healthy(uint8_t i) const { return false; }
 float AP_Airspeed::get_airspeed(uint8_t i) const { return 0.0; }
 float AP_Airspeed::get_differential_pressure(uint8_t i) const { return 0.0; }
 
-#if AP_AIRSPEED_MSP_ENABLED
+
 void AP_Airspeed::handle_msp(const MSP::msp_airspeed_data_message_t &pkt) {}
-#endif
+
 
 bool AP_Airspeed::all_healthy(void) const { return false; }
 void AP_Airspeed::init(void) {};

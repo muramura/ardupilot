@@ -18,7 +18,7 @@
 
 #include "AP_Airspeed_analog.h"
 
-#if AP_AIRSPEED_ANALOG_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Common/AP_Common.h>
@@ -52,4 +52,4 @@ bool AP_Airspeed_Analog::get_differential_pressure(float &pressure)
     return true;
 }
 
-#endif  // AP_AIRSPEED_ANALOG_ENABLED
+

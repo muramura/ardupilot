@@ -1,6 +1,6 @@
 #include "AP_InternalError_config.h"
 
-#if AP_INTERNALERROR_ENABLED
+
 
 #include "AP_InternalError.h"
 
@@ -144,4 +144,4 @@ void AP_memory_guard_error(uint32_t size)
     }
 }
 
-#endif  // AP_INTERNALERROR_ENABLED
+

@@ -477,7 +477,7 @@ bool AP_ExternalAHRS_InertialLabs::check_uart()
         AP::compass().handle_external(mag_data);
     }
 
-#if AP_AIRSPEED_EXTERNAL_ENABLED && (APM_BUILD_COPTER_OR_HELI || APM_BUILD_TYPE(APM_BUILD_ArduPlane))
+#if (APM_BUILD_COPTER_OR_HELI || APM_BUILD_TYPE(APM_BUILD_ArduPlane))
     // only on plane and copter as others do not link AP_Airspeed
     if (GOT_MSG(DIFFERENTIAL_PRESSURE) &&
         GOT_MSG(TEMPERATURE)) {
@@ -486,7 +486,7 @@ bool AP_ExternalAHRS_InertialLabs::check_uart()
             arsp->handle_external(airspeed_data);
         }
     }
-#endif // AP_AIRSPEED_EXTERNAL_ENABLED
+#endif  // (APM_BUILD_COPTER_OR_HELI || APM_BUILD_TYPE(APM_BUILD_ArduPlane)
     buffer_ofs = 0;
 
 #if HAL_LOGGING_ENABLED

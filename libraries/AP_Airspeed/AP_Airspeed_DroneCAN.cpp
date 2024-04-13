@@ -23,11 +23,11 @@ void AP_Airspeed_DroneCAN::subscribe_msgs(AP_DroneCAN* ap_dronecan)
         AP_BoardConfig::allocation_error("airspeed_sub");
     }
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
     if (Canard::allocate_sub_arg_callback(ap_dronecan, &handle_hygrometer, ap_dronecan->get_driver_index()) == nullptr) {
         AP_BoardConfig::allocation_error("hygrometer_sub");
     }
-#endif
+
 }
 
 AP_Airspeed_Backend* AP_Airspeed_DroneCAN::probe(AP_Airspeed &_frontend, uint8_t _instance, uint32_t previous_devid)
@@ -122,7 +122,7 @@ void AP_Airspeed_DroneCAN::handle_airspeed(AP_DroneCAN *ap_dronecan, const Canar
     }
 }
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
 void AP_Airspeed_DroneCAN::handle_hygrometer(AP_DroneCAN *ap_dronecan, const CanardRxTransfer& transfer, const dronecan_sensors_hygrometer_Hygrometer &msg)
 {
     WITH_SEMAPHORE(_sem_registry);
@@ -136,7 +136,7 @@ void AP_Airspeed_DroneCAN::handle_hygrometer(AP_DroneCAN *ap_dronecan, const Can
         driver->_hygrometer.last_sample_ms = AP_HAL::millis();
     }
 }
-#endif // AP_AIRSPEED_HYGROMETER_ENABLE
+
 
 bool AP_Airspeed_DroneCAN::init()
 {
@@ -173,7 +173,7 @@ bool AP_Airspeed_DroneCAN::get_temperature(float &temperature)
     return true;
 }
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
 /*
   return hygrometer data if available
  */
@@ -188,5 +188,5 @@ bool AP_Airspeed_DroneCAN::get_hygrometer(uint32_t &last_sample_ms, float &tempe
     humidity = _hygrometer.humidity;
     return true;
 }
-#endif // AP_AIRSPEED_HYGROMETER_ENABLE
+
 #endif // AP_AIRSPEED_DRONECAN_ENABLED

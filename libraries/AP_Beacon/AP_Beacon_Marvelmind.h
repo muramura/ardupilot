@@ -22,7 +22,7 @@
 
 #include "AP_Beacon_Backend.h"
 
-#if AP_BEACON_MARVELMIND_ENABLED
+
 
 #define AP_BEACON_MARVELMIND_BUF_SIZE 255
 
@@ -103,4 +103,4 @@ private:
     bool beacon_position_initialized;
 };
 
-#endif  // AP_BEACON_MARVELMIND_ENABLED
+

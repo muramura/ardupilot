@@ -20,7 +20,7 @@
 
 #include "AP_Camera_Backend.h"
 
-#if AP_CAMERA_SCRIPTING_ENABLED
+
 
 class AP_Camera_Scripting : public AP_Camera_Backend
 {
@@ -60,4 +60,4 @@ private:
     AP_Camera::camera_state_t _cam_state;
 };
 
-#endif // AP_CAMERA_SCRIPTING_ENABLED
+

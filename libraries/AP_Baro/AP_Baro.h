@@ -188,9 +188,9 @@ public:
         return _rsem;
     }
 
-#if AP_BARO_MSP_ENABLED
+
     void handle_msp(const MSP::msp_baro_data_message_t &pkt);
-#endif
+
 
     void handle_external(const AP_ExternalAHRS::baro_data_message_t &pkt);
 

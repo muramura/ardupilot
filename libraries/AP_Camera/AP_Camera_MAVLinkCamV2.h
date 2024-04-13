@@ -21,7 +21,7 @@
 
 #include "AP_Camera_Backend.h"
 
-#if AP_CAMERA_MAVLINKCAMV2_ENABLED
+
 
 class AP_Camera_MAVLinkCamV2 : public AP_Camera_Backend
 {
@@ -74,4 +74,4 @@ private:
     uint8_t _compid;            // component id of gimbal
 };
 
-#endif // AP_CAMERA_MAVLINKCAMV2_ENABLED
+

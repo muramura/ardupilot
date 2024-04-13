@@ -1,6 +1,6 @@
 #include "AP_Compass_config.h"
 
-#if AP_COMPASS_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 
@@ -78,10 +78,10 @@ void AP_Compass_Backend::correct_field(Vector3f &mag, uint8_t i)
     Compass::mag_state &state = _compass._state[Compass::StateIndex(i)];
 
     const Vector3f &offsets = state.offset.get();
-#if AP_COMPASS_DIAGONALS_ENABLED
+
     const Vector3f &diagonals = state.diagonals.get();
     const Vector3f &offdiagonals = state.offdiagonals.get();
-#endif
+
 
     // add in the basic offsets
     mag += offsets;
@@ -92,7 +92,7 @@ void AP_Compass_Backend::correct_field(Vector3f &mag, uint8_t i)
         mag *= state.scale_factor;
     }
 
-#if AP_COMPASS_DIAGONALS_ENABLED
+
     // apply elliptical correction
     if (!diagonals.is_zero()) {
         Matrix3f mat(
@@ -103,7 +103,7 @@ void AP_Compass_Backend::correct_field(Vector3f &mag, uint8_t i)
 
         mag = mat * mag;
     }
-#endif
+
 
 #if COMPASS_MOT_ENABLED
     const Vector3f &mot = state.motor_compensation.get();
@@ -299,4 +299,4 @@ enum Rotation AP_Compass_Backend::get_board_orientation(void) const
     return _compass._board_orientation;
 }
 
-#endif  // AP_COMPASS_ENABLED
+

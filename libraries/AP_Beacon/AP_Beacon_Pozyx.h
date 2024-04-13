@@ -2,7 +2,7 @@
 
 #include "AP_Beacon_Backend.h"
 
-#if AP_BEACON_POZYX_ENABLED
+
 
 #define AP_BEACON_POZYX_MSG_LEN_MAX         20      // messages from uno/pozyx are no more than 20bytes
 #define AP_BEACON_POZYX_HEADER              0x01    // messages start with this character
@@ -44,4 +44,4 @@ private:
     uint32_t last_update_ms = 0;
 };
 
-#endif  // AP_BEACON_POZYX_ENABLED
+

@@ -15,7 +15,7 @@
 
 #include "AP_Compass_MSP.h"
 
-#if AP_COMPASS_MSP_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 
@@ -44,5 +44,5 @@ void AP_Compass_MSP::read(void)
     drain_accumulated_samples(instance);
 }
 
-#endif // AP_COMPASS_MSP_ENABLED
+
 

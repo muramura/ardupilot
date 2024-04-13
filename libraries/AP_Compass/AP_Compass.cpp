@@ -1,6 +1,6 @@
 #include "AP_Compass_config.h"
 
-#if AP_COMPASS_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #if CONFIG_HAL_BOARD == HAL_BOARD_LINUX
@@ -36,9 +36,9 @@
 #include "AP_Compass_MMC5xx3.h"
 #include "AP_Compass_MAG3110.h"
 #include "AP_Compass_RM3100.h"
-#if AP_COMPASS_MSP_ENABLED
+
 #include "AP_Compass_MSP.h"
-#endif
+
 
 #include "AP_Compass_ExternalAHRS.h"
 
@@ -371,7 +371,7 @@ const AP_Param::GroupInfo Compass::var_info[] = {
     AP_GROUPINFO("EXTERN3",23, Compass, _state._priv_instance[2].external, 0),
 #endif // COMPASS_MAX_INSTANCES
 
-#if AP_COMPASS_DIAGONALS_ENABLED
+
     // @Param: DIA_X
     // @DisplayName: Compass soft-iron diagonal X component
     // @Description: DIA_X in the compass soft-iron calibration matrix: [[DIA_X, ODI_X, ODI_Y], [ODI_X, DIA_Y, ODI_Z], [ODI_Y, ODI_Z, DIA_Z]]
@@ -483,7 +483,7 @@ const AP_Param::GroupInfo Compass::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("ODI3",    29, Compass, _state._priv_instance[2].offdiagonals, 0),
 #endif // COMPASS_MAX_INSTANCES
-#endif // AP_COMPASS_DIAGONALS_ENABLED
+
 
 #if COMPASS_CAL_ENABLED
     // @Param: CAL_FIT
@@ -923,10 +923,10 @@ void Compass::mag_state::copy_from(const Compass::mag_state& state)
     external.set_and_save_ifchanged(state.external);
     orientation.set_and_save_ifchanged(state.orientation);
     offset.set_and_save_ifchanged(state.offset);
-#if AP_COMPASS_DIAGONALS_ENABLED
+
     diagonals.set_and_save_ifchanged(state.diagonals);
     offdiagonals.set_and_save_ifchanged(state.offdiagonals);
-#endif
+
     scale_factor.set_and_save_ifchanged(state.scale_factor);
     dev_id.set_and_save_ifchanged(state.dev_id);
     motor_compensation.set_and_save_ifchanged(state.motor_compensation);
@@ -1353,13 +1353,13 @@ void Compass::_detect_backends(void)
     CHECK_UNREG_LIMIT_RETURN;
 #endif
 
-#if AP_COMPASS_MSP_ENABLED
+
     for (uint8_t i=0; i<8; i++) {
         if (msp_instance_mask & (1U<<i)) {
             ADD_BACKEND(DRIVER_MSP, new AP_Compass_MSP(i));
         }
     }
-#endif
+
 
     // finally look for i2c and spi compasses not found yet
     CHECK_UNREG_LIMIT_RETURN;
@@ -1812,7 +1812,7 @@ Compass::set_and_save_offsets(uint8_t i, const Vector3f &offsets)
     }
 }
 
-#if AP_COMPASS_DIAGONALS_ENABLED
+
 void
 Compass::set_and_save_diagonals(uint8_t i, const Vector3f &diagonals)
 {
@@ -1832,7 +1832,7 @@ Compass::set_and_save_offdiagonals(uint8_t i, const Vector3f &offdiagonals)
         _state[id].offdiagonals.set_and_save(offdiagonals);
     }
 }
-#endif // AP_COMPASS_DIAGONALS_ENABLED
+
 
 void
 Compass::set_and_save_scale_factor(uint8_t i, float scale_factor)
@@ -2188,7 +2188,7 @@ bool Compass::have_scale_factor(uint8_t i) const
     return true;
 }
 
-#if AP_COMPASS_MSP_ENABLED
+
 void Compass::handle_msp(const MSP::msp_compass_data_message_t &pkt)
 {
     if (!_driver_enabled(DRIVER_MSP)) {
@@ -2204,7 +2204,7 @@ void Compass::handle_msp(const MSP::msp_compass_data_message_t &pkt)
         }
     }
 }
-#endif // AP_COMPASS_MSP_ENABLED
+
 
 
 void Compass::handle_external(const AP_ExternalAHRS::mag_data_message_t &pkt)
@@ -2241,4 +2241,4 @@ Compass &compass()
 
 }
 
-#endif  // AP_COMPASS_ENABLED
+

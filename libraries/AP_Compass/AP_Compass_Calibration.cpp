@@ -203,10 +203,10 @@ bool Compass::_accept_calibration(uint8_t i)
         float scale_factor = cal_report.scale_factor;
 
         set_and_save_offsets(i, ofs);
-#if AP_COMPASS_DIAGONALS_ENABLED
+
         set_and_save_diagonals(i,diag);
         set_and_save_offdiagonals(i,offdiag);
-#endif
+
         set_and_save_scale_factor(i,scale_factor);
 
         if (cal_report.check_orientation && _get_state(prio).external && _rotate_auto >= 2) {
@@ -463,7 +463,7 @@ bool Compass::get_uncorrected_field(uint8_t instance, Vector3f &field) const
     // get corrected field
     field = get_field(instance);
 
-#if AP_COMPASS_DIAGONALS_ENABLED
+
     // form elliptical correction matrix and invert it. This is
     // needed to remove the effects of the elliptical correction
     // when calculating new offsets
@@ -482,7 +482,7 @@ bool Compass::get_uncorrected_field(uint8_t instance, Vector3f &field) const
         // remove impact of diagonals and off-diagonals
         field = mat * field;
     }
-#endif
+
 
     // remove impact of offsets
     field -= get_offsets(instance);
@@ -564,12 +564,12 @@ bool Compass::mag_cal_fixed_yaw(float yaw_deg, uint8_t compass_mask,
 
         Vector3f offsets = field - measurement;
         set_and_save_offsets(i, offsets);
-#if AP_COMPASS_DIAGONALS_ENABLED
+
         Vector3f one{1,1,1};
         set_and_save_diagonals(i, one);
         Vector3f zero{0,0,0};
         set_and_save_offdiagonals(i, zero);
-#endif
+
     }
 
     return true;

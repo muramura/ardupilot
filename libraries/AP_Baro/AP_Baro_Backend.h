@@ -19,9 +19,9 @@ public:
     bool pressure_ok(float press);
     uint32_t get_error_count() const { return _error_count; }
 
-#if AP_BARO_MSP_ENABLED
+
     virtual void handle_msp(const MSP::msp_baro_data_message_t &pkt) {}
-#endif
+
 
 
     virtual void handle_external(const AP_ExternalAHRS::baro_data_message_t &pkt) {}

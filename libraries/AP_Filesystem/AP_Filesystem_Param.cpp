@@ -100,7 +100,7 @@ int AP_Filesystem_Param::open(const char *fname, int flags, bool allow_absolute_
             c = strchr(c, '&');
             continue;
         }
-#if AP_PARAM_DEFAULTS_ENABLED
+
         if (strncmp(c, "withdefaults=", 13) == 0) {
             uint32_t v = strtoul(c+13, nullptr, 10);
             if (v > 1) {
@@ -111,7 +111,7 @@ int AP_Filesystem_Param::open(const char *fname, int flags, bool allow_absolute_
             c = strchr(c, '&');
             continue;
         }
-#endif
+
     }
 
     return idx;
@@ -211,11 +211,11 @@ uint8_t AP_Filesystem_Param::pack_param(const struct rfile &r, struct cursor &c,
         common_len--;
         pname--;
     }
-#if AP_PARAM_DEFAULTS_ENABLED
+
     const bool add_default = r.with_defaults && !is_equal(ap->cast_to_float(ptype), default_val);
-#else
-    const bool add_default = false;
-#endif
+
+
+
     const uint8_t type_len = AP_Param::type_size(ptype);
     uint8_t packed_len = type_len + name_len + 2 + (add_default ? type_len : 0);
     const uint8_t flags = add_default;
@@ -240,7 +240,7 @@ uint8_t AP_Filesystem_Param::pack_param(const struct rfile &r, struct cursor &c,
     buf[1] = common_len | ((name_len-1)<<4);
     memcpy(&buf[2], pname, name_len);
     memcpy(&buf[2+name_len], ap, type_len);
-#if AP_PARAM_DEFAULTS_ENABLED
+
     if (add_default) {
         switch (ptype) {
             case AP_PARAM_NONE:
@@ -269,7 +269,7 @@ uint8_t AP_Filesystem_Param::pack_param(const struct rfile &r, struct cursor &c,
             }
         }
     }
-#endif
+
 
     strcpy(c.last_name, name);
 

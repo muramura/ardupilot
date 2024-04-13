@@ -10,14 +10,14 @@
 
 enum ap_message : uint8_t {
     MSG_HEARTBEAT,
-#if AP_AHRS_ENABLED
+
     MSG_AHRS,
     MSG_AHRS2,
     MSG_ATTITUDE,
     MSG_ATTITUDE_QUATERNION,
     MSG_LOCATION,
     MSG_VFR_HUD,
-#endif
+
     MSG_SYS_STATUS,
     MSG_POWER_STATUS,
     MSG_MEMINFO,

@@ -767,7 +767,7 @@ void AP_Baro::init(void)
     _probe_i2c_barometers();
 #endif
 
-#if AP_BARO_MSP_ENABLED
+
     if ((_baro_probe_ext.get() & PROBE_MSP) && msp_instance_mask == 0) {
         // allow for late addition of MSP sensor
         msp_instance_mask |= 1;
@@ -777,7 +777,7 @@ void AP_Baro::init(void)
             ADD_BACKEND(new AP_Baro_MSP(*this, i));
         }
     }
-#endif
+
 
 #if !defined(HAL_BARO_ALLOW_INIT_NO_BARO) // most boards requires external baro
 #if AP_SIM_BARO_ENABLED
@@ -1077,7 +1077,7 @@ void AP_Baro::set_pressure_correction(uint8_t instance, float p_correction)
     }
 }
 
-#if AP_BARO_MSP_ENABLED
+
 /*
   handle MSP barometer data
  */
@@ -1094,7 +1094,7 @@ void AP_Baro::handle_msp(const MSP::msp_baro_data_message_t &pkt)
         }
     }
 }
-#endif
+
 
 
 /*

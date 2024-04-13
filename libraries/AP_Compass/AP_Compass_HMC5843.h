@@ -27,9 +27,9 @@ public:
                                      bool force_external,
                                      enum Rotation rotation);
 
-#if AP_INERTIALSENSOR_ENABLED
+
     static AP_Compass_Backend *probe_mpu6000(enum Rotation rotation);
-#endif
+
 
     static constexpr const char *name = "HMC5843";
 
@@ -127,7 +127,7 @@ private:
     AP_HAL::OwnPtr<AP_HAL::Device> _dev;
 };
 
-#if AP_INERTIALSENSOR_ENABLED
+
 class AP_HMC5843_BusDriver_Auxiliary : public AP_HMC5843_BusDriver
 {
 public:
@@ -157,4 +157,4 @@ private:
     AuxiliaryBusSlave *_slave;
     bool _started;
 };
-#endif  // AP_INERTIALSENSOR_ENABLED
+

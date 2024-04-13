@@ -7,12 +7,12 @@
 #include <AP_Param/AP_Param.h>
 #include <AP_Math/AP_Math.h>
 
-#if AP_AIRSPEED_MSP_ENABLED
+
 #include <AP_MSP/msp.h>
-#endif
-#if AP_AIRSPEED_EXTERNAL_ENABLED
+
+
 #include <AP_ExternalAHRS/AP_ExternalAHRS.h>
-#endif
+
 
 class AP_Airspeed_Backend;
 
@@ -156,9 +156,9 @@ public:
     uint32_t last_update_ms(uint8_t i) const { return state[i].last_update_ms; }
     uint32_t last_update_ms(void) const { return last_update_ms(primary); }
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
     bool get_hygrometer(uint8_t i, uint32_t &last_sample_ms, float &temperature, float &humidity) const;
-#endif
+
 
     static const struct AP_Param::GroupInfo var_info[];
 
@@ -209,13 +209,13 @@ public:
         return get_corrected_pressure(primary);
     }
 
-#if AP_AIRSPEED_MSP_ENABLED
-    void handle_msp(const MSP::msp_airspeed_data_message_t &pkt);
-#endif
 
-#if AP_AIRSPEED_EXTERNAL_ENABLED
+    void handle_msp(const MSP::msp_airspeed_data_message_t &pkt);
+
+
+
     void handle_external(const AP_ExternalAHRS::airspeed_data_message_t &pkt);
-#endif
+
     
     enum class CalibrationState {
         NOT_STARTED,
@@ -275,9 +275,9 @@ private:
             uint32_t last_warn_ms;
         } failures;
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
         uint32_t last_hygrometer_log_ms;
-#endif
+
     } state[AIRSPEED_MAX_SENSORS];
 
     bool calibration_enabled;

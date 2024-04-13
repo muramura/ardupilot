@@ -7,7 +7,7 @@
 
 // AP_BARO_MSP_ENABLED is defined in AP_Baro.h
 
-#if AP_BARO_MSP_ENABLED
+
 
 #define MOVING_AVERAGE_WEIGHT 0.20f // a 5 samples moving average
 
@@ -26,4 +26,4 @@ private:
     uint16_t count;
 };
 
-#endif // AP_BARO_MSP_ENABLED
+

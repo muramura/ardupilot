@@ -1,6 +1,6 @@
 #include "AP_Airspeed_External.h"
 
-#if AP_AIRSPEED_EXTERNAL_ENABLED
+
 
 AP_Airspeed_External::AP_Airspeed_External(AP_Airspeed &_frontend, uint8_t _instance) :
     AP_Airspeed_Backend(_frontend, _instance)
@@ -55,4 +55,4 @@ void AP_Airspeed_External::handle_external(const AP_ExternalAHRS::airspeed_data_
     }
 }
 
-#endif // AP_AIRSPEED_EXTERNAL_ENABLED
+

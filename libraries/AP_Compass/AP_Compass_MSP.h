@@ -2,7 +2,7 @@
 
 #include "AP_Compass_config.h"
 
-#if AP_COMPASS_MSP_ENABLED
+
 
 #include "AP_Compass.h"
 #include "AP_Compass_Backend.h"
@@ -20,5 +20,3 @@ private:
     uint8_t msp_instance;
     uint8_t instance;
 };
-
-#endif // AP_COMPASS_MSP_ENABLED

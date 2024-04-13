@@ -5,7 +5,7 @@
 
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_MSP_ENABLED
+
 
 #include "AP_Airspeed_Backend.h"
 
@@ -36,4 +36,4 @@ private:
     uint8_t temp_count;
 };
 
-#endif // AP_AIRSPEED_MSP_ENABLED
+

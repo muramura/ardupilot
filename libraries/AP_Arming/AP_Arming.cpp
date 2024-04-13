@@ -382,7 +382,7 @@ bool AP_Arming::logging_checks(bool report)
 }
 #endif  // HAL_LOGGING_ENABLED
 
-#if AP_INERTIALSENSOR_ENABLED
+
 bool AP_Arming::ins_accels_consistent(const AP_InertialSensor &ins)
 {
     const uint32_t now = AP_HAL::millis();
@@ -503,7 +503,7 @@ bool AP_Arming::ins_checks(bool report)
 
     return true;
 }
-#endif // AP_INERTIALSENSOR_ENABLED
+
 
 bool AP_Arming::compass_checks(bool report)
 {
@@ -570,7 +570,7 @@ bool AP_Arming::compass_checks(bool report)
             return false;
         }
 
-#if AP_AHRS_ENABLED
+
         // if ahrs is using compass and we have location, check mag field versus expected earth magnetic model
         Location ahrs_loc;
         AP_AHRS &ahrs = AP::ahrs();
@@ -589,7 +589,7 @@ bool AP_Arming::compass_checks(bool report)
                 return false;
             }           
         }
-#endif  // AP_AHRS_ENABLED
+
     }
 
     return true;
@@ -1371,7 +1371,7 @@ bool AP_Arming::fettec_checks(bool display_failure) const
 }
 #endif  // AP_FETTEC_ONEWIRE_ENABLED
 
-#if AP_ARMING_AUX_AUTH_ENABLED
+
 // request an auxiliary authorisation id.  This id should be used in subsequent calls to set_aux_auth_passed/failed
 // returns true on success
 bool AP_Arming::get_aux_auth_id(uint8_t& auth_id)
@@ -1488,7 +1488,7 @@ bool AP_Arming::aux_auth_checks(bool display_failure)
     // if we got this far all auxiliary checks must have passed
     return true;
 }
-#endif  // AP_ARMING_AUX_AUTH_ENABLED
+
 
 #if HAL_GENERATOR_ENABLED
 bool AP_Arming::generator_checks(bool display_failure) const
@@ -1570,12 +1570,12 @@ bool AP_Arming::pre_arm_checks(bool report)
 
         &  barometer_checks(report)
 
-#if AP_INERTIALSENSOR_ENABLED
+
         &  ins_checks(report)
-#endif
-#if AP_COMPASS_ENABLED
+
+
         &  compass_checks(report)
-#endif
+
 
         &  gps_checks(report)
 
@@ -1622,9 +1622,9 @@ bool AP_Arming::pre_arm_checks(bool report)
 #if HAL_VISUALODOM_ENABLED
         &  visodom_checks(report)
 #endif
-#if AP_ARMING_AUX_AUTH_ENABLED
+
         &  aux_auth_checks(report)
-#endif
+
 
         &  disarm_switch_checks(report)
 

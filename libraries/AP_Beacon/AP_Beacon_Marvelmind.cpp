@@ -20,7 +20,7 @@
 
 #include "AP_Beacon_Marvelmind.h"
 
-#if AP_BEACON_MARVELMIND_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Math/crc.h>
@@ -388,4 +388,4 @@ void AP_Beacon_Marvelmind::order_stationary_beacons()
     }
 }
 
-#endif  // AP_BEACON_MARVELMIND_ENABLED
+

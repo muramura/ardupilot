@@ -1,6 +1,6 @@
 #include "AP_Camera_Relay.h"
 
-#if AP_CAMERA_RELAY_ENABLED
+
 
 #include <AP_Relay/AP_Relay.h>
 
@@ -43,4 +43,4 @@ bool AP_Camera_Relay::trigger_pic()
     return true;
 }
 
-#endif // AP_CAMERA_RELAY_ENABLED
+

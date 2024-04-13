@@ -6,9 +6,9 @@
 #include "AP_InertialSensor_Backend.h"
 #include <AP_Logger/AP_Logger.h>
 #include <AP_BoardConfig/AP_BoardConfig.h>
-#if AP_MODULE_SUPPORTED
+
 #include <AP_Module/AP_Module.h>
-#endif
+
 #include <stdio.h>
 
 #define SENSOR_RATE_DEBUG 0
@@ -220,7 +220,7 @@ void AP_InertialSensor_Backend::apply_gyro_filters(const uint8_t instance, const
             continue;
         }
         bool inactive = notch.is_inactive();
-#if AP_AHRS_ENABLED
+
         // by default we only run the expensive notch filters on the
         // currently active IMU we reset the inactive notch filters so
         // that if we switch IMUs we're not left with old data
@@ -228,7 +228,7 @@ void AP_InertialSensor_Backend::apply_gyro_filters(const uint8_t instance, const
             instance != AP::ahrs().get_primary_gyro_index()) {
             inactive = true;
         }
-#endif
+
         if (inactive) {
             // while inactive we reset the filter so when it activates the first output
             // will be the first input sample
@@ -295,10 +295,10 @@ void AP_InertialSensor_Backend::_notify_new_gyro_raw_sample(uint8_t instance,
         sample_us = _imu._gyro_last_sample_us[instance];
     }
 
-#if AP_MODULE_SUPPORTED
+
     // call gyro_sample hook if any
     AP_Module::call_hook_gyro_sample(instance, dt, gyro);
-#endif
+
 
     // push gyros if optical flow present
     if (hal.opticalflow) {
@@ -383,10 +383,10 @@ void AP_InertialSensor_Backend::_notify_new_delta_angle(uint8_t instance, const 
 
     _rotate_and_correct_gyro(instance, gyro);
 
-#if AP_MODULE_SUPPORTED
+
     // call gyro_sample hook if any
     AP_Module::call_hook_gyro_sample(instance, dt, gyro);
-#endif
+
 
     // push gyros if optical flow present
     if (hal.opticalflow) {
@@ -447,11 +447,11 @@ void AP_InertialSensor_Backend::log_gyro_raw(uint8_t instance, const uint64_t sa
         return;
     }
 
-#if AP_AHRS_ENABLED
+
     const bool log_because_primary_gyro = _imu.raw_logging_option_set(AP_InertialSensor::RAW_LOGGING_OPTION::PRIMARY_GYRO_ONLY) && (instance == AP::ahrs().get_primary_gyro_index());
-#else
-    const bool log_because_primary_gyro = false;
-#endif
+
+
+
 
     if (_imu.raw_logging_option_set(AP_InertialSensor::RAW_LOGGING_OPTION::ALL_GYROS) ||
         log_because_primary_gyro ||
@@ -549,10 +549,10 @@ void AP_InertialSensor_Backend::_notify_new_accel_raw_sample(uint8_t instance,
         sample_us = _imu._accel_last_sample_us[instance];
     }
 
-#if AP_MODULE_SUPPORTED
+
     // call accel_sample hook if any
     AP_Module::call_hook_accel_sample(instance, dt, accel, fsync_set);
-#endif    
+
     
     _imu.calc_vibration_and_clipping(instance, accel, dt);
 
@@ -627,10 +627,10 @@ void AP_InertialSensor_Backend::_notify_new_delta_velocity(uint8_t instance, con
 
     _rotate_and_correct_accel(instance, accel);
 
-#if AP_MODULE_SUPPORTED
+
     // call accel_sample hook if any
     AP_Module::call_hook_accel_sample(instance, dt, accel, false);
-#endif    
+
     
     _imu.calc_vibration_and_clipping(instance, accel, dt);
 

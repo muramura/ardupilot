@@ -1,6 +1,6 @@
 #include "AP_AHRS_External.h"
 
-#if AP_AHRS_EXTERNAL_ENABLED
+
 
 #include <AP_ExternalAHRS/AP_ExternalAHRS.h>
 #include <AP_AHRS/AP_AHRS.h>
@@ -136,5 +136,3 @@ void AP_AHRS_External::get_control_limits(float &ekfGndSpdLimit, float &ekfNavVe
     ekfGndSpdLimit = 50.0;
     ekfNavVelGainScaler = 0.5;
 }
-
-#endif

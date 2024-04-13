@@ -199,16 +199,16 @@ void AP_Camera::init()
     // create each instance
     for (uint8_t instance = 0; instance < AP_CAMERA_MAX_INSTANCES; instance++) {
         switch ((CameraType)_params[instance].type.get()) {
-#if AP_CAMERA_SERVO_ENABLED
+
         case CameraType::SERVO:
             _backends[instance] = new AP_Camera_Servo(*this, _params[instance], instance);
             break;
-#endif
-#if AP_CAMERA_RELAY_ENABLED
+
+
         case CameraType::RELAY:
             _backends[instance] = new AP_Camera_Relay(*this, _params[instance], instance);
             break;
-#endif
+
 
         // check for GoPro in Solo camera
         case CameraType::SOLOGIMBAL:
@@ -227,18 +227,18 @@ void AP_Camera::init()
             _backends[instance] = new AP_Camera_MAVLink(*this, _params[instance], instance);
             break;
 
-#if AP_CAMERA_MAVLINKCAMV2_ENABLED
+
         // check for MAVLink Camv2 driver
         case CameraType::MAVLINK_CAMV2:
             _backends[instance] = new AP_Camera_MAVLinkCamV2(*this, _params[instance], instance);
             break;
-#endif
-#if AP_CAMERA_SCRIPTING_ENABLED
+
+
         // check for Scripting driver
         case CameraType::SCRIPTING:
             _backends[instance] = new AP_Camera_Scripting(*this, _params[instance], instance);
             break;
-#endif
+
         case CameraType::NONE:
             break;
         }
@@ -729,7 +729,7 @@ bool AP_Camera::set_camera_source(uint8_t instance, CameraSource primary_source,
 }
 #endif // AP_CAMERA_SET_CAMERA_SOURCE_ENABLED
 
-#if AP_CAMERA_SCRIPTING_ENABLED
+
 // accessor to allow scripting backend to retrieve state
 // returns true on success and cam_state is filled in
 bool AP_Camera::get_state(uint8_t instance, camera_state_t& cam_state)
@@ -742,7 +742,7 @@ bool AP_Camera::get_state(uint8_t instance, camera_state_t& cam_state)
     }
     return backend->get_state(cam_state);
 }
-#endif // #if AP_CAMERA_SCRIPTING_ENABLED
+
 
 // return backend for instance number
 AP_Camera_Backend *AP_Camera::get_instance(uint8_t instance) const
@@ -820,13 +820,13 @@ bool AP_Camera::get_legacy_relay_index(int8_t &index) const
     // Copter, Plane, Sub and Rover all have both relay and camera and all init relay first
     // This will only be a issue if the relay and camera conversion were done at once, if the user skipped 4.4
     for (uint8_t i = 0; i < AP_CAMERA_MAX_INSTANCES; i++) {
-#if AP_CAMERA_RELAY_ENABLED
+
         if ((CameraType)_params[i].type.get() == CameraType::RELAY) {
             // Camera was hard coded to relay 0
             index = 0;
             return true;
         }
-#endif
+
     }
     return false;
 }

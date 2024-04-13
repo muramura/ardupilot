@@ -444,9 +444,9 @@ public:
 #if AP_AHRS_SIM_ENABLED
         SIM = 10,
 #endif
-#if AP_AHRS_EXTERNAL_ENABLED
+
         EXTERNAL = 11,
-#endif
+
     };
 
     // set the selected ekf type, for RC aux control
@@ -801,9 +801,9 @@ private:
     void update_SITL(void);
 #endif
 
-#if AP_AHRS_EXTERNAL_ENABLED
+
     void update_external(void);
-#endif    
+  
 
     /*
      * trim-related state and private methods:
@@ -1003,10 +1003,10 @@ private:
     struct AP_AHRS_Backend::Estimates sim_estimates;
 #endif
 
-#if AP_AHRS_EXTERNAL_ENABLED
+
     AP_AHRS_External external;
     struct AP_AHRS_Backend::Estimates external_estimates;
-#endif
+
 
     enum class Options : uint16_t {
         DISABLE_DCM_FALLBACK_FW=(1U<<0),

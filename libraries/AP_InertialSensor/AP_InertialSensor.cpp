@@ -2,7 +2,7 @@
 
 #include "AP_InertialSensor.h"
 
-#if AP_INERTIALSENSOR_ENABLED
+
 
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL.h>
@@ -2489,9 +2489,9 @@ bool AP_InertialSensor::calibrate_gyros()
     if (!gyro_calibrated_ok_all()) {
         return false;
     }
-#if AP_AHRS_ENABLED
+
     AP::ahrs().reset_gyro_drift();
-#endif
+
     return true;
 }
 
@@ -2639,10 +2639,10 @@ MAV_RESULT AP_InertialSensor::simple_accel_cal()
             _accel_id(k).set_and_save(0);
         }
 
-#if AP_AHRS_ENABLED
+
         // force trim to zero
         AP::ahrs().set_trim(Vector3f(0, 0, 0));
-#endif
+
     } else {
         DEV_PRINTF("\nFAILED\n");
         // restore old values
@@ -2663,10 +2663,10 @@ MAV_RESULT AP_InertialSensor::simple_accel_cal()
         update();
     }
 
-#if AP_AHRS_ENABLED
+
     // and reset state estimators
     AP::ahrs().reset();
-#endif
+
 
     // stop flashing leds
     AP_Notify::flags.initialising = false;
@@ -2789,4 +2789,4 @@ AP_InertialSensor &ins()
 
 };
 
-#endif  // AP_INERTIALSENSOR_ENABLED
+

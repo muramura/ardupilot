@@ -51,12 +51,12 @@ public:
     // enums
     enum class CameraType {
         NONE = 0,           // None
-#if AP_CAMERA_SERVO_ENABLED
+
         SERVO = 1,          // Servo/PWM controlled camera
-#endif
-#if AP_CAMERA_RELAY_ENABLED
+
+
         RELAY = 2,          // Relay controlled camera
-#endif
+
 
         SOLOGIMBAL = 3,     // GoPro in Solo gimbal
 
@@ -66,12 +66,12 @@ public:
 
         MAVLINK = 5,        // MAVLink enabled camera
 
-#if AP_CAMERA_MAVLINKCAMV2_ENABLED
+
         MAVLINK_CAMV2 = 6,  // MAVLink camera v2
-#endif
-#if AP_CAMERA_SCRIPTING_ENABLED
+
+
         SCRIPTING = 7,  // Scripting backend
-#endif
+
     };
 
     // detect and initialise backends
@@ -176,7 +176,7 @@ public:
     // set if vehicle is in AUTO mode
     void set_is_auto_mode(bool enable) { _is_in_auto_mode = enable; }
 
-#if AP_CAMERA_SCRIPTING_ENABLED
+
     // structure and accessors for use by scripting backends
     typedef struct {
         uint16_t take_pic_incr; // incremented each time camera is requested to take a picture
@@ -193,7 +193,7 @@ public:
     // accessor to allow scripting backend to retrieve state
     // returns true on success and cam_state is filled in
     bool get_state(uint8_t instance, camera_state_t& cam_state);
-#endif
+
 
     // Return true and the relay index if relay camera backend is selected, used for conversion to relay functions
     bool get_legacy_relay_index(int8_t &index) const;

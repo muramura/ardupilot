@@ -21,10 +21,10 @@ public:
     // temperature not available via analog backend
     bool get_temperature(float &temperature) override;
 
-#if AP_AIRSPEED_HYGROMETER_ENABLE
+
     // get hygrometer data
     bool get_hygrometer(uint32_t &last_sample_ms, float &temperature, float &humidity) override;
-#endif
+
 
     static void subscribe_msgs(AP_DroneCAN* ap_dronecan);
 

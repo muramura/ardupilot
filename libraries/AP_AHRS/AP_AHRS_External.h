@@ -23,7 +23,7 @@
 
 #include "AP_AHRS_config.h"
 
-#if AP_AHRS_EXTERNAL_ENABLED
+
 
 #include "AP_AHRS_Backend.h"
 
@@ -88,5 +88,3 @@ public:
 
     void get_control_limits(float &ekfGndSpdLimit, float &controlScaleXY) const override;
 };
-
-#endif

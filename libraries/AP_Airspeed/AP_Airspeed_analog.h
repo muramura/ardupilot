@@ -2,7 +2,7 @@
 
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_ANALOG_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 
@@ -26,4 +26,4 @@ private:
     AP_HAL::AnalogSource *_source;
 };
 
-#endif  // AP_AIRSPEED_ANALOG_ENABLED
+

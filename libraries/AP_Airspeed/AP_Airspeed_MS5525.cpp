@@ -18,7 +18,7 @@
  */
 #include "AP_Airspeed_MS5525.h"
 
-#if AP_AIRSPEED_MS5525_ENABLED
+
 
 #include <stdio.h>
 #include <utility>
@@ -301,4 +301,4 @@ bool AP_Airspeed_MS5525::get_temperature(float &_temperature)
     return true;
 }
 
-#endif  // AP_AIRSPEED_MS5525_ENABLED
+

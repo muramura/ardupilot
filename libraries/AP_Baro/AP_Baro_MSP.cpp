@@ -1,6 +1,6 @@
 #include "AP_Baro_MSP.h"
 
-#if AP_BARO_MSP_ENABLED
+
 
 AP_Baro_MSP::AP_Baro_MSP(AP_Baro &baro, uint8_t _msp_instance) :
     AP_Baro_Backend(baro)
@@ -33,4 +33,4 @@ void AP_Baro_MSP::handle_msp(const MSP::msp_baro_data_message_t &pkt)
     count++;
 }
 
-#endif // AP_BARO_MSP_ENABLED
+

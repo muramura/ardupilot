@@ -15,7 +15,7 @@
 
 #include "AP_Beacon_Pozyx.h"
 
-#if AP_BEACON_POZYX_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <ctype.h>
@@ -161,4 +161,4 @@ void AP_Beacon_Pozyx::parse_buffer()
     }
 }
 
-#endif  // AP_BEACON_POZYX_ENABLED
+

@@ -5,7 +5,7 @@
 
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_EXTERNAL_ENABLED
+
 
 #include "AP_Airspeed_Backend.h"
 #include <AP_ExternalAHRS/AP_ExternalAHRS.h>
@@ -34,5 +34,5 @@ private:
     uint8_t temperature_count;
 };
 
-#endif // AP_AIRSPEED_EXTERNAL_ENABLED
+
 
