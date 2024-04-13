@@ -2,7 +2,7 @@
 #include <AP_Mount/AP_Mount.h>
 #include <AP_Logger/AP_Logger_config.h>
 
-#if AP_CAMERA_ENABLED && HAL_LOGGING_ENABLED
+#if HAL_LOGGING_ENABLED
 
 #include <AP_Logger/AP_Logger.h>
 #include <AP_GPS/AP_GPS.h>

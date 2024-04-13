@@ -152,11 +152,11 @@ void ModeAuto::run()
         loiter_to_alt_run();
         break;
 
-#if AP_MISSION_NAV_PAYLOAD_PLACE_ENABLED && AC_PAYLOAD_PLACE_ENABLED
+
     case SubMode::NAV_PAYLOAD_PLACE:
         payload_place.run();
         break;
-#endif
+
 
     case SubMode::NAV_ATTITUDE_TIME:
         nav_attitude_time_run();
@@ -557,7 +557,7 @@ bool ModeAuto::is_taking_off() const
     return ((_mode == SubMode::TAKEOFF) && !auto_takeoff.complete);
 }
 
-#if AC_PAYLOAD_PLACE_ENABLED
+
 // auto_payload_place_start - initialises controller to implement a placing
 void PayloadPlace::start_descent()
 {
@@ -587,7 +587,7 @@ void PayloadPlace::start_descent()
 
     state = PayloadPlace::State::Descent_Start;
 }
-#endif
+
 
 // returns true if pilot's yaw input should be used to adjust vehicle's heading
 bool ModeAuto::use_pilot_yaw(void) const
@@ -682,11 +682,11 @@ bool ModeAuto::start_command(const AP_Mission::Mission_Command& cmd)
         do_nav_delay(cmd);
         break;
 
-#if AP_MISSION_NAV_PAYLOAD_PLACE_ENABLED && AC_PAYLOAD_PLACE_ENABLED
+
     case MAV_CMD_NAV_PAYLOAD_PLACE:              // 94 place at Waypoint
         do_payload_place(cmd);
         break;
-#endif
+
 
 
     case MAV_CMD_NAV_SCRIPT_TIME:
@@ -892,11 +892,11 @@ bool ModeAuto::verify_command(const AP_Mission::Mission_Command& cmd)
         cmd_complete = verify_land();
         break;
 
-#if AP_MISSION_NAV_PAYLOAD_PLACE_ENABLED && AC_PAYLOAD_PLACE_ENABLED
+
     case MAV_CMD_NAV_PAYLOAD_PLACE:
         cmd_complete = payload_place.verify();
         break;
-#endif
+
 
     case MAV_CMD_NAV_LOITER_UNLIM:
         cmd_complete = verify_loiter_unlimited();
@@ -1187,7 +1187,7 @@ void ModeAuto::nav_attitude_time_run()
     pos_control->update_z_controller();
 }
 
-#if AC_PAYLOAD_PLACE_ENABLED
+
 // auto_payload_place_run - places an object in auto mode
 //      called by auto_run at 100hz or more
 void PayloadPlace::run()
@@ -1413,7 +1413,7 @@ void PayloadPlace::run()
         break;
     }
 }
-#endif
+
 
 // sets the target_loc's alt to the vehicle's current alt but does not change target_loc's frame
 // in the case of terrain altitudes either the terrain database or the rangefinder may be used
@@ -1535,9 +1535,9 @@ bool ModeAuto::set_next_wp(const AP_Mission::Mission_Command& current_cmd, const
     switch (next_cmd.id) {
     case MAV_CMD_NAV_WAYPOINT:
     case MAV_CMD_NAV_LOITER_UNLIM:
-#if AP_MISSION_NAV_PAYLOAD_PLACE_ENABLED
+
     case MAV_CMD_NAV_PAYLOAD_PLACE:
-#endif
+
     case MAV_CMD_NAV_LOITER_TIME: {
         const Location dest_loc = loc_from_cmd(current_cmd, default_loc);
         const Location next_dest_loc = loc_from_cmd(next_cmd, dest_loc);
@@ -1944,7 +1944,7 @@ void ModeAuto::do_winch(const AP_Mission::Mission_Command& cmd)
 }
 
 
-#if AP_MISSION_NAV_PAYLOAD_PLACE_ENABLED && AC_PAYLOAD_PLACE_ENABLED
+
 // do_payload_place - initiate placing procedure
 void ModeAuto::do_payload_place(const AP_Mission::Mission_Command& cmd)
 {
@@ -1976,7 +1976,7 @@ void ModeAuto::do_payload_place(const AP_Mission::Mission_Command& cmd)
     // set submode
     set_submode(SubMode::NAV_PAYLOAD_PLACE);
 }
-#endif  // AP_MISSION_NAV_PAYLOAD_PLACE_ENABLED
+
 
 // do_RTL - start Return-to-Launch
 void ModeAuto::do_RTL(void)
@@ -2046,7 +2046,7 @@ bool ModeAuto::verify_land()
     return retval;
 }
 
-#if AC_PAYLOAD_PLACE_ENABLED
+
 // verify_payload_place - returns true if placing has been completed
 bool PayloadPlace::verify()
 {
@@ -2066,7 +2066,7 @@ bool PayloadPlace::verify()
     // should never get here
     return true;
 }
-#endif
+
 
 bool ModeAuto::verify_loiter_unlimited()
 {

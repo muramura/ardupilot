@@ -1,6 +1,6 @@
 #include "AP_Camera_Mount.h"
 
-#if AP_CAMERA_MOUNT_ENABLED
+
 #include <AP_Mount/AP_Mount.h>
 
 extern const AP_HAL::HAL& hal;
@@ -109,4 +109,4 @@ void AP_Camera_Mount::send_camera_capture_status(mavlink_channel_t chan) const
     }
 }
 
-#endif // AP_CAMERA_MOUNT_ENABLED
+

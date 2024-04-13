@@ -209,24 +209,24 @@ void AP_Camera::init()
             _backends[instance] = new AP_Camera_Relay(*this, _params[instance], instance);
             break;
 #endif
-#if AP_CAMERA_SOLOGIMBAL_ENABLED
+
         // check for GoPro in Solo camera
         case CameraType::SOLOGIMBAL:
             _backends[instance] = new AP_Camera_SoloGimbal(*this, _params[instance], instance);
             break;
-#endif
-#if AP_CAMERA_MOUNT_ENABLED
+
+
         // check for Mount camera
         case CameraType::MOUNT:
             _backends[instance] = new AP_Camera_Mount(*this, _params[instance], instance);
             break;
-#endif
-#if AP_CAMERA_MAVLINK_ENABLED
+
+
         // check for MAVLink enabled camera driver
         case CameraType::MAVLINK:
             _backends[instance] = new AP_Camera_MAVLink(*this, _params[instance], instance);
             break;
-#endif
+
 #if AP_CAMERA_MAVLINKCAMV2_ENABLED
         // check for MAVLink Camv2 driver
         case CameraType::MAVLINK_CAMV2:

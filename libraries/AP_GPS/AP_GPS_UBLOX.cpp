@@ -20,7 +20,7 @@
 //
 #include "AP_GPS_UBLOX.h"
 
-#if AP_GPS_UBLOX_ENABLED
+
 
 #include "AP_GPS.h"
 #include <AP_HAL/Util.h>
@@ -2187,4 +2187,4 @@ bool AP_GPS_UBLOX::supports_F9_config(void) const
     return _hardware_generation == UBLOX_F9 || _hardware_generation == UBLOX_M10;
 }
 
-#endif
+

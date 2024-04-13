@@ -249,14 +249,14 @@ jump_to_app()
 {
     const uint32_t *app_base = (const uint32_t *)(APP_START_ADDRESS);
 
-#if AP_CHECK_FIRMWARE_ENABLED
+
     const auto ok = check_good_firmware();
     if (ok != check_fw_result_t::CHECK_FW_OK) {
         // bad firmware, don't try and boot
         led_set(LED_BAD_FW);
         return;
     }
-#endif
+
     
     // If we have QSPI chip start it
 #if EXT_FLASH_SIZE_MB

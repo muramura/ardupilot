@@ -1,6 +1,6 @@
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_SMBUS_NEODESIGN_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Common/AP_Common.h>
@@ -81,4 +81,4 @@ void AP_BattMonitor_SMBus_NeoDesign::timer()
     read_temp();
 }
 
-#endif  // AP_BATTERY_SMBUS_NEODESIGN_ENABLED
+

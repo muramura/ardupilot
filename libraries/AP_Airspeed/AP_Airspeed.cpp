@@ -261,9 +261,9 @@ void AP_Airspeed::convert_per_instance()
         { {138, 842}, AP_PARAM_FLOAT, "OFFSET" },    // ARSPD_OFFSET, ARSPD2_OFFSET
         { {202, 906}, AP_PARAM_FLOAT, "RATIO" },     // ARSPD_RATIO, ARSPD2_RATIO
         { {266, 970}, AP_PARAM_INT8, "PIN" },        // ARSPD_PIN, ARSPD2_PIN
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
         { {330, 1034}, AP_PARAM_INT8, "AUTOCAL" },    // ARSPD_AUTOCAL, ARSPD2_AUTOCAL
-#endif
+
         { {394, 1098}, AP_PARAM_INT8, "TUBE_ORDR" },  // ARSPD_TUBE_ORDER, ARSPD2_TUBE_ORDR
         { {458, 1162}, AP_PARAM_INT8, "SKIP_CAL" },   // ARSPD_SKIP_CAL, ARSPD2_SKIP_CAL
         { {522, 1226}, AP_PARAM_FLOAT, "PSI_RANGE" }, // ARSPD_PSI_RANGE, ARSPD2_PSI_RANGE
@@ -282,9 +282,9 @@ void AP_Airspeed::convert_per_instance()
         const char* name;
     }  conversion_table[] = {
         { {0, 11}, AP_PARAM_INT8, "TYPE" },      // ARSPD_TYPE, ARSPD2_TYPE
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
         { {5, 16}, AP_PARAM_INT8, "AUTOCAL" },    // ARSPD_AUTOCAL, ARSPD2_AUTOCAL
-#endif
+
         { {8, 19}, AP_PARAM_FLOAT, "PSI_RANGE" }, // ARSPD_PSI_RANGE, ARSPD2_PSI_RANGE
         { {24, 25}, AP_PARAM_INT32, "DEVID" },    // ARSPD_DEVID, ARSPD2_DEVID
     };
@@ -342,10 +342,10 @@ void AP_Airspeed::allocate()
 #else
     // look for sensors based on type parameters
     for (uint8_t i=0; i<AIRSPEED_MAX_SENSORS; i++) {
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
         state[i].calibration.init(param[i].ratio);
         state[i].last_saved_ratio = param[i].ratio;
-#endif
+
 
         // Set the enable automatically to false and set the probability that the airspeed is healhy to start with
         state[i].failures.health_probability = 1.0f;
@@ -425,11 +425,11 @@ void AP_Airspeed::allocate()
 #endif
             break;
         case TYPE_NMEA_WATER:
-#if AP_AIRSPEED_NMEA_ENABLED
+
 #if APM_BUILD_TYPE(APM_BUILD_Rover) || APM_BUILD_TYPE(APM_BUILD_ArduSub) 
             sensor[i] = new AP_Airspeed_NMEA(*this, i);
 #endif
-#endif
+
             break;
         case TYPE_MSP:
 #if AP_AIRSPEED_MSP_ENABLED

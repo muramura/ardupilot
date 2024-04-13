@@ -1,6 +1,6 @@
 #include "AP_BattMonitor_config.h"
 
-#if AP_BATTERY_SMBUS_SOLO_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Common/AP_Common.h>
@@ -122,4 +122,4 @@ void AP_BattMonitor_SMBus_Solo::timer()
     read_cycle_count();
 }
 
-#endif  // AP_BATTERY_SMBUS_SOLO_ENABLED
+

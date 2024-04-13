@@ -2,7 +2,7 @@
 
 #include "AP_BattMonitor_SMBus.h"
 
-#if AP_BATTERY_SMBUS_SUI_ENABLED
+
 
 // Base SUI class
 class AP_BattMonitor_SMBus_SUI : public AP_BattMonitor_SMBus
@@ -31,4 +31,4 @@ private:
     uint32_t last_volt_read_us;
 };
 
-#endif  // AP_BATTERY_SMBUS_SUI_ENABLED
+

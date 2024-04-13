@@ -911,7 +911,7 @@ const AP_Param::GroupInfo AP_OSD_Screen::var_info[] = {
     // @Range: 0 21
     AP_SUBGROUPINFO(current2, "CURRENT2", 54, AP_OSD_Screen, AP_OSD_Setting),
 
-#if AP_VIDEOTX_ENABLED
+
     // @Param: VTX_PWR_EN
     // @DisplayName: VTX_PWR_EN
     // @Description: Displays VTX Power
@@ -927,7 +927,7 @@ const AP_Param::GroupInfo AP_OSD_Screen::var_info[] = {
     // @Description: Vertical position on screen
     // @Range: 0 21
     AP_SUBGROUPINFO(vtx_power, "VTX_PWR", 55, AP_OSD_Screen, AP_OSD_Setting),
-#endif  // AP_VIDEOTX_ENABLED
+
 
 
     // @Param: TER_HGT_EN
@@ -2463,7 +2463,7 @@ void AP_OSD_Screen::draw_current2(uint8_t x, uint8_t y)
     draw_current(1, x, y);
 }
 
-#if AP_VIDEOTX_ENABLED
+
 void AP_OSD_Screen::draw_vtx_power(uint8_t x, uint8_t y)
 {
     AP_VideoTX *vtx = AP_VideoTX::get_singleton();
@@ -2477,7 +2477,7 @@ void AP_OSD_Screen::draw_vtx_power(uint8_t x, uint8_t y)
     }
     backend->write(x, y, !vtx->is_configuration_finished(), "%4hu%c", powr, SYMBOL(SYM_MW));
 }
-#endif  // AP_VIDEOTX_ENABLED
+
 
 
 void AP_OSD_Screen::draw_hgt_abvterr(uint8_t x, uint8_t y)
@@ -2589,9 +2589,9 @@ void AP_OSD_Screen::draw(void)
 
     DRAW_SETTING(clk);
 
-#if AP_VIDEOTX_ENABLED
+
     DRAW_SETTING(vtx_power);
-#endif
+
 
 #if HAL_WITH_ESC_TELEM
     DRAW_SETTING(esc_temp);

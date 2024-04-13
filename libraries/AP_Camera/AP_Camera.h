@@ -57,15 +57,15 @@ public:
 #if AP_CAMERA_RELAY_ENABLED
         RELAY = 2,          // Relay controlled camera
 #endif
-#if AP_CAMERA_SOLOGIMBAL_ENABLED
+
         SOLOGIMBAL = 3,     // GoPro in Solo gimbal
-#endif
-#if AP_CAMERA_MOUNT_ENABLED
+
+
         MOUNT = 4,          // Mount library implements camera
-#endif
-#if AP_CAMERA_MAVLINK_ENABLED
+
+
         MAVLINK = 5,        // MAVLink enabled camera
-#endif
+
 #if AP_CAMERA_MAVLINKCAMV2_ENABLED
         MAVLINK_CAMV2 = 6,  // MAVLink camera v2
 #endif

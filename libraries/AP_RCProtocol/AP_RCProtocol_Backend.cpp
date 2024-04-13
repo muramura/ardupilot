@@ -27,10 +27,10 @@
 #include <AP_VideoTX/AP_VideoTX_config.h>
 
 // for video TX configuration:
-#if AP_VIDEOTX_ENABLED
+
 #include <AP_VideoTX/AP_VideoTX.h>
 #include "spm_srxl.h"
-#endif
+
 
 
 
@@ -118,7 +118,7 @@ void AP_RCProtocol_Backend::decode_11bit_channels(const uint8_t* data, uint8_t n
     }
 }
 
-#if AP_VIDEOTX_ENABLED
+
 // configure the video transmitter, the input values are Spektrum-oriented
 void AP_RCProtocol_Backend::configure_vtx(uint8_t band, uint8_t channel, uint8_t power, uint8_t pitmode)
 {
@@ -171,7 +171,7 @@ void AP_RCProtocol_Backend::configure_vtx(uint8_t band, uint8_t channel, uint8_t
         break;
     }
 }
-#endif  // AP_VIDEOTX_ENABLED
+
 
 /*
   optionally log RC input data

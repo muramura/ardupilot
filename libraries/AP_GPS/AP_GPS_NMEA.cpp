@@ -40,7 +40,7 @@
 
 #include "AP_GPS_NMEA.h"
 
-#if AP_GPS_NMEA_ENABLED
+
 extern const AP_HAL::HAL& hal;
 
 #ifndef AP_GPS_NMEA_CONFIG_PERIOD_MS
@@ -266,7 +266,7 @@ bool AP_GPS_NMEA::_have_new_message()
         _last_KSXT_pos_ms = 0;
     }
 
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
     if (now - _last_AGRICA_ms > 500) {
         if (_last_AGRICA_ms != 0) {
             // we have lost AGRICA
@@ -279,7 +279,7 @@ bool AP_GPS_NMEA::_have_new_message()
             _last_AGRICA_ms = 0;
         }
     }
-#endif // AP_GPS_NMEA_UNICORE_ENABLED
+
 
     _last_fix_ms = now;
 
@@ -449,7 +449,7 @@ bool AP_GPS_NMEA::_term_complete()
                     state.gps_yaw_configured = true;
                 }
                 break;
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
             case _GPS_SENTENCE_AGRICA: {
                 const auto &ag = _agrica;
                 _last_AGRICA_ms = now;
@@ -507,7 +507,7 @@ bool AP_GPS_NMEA::_term_complete()
 #endif // GPS_MOVING_BASELINE
                 break;
             }
-#endif // AP_GPS_NMEA_UNICORE_ENABLED
+
             }
             // see if we got a good message
             return _have_new_message();
@@ -529,7 +529,7 @@ bool AP_GPS_NMEA::_term_complete()
             _sentence_type = _GPS_SENTENCE_KSXT;
             return false;
         }
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
         if (strcmp(_term, "AGRICA") == 0 && _expect_agrica) {
             _sentence_type = _GPS_SENTENCE_AGRICA;
             return false;
@@ -542,7 +542,7 @@ bool AP_GPS_NMEA::_term_complete()
             _sentence_type = _GPS_SENTENCE_UNIHEADINGA;
             return false;
         }
-#endif
+
         /*
           The first two letters of the NMEA term are the talker
           ID. The most common is 'GP' but there are a bunch of others
@@ -657,7 +657,7 @@ bool AP_GPS_NMEA::_term_complete()
         case _GPS_SENTENCE_KSXT + 1 ... _GPS_SENTENCE_KSXT + 22: // KSXT message, fields
             _ksxt.fields[_term_number-1] = atof(_term);
             break;
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
         case _GPS_SENTENCE_AGRICA + 1 ... _GPS_SENTENCE_AGRICA + 65: // AGRICA message
             parse_agrica_field(_term_number, _term);
             break;
@@ -669,14 +669,14 @@ bool AP_GPS_NMEA::_term_complete()
             parse_uniheadinga_field(_term_number, _term);
             break;
 #endif
-#endif
+
         }
     }
 
     return false;
 }
 
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
 /*
   parse an AGRICA message term
 
@@ -792,7 +792,7 @@ void AP_GPS_NMEA::parse_versiona_field(uint16_t term_number, const char *term)
     }
 #pragma GCC diagnostic pop
 }
-#endif // AP_GPS_NMEA_UNICORE_ENABLED
+
 
 /*
   detect a NMEA GPS. Adds one byte, and returns true if the stream
@@ -851,13 +851,13 @@ void AP_GPS_NMEA::send_config(void)
     }
     last_config_ms = now_ms;
     const uint16_t rate_ms = params.rate_ms;
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
     const float rate_s = rate_ms * 0.001;
-#endif
+
     const uint8_t rate_hz = 1000U / rate_ms;
 
     switch (get_type()) {
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
     case AP_GPS::GPS_TYPE_UNICORE_MOVINGBASE_NMEA:
         port->printf("\r\nCONFIG HEADING FIXLENGTH\r\n" \
                      "CONFIG UNDULATION AUTO\r\n" \
@@ -883,7 +883,7 @@ void AP_GPS_NMEA::send_config(void)
         }
         break;
     }
-#endif // AP_GPS_NMEA_UNICORE_ENABLED
+
 
     case AP_GPS::GPS_TYPE_HEMI: {
         port->printf(
@@ -918,12 +918,12 @@ void AP_GPS_NMEA::send_config(void)
 bool AP_GPS_NMEA::is_healthy(void) const
 {
     switch (get_type()) {
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
     case AP_GPS::GPS_TYPE_UNICORE_MOVINGBASE_NMEA:
     case AP_GPS::GPS_TYPE_UNICORE_NMEA:
         // we should be getting AGRICA messages
         return _last_AGRICA_ms != 0;
-#endif // AP_GPS_NMEA_UNICORE_ENABLED
+
 
     case AP_GPS::GPS_TYPE_HEMI:
         // we should be getting HDR for yaw
@@ -943,12 +943,12 @@ bool AP_GPS_NMEA::is_healthy(void) const
 bool AP_GPS_NMEA::get_lag(float &lag_sec) const
 {
     switch (get_type()) {
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
     case AP_GPS::GPS_TYPE_UNICORE_MOVINGBASE_NMEA:
     case AP_GPS::GPS_TYPE_UNICORE_NMEA:
         lag_sec = 0.14;
         break;
-#endif // AP_GPS_NMEA_UNICORE_ENABLED
+
 
     default:
         lag_sec = 0.2;
@@ -961,7 +961,7 @@ bool AP_GPS_NMEA::get_lag(float &lag_sec) const
 void AP_GPS_NMEA::Write_AP_Logger_Log_Startup_messages() const
 {
     AP_GPS_Backend::Write_AP_Logger_Log_Startup_messages();
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
     if (_have_unicore_versiona) {
         AP::logger().Write_MessageF("NMEA %u %s %s %s",
                                     state.instance+1,
@@ -969,8 +969,8 @@ void AP_GPS_NMEA::Write_AP_Logger_Log_Startup_messages() const
                                     _versiona.version,
                                     _versiona.build_date);
     }
-#endif
+
 }
 #endif
 
-#endif // AP_GPS_NMEA_ENABLED
+

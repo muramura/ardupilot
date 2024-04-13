@@ -4,7 +4,7 @@
 #include "AP_CheckFirmware.h"
 #include <AP_HAL/HAL.h>
 
-#if AP_CHECK_FIRMWARE_ENABLED && AP_SIGNED_FIRMWARE && !defined(HAL_BOOTLOADER_BUILD)
+#if AP_SIGNED_FIRMWARE && !defined(HAL_BOOTLOADER_BUILD)
 
 #include "monocypher.h"
 #include <AP_Math/AP_Math.h>

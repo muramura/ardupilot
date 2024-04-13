@@ -21,7 +21,7 @@
 #include <AP_HAL/utility/sparse-endian.h>
 #include <AP_SerialManager/AP_SerialManager.h>
 
-#if AP_SMARTAUDIO_ENABLED
+
 
 #ifdef SA_DEBUG
 # define debug(fmt, args...)	do { hal.console->printf("SA: " fmt "\n", ##args); } while (0)
@@ -669,4 +669,4 @@ void AP_SmartAudio::update_baud_rate()
     _port->begin(_smartbaud);
 }
 
-#endif // AP_SMARTAUDIO_ENABLED
+

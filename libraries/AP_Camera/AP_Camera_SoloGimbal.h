@@ -2,7 +2,7 @@
 
 #include "AP_Camera_config.h"
 
-#if AP_CAMERA_SOLOGIMBAL_ENABLED
+
 
 #include "AP_Camera_Backend.h"
 #include <GCS_MAVLink/GCS_MAVLink.h>
@@ -34,4 +34,4 @@ private:
     mavlink_channel_t heartbeat_channel;
 };
 
-#endif // AP_CAMERA_SOLOGIMBAL_ENABLED
+

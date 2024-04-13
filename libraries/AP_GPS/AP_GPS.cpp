@@ -76,15 +76,15 @@ const uint32_t AP_GPS::_baudrates[] = {9600U, 115200U, 4800U, 19200U, 38400U, 57
 // initialisation blobs to send to the GPS to try to get it into the
 // right mode.
 const char AP_GPS::_initialisation_blob[] =
-#if AP_GPS_UBLOX_ENABLED
+
     UBLOX_SET_BINARY_230400
-#endif
-#if AP_GPS_SIRF_ENABLED
+
+
     SIRF_SET_BINARY
-#endif
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
+
     NMEA_UNICORE_SETUP
-#endif
+
     ""   // to compile we need *some_initialiser if all backends compiled out
     ;
 
@@ -167,7 +167,7 @@ const AP_Param::GroupInfo AP_GPS::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("_INJECT_TO",   7, AP_GPS, _inject_to, GPS_RTK_INJECT_TO_ALL),
 
-#if AP_GPS_SBP2_ENABLED || AP_GPS_SBP_ENABLED
+#if AP_GPS_SBP_ENABLED
     // @Param: _SBP_LOGMASK
     // @DisplayName: Swift Binary Protocol Logging Mask
     // @Description: Masked with the SBP msg_type field to determine whether SBR1/SBR2 data is logged
@@ -370,10 +370,10 @@ void AP_GPS::convert_parameters()
         { k_param_gps_key, 17, AP_PARAM_VECTOR3F, "GPS2_POS" },
         { k_param_gps_key, 18, AP_PARAM_INT16, "GPS1_DELAY_MS" },
         { k_param_gps_key, 19, AP_PARAM_INT16, "GPS2_DELAY_MS" },
-#if AP_GPS_SBF_ENABLED
+
         { k_param_gps_key, 23, AP_PARAM_INT8, "GPS1_COM_PORT" },
         { k_param_gps_key, 24, AP_PARAM_INT8, "GPS2_COM_PORT" },
-#endif
+
 
 #if HAL_ENABLE_DRONECAN_DRIVERS
         { k_param_gps_key, 28, AP_PARAM_INT32, "GPS1_CAN_NODEID" },
@@ -515,13 +515,13 @@ void AP_GPS::send_blob_start(uint8_t instance)
 {
     const auto type = params[instance].type;
 
-#if AP_GPS_UBLOX_ENABLED
+
     if (type == GPS_TYPE_UBLOX && option_set(DriverOptions::UBX_Use115200)) {
         static const char blob[] = UBLOX_SET_BINARY_115200;
         send_blob_start(instance, blob, sizeof(blob));
         return;
     }
-#endif // AP_GPS_UBLOX_ENABLED
+
 
 #if GPS_MOVING_BASELINE && AP_GPS_UBLOX_ENABLED
     if ((type == GPS_TYPE_UBLOX_RTK_BASE ||
@@ -541,16 +541,16 @@ void AP_GPS::send_blob_start(uint8_t instance)
     const char *blob = nullptr;
     uint32_t blob_size = 0;
     switch (GPS_Type(type)) {
-#if AP_GPS_SBF_ENABLED
+
     case GPS_TYPE_SBF:
     case GPS_TYPE_SBF_DUAL_ANTENNA:
-#endif //AP_GPS_SBF_ENABLED
+
 #if AP_GPS_GSOF_ENABLED
     case GPS_TYPE_GSOF:
 #endif //AP_GPS_GSOF_ENABLED
-#if AP_GPS_NOVA_ENABLED
+
     case GPS_TYPE_NOVA:
-#endif //AP_GPS_NOVA_ENABLED
+
 #if HAL_SIM_GPS_ENABLED
     case GPS_TYPE_SITL:
 #endif  // HAL_SIM_GPS_ENABLED
@@ -708,16 +708,16 @@ AP_GPS_Backend *AP_GPS::_detect_instance(uint8_t instance)
     }
 
     switch (GPS_Type(type)) {
-#if AP_GPS_SBF_ENABLED
+
     // by default the sbf/trimble gps outputs no data on its port, until configured.
     case GPS_TYPE_SBF:
     case GPS_TYPE_SBF_DUAL_ANTENNA:
         return new AP_GPS_SBF(*this, params[instance], state[instance], _port[instance]);
-#endif //AP_GPS_SBF_ENABLED
-#if AP_GPS_NOVA_ENABLED
+
+
     case GPS_TYPE_NOVA:
         return new AP_GPS_NOVA(*this, params[instance], state[instance], _port[instance]);
-#endif //AP_GPS_NOVA_ENABLED
+
 
 #if HAL_SIM_GPS_ENABLED
     case GPS_TYPE_SITL:
@@ -739,7 +739,7 @@ AP_GPS_Backend *AP_GPS::_detect_instance(uint8_t instance)
         const uint8_t data = _port[instance]->read();
         (void)data;  // if all backends are compiled out then "data" is unused
 
-#if AP_GPS_UBLOX_ENABLED
+
         if ((type == GPS_TYPE_AUTO ||
              type == GPS_TYPE_UBLOX) &&
             ((!_auto_config && _baudrates[dstate->current_baud] >= 38400) ||
@@ -762,43 +762,43 @@ AP_GPS_Backend *AP_GPS::_detect_instance(uint8_t instance)
             }
             return new AP_GPS_UBLOX(*this, params[instance], state[instance], _port[instance], role);
         }
-#endif  // AP_GPS_UBLOX_ENABLED
-#if AP_GPS_SBP2_ENABLED
+
+
         if ((type == GPS_TYPE_AUTO || type == GPS_TYPE_SBP) &&
                  AP_GPS_SBP2::_detect(dstate->sbp2_detect_state, data)) {
             return new AP_GPS_SBP2(*this, params[instance], state[instance], _port[instance]);
         }
-#endif //AP_GPS_SBP2_ENABLED
-#if AP_GPS_SBP_ENABLED
+
+
         if ((type == GPS_TYPE_AUTO || type == GPS_TYPE_SBP) &&
                  AP_GPS_SBP::_detect(dstate->sbp_detect_state, data)) {
             return new AP_GPS_SBP(*this, params[instance], state[instance], _port[instance]);
         }
-#endif //AP_GPS_SBP_ENABLED
-#if AP_GPS_SIRF_ENABLED
+
+
         if ((type == GPS_TYPE_AUTO || type == GPS_TYPE_SIRF) &&
                  AP_GPS_SIRF::_detect(dstate->sirf_detect_state, data)) {
             return new AP_GPS_SIRF(*this, params[instance], state[instance], _port[instance]);
         }
-#endif
-#if AP_GPS_ERB_ENABLED
+
+
         if ((type == GPS_TYPE_AUTO || type == GPS_TYPE_ERB) &&
                  AP_GPS_ERB::_detect(dstate->erb_detect_state, data)) {
             return new AP_GPS_ERB(*this, params[instance], state[instance], _port[instance]);
         }
-#endif // AP_GPS_ERB_ENABLED
-#if AP_GPS_NMEA_ENABLED
+
+
         if ((type == GPS_TYPE_NMEA ||
                     type == GPS_TYPE_HEMI ||
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
                     type == GPS_TYPE_UNICORE_NMEA ||
                     type == GPS_TYPE_UNICORE_MOVINGBASE_NMEA ||
-#endif
+
                     type == GPS_TYPE_ALLYSTAR) &&
                    AP_GPS_NMEA::_detect(dstate->nmea_detect_state, data)) {
             return new AP_GPS_NMEA(*this, params[instance], state[instance], _port[instance]);
         }
-#endif //AP_GPS_NMEA_ENABLED
+
     }
 
     return nullptr;

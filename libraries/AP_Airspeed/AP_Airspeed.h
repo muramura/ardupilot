@@ -36,9 +36,9 @@ public:
 #endif
     AP_Int8  type;
     AP_Int8  bus;
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
     AP_Int8  autocal;
-#endif
+
 
     static const struct AP_Param::GroupInfo var_info[];
 };
@@ -83,10 +83,10 @@ public:
     // indicate which bit in LOG_BITMASK indicates we should log airspeed readings
     void set_log_bit(uint32_t log_bit) { _log_bit = log_bit; }
 
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
     // inflight ratio calibration
     void set_calibration_enabled(bool enable) {calibration_enabled = enable;}
-#endif //AP_AIRSPEED_AUTOCAL_ENABLE
+
 
     // read the analog source and update airspeed
     void update(void);
@@ -261,11 +261,11 @@ private:
             uint16_t read_count;
         } cal;
 
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
         Airspeed_Calibration calibration;
         float last_saved_ratio;
         uint8_t counter;
-#endif // AP_AIRSPEED_AUTOCAL_ENABLE
+
 
         struct {
             uint32_t last_check_ms;

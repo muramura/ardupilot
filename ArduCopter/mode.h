@@ -29,7 +29,7 @@ private:
     Vector3p complete_pos;  // target takeoff position as offset from ekf origin in cm
 };
 
-#if AC_PAYLOAD_PLACE_ENABLED
+
 class PayloadPlace {
 public:
     void run();
@@ -60,7 +60,7 @@ private:
     float descent_start_altitude_cm;
     float descent_speed_cms;
 };
-#endif
+
 
 class Mode {
     friend class PayloadPlace;
@@ -208,10 +208,10 @@ protected:
         land_run_vertical_control(pause_descent);
     }
 
-#if AC_PAYLOAD_PLACE_ENABLED
+
     // payload place flight behaviour:
     static PayloadPlace payload_place;
-#endif
+
 
     // run normal or precision landing (if enabled)
     // pause_descent is true if vehicle should not descend
@@ -510,9 +510,9 @@ public:
         NAVGUIDED,
         LOITER,
         LOITER_TO_ALT,
-#if AP_MISSION_NAV_PAYLOAD_PLACE_ENABLED && AC_PAYLOAD_PLACE_ENABLED
+
         NAV_PAYLOAD_PLACE,
-#endif
+
         NAV_SCRIPT_TIME,
         NAV_ATTITUDE_TIME,
     };

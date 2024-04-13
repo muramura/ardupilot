@@ -272,12 +272,12 @@ void AP_Button::run_aux_functions(bool force)
 
         const RC_Channel::AuxSwitchPos pos = value ? RC_Channel::AuxSwitchPos::HIGH : RC_Channel::AuxSwitchPos::LOW;
         // I wonder if we can do better here:
-#if AP_RC_CHANNEL_AUX_FUNCTION_STRINGS_ENABLED
+
         const char *str = rc_channel->string_for_aux_function(func);
         if (str != nullptr) {
             GCS_SEND_TEXT(MAV_SEVERITY_INFO, "Button %i: executing (%s %s)", i+1, str, rc_channel->string_for_aux_pos(pos));
         }
-#endif
+
         rc_channel->run_aux_function(func, pos, RC_Channel::AuxFuncTriggerSource::BUTTON);
     }
 }

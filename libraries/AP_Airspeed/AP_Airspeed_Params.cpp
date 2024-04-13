@@ -80,14 +80,14 @@ const AP_Param::GroupInfo AP_Airspeed_Params::var_info[] = {
     AP_GROUPINFO("PIN", 5, AP_Airspeed_Params, pin, 0),
 #endif // HAL_BUILD_AP_PERIPH
 
-#if AP_AIRSPEED_AUTOCAL_ENABLE
+
     // @Param: AUTOCAL
     // @DisplayName: Automatic airspeed ratio calibration
     // @DisplayName{Copter, Blimp, Rover, Sub}: This parameter and function is not used by this vehicle. Always set to 0.
     // @Description: Enables automatic adjustment of airspeed ratio during a calibration flight based on estimation of ground speed and true airspeed. New ratio saved every 2 minutes if change is > 5%. Should not be left enabled.
     // @User: Advanced
     AP_GROUPINFO("AUTOCAL", 6, AP_Airspeed_Params, autocal, 0),
-#endif
+
 
 #ifndef HAL_BUILD_AP_PERIPH
     // @Param: TUBE_ORDR

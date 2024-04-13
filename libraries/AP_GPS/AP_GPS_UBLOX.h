@@ -22,7 +22,7 @@
 
 #include "AP_GPS_config.h"
 
-#if AP_GPS_UBLOX_ENABLED
+
 
 #include "AP_GPS.h"
 #include "GPS_Backend.h"
@@ -884,4 +884,4 @@ private:
     static const config_list config_L5_ovrd_dis[];
 };
 
-#endif
+

@@ -20,7 +20,7 @@
 
 #include "AP_Airspeed_NMEA.h"
 
-#if AP_AIRSPEED_NMEA_ENABLED
+
 
 #include <AP_Vehicle/AP_Vehicle_Type.h>
 #if APM_BUILD_TYPE(APM_BUILD_Rover) || APM_BUILD_TYPE(APM_BUILD_ArduSub) 
@@ -219,4 +219,4 @@ bool AP_Airspeed_NMEA::decode_latest_term()
 
 #endif  // APM_BUILD_TYPE(APM_BUILD_Rover) || APM_BUILD_TYPE(APM_BUILD_ArduSub) 
 
-#endif  // AP_AIRSPEED_NMEA_ENABLED
+

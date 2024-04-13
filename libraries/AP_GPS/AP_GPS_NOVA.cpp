@@ -21,7 +21,7 @@
 #include "AP_GPS_NOVA.h"
 #include <AP_Logger/AP_Logger.h>
 
-#if AP_GPS_NOVA_ENABLED
+
 
 extern const AP_HAL::HAL& hal;
 
@@ -292,5 +292,3 @@ AP_GPS_NOVA::process_message(void)
     
     return false;
 }
-
-#endif

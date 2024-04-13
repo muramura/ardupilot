@@ -2,7 +2,7 @@
 
 #include "AP_Baro_Backend.h"
 
-#if AP_BARO_ICP101XX_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_HAL/Semaphores.h>
@@ -60,4 +60,4 @@ private:
     uint32_t measure_interval = 0;
 };
 
-#endif  // AP_BARO_ICP101XX_ENABLED
+

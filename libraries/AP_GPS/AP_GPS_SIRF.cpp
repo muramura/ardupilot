@@ -20,7 +20,7 @@
 
 #include "AP_GPS_config.h"
 
-#if AP_GPS_SIRF_ENABLED
+
 
 #include "AP_GPS_SIRF.h"
 #include <AP_HAL/utility/sparse-endian.h>
@@ -255,4 +255,4 @@ bool AP_GPS_SIRF::_detect(struct SIRF_detect_state &state, uint8_t data)
     return false;
 }
 
-#endif  // AP_GPS_SIRF_ENABLED
+

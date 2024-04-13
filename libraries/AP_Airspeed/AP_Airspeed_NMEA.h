@@ -2,7 +2,7 @@
 
 #include "AP_Airspeed_config.h"
 
-#if AP_AIRSPEED_NMEA_ENABLED
+
 
 #include "AP_Airspeed_Backend.h"
 #include <AP_HAL/AP_HAL.h>
@@ -70,4 +70,4 @@ private:
     uint32_t _last_update_ms;
 };
 
-#endif  // AP_AIRSPEED_NMEA_ENABLED
+

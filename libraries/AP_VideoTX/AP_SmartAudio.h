@@ -17,7 +17,7 @@
 
 #include "AP_VideoTX_config.h"
 
-#if AP_SMARTAUDIO_ENABLED
+
 
 #include <AP_Param/AP_Param.h>
 #include <AP_HAL/utility/RingBuffer.h>
@@ -261,4 +261,4 @@ private:
     void set_configuration_pending(bool pending) { _vtx_changes_pending = pending; }
     bool is_configuration_pending(){ return _vtx_changes_pending;}
 };
-#endif
+

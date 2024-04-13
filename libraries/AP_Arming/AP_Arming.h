@@ -232,9 +232,9 @@ protected:
     
     bool estop_checks(bool display_failure);
 
-#if AP_ARMING_CRASHDUMP_ACK_ENABLED
+
     bool crashdump_checks(bool report);
-#endif
+
 
     virtual bool system_checks(bool report);
 
@@ -320,12 +320,12 @@ private:
     bool blending_auto_switch_checks(bool report);
 #endif
 
-#if AP_ARMING_CRASHDUMP_ACK_ENABLED
+
     struct CrashDump {
         void check_reset();
         AP_Int8  acked;
     } crashdump_ack;
-#endif  // AP_ARMING_CRASHDUMP_ACK_ENABLED
+
 
 };
 

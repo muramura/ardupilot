@@ -20,7 +20,7 @@
 #include "AP_GPS.h"
 #include "AP_GPS_ERB.h"
 
-#if AP_GPS_ERB_ENABLED
+
 
 #define ERB_DEBUGGING 0
 
@@ -294,4 +294,4 @@ reset:
     }
     return false;
 }
-#endif
+

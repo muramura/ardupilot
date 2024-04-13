@@ -16,7 +16,7 @@
 
 #include "AP_VideoTX_config.h"
 
-#if AP_VIDEOTX_ENABLED
+
 
 #include <AP_Param/AP_Param.h>
 
@@ -203,4 +203,4 @@ namespace AP {
     AP_VideoTX& vtx();
 };
 
-#endif  // AP_VIDEOTX_ENABLED
+

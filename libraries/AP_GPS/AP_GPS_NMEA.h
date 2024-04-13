@@ -46,7 +46,7 @@
 #include "AP_GPS.h"
 #include "GPS_Backend.h"
 
-#if AP_GPS_NMEA_ENABLED
+
 /// NMEA parser
 ///
 class AP_GPS_NMEA : public AP_GPS_Backend
@@ -131,7 +131,7 @@ private:
     /// return true if we have a new set of NMEA messages
     bool _have_new_message(void);
 
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
     /*
       parse an AGRICA field
      */
@@ -144,7 +144,7 @@ private:
     // parse UNIHEADINGA field
     void parse_uniheadinga_field(uint16_t term_number, const char *term);
 #endif
-#endif
+
 
 
     uint8_t _parity;                                                    ///< NMEA message checksum accumulator
@@ -222,7 +222,7 @@ private:
         double fields[21];
     } _ksxt;
 
-#if AP_GPS_NMEA_UNICORE_ENABLED
+
     /*
       unicore AGRICA message parsing
      */
@@ -256,7 +256,7 @@ private:
         float heading_sd;
     } _uniheadinga;
 #endif
-#endif // AP_GPS_NMEA_UNICORE_ENABLED
+
     bool _expect_agrica;
 
     // last time we sent type specific config strings
@@ -272,5 +272,5 @@ private:
 #define NMEA_UNICORE_SETUP "CONFIG COM1 230400 8 n 1\r\nCONFIG COM2 230400 8 n 1\r\nCONFIG COM3 230400 8 n 1\r\nGPGGA 0.2\r\n"
 #endif
 
-#endif // AP_GPS_NMEA_ENABLED
+
 

@@ -449,45 +449,45 @@ AP_BattMonitor::init()
         state[instance].instance = instance;
 
         switch (get_type(instance)) {
-#if AP_BATTERY_ANALOG_ENABLED
+
             case Type::ANALOG_VOLTAGE_ONLY:
             case Type::ANALOG_VOLTAGE_AND_CURRENT:
                 drivers[instance] = new AP_BattMonitor_Analog(*this, state[instance], _params[instance]);
                 break;
-#endif
-#if AP_BATTERY_SMBUS_SOLO_ENABLED
+
+
             case Type::SOLO:
                 drivers[instance] = new AP_BattMonitor_SMBus_Solo(*this, state[instance], _params[instance]);
                 break;
-#endif
-#if AP_BATTERY_SMBUS_GENERIC_ENABLED
+
+
             case Type::SMBus_Generic:
                 drivers[instance] = new AP_BattMonitor_SMBus_Generic(*this, state[instance], _params[instance]);
                 break;
-#endif
-#if AP_BATTERY_SMBUS_SUI_ENABLED
+
+
             case Type::SUI3:
                 drivers[instance] = new AP_BattMonitor_SMBus_SUI(*this, state[instance], _params[instance], 3);
                 break;
             case Type::SUI6:
                 drivers[instance] = new AP_BattMonitor_SMBus_SUI(*this, state[instance], _params[instance], 6);
                 break;
-#endif
-#if AP_BATTERY_SMBUS_MAXELL_ENABLED
+
+
             case Type::MAXELL:
                 drivers[instance] = new AP_BattMonitor_SMBus_Maxell(*this, state[instance], _params[instance]);
                 break;
-#endif
-#if AP_BATTERY_SMBUS_ROTOYE_ENABLED
+
+
             case Type::Rotoye:
                 drivers[instance] = new AP_BattMonitor_SMBus_Rotoye(*this, state[instance], _params[instance]);
                 break;
-#endif
-#if AP_BATTERY_SMBUS_NEODESIGN_ENABLED
+
+
             case Type::NeoDesign:
                 drivers[instance] = new AP_BattMonitor_SMBus_NeoDesign(*this, state[instance], _params[instance]);
                 break;
-#endif
+
 #if AP_BATTERY_BEBOP_ENABLED && (CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_BEBOP)
             case Type::BEBOP:
                 drivers[instance] = new AP_BattMonitor_Bebop(*this, state[instance], _params[instance]);

@@ -358,9 +358,9 @@ protected:
 #if HAL_GYROFFT_ENABLED
     AP_GyroFFT gyro_fft;
 #endif
-#if AP_VIDEOTX_ENABLED
+
     AP_VideoTX vtx;
-#endif
+
 
 
     AP_SerialManager serial_manager;
@@ -411,9 +411,9 @@ protected:
     AP_ExternalAHRS externalAHRS;
 #endif
 
-#if AP_SMARTAUDIO_ENABLED
+
     AP_SmartAudio smartaudio;
-#endif
+
 
 #if AP_TRAMP_ENABLED
     AP_Tramp tramp;
