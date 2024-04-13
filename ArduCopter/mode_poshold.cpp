@@ -37,7 +37,7 @@ bool ModePosHold::init(bool ignore_checks)
     }
 
     // initialise lean angles to current attitude
-    pilot_roll = 0.0f;
+    pilot_roll  = 0.0f;
     pilot_pitch = 0.0f;
 
     // compute brake_gain
@@ -45,11 +45,11 @@ bool ModePosHold::init(bool ignore_checks)
 
     if (copter.ap.land_complete) {
         // if landed begin in loiter mode
-        roll_mode = RPMode::LOITER;
+        roll_mode  = RPMode::LOITER;
         pitch_mode = RPMode::LOITER;
     } else {
         // if not landed start in pilot override to avoid hard twitch
-        roll_mode = RPMode::PILOT_OVERRIDE;
+        roll_mode  = RPMode::PILOT_OVERRIDE;
         pitch_mode = RPMode::PILOT_OVERRIDE;
     }
 
@@ -108,7 +108,7 @@ void ModePosHold::run()
         loiter_nav->init_target();
 
         // set poshold state to pilot override
-        roll_mode = RPMode::PILOT_OVERRIDE;
+        roll_mode  = RPMode::PILOT_OVERRIDE;
         pitch_mode = RPMode::PILOT_OVERRIDE;
 
         // initialise wind compensation estimate
@@ -127,7 +127,7 @@ void ModePosHold::run()
         pos_control->relax_z_controller(0.0f);   // forces throttle output to decay to zero
 
         // set poshold state to pilot override
-        roll_mode = RPMode::PILOT_OVERRIDE;
+        roll_mode  = RPMode::PILOT_OVERRIDE;
         pitch_mode = RPMode::PILOT_OVERRIDE;
         break;
 
@@ -148,7 +148,7 @@ void ModePosHold::run()
         loiter_nav->init_target();
 
         // set poshold state to pilot override
-        roll_mode = RPMode::PILOT_OVERRIDE;
+        roll_mode  = RPMode::PILOT_OVERRIDE;
         pitch_mode = RPMode::PILOT_OVERRIDE;
         break;
 
@@ -371,7 +371,7 @@ void ModePosHold::run()
 
     // switch into LOITER mode when both roll and pitch are ready
     if (roll_mode == RPMode::BRAKE_READY_TO_LOITER && pitch_mode == RPMode::BRAKE_READY_TO_LOITER) {
-        roll_mode = RPMode::BRAKE_TO_LOITER;
+        roll_mode  = RPMode::BRAKE_TO_LOITER;
         pitch_mode = RPMode::BRAKE_TO_LOITER;
         brake.to_loiter_timer = POSHOLD_BRAKE_TO_LOITER_TIMER;
         // init loiter controller
@@ -394,7 +394,7 @@ void ModePosHold::run()
                     brake.to_loiter_timer--;
                 } else {
                     // progress to full loiter on next iteration
-                    roll_mode = RPMode::LOITER;
+                    roll_mode  = RPMode::LOITER;
                     pitch_mode = RPMode::LOITER;
                 }
 
@@ -441,7 +441,7 @@ void ModePosHold::run()
                 loiter_nav->update(false);
 
                 // set roll angle based on loiter controller outputs
-                roll = loiter_nav->get_roll();
+                roll  = loiter_nav->get_roll();
                 pitch = loiter_nav->get_pitch();
 
                 // update wind compensation estimate
@@ -454,7 +454,7 @@ void ModePosHold::run()
                         // init transition to pilot override
                         roll_controller_to_pilot_override();
                         // switch pitch-mode to brake (but ready to go back to loiter anytime)
-                        pitch_mode = RPMode::BRAKE_READY_TO_LOITER;
+                        pitch_mode  = RPMode::BRAKE_READY_TO_LOITER;
                         // reset brake.pitch because wind_comp is now different and should give the compensation of the whole previous loiter angle
                         brake.pitch = 0.0f;
                     }
@@ -464,7 +464,7 @@ void ModePosHold::run()
                         pitch_controller_to_pilot_override();
                         // if roll not overriden switch roll-mode to brake (but be ready to go back to loiter any time)
                         if (is_zero(target_roll)) {
-                            roll_mode = RPMode::BRAKE_READY_TO_LOITER;
+                            roll_mode  = RPMode::BRAKE_READY_TO_LOITER;
                             brake.roll = 0.0f;
                         }
                             // if roll not overridden switch roll-mode to brake (but be ready to go back to loiter any time)
@@ -480,7 +480,7 @@ void ModePosHold::run()
 
     // constrain target pitch/roll angles
     float angle_max = copter.aparm.angle_max;
-    roll = constrain_float(roll, -angle_max, angle_max);
+    roll  = constrain_float(roll, -angle_max, angle_max);
     pitch = constrain_float(pitch, -angle_max, angle_max);
 
     // call attitude controller
@@ -528,15 +528,17 @@ void ModePosHold::update_brake_angle_from_velocity(float &brake_angle, float vel
     float brake_rate = g.poshold_brake_rate;
 
     brake_rate /= (float)LOOP_RATE_FACTOR;
-    if (brake_rate <= 1.0f) {
+    if (brake_rate < 1.0f) {
         brake_rate = 1.0f;
     }
 
     // calculate velocity-only based lean angle
-    if (velocity >= 0) {
+    if (is_positive(velocity)) {
         lean_angle = -brake.gain * velocity * (1.0f + 500.0f / (velocity + 60.0f));
-    } else {
+    } else if (is_negative(velocity)) {
         lean_angle = -brake.gain * velocity * (1.0f + 500.0f / (-velocity + 60.0f));
+    } else {
+        lean_angle = 0.0f;
     }
 
     // do not let lean_angle be too far from brake_angle
@@ -551,7 +553,7 @@ void ModePosHold::init_wind_comp_estimate()
 {
     wind_comp_ef.zero();
     wind_comp_timer = 0;
-    wind_comp_roll = 0.0f;
+    wind_comp_roll  = 0.0f;
     wind_comp_pitch = 0.0f;
 }
 
@@ -609,7 +611,7 @@ void ModePosHold::get_wind_comp_lean_angles(float &roll_angle, float &pitch_angl
     wind_comp_timer = 0;
 
     // convert earth frame desired accelerations to body frame roll and pitch lean angles
-    roll_angle = atanf((-wind_comp_ef.x*ahrs.sin_yaw() + wind_comp_ef.y*ahrs.cos_yaw())/(GRAVITY_MSS*100))*(18000.0f/M_PI);
+    roll_angle  = atanf((-wind_comp_ef.x*ahrs.sin_yaw() + wind_comp_ef.y*ahrs.cos_yaw())/(GRAVITY_MSS*100))*(18000.0f/M_PI);
     pitch_angle = atanf(-(wind_comp_ef.x*ahrs.cos_yaw() + wind_comp_ef.y*ahrs.sin_yaw())/(GRAVITY_MSS*100))*(18000.0f/M_PI);
 }
 
