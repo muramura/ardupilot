@@ -14,7 +14,7 @@
  */
 #include "AP_GPS_config.h"
 
-#if AP_GPS_ENABLED
+
 
 #include "AP_GPS.h"
 
@@ -2145,4 +2145,4 @@ AP_GPS &gps()
 
 };
 
-#endif  // AP_GPS_ENABLED
+

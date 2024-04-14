@@ -251,7 +251,7 @@ void AP_Camera_Backend::send_camera_settings(mavlink_channel_t chan) const
         NaN);               // focusLevel float, percentage from 0 to 100, NaN if unknown
 }
 
-#if AP_CAMERA_SEND_FOV_STATUS_ENABLED
+
 // send camera field of view status
 void AP_Camera_Backend::send_camera_fov_status(mavlink_channel_t chan) const
 {
@@ -288,7 +288,7 @@ void AP_Camera_Backend::send_camera_fov_status(mavlink_channel_t chan) const
         vertical_fov() > 0 ? vertical_fov() : NaN
     );
 }
-#endif
+
 
 // send camera capture status message to GCS
 void AP_Camera_Backend::send_camera_capture_status(mavlink_channel_t chan) const

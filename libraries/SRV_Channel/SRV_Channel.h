@@ -600,23 +600,23 @@ private:
     static SRV_Channel *channels;
     static SRV_Channels *_singleton;
 
-#if AP_VOLZ_ENABLED
+
     // support for Volz protocol
     AP_Volz_Protocol volz;
     static AP_Volz_Protocol *volz_ptr;
-#endif
 
-#if AP_SBUSOUTPUT_ENABLED
+
+
     // support for SBUS protocol
     AP_SBusOut sbus;
     static AP_SBusOut *sbus_ptr;
-#endif
 
-#if AP_ROBOTISSERVO_ENABLED
+
+
     // support for Robotis servo protocol
     AP_RobotisServo robotis;
     static AP_RobotisServo *robotis_ptr;
-#endif
+
 
 #if HAL_SUPPORT_RCOUT_SERIAL
     // support for BLHeli protocol
@@ -624,10 +624,10 @@ private:
     static AP_BLHeli *blheli_ptr;
 #endif
 
-#if AP_FETTEC_ONEWIRE_ENABLED
+
     AP_FETtecOneWire fetteconwire;
     static AP_FETtecOneWire *fetteconwire_ptr;
-#endif  // AP_FETTEC_ONEWIRE_ENABLED
+
 
     // mask of disabled channels
     static uint32_t disabled_mask;

@@ -1353,7 +1353,7 @@ bool AP_Arming::mount_checks(bool display_failure) const
 }
 #endif  // HAL_MOUNT_ENABLED
 
-#if AP_FETTEC_ONEWIRE_ENABLED
+
 bool AP_Arming::fettec_checks(bool display_failure) const
 {
     const AP_FETtecOneWire *f = AP_FETtecOneWire::get_singleton();
@@ -1369,7 +1369,7 @@ bool AP_Arming::fettec_checks(bool display_failure) const
     }
     return true;
 }
-#endif  // AP_FETTEC_ONEWIRE_ENABLED
+
 
 
 // request an auxiliary authorisation id.  This id should be used in subsequent calls to set_aux_auth_passed/failed
@@ -1616,9 +1616,9 @@ bool AP_Arming::pre_arm_checks(bool report)
 #if HAL_MOUNT_ENABLED
         &  mount_checks(report)
 #endif
-#if AP_FETTEC_ONEWIRE_ENABLED
+
         &  fettec_checks(report)
-#endif
+
 #if HAL_VISUALODOM_ENABLED
         &  visodom_checks(report)
 #endif

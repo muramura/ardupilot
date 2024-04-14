@@ -18,7 +18,7 @@
 
 #include <AP_Common/AP_Common.h>
 
-#if AP_NOTIFY_PROFILED_ENABLED
+
 #include "SerialLED.h"
 
 class ProfiLED: public SerialLED {
@@ -28,7 +28,7 @@ public:
     uint16_t init_ports() override;
 
 };
-#endif  // AP_NOTIFY_PROFILED_ENABLED
+
 
 #if AP_NOTIFY_PROFILED_SPI_ENABLED
 #include <AP_HAL/SPIDevice.h>

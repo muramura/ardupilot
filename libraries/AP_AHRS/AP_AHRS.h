@@ -438,9 +438,7 @@ public:
 #if HAL_NAVEKF3_AVAILABLE
         THREE = 3,
 #endif
-#if HAL_NAVEKF2_AVAILABLE
-        TWO = 2,
-#endif
+
 #if AP_AHRS_SIM_ENABLED
         SIM = 10,
 #endif
@@ -455,9 +453,7 @@ public:
     }
     
     // these are only out here so vehicles can reference them for parameters
-#if HAL_NAVEKF2_AVAILABLE
-    NavEKF2 EKF2;
-#endif
+
 #if HAL_NAVEKF3_AVAILABLE
     NavEKF3 EKF3;
 #endif
@@ -751,10 +747,7 @@ private:
     float _sin_pitch;
     float _sin_yaw;
 
-#if HAL_NAVEKF2_AVAILABLE
-    void update_EKF2(void);
-    bool _ekf2_started;
-#endif
+
 #if HAL_NAVEKF3_AVAILABLE
     bool _ekf3_started;
     void update_EKF3(void);

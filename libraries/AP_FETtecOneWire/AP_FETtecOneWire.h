@@ -44,7 +44,7 @@
 #define HAL_AP_FETTEC_ESC_LIGHT 0
 #endif
 
-#if AP_FETTEC_ONEWIRE_ENABLED
+
 
 #define FTW_DEBUGGING 0
 #if FTW_DEBUGGING
@@ -499,4 +499,4 @@ private:
     /// returns true if the first message in the buffer is OK
     bool buffer_contains_ok(const uint8_t length);
 };
-#endif // AP_FETTEC_ONEWIRE_ENABLED
+

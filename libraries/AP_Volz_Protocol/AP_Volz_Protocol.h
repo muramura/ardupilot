@@ -39,7 +39,7 @@
 #define AP_VOLZ_ENABLED BOARD_FLASH_SIZE > 1024
 #endif
 
-#if AP_VOLZ_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Param/AP_Param.h>
@@ -82,4 +82,4 @@ private:
     bool initialised;
 };
 
-#endif  // AP_VOLZ_PROTOCOL
+

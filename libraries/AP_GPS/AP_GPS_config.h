@@ -7,7 +7,7 @@
 #define AP_GPS_ENABLED 1
 #endif
 
-#if AP_GPS_ENABLED
+
 /**
    maximum number of GPS instances available on this platform. If more
    than 1 then redundant sensors may be available
@@ -30,7 +30,7 @@
 #if GPS_MAX_INSTANCES > GPS_MAX_RECEIVERS
 #define GPS_BLENDED_INSTANCE GPS_MAX_RECEIVERS  // the virtual blended GPS is always the highest instance (2)
 #endif
-#endif
+
 
 #ifndef AP_GPS_BACKEND_DEFAULT_ENABLED
 #define AP_GPS_BACKEND_DEFAULT_ENABLED AP_GPS_ENABLED

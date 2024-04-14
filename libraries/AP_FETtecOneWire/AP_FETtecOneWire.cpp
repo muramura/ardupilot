@@ -22,7 +22,7 @@
 #include <GCS_MAVLink/GCS.h>
 
 #include "AP_FETtecOneWire.h"
-#if AP_FETTEC_ONEWIRE_ENABLED
+
 
 extern const AP_HAL::HAL& hal;
 
@@ -873,4 +873,4 @@ void AP_FETtecOneWire::led_color(const uint8_t r, const uint8_t g, const uint8_t
 }
 #endif  // HAL_AP_FETTEC_ESC_LIGHT
 
-#endif  // AP_FETTEC_ONEWIRE_ENABLED
+

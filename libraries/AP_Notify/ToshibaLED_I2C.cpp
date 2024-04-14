@@ -20,7 +20,7 @@
 
 #include "ToshibaLED_I2C.h"
 
-#if AP_NOTIFY_TOSHIBALED_ENABLED
+
 
 #include <utility>
 
@@ -98,4 +98,4 @@ void ToshibaLED_I2C::_timer(void)
     _dev->transfer(val, sizeof(val), nullptr, 0);
 }
 
-#endif  // AP_NOTIFY_TOSHIBALED_ENABLED
+

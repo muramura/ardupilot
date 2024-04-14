@@ -447,7 +447,7 @@ void AP_ToneAlarm::update()
 }
 
 
-#if AP_NOTIFY_MAVLINK_PLAY_TUNE_SUPPORT_ENABLED
+
 /*
  *  handle a PLAY_TUNE message
  */
@@ -468,4 +468,4 @@ void AP_Notify::handle_play_tune(const mavlink_message_t &msg)
 
     play_tune(_tone_buf);
 }
-#endif
+

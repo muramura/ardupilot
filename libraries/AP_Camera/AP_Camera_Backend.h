@@ -115,10 +115,10 @@ public:
     // send camera settings message to GCS
     virtual void send_camera_settings(mavlink_channel_t chan) const;
 
-#if AP_CAMERA_SEND_FOV_STATUS_ENABLED
+
     // send camera field of view status
     void send_camera_fov_status(mavlink_channel_t chan) const;
-#endif
+
 
     // send camera capture status message to GCS
     virtual void send_camera_capture_status(mavlink_channel_t chan) const;

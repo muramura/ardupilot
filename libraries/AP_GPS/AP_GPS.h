@@ -16,7 +16,7 @@
 
 #include "AP_GPS_config.h"
 
-#if AP_GPS_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <inttypes.h>
@@ -827,4 +827,4 @@ namespace AP {
     AP_GPS &gps();
 };
 
-#endif  // AP_GPS_ENABLED
+

@@ -618,11 +618,11 @@ const AP_Param::Info Copter::var_info[] = {
     // @Path: ../libraries/AP_RCMapper/AP_RCMapper.cpp
     GOBJECT(rcmap, "RCMAP_",        RCMapper),
 
-#if HAL_NAVEKF2_AVAILABLE
-    // @Group: EK2_
-    // @Path: ../libraries/AP_NavEKF2/AP_NavEKF2.cpp
-    GOBJECTN(ahrs.EKF2, NavEKF2, "EK2_", NavEKF2),
-#endif
+
+
+
+
+
 
 #if HAL_NAVEKF3_AVAILABLE
     // @Group: EK3_

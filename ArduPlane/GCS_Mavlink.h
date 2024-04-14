@@ -23,9 +23,9 @@ protected:
     uint32_t log_radio_bit() const override { return MASK_LOG_PM; }
 #endif
 
-#if AP_MAVLINK_MISSION_SET_CURRENT_ENABLED
+
     void handle_mission_set_current(AP_Mission &mission, const mavlink_message_t &msg) override;
-#endif
+
 
     bool sysid_enforce() const override;
 

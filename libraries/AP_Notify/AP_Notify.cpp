@@ -52,19 +52,19 @@ AP_Notify *AP_Notify::_singleton;
 #define CONFIG_NOTIFY_DEVICES_MAX 6
 #endif
 
-#if AP_NOTIFY_TOSHIBALED_ENABLED
+
 #define TOSHIBA_LED_I2C_BUS_INTERNAL    0
 #define TOSHIBA_LED_I2C_BUS_EXTERNAL    1
 #define ALL_TOSHIBALED_I2C (Notify_LED_ToshibaLED_I2C_Internal | Notify_LED_ToshibaLED_I2C_External)
-#else
-#define ALL_TOSHIBALED_I2C 0
-#endif
 
-#if AP_NOTIFY_NCP5623_ENABLED
+
+
+
+
 #define ALL_NCP5623_I2C (Notify_LED_NCP5623_I2C_Internal | Notify_LED_NCP5623_I2C_External)
-#else
-#define ALL_NCP5623_I2C 0
-#endif
+
+
+
 
 
 #define ALL_LP5562_I2C (Notify_LED_LP5562_I2C_Internal | Notify_LED_LP5562_I2C_External)
@@ -319,15 +319,15 @@ void AP_Notify::add_backends(void)
                 ADD_BACKEND(new AP_BoardLED2());
 #endif
                 break;
-#if AP_NOTIFY_TOSHIBALED_ENABLED
+
             case Notify_LED_ToshibaLED_I2C_Internal:
                 ADD_BACKEND(new ToshibaLED_I2C(TOSHIBA_LED_I2C_BUS_INTERNAL));
                 break;
             case Notify_LED_ToshibaLED_I2C_External:
                 ADD_BACKEND(new ToshibaLED_I2C(TOSHIBA_LED_I2C_BUS_EXTERNAL));
                 break;
-#endif
-#if AP_NOTIFY_NCP5623_ENABLED
+
+
             case Notify_LED_NCP5623_I2C_External:
                 FOREACH_I2C_EXTERNAL(b) {
                     ADD_BACKEND(new NCP5623(b));
@@ -338,23 +338,23 @@ void AP_Notify::add_backends(void)
                     ADD_BACKEND(new NCP5623(b));
                 }
                 break;
-#endif
-#if AP_NOTIFY_PCA9685_ENABLED
+
+
             case Notify_LED_PCA9685LED_I2C_External:
                 ADD_BACKEND(new PCA9685LED_I2C());
                 break;
-#endif
-#if AP_NOTIFY_NEOPIXEL_ENABLED
+
+
             case Notify_LED_NeoPixel:
             case Notify_LED_NeoPixelRGB:
                 ADD_BACKEND(new NeoPixel());
                 break;
-#endif
-#if AP_NOTIFY_PROFILED_ENABLED
+
+
             case Notify_LED_ProfiLED:
                 ADD_BACKEND(new ProfiLED());
                 break;
-#endif
+
 #if AP_NOTIFY_PROFILED_SPI_ENABLED
             case Notify_LED_ProfiLED_SPI:
                 ADD_BACKEND(new ProfiLED_SPI());
@@ -480,7 +480,7 @@ void AP_Notify::update(void)
     memset(&AP_Notify::events, 0, sizeof(AP_Notify::events));
 }
 
-#if AP_NOTIFY_MAVLINK_LED_CONTROL_SUPPORT_ENABLED
+
 // handle a LED_CONTROL message
 void AP_Notify::handle_led_control(const mavlink_message_t &msg)
 {
@@ -490,7 +490,7 @@ void AP_Notify::handle_led_control(const mavlink_message_t &msg)
         }
     }
 }
-#endif
+
 
 // handle RGB from Scripting or AP_Periph
 void AP_Notify::handle_rgb(uint8_t r, uint8_t g, uint8_t b, uint8_t rate_hz)

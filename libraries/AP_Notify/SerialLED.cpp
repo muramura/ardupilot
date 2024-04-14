@@ -15,7 +15,7 @@
 
 #include "SerialLED.h"
 
-#if AP_NOTIFY_SERIALLED_ENABLED
+
 
 extern const AP_HAL::HAL& hal;
 
@@ -57,4 +57,4 @@ bool SerialLED::hw_set_rgb(uint8_t red, uint8_t green, uint8_t blue)
     return true;
 }
 
-#endif  // AP_NOTIFY_SERIALLED_ENABLED
+

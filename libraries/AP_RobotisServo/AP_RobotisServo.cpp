@@ -36,7 +36,7 @@
 
 #include "AP_RobotisServo.h"
 
-#if AP_ROBOTISSERVO_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Math/AP_Math.h>
@@ -408,4 +408,4 @@ void AP_RobotisServo::update()
     }
 }
 
-#endif  // AP_ROBOTISSERVO_ENABLED
+

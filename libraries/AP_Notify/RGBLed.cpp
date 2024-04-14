@@ -229,7 +229,7 @@ void RGBLed::update()
     set_rgb(red_des, green_des, blue_des);
 }
 
-#if AP_NOTIFY_MAVLINK_LED_CONTROL_SUPPORT_ENABLED
+
 /*
   handle LED control, only used when LED_OVERRIDE=1
 */
@@ -256,7 +256,7 @@ void RGBLed::handle_led_control(const mavlink_message_t &msg)
         break;
     }
 }
-#endif
+
 
 /*
   update LED when in override mode

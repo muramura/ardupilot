@@ -24,7 +24,7 @@
 #define AP_ROBOTISSERVO_ENABLED BOARD_FLASH_SIZE > 1024
 #endif
 
-#if AP_ROBOTISSERVO_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Param/AP_Param.h>
@@ -73,4 +73,4 @@ private:
     uint32_t delay_time_us;
 };
 
-#endif  // AP_ROBOTISSERVO_ENABLED
+

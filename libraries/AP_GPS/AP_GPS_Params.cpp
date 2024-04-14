@@ -16,7 +16,7 @@
 
 #include "AP_GPS_config.h"
 
-#if AP_GPS_ENABLED
+
 
 #include "AP_GPS.h"
 
@@ -121,4 +121,4 @@ AP_GPS::Params::Params(void)
     AP_Param::setup_object_defaults(this, var_info);
 }
 
-#endif  // AP_GPS_ENABLED
+

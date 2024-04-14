@@ -622,7 +622,7 @@ void GCS_MAVLINK::handle_mission_request_int(const mavlink_message_t &msg)
         prot->handle_mission_request_int(*this, packet, msg);
 }
 
-#if AP_MAVLINK_MSG_MISSION_REQUEST_ENABLED
+
 void GCS_MAVLINK::handle_mission_request(const mavlink_message_t &msg)
 {
         // decode
@@ -635,7 +635,7 @@ void GCS_MAVLINK::handle_mission_request(const mavlink_message_t &msg)
         }
         prot->handle_mission_request(*this, packet, msg);
 }
-#endif
+
 
 // returns a MISSION_STATE numeration value best describing out
 // current mission state.
@@ -680,7 +680,7 @@ void GCS_MAVLINK::send_mission_current(const class AP_Mission &mission, uint16_t
         mission_mode);  // mission_mode
 }
 
-#if AP_MAVLINK_MISSION_SET_CURRENT_ENABLED
+
 /*
   handle a MISSION_SET_CURRENT mavlink packet
 
@@ -716,7 +716,7 @@ void GCS_MAVLINK::handle_mission_set_current(AP_Mission &mission, const mavlink_
         }
     }
 }
-#endif  // AP_MAVLINK_MISSION_SET_CURRENT_ENABLED
+
 
 /*
   handle a MISSION_COUNT mavlink packet
@@ -1109,9 +1109,9 @@ ap_message GCS_MAVLINK::mavlink_id_to_ap_message_id(const uint32_t mavlink_id) c
 
         { MAVLINK_MSG_ID_AIS_VESSEL,            MSG_AIS_VESSEL},
 
-#if AP_MAVLINK_MSG_UAVIONIX_ADSB_OUT_STATUS_ENABLED
+
         { MAVLINK_MSG_ID_UAVIONIX_ADSB_OUT_STATUS, MSG_UAVIONIX_ADSB_OUT_STATUS},
-#endif
+
 #if AP_MAVLINK_MSG_RELAY_STATUS_ENABLED
         { MAVLINK_MSG_ID_RELAY_STATUS, MSG_RELAY_STATUS},
 #endif
@@ -4133,12 +4133,12 @@ void GCS_MAVLINK::handle_message(const mavlink_message_t &msg)
         handle_statustext(msg);
         break;
 
-#if AP_NOTIFY_MAVLINK_LED_CONTROL_SUPPORT_ENABLED
+
     case MAVLINK_MSG_ID_LED_CONTROL:
         // send message to Notify
         AP_Notify::handle_led_control(msg);
         break;
-#endif
+
 
 
     case MAVLINK_MSG_ID_MANUAL_CONTROL:
@@ -4146,12 +4146,12 @@ void GCS_MAVLINK::handle_message(const mavlink_message_t &msg)
         break;
 
 
-#if AP_NOTIFY_MAVLINK_PLAY_TUNE_SUPPORT_ENABLED
+
     case MAVLINK_MSG_ID_PLAY_TUNE:
         // send message to Notify
         AP_Notify::handle_play_tune(msg);
         break;
-#endif
+
 
 #if AP_MAVLINK_RALLY_POINT_PROTOCOL_ENABLED
     case MAVLINK_MSG_ID_RALLY_POINT:
@@ -4328,13 +4328,13 @@ void GCS_MAVLINK::handle_common_mission_message(const mavlink_message_t &msg)
         handle_mission_request_int(msg);
         break;
 
-#if AP_MAVLINK_MSG_MISSION_REQUEST_ENABLED
+
     case MAVLINK_MSG_ID_MISSION_REQUEST:
         handle_mission_request(msg);
         break;
-#endif
 
-#if AP_MAVLINK_MISSION_SET_CURRENT_ENABLED
+
+
     case MAVLINK_MSG_ID_MISSION_SET_CURRENT:    // MAV ID: 41
     {
         AP_Mission *_mission = AP::mission();
@@ -4343,7 +4343,7 @@ void GCS_MAVLINK::handle_common_mission_message(const mavlink_message_t &msg)
         }
         break;
     }
-#endif
+
 
     // GCS request the full list of commands, we return just the number and leave the GCS to then request each command individually
     case MAVLINK_MSG_ID_MISSION_REQUEST_LIST:       // MAV ID: 43
@@ -6039,7 +6039,7 @@ bool GCS_MAVLINK::try_send_message(const enum ap_message id)
             camera->send_camera_settings(chan);
         }
         break;
-#if AP_CAMERA_SEND_FOV_STATUS_ENABLED
+
     case MSG_CAMERA_FOV_STATUS:
         {
             AP_Camera *camera = AP::camera();
@@ -6050,7 +6050,7 @@ bool GCS_MAVLINK::try_send_message(const enum ap_message id)
             camera->send_camera_fov_status(chan);
         }
         break;
-#endif
+
     case MSG_CAMERA_CAPTURE_STATUS:
         {
             AP_Camera *camera = AP::camera();
@@ -6319,12 +6319,12 @@ bool GCS_MAVLINK::try_send_message(const enum ap_message id)
     }
 
 
-#if AP_MAVLINK_MSG_UAVIONIX_ADSB_OUT_STATUS_ENABLED
+
     case MSG_UAVIONIX_ADSB_OUT_STATUS:
         CHECK_PAYLOAD_SIZE(UAVIONIX_ADSB_OUT_STATUS);
         send_uavionix_adsb_out_status();
         break;
-#endif
+
 
 #if AP_MAVLINK_MSG_RELAY_STATUS_ENABLED
     case MSG_RELAY_STATUS:

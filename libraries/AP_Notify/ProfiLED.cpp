@@ -31,7 +31,7 @@
 
 extern const AP_HAL::HAL& hal;
 
-#if AP_NOTIFY_PROFILED_ENABLED
+
 
 ProfiLED::ProfiLED() :
     SerialLED(ProfiLED_OFF, ProfiLED_HIGH, ProfiLED_MEDIUM, ProfiLED_LOW)
@@ -66,7 +66,7 @@ uint16_t ProfiLED::init_ports()
 
     return mask;
 }
-#endif  // AP_NOTIFY_PROFILED_ENABLED
+
 
 #if AP_NOTIFY_PROFILED_SPI_ENABLED
 ProfiLED_SPI::ProfiLED_SPI() :

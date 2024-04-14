@@ -9,7 +9,7 @@
 
 #include "AP_SBusOut_config.h"
 
-#if AP_SBUSOUTPUT_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Param/AP_Param.h>
@@ -40,4 +40,4 @@ private:
     bool initialised;
 };
 
-#endif  // AP_SBUSOUTPUT_ENABLED
+

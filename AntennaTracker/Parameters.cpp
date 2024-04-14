@@ -564,11 +564,11 @@ const AP_Param::Info Tracker::var_info[] = {
     // @Path: ../libraries/AP_Vehicle/AP_Vehicle.cpp
     PARAM_VEHICLE_INFO,
 
-#if HAL_NAVEKF2_AVAILABLE
-    // @Group: EK2_
-    // @Path: ../libraries/AP_NavEKF2/AP_NavEKF2.cpp
-    GOBJECTN(ahrs.EKF2, NavEKF2, "EK2_", NavEKF2),
-#endif
+
+
+
+
+
 
 #if HAL_NAVEKF3_AVAILABLE
     // @Group: EK3_

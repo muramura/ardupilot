@@ -41,21 +41,21 @@ extern const AP_HAL::HAL& hal;
 SRV_Channel *SRV_Channels::channels;
 SRV_Channels *SRV_Channels::_singleton;
 
-#if AP_VOLZ_ENABLED
+
 AP_Volz_Protocol *SRV_Channels::volz_ptr;
-#endif
 
-#if AP_SBUSOUTPUT_ENABLED
+
+
 AP_SBusOut *SRV_Channels::sbus_ptr;
-#endif
 
-#if AP_ROBOTISSERVO_ENABLED
+
+
 AP_RobotisServo *SRV_Channels::robotis_ptr;
-#endif
 
-#if AP_FETTEC_ONEWIRE_ENABLED
+
+
 AP_FETtecOneWire *SRV_Channels::fetteconwire_ptr;
-#endif
+
 
 uint16_t SRV_Channels::override_counter[NUM_SERVO_CHANNELS];
 
@@ -189,17 +189,17 @@ const AP_Param::GroupInfo SRV_Channels::var_info[] = {
     // @Units: Hz
     AP_GROUPINFO("_RATE",  18, SRV_Channels, default_rate, 50),
 
-#if AP_VOLZ_ENABLED
+
     // @Group: _VOLZ_
     // @Path: ../AP_Volz_Protocol/AP_Volz_Protocol.cpp
     AP_SUBGROUPINFO(volz, "_VOLZ_",  19, SRV_Channels, AP_Volz_Protocol),
-#endif
 
-#if AP_SBUSOUTPUT_ENABLED
+
+
     // @Group: _SBUS_
     // @Path: ../AP_SBusOut/AP_SBusOut.cpp
     AP_SUBGROUPINFO(sbus, "_SBUS_",  20, SRV_Channels, AP_SBusOut),
-#endif
+
 
 #if HAL_SUPPORT_RCOUT_SERIAL
     // @Group: _BLH_
@@ -207,17 +207,17 @@ const AP_Param::GroupInfo SRV_Channels::var_info[] = {
     AP_SUBGROUPINFO(blheli, "_BLH_",  21, SRV_Channels, AP_BLHeli),
 #endif
 
-#if AP_ROBOTISSERVO_ENABLED
+
     // @Group: _ROB_
     // @Path: ../AP_RobotisServo/AP_RobotisServo.cpp
     AP_SUBGROUPINFO(robotis, "_ROB_",  22, SRV_Channels, AP_RobotisServo),
-#endif
 
-#if AP_FETTEC_ONEWIRE_ENABLED
+
+
     // @Group: _FTW_
     // @Path: ../AP_FETtecOneWire/AP_FETtecOneWire.cpp
     AP_SUBGROUPINFO(fetteconwire, "_FTW_",  25, SRV_Channels, AP_FETtecOneWire),
-#endif
+
 
     // @Param: _DSHOT_RATE
     // @DisplayName: Servo DShot output rate
@@ -380,21 +380,21 @@ SRV_Channels::SRV_Channels(void)
 #endif
     }
 
-#if AP_FETTEC_ONEWIRE_ENABLED
+
     fetteconwire_ptr = &fetteconwire;
-#endif
 
-#if AP_VOLZ_ENABLED
+
+
     volz_ptr = &volz;
-#endif
 
-#if AP_SBUSOUTPUT_ENABLED
+
+
     sbus_ptr = &sbus;
-#endif
 
-#if AP_ROBOTISSERVO_ENABLED
+
+
     robotis_ptr = &robotis;
-#endif // AP_ROBOTISSERVO_ENABLED
+
 
 #if HAL_SUPPORT_RCOUT_SERIAL
     blheli_ptr = &blheli;
@@ -517,29 +517,29 @@ void SRV_Channels::push()
 {
     hal.rcout->push();
 
-#if AP_VOLZ_ENABLED
+
     // give volz library a chance to update
     volz_ptr->update();
-#endif
 
-#if AP_SBUSOUTPUT_ENABLED
+
+
     // give sbus library a chance to update
     sbus_ptr->update();
-#endif
 
-#if AP_ROBOTISSERVO_ENABLED
+
+
     // give robotis library a chance to update
     robotis_ptr->update();
-#endif
+
 
 #if HAL_SUPPORT_RCOUT_SERIAL
     // give blheli telemetry a chance to update
     blheli_ptr->update_telemetry();
 #endif
 
-#if AP_FETTEC_ONEWIRE_ENABLED
+
     fetteconwire_ptr->update();
-#endif
+
 
 #if AP_KDECAN_ENABLED
     if (AP::kdecan() != nullptr) {

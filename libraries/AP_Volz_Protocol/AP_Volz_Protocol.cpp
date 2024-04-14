@@ -6,7 +6,7 @@
  */
 #include "AP_Volz_Protocol.h"
 
-#if AP_VOLZ_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 
@@ -160,4 +160,4 @@ void AP_Volz_Protocol::update_volz_bitmask(uint32_t new_bitmask)
     volz_time_frame_micros = channels_micros;
 }
 
-#endif  // AP_VOLZ_ENABLED
+
