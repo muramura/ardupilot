@@ -330,7 +330,7 @@ bool AP_ADSB::is_valid_callsign(uint16_t octal)
     return true;
 }
 
-#if AP_GPS_ENABLED && AP_AHRS_ENABLED && AP_BARO_ENABLED
+#if AP_AHRS_ENABLED && AP_BARO_ENABLED
 /*
  * periodic update to handle vehicle timeouts and trigger collision detection
  */
