@@ -144,7 +144,7 @@ void NavEKF3_core::ResetPosition(resetDataSource posResetSource)
     lastPosPassTime_ms = imuSampleTime_ms;
 }
 
-#if EK3_FEATURE_POSITION_RESET
+
 // Sets the EKF's NE horizontal position states and their corresponding variances from a supplied WGS-84 location and optionally uncertainty
 // The altitude element of the location is not used. If accuracy is not known should be passed as NaN.
 // Returns true if the set was successful
@@ -182,7 +182,7 @@ bool NavEKF3_core::setLatLng(const Location &loc, float posAccuracy, uint32_t ti
 
     return true;
 }
-#endif // EK3_FEATURE_POSITION_RESET
+
 
 
 // reset the stateStruct's NE position to the specified position

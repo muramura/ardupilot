@@ -1410,7 +1410,7 @@ bool NavEKF3::setOriginLLH(const Location &loc)
 
 bool NavEKF3::setLatLng(const Location &loc, float posAccuracy, uint32_t timestamp_ms)
 {
-#if EK3_FEATURE_POSITION_RESET
+
     AP::dal().log_SetLatLng(loc, posAccuracy, timestamp_ms);
 
     if (!core) {
@@ -1422,9 +1422,9 @@ bool NavEKF3::setLatLng(const Location &loc, float posAccuracy, uint32_t timesta
     }
     // return true if any core accepts the new origin
     return ret;
-#else
-    return false;
-#endif // EK3_FEATURE_POSITION_RESET
+
+
+
 }
 
 

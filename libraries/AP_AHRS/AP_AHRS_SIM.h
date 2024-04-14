@@ -30,24 +30,24 @@
 #include <GCS_MAVLink/GCS.h>
 #include <SITL/SITL.h>
 
-#if HAL_NAVEKF3_AVAILABLE
+
 #include <AP_NavEKF3/AP_NavEKF3.h>
-#endif
+
 
 class AP_AHRS_SIM : public AP_AHRS_Backend {
 public:
 
-#if HAL_NAVEKF3_AVAILABLE
+
     AP_AHRS_SIM(NavEKF3 &_EKF3) :
         AP_AHRS_Backend(),
         EKF3(_EKF3)
         { }
     ~AP_AHRS_SIM() {}
-#else
-    // a version of the constructor which doesn't take a non-existant
-    // NavEKF3 class instance as a parameter.
-    AP_AHRS_SIM() : AP_AHRS_Backend() { }
-#endif
+
+
+
+
+
 
     CLASS_NO_COPY(AP_AHRS_SIM);
 
@@ -119,12 +119,12 @@ private:
     // dead-reckoning support
     bool get_location(Location &loc) const;
 
-#if HAL_NAVEKF3_AVAILABLE
+
     // a reference to the EKF3 backend that we can use to send in
     // body-frame-odometry data into the EKF.  Rightfully there should
     // be something over in the SITL directory doing this.
     NavEKF3 &EKF3;
-#endif
+
 
     class SITL::SIM *_sitl;
     uint32_t _last_body_odm_update_ms;

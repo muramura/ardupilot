@@ -257,7 +257,7 @@ void AP_AHRS_SIM::get_results(AP_AHRS_Backend::Estimates &results)
 
     results.location_valid = get_location(results.location);
 
-#if HAL_NAVEKF3_AVAILABLE
+
     if (_sitl->odom_enable) {
         // use SITL states to write body frame odometry data at 20Hz
         uint32_t timeStamp_ms = AP_HAL::millis();
@@ -279,7 +279,7 @@ void AP_AHRS_SIM::get_results(AP_AHRS_Backend::Estimates &results)
             EKF3.writeBodyFrameOdom(quality, delPos, delAng, delTime, timeStamp_ms, 0, posOffset);
         }
     }
-#endif // HAL_NAVEKF3_AVAILABLE
+
 }
 
 #endif // AP_AHRS_SIM_ENABLED
