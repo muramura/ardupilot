@@ -61,9 +61,9 @@ public:
 
         Notify_LED_PCA9685LED_I2C_External  = (1 << 3), // External PCA9685_I2C
 
-#if AP_NOTIFY_OREOLED_ENABLED
+
         Notify_LED_OreoLED                  = (1 << 4), // Oreo
-#endif
+
 #if AP_NOTIFY_DRONECAN_LED_ENABLED
         Notify_LED_DroneCAN                   = (1 << 5), // UAVCAN RGB LED
 #endif
@@ -77,15 +77,15 @@ public:
 
         Notify_LED_ProfiLED                 = (1 << 9), // ProfiLED
 
-#if AP_NOTIFY_SCRIPTING_LED_ENABLED
+
         Notify_LED_Scripting                = (1 << 10),// Colour accessor for scripting
-#endif
-#if AP_NOTIFY_DSHOT_LED_ENABLED
+
+
         Notify_LED_DShot                    = (1 << 11),// Use dshot commands to set ESC LEDs
-#endif
-#if AP_NOTIFY_PROFILED_SPI_ENABLED
+
+
         Notify_LED_ProfiLED_SPI             = (1 << 12), // ProfiLED (SPI)
-#endif
+
 
         Notify_LED_LP5562_I2C_External      = (1 << 13), // LP5562
         Notify_LED_LP5562_I2C_Internal      = (1 << 14), // LP5562
@@ -94,9 +94,9 @@ public:
         Notify_LED_IS31FL3195_I2C_External  = (1 << 15), // IS31FL3195
         Notify_LED_IS31FL3195_I2C_Internal  = (1 << 16), // IS31FL3195
 
-#if AP_NOTIFY_DISCRETE_RGB_ENABLED
+
         Notify_LED_DiscreteRGB              = (1 << 17), // DiscreteRGB
-#endif
+
 
         Notify_LED_NeoPixelRGB              = (1 << 18), // NeoPixel AdaFruit 4544 Worldsemi WS2811
 

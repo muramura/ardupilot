@@ -13,7 +13,7 @@
 
 #include "AP_Notify_config.h"
 
-#if AP_NOTIFY_DISCRETE_RGB_ENABLED
+
 
 #include "DiscreteRGBLed.h"
 
@@ -60,4 +60,4 @@ bool DiscreteRGBLed::hw_set_rgb(uint8_t red, uint8_t green, uint8_t blue)
     return true;
 }
 
-#endif  // AP_NOTIFY_DISCRETE_RGB_ENABLED
+

@@ -68,7 +68,7 @@ uint16_t ProfiLED::init_ports()
 }
 
 
-#if AP_NOTIFY_PROFILED_SPI_ENABLED
+
 ProfiLED_SPI::ProfiLED_SPI() :
     RGBLed(ProfiLED_OFF, ProfiLED_HIGH, ProfiLED_MEDIUM, ProfiLED_LOW) {}
 
@@ -168,4 +168,4 @@ void ProfiLED_SPI::update_led_strip() {
     }
 }
 
-#endif  // AP_NOTIFY_PROFILED_SPI_ENABLED
+

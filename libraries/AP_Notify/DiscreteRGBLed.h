@@ -20,7 +20,7 @@
 
 #include "AP_Notify_config.h"
 
-#if AP_NOTIFY_DISCRETE_RGB_ENABLED
+
 
 #include "RGBLed.h"
 
@@ -40,4 +40,4 @@ private:
     uint16_t red_pin_number, green_pin_number, blue_pin_number;
 };
 
-#endif  // AP_NOTIFY_DISCRETE_RGB_ENABLED
+

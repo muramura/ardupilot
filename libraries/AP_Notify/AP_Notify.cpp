@@ -195,14 +195,14 @@ const AP_Param::GroupInfo AP_Notify::var_info[] = {
     AP_GROUPINFO("DISPLAY_TYPE", 3, AP_Notify, _display_type, 0),
 #endif
 
-#if AP_NOTIFY_OREOLED_ENABLED
+
     // @Param: OREO_THEME
     // @DisplayName: OreoLED Theme
     // @Description: Enable/Disable Solo Oreo LED driver, 0 to disable, 1 for Aircraft theme, 2 for Rover theme
     // @Values: 0:Disabled,1:Aircraft,2:Rover
     // @User: Advanced
     AP_GROUPINFO("OREO_THEME", 4, AP_Notify, _oreo_theme, 0),
-#endif
+
 
     // @Param: BUZZ_PIN
     // @DisplayName: Buzzer pin
@@ -355,33 +355,33 @@ void AP_Notify::add_backends(void)
                 ADD_BACKEND(new ProfiLED());
                 break;
 
-#if AP_NOTIFY_PROFILED_SPI_ENABLED
+
             case Notify_LED_ProfiLED_SPI:
                 ADD_BACKEND(new ProfiLED_SPI());
                 break;
-#endif
-#if AP_NOTIFY_OREOLED_ENABLED
+
+
             case Notify_LED_OreoLED:
                 if (_oreo_theme) {
                     ADD_BACKEND(new OreoLED_I2C(0, _oreo_theme));
                 }
                 break;
-#endif
+
 #if AP_NOTIFY_DRONECAN_LED_ENABLED
             case Notify_LED_DroneCAN:
                 ADD_BACKEND(new DroneCAN_RGB_LED());
                 break;
 #endif // AP_NOTIFY_DRONECAN_LED_ENABLED
-#if AP_NOTIFY_SCRIPTING_LED_ENABLED
+
             case Notify_LED_Scripting:
                 ADD_BACKEND(new ScriptingLED());
                 break;
-#endif
-#if AP_NOTIFY_DSHOT_LED_ENABLED
+
+
             case Notify_LED_DShot:
                 ADD_BACKEND(new DShotLED());
                 break;
-#endif
+
 
             case Notify_LED_LP5562_I2C_External:
                 FOREACH_I2C_EXTERNAL(b) {
@@ -406,14 +406,14 @@ void AP_Notify::add_backends(void)
                 }
                 break;
 
-#if AP_NOTIFY_DISCRETE_RGB_ENABLED
+
             case Notify_LED_DiscreteRGB:
                 ADD_BACKEND(new DiscreteRGBLed(DISCRETE_RGB_RED_PIN,
                                                DISCRETE_RGB_GREEN_PIN,
                                                DISCRETE_RGB_BLUE_PIN,
                                                DISCRETE_RGB_POLARITY));
                 break;
-#endif
+
         }
     }
 

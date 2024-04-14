@@ -30,7 +30,7 @@ public:
 };
 
 
-#if AP_NOTIFY_PROFILED_SPI_ENABLED
+
 #include <AP_HAL/SPIDevice.h>
 #include "RGBLed.h"
 
@@ -63,4 +63,4 @@ private:
 };
 
 
-#endif  // AP_NOTIFY_PROFILED_SPI_ENABLED
+

@@ -9,9 +9,9 @@
 #include <AP_SerialLED/AP_SerialLED_config.h>
 #include <AP_Scripting/AP_Scripting_config.h>
 
-#ifndef AP_NOTIFY_DISCRETE_RGB_ENABLED
-#define AP_NOTIFY_DISCRETE_RGB_ENABLED 0
-#endif
+
+
+
 
 #ifndef HAL_DISPLAY_ENABLED
 #define HAL_DISPLAY_ENABLED 1
@@ -21,9 +21,9 @@
 #define AP_NOTIFY_DRONECAN_LED_ENABLED HAL_ENABLE_DRONECAN_DRIVERS
 #endif
 
-#ifndef AP_NOTIFY_DSHOT_LED_ENABLED
-#define AP_NOTIFY_DSHOT_LED_ENABLED HAL_SUPPORT_RCOUT_SERIAL
-#endif
+
+
+
 
 #ifndef AP_NOTIFY_VRBOARD_LED_ENABLED
 #define AP_NOTIFY_VRBOARD_LED_ENABLED 0
@@ -57,9 +57,9 @@
 
 
 
-#ifndef AP_NOTIFY_PROFILED_SPI_ENABLED
-#define AP_NOTIFY_PROFILED_SPI_ENABLED 0  // requires hwdef to have SPI line
-#endif
+
+
+
 
 #ifndef AP_NOTIFY_SCRIPTING_LED_ENABLED
 #define AP_NOTIFY_SCRIPTING_LED_ENABLED AP_SCRIPTING_ENABLED
@@ -73,9 +73,9 @@
 
 
 
-#ifndef AP_NOTIFY_OREOLED_ENABLED
-#define AP_NOTIFY_OREOLED_ENABLED 0
-#endif
+
+
+
 
 // Serial LED backends:
 

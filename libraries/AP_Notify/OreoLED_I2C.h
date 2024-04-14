@@ -18,7 +18,7 @@
 
 #include "AP_Notify_config.h"
 
-#if AP_NOTIFY_OREOLED_ENABLED
+
 
 #include <AP_HAL/AP_HAL.h>
 #include "NotifyDevice.h"
@@ -203,4 +203,4 @@ private:
     uint32_t _last_sync_ms;
 };
 
-#endif  // AP_NOTIFY_OREOLED_ENABLED
+
