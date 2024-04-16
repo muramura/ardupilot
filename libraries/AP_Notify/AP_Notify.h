@@ -94,9 +94,9 @@ public:
         Notify_LED_IS31FL3195_I2C_External  = (1 << 15), // IS31FL3195
         Notify_LED_IS31FL3195_I2C_Internal  = (1 << 16), // IS31FL3195
 
-
+#if AP_NOTIFY_DISCRETE_RGB_ENABLED
         Notify_LED_DiscreteRGB              = (1 << 17), // DiscreteRGB
-
+#endif
 
         Notify_LED_NeoPixelRGB              = (1 << 18), // NeoPixel AdaFruit 4544 Worldsemi WS2811
 

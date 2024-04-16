@@ -406,14 +406,14 @@ void AP_Notify::add_backends(void)
                 }
                 break;
 
-
+#if AP_NOTIFY_DISCRETE_RGB_ENABLED
             case Notify_LED_DiscreteRGB:
                 ADD_BACKEND(new DiscreteRGBLed(DISCRETE_RGB_RED_PIN,
                                                DISCRETE_RGB_GREEN_PIN,
                                                DISCRETE_RGB_BLUE_PIN,
                                                DISCRETE_RGB_POLARITY));
                 break;
-
+#endif
         }
     }
 
