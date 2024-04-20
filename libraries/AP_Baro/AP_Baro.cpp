@@ -986,7 +986,8 @@ void AP_Baro::update(void)
 
 #ifdef HAL_BUILD_AP_PERIPH
 // calibration and alt check not valid for AP_Periph
-bool AP_Baro::healthy(uint8_t instance) const {
+bool AP_Baro::healthy(uint8_t instance) const
+{
     // If the requested instance was outside max instances it is not healthy (it doesn't exist)
     if (instance >= BARO_MAX_INSTANCES) {
         return false;
@@ -994,7 +995,8 @@ bool AP_Baro::healthy(uint8_t instance) const {
     return sensors[instance].healthy;
 }
 #else
-bool AP_Baro::healthy(uint8_t instance) const {
+bool AP_Baro::healthy(uint8_t instance) const
+{
     // If the requested instance was outside max instances it is not healthy (it doesn't exist)
     if (instance >= BARO_MAX_INSTANCES) {
         return false;
