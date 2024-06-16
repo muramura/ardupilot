@@ -18,6 +18,7 @@
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Math/AP_Math.h>
+#include <GCS_MAVLink/GCS.h>
 
 #include "ToneAlarm.h"
 #include "AP_Notify.h"
@@ -133,7 +134,7 @@ bool AP_ToneAlarm::init()
 #endif
 
 #ifndef HAL_BUILD_AP_PERIPH
-    play_tone(AP_NOTIFY_TONE_STARTUP);
+    //play_tone(AP_NOTIFY_TONE_STARTUP);
 #endif
     return true;
 }
@@ -167,6 +168,7 @@ void AP_ToneAlarm::play_tune(const char *str)
     _mml_player.stop();
     strncpy(_tone_buf, str, AP_NOTIFY_TONEALARM_TONE_BUF_SIZE);
     _tone_buf[AP_NOTIFY_TONEALARM_TONE_BUF_SIZE-1] = 0;
+    GCS_SEND_TEXT(MAV_SEVERITY_NOTICE, "### %s", _tone_buf);
     _mml_player.play(_tone_buf);
 }
 
@@ -222,12 +224,12 @@ void AP_ToneAlarm::update()
     flags.compass_cal_running = AP_Notify::flags.compass_cal_running;
 
     if (AP_Notify::events.compass_cal_canceled) {
-        play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
+        //play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
         return;
     }
 
     if (AP_Notify::events.initiated_compass_cal) {
-        play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
+        //play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
         return;
     }
 
@@ -244,7 +246,7 @@ void AP_ToneAlarm::update()
     }
 
     if (AP_Notify::events.initiated_temp_cal) {
-        play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
+        //play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
         return;
     }
 
@@ -286,7 +288,7 @@ void AP_ToneAlarm::update()
         if (AP_Notify::flags.armed) {
             play_tone(AP_NOTIFY_TONE_LOUD_NEU_FEEDBACK);
         } else {
-            play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
+            //play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
         }
     }
 
@@ -347,7 +349,20 @@ void AP_ToneAlarm::update()
     if (flags.pre_arm_check != AP_Notify::flags.pre_arm_check) {
         flags.pre_arm_check = AP_Notify::flags.pre_arm_check;
         if (flags.pre_arm_check) {
-            play_tone(AP_NOTIFY_TONE_QUIET_READY_OR_FINISHED);
+            //play_tone(AP_NOTIFY_TONE_QUIET_READY_OR_FINISHED);
+            //_have_played_ready_tone = true;
+
+    enum ap_var_type ptype = AP_PARAM_NONE;
+    AP_Param *ap2;
+    ap2 = AP_Param::find("TONEALARM_START", &ptype);
+    if (ap2 == nullptr) {
+        GCS_SEND_TEXT(MAV_SEVERITY_NOTICE, "### AP_Notify::play_tune");
+    } else {
+        float param_value = 0.0;
+        AP_Param::get("TONEALARM_START", param_value);
+        GCS_SEND_TEXT(MAV_SEVERITY_NOTICE, "### AP_Notify::play_tune %f %d", param_value, ptype);
+        AP_Param::set_and_save_by_name_ifchanged("TONEALARM_START", 1.0);
+    }
             _have_played_ready_tone = true;
         } else {
             // only play sad tone if we've ever played happy tone:
@@ -365,7 +380,7 @@ void AP_ToneAlarm::update()
             play_tone(AP_NOTIFY_TONE_QUIET_ARMING_WARNING);
         } else {
             // disarming tune
-            play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
+            //play_tone(AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK);
             if (!flags.leak_detected) {
                 stop_cont_tone();
             }
