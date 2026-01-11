@@ -20,7 +20,7 @@
 
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Common/AP_Common.h>
-#if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+#if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED || AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
 #include <GCS_MAVLink/GCS_MAVLink.h>
 #endif
 
@@ -98,6 +98,9 @@ public:
 #endif  // AP_RCPROTOCOL_IOMCU_ENABLED
 #if AP_RCPROTOCOL_EMLID_RCIO_ENABLED
         EMLID_RCIO = 21,
+#endif
+#if AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
+        MAVLINK_RADIO_MASKED = 22,
 #endif
         NONE    //last enum always is None
     };
@@ -194,6 +197,9 @@ public:
 #if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
         case MAVLINK_RADIO:
 #endif
+#if AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
+        case MAVLINK_RADIO_MASKED:
+#endif
 #if AP_RCPROTOCOL_JOYSTICK_SFML_ENABLED
         case JOYSTICK_SFML:
 #endif
@@ -267,6 +273,9 @@ public:
     // handle mavlink radio
 #if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
     void handle_radio_rc_channels(const mavlink_radio_rc_channels_t* packet);
+#endif
+#if AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
+    void handle_radio_rc_channels_masked(const mavlink_radio_rc_channels_masked_t* packet);
 #endif
 
 private:

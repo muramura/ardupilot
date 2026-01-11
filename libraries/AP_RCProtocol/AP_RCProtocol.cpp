@@ -37,6 +37,7 @@
 #include "AP_RCProtocol_DroneCAN.h"
 #include "AP_RCProtocol_GHST.h"
 #include "AP_RCProtocol_MAVLinkRadio.h"
+#include "AP_RCProtocol_MAVLinkRadioMasked.h"
 #include "AP_RCProtocol_Joystick_SFML.h"
 #include "AP_RCProtocol_UDP.h"
 #include "AP_RCProtocol_FDM.h"
@@ -99,6 +100,9 @@ void AP_RCProtocol::init()
 #endif
 #if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
     backend[AP_RCProtocol::MAVLINK_RADIO] = NEW_NOTHROW AP_RCProtocol_MAVLinkRadio(*this);
+#endif
+#if AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
+    backend[AP_RCProtocol::MAVLINK_RADIO_MASKED] = NEW_NOTHROW AP_RCProtocol_MAVLinkRadioMasked(*this);
 #endif
 #if AP_RCPROTOCOL_JOYSTICK_SFML_ENABLED
     backend[AP_RCProtocol::JOYSTICK_SFML] = NEW_NOTHROW AP_RCProtocol_Joystick_SFML(*this);
@@ -510,6 +514,9 @@ bool AP_RCProtocol::new_input()
 #if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
         AP_RCProtocol::MAVLINK_RADIO,
 #endif
+#if AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
+        AP_RCProtocol::MAVLINK_RADIO_MASKED,
+#endif
 #if AP_RCPROTOCOL_JOYSTICK_SFML_ENABLED
         AP_RCProtocol::JOYSTICK_SFML,
 #endif
@@ -679,6 +686,10 @@ const char *AP_RCProtocol::protocol_name_from_protocol(rcprotocol_t protocol)
     case MAVLINK_RADIO:
         return "MAVRadio";
 #endif
+#if AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
+    case MAVLINK_RADIO_MASKED:
+        return "MAVRadioMasked";
+#endif
 #if AP_RCPROTOCOL_JOYSTICK_SFML_ENABLED
     case JOYSTICK_SFML:
         return "SFML";
@@ -739,6 +750,19 @@ void AP_RCProtocol::handle_radio_rc_channels(const mavlink_radio_rc_channels_t* 
     backend[AP_RCProtocol::MAVLINK_RADIO]->update_radio_rc_channels(packet);
 };
 #endif // AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+
+#if AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
+void AP_RCProtocol::handle_radio_rc_channels_masked(const mavlink_radio_rc_channels_masked_t* packet)
+{
+    //GCS_SEND_TEXT(MAV_SEVERITY_NOTICE, "### RCInput: received MAVLink RADIO_CHANNELS_MASKED message");
+    if (backend[AP_RCProtocol::MAVLINK_RADIO_MASKED] == nullptr) {
+        return;
+    }
+
+    //GCS_SEND_TEXT(MAV_SEVERITY_NOTICE, "### RCInput: received MAVLink RADIO_CHANNELS_MASKED message");
+    backend[AP_RCProtocol::MAVLINK_RADIO_MASKED]->update_radio_rc_channels_masked(packet);
+};
+#endif // AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
 
 namespace AP {
     AP_RCProtocol &RC()
