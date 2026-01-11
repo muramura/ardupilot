@@ -71,7 +71,14 @@ void AP_RCProtocol_Backend::read(uint16_t *pwm, uint8_t n)
 void AP_RCProtocol_Backend::add_input(uint8_t num_values, uint16_t *values, bool in_failsafe, int16_t _rssi, int16_t _rx_link_quality)
 {
     num_values = MIN(num_values, MAX_RCIN_CHANNELS);
-    memcpy(_pwm_values, values, num_values*sizeof(uint16_t));
+
+    // copy in new values, ignoring 0xFFFF entries
+    for (uint8_t i = 0; i < num_values; i++) {
+        if (values[i] != UINT16_MAX) {
+            _pwm_values[i] = values[i];
+        }
+    }
+
     _num_channels = num_values;
     rc_frame_count++;
     frontend.set_failsafe_active(in_failsafe);
