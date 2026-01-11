@@ -4564,6 +4564,11 @@ void GCS_MAVLINK::handle_message(const mavlink_message_t &msg)
         handle_radio_rc_channels(msg);
         break;
 #endif
+#if AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
+    case MAVLINK_MSG_ID_RADIO_RC_CHANNELS_MASKED:
+        handle_radio_rc_channels_masked(msg);
+        break;
+#endif
 #endif
 
 #if AP_OPTICALFLOW_ENABLED
@@ -7576,5 +7581,15 @@ void GCS_MAVLINK::handle_radio_rc_channels(const mavlink_message_t &msg)
     AP::RC().handle_radio_rc_channels(&packet);
 }
 #endif // AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
+
+#if AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
+void GCS_MAVLINK::handle_radio_rc_channels_masked(const mavlink_message_t &msg)
+{
+    mavlink_radio_rc_channels_masked_t packet;
+    mavlink_msg_radio_rc_channels_masked_decode(&msg, &packet);
+
+    AP::RC().handle_radio_rc_channels_masked(&packet);
+}
+#endif // AP_RCPROTOCOL_MAVLINK_RADIO_MASKED_ENABLED
 
 #endif  // HAL_GCS_ENABLED
