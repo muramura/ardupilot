@@ -4215,6 +4215,52 @@ void GCS_MAVLINK::handle_rc_channels_override(const mavlink_message_t &msg)
     sysid_mygcs_seen(tnow);
 
 }
+
+/**
+ * @brief Handle the RC_CHANNELS_OVERRIDE_V2 message.
+ *
+ * This message allows for overriding up to 32 RC channels using a bitmask-based approach.
+ * Channel values are received in a high-resolution, centered 13-bit format (-4096 to 4096).
+ *
+ * Key behaviors:
+ * - Only accepts control from a recognized GCS (sysid check).
+ * - Converts the 13-bit format to standard PWM (1500 +/- 640) using the formula: (x * 5 / 32) + 1500.
+ * - Uses active_mask to efficiently skip inactive channels and terminates early when the mask is empty.
+ * - Ensures channel indices do not exceed the vehicle's supported channel count.
+ *
+ * @param msg The MAVLink message containing the RC_CHANNELS_OVERRIDE_V2 packet.
+ */
+void GCS_MAVLINK::handle_rc_channels_override_v2(const mavlink_message_t &msg)
+{
+    if (!gcs().sysid_is_gcs(msg.sysid)) {
+        return; // Only accept control from our gcs
+    }
+
+    mavlink_rc_channels_override_v2_t packet;
+    mavlink_msg_rc_channels_override_v2_decode(&msg, &packet);
+
+    const uint32_t tnow = AP_HAL::millis();
+    uint32_t mask = packet.active_mask;
+    uint8_t index = 0;
+
+    for (uint8_t ch = 0; ch < MAVLINK_MSG_RC_CHANNELS_OVERRIDE_V2_FIELD_CHANNELS_LEN; ch++) {
+        if (mask & 0x1) {
+            // Convert 13-bit format (-4096 to 4096) to PWM (1500 +/- 640)
+            const uint16_t rc_pwm = (uint16_t)(((int32_t)packet.channels[index++] * 5) / 32 + 1500);
+            
+            // RC_Channels::set_override handles NUM_RC_CHANNELS bounds check internally
+            RC_Channels::set_override(ch, rc_pwm, tnow);
+        }
+    
+        mask >>= 1;
+        if (mask == 0) {
+            break; // Early exit when no more bits are set
+        }
+    }
+
+    sysid_mygcs_seen(tnow);
+}
+
 #endif  // AP_RC_CHANNEL_ENABLED
 
 #if AP_OPTICALFLOW_ENABLED
@@ -4578,6 +4624,11 @@ void GCS_MAVLINK::handle_message(const mavlink_message_t &msg)
     case MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE:
         handle_rc_channels_override(msg);
         break;
+
+    case MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE_V2:
+        handle_rc_channels_override_v2(msg);
+        break;
+
 #if AP_RCPROTOCOL_MAVLINK_RADIO_ENABLED
     case MAVLINK_MSG_ID_RADIO_RC_CHANNELS:
         handle_radio_rc_channels(msg);

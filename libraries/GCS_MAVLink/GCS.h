@@ -605,6 +605,7 @@ protected:
     void handle_param_request_read(const mavlink_message_t &msg);
     virtual bool params_ready() const { return true; }
     void handle_rc_channels_override(const mavlink_message_t &msg);
+    void handle_rc_channels_override_v2(const mavlink_message_t &msg);
     void handle_system_time_message(const mavlink_message_t &msg);
     void handle_common_rally_message(const mavlink_message_t &msg);
     void handle_rally_fetch_point(const mavlink_message_t &msg);
