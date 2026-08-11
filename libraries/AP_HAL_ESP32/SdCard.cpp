@@ -358,7 +358,9 @@ void unmount_sdcard()
 // empty impl's
 void mount_sdcard()
 {
+#ifndef HAL_ESP32_SUPPRESS_NO_SDCARD_SETUP_MESSAGE
     printf("No sdcard setup.\n");
+#endif
 }
 void unmount_sdcard()
 {
@@ -368,5 +370,3 @@ bool sdcard_retry(void)
     return true;
 }
 #endif
-
-
