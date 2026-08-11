@@ -86,7 +86,21 @@ define AP_AIRSPEED_ENABLED 0
 
 # the stampfly does not have a temperature sensor:
 define AP_TEMPERATURE_SENSOR_ENABLED 0
-env AP_LIBRARIES_DISABLED AP_TemperatureSensor
+
+# the stampfly does not have visual odometry or winch hardware:
+define HAL_VISUALODOM_ENABLED 0
+define AP_WINCH_ENABLED 0
+
+# the stampfly does not have external AHRS, FrSky telemetry, MSP/OSD,
+# OpenDroneID or proximity hardware:
+define AP_FRSKY_TELEM_ENABLED 0
+define HAL_MSP_ENABLED 0
+define OSD_ENABLED 0
+define OSD_PARAM_ENABLED 0
+define AP_OPENDRONEID_ENABLED 0
+define HAL_PROXIMITY_ENABLED 0
+
+env AP_LIBRARIES_DISABLED AP_TemperatureSensor AP_Generator AP_Gripper AP_Mount AP_Airspeed AP_ADSB AP_Camera AP_VisualOdom AP_Winch AP_ExternalAHRS AP_Frsky_Telem AP_MSP AP_OSD AP_OpenDroneID AP_Proximity
 
 define HAL_ESP32_BOARD_NAME "esp32s3m5stampfly"
 
