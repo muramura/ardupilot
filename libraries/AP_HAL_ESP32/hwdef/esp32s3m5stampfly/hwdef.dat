@@ -81,6 +81,10 @@ define AP_NOTIFY_TONEALARM_ENABLED 1
 # the stampfly does not have an Airspeed sensor:
 define AP_AIRSPEED_ENABLED 0
 
+# the stampfly does not have a temperature sensor:
+define AP_TEMPERATURE_SENSOR_ENABLED 0
+env AP_LIBRARIES_DISABLED AP_TemperatureSensor
+
 define HAL_ESP32_BOARD_NAME "esp32s3m5stampfly"
 
 define AP_COMPASS_ENABLE_DEFAULT 0

@@ -88,6 +88,13 @@ def _depends_on_vehicle(bld, source_node):
 
     return _depends_on_vehicle_cache[path]
 
+def _library_is_disabled(bld, library):
+    disabled_libraries = []
+    for item in Utils.to_list(getattr(bld.env, 'AP_LIBRARIES_DISABLED', [])):
+        disabled_libraries.extend(re.split(r'[\s,]+', item))
+    return library in disabled_libraries
+
+
 @conf
 def ap_library(bld, library, vehicle):
     try:
@@ -115,6 +122,9 @@ def ap_library(bld, library, vehicle):
         bld.fatal('ap_library: %s not found' % library)
 
     src = library_dir.ant_glob(wildcard)
+
+    if _library_is_disabled(bld, library):
+        src = []
 
     # allow for dynamically generated sources in a library that inherit the
     # dependencies and includes
