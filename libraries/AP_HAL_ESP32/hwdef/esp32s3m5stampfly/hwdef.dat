@@ -167,7 +167,7 @@ env AP_LIBRARIES_DISABLED AP_TemperatureSensor AP_Generator AP_Gripper AP_Mount 
 
 define HAL_ESP32_BOARD_NAME "esp32s3m5stampfly"
 
-define AP_COMPASS_ENABLE_DEFAULT 0
+define AP_COMPASS_ENABLE_DEFAULT 1
 
 # no ADC
 
