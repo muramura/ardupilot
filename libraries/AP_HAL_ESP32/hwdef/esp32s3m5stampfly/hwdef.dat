@@ -39,16 +39,42 @@ ESP32_I2CBUS  I2C_NUM_1  GPIO_NUM_13 GPIO_NUM_15 400*KHZ  false    false
 
 # one IMU:
 IMU BMI270 SPI:bmi270 ROTATION_ROLL_180_YAW_90
+define INS_MAX_INSTANCES 1
+define AP_INERTIALSENSOR_BATCHSAMPLER_ENABLED 0
+define AP_INERTIALSENSOR_FAST_SAMPLE_WINDOW_ENABLED 0
+
+# one compass:
+COMPASS BMM150 I2C:0:0x10 false ROTATION_NONE
+define AP_COMPASS_BMM150_ENABLED 1
+define HAL_COMPASS_MAX_SENSORS 1
+define AP_COMPASS_CALIBRATION_FIXED_YAW_ENABLED 0
+define COMPASS_LEARN_ENABLED 0
 
 # one Baro:
 BARO BMP280 I2C:0:0x76
+define AP_BARO_BACKEND_DEFAULT_ENABLED 0
+define AP_BARO_BMP280_ENABLED 1
+define AP_BARO_PROBE_EXTERNAL_I2C_BUSES 0
+define HAL_BARO_WIND_COMP_ENABLED 0
 
 # VL53L3CX XSHUT pins used by the original M5StampFly firmware.
 # The VL53L3CX driver uses RNGFNDx_ORIENT only to select which
 # same-address sensor is powered up on this board.
 define AP_RANGEFINDER_BACKEND_DEFAULT_ENABLED 0
 define AP_RANGEFINDER_VL53L3CX_ENABLED 1
-env AP_LIBRARY_SOURCES_ENABLED AP_RangeFinder:AP_RangeFinder.cpp,AP_RangeFinder_Backend.cpp,AP_RangeFinder_Backend_I2C.cpp,AP_RangeFinder_Params.cpp,AP_RangeFinder_VL53L3CX.cpp
+define AP_OPTICALFLOW_ENABLED 1
+define AP_OPTICALFLOW_BACKEND_DEFAULT_ENABLED 0
+define AP_OPTICALFLOW_CALIBRATOR_ENABLED 0
+define AP_OPTICALFLOW_CXOF_ENABLED 1
+define AP_OPTICALFLOW_MAV_ENABLED 1
+define AP_OPTICALFLOW_HEREFLOW_ENABLED 0
+define HAL_MSP_OPTICALFLOW_ENABLED 0
+define AP_OPTICALFLOW_ONBOARD_ENABLED 0
+define AP_OPTICALFLOW_PIXART_ENABLED 0
+define AP_OPTICALFLOW_PX4FLOW_ENABLED 0
+define AP_OPTICALFLOW_SITL_ENABLED AP_SIM_ENABLED
+define AP_OPTICALFLOW_UPFLOW_ENABLED 0
+env AP_LIBRARY_SOURCES_ENABLED AP_RangeFinder:AP_RangeFinder.cpp,AP_RangeFinder_Backend.cpp,AP_RangeFinder_Backend_I2C.cpp,AP_RangeFinder_Params.cpp,AP_RangeFinder_VL53L3CX.cpp AP_Baro:AP_Baro.cpp,AP_Baro_Backend.cpp,AP_Baro_BMP280.cpp,AP_Baro_Logging.cpp,AP_Baro_atmosphere.cpp AP_Compass:AP_Compass.cpp,AP_Compass_Backend.cpp,AP_Compass_BMM150.cpp,AP_Compass_Logging.cpp,AP_Compass_Calibration.cpp,CompassCalibrator.cpp,Compass_PerMotor.cpp AP_InertialSensor:AP_InertialSensor.cpp,AP_InertialSensor_Backend.cpp,AP_InertialSensor_BMI270.cpp,AP_InertialSensor_Logging.cpp,AP_InertialSensor_NONE.cpp,AP_InertialSensor_Params.cpp AP_BattMonitor:AP_BattMonitor.cpp,AP_BattMonitor_Backend.cpp,AP_BattMonitor_INA3221.cpp,AP_BattMonitor_Logging.cpp,AP_BattMonitor_Params.cpp AP_GPS:AP_GPS.cpp,AP_GPS_MAV.cpp,AP_GPS_Params.cpp,AP_GPS_SITL.cpp,GPS_Backend.cpp AP_AHRS:AP_AHRS.cpp,AP_AHRS_Backend.cpp,AP_AHRS_DCM.cpp,AP_AHRS_Logging.cpp,AP_AHRS_NavEKF3.cpp,AP_AHRS_View.cpp AP_OpticalFlow:AP_OpticalFlow.cpp,AP_OpticalFlow_Backend.cpp,AP_OpticalFlow_CXOF.cpp,AP_OpticalFlow_MAV.cpp,AP_OpticalFlow_SITL.cpp
 define HAL_RANGEFINDER_VL53L3CX_XSHUT_DOWN 7
 define HAL_RANGEFINDER_VL53L3CX_XSHUT_FORWARD 9
 define HAL_RANGEFINDER_VL53L3CX_INT_DOWN 6
@@ -99,8 +125,45 @@ define OSD_ENABLED 0
 define OSD_PARAM_ENABLED 0
 define AP_OPENDRONEID_ENABLED 0
 define HAL_PROXIMITY_ENABLED 0
+define AP_BEACON_ENABLED 0
+define AP_VIDEOTX_ENABLED 0
+define AP_TRAMP_ENABLED 0
+define AP_SMARTAUDIO_ENABLED 0
+define AP_RPM_ENABLED 0
+define AP_WHEELENCODER_ENABLED 0
+define HAL_PARACHUTE_ENABLED 0
+define AP_LANDINGGEAR_ENABLED 0
+define HAL_SPRAYER_ENABLED 0
+define AP_ROBOTISSERVO_ENABLED 0
+define AP_SBUSOUTPUT_ENABLED 0
+define AP_VOLZ_ENABLED 0
+define HAL_WITH_ESC_TELEM 0
+define AP_EXTENDED_ESC_TELEM_ENABLED 0
+define AP_ICENGINE_ENABLED 0
+define AP_IRLOCK_ENABLED 0
+define AC_PRECLAND_ENABLED 0
+define AC_PRECLAND_IRLOCK_ENABLED 0
+define HAL_EFI_ENABLED 0
+define AP_RADIO_ENABLED 0
+define AP_NETWORKING_ENABLED 0
+define HAL_NAVEKF2_AVAILABLE 0
+define AP_AHRS_NAVEKF2_ENABLED 0
+define AP_AHRS_EXTERNAL_ENABLED 0
+define AP_AHRS_SIM_ENABLED 0
 
-env AP_LIBRARIES_DISABLED AP_TemperatureSensor AP_Generator AP_Gripper AP_Mount AP_Airspeed AP_ADSB AP_Camera AP_VisualOdom AP_Winch AP_ExternalAHRS AP_Frsky_Telem AP_MSP AP_OSD AP_OpenDroneID AP_Proximity
+# the stampfly has no onboard GPS; keep MAVLink GPS and SITL GPS backends only.
+define GPS_MAX_RECEIVERS 1
+define GPS_MAX_INSTANCES 1
+define GPS_MOVING_BASELINE 0
+define AP_GPS_BACKEND_DEFAULT_ENABLED 0
+define AP_GPS_BLENDED_ENABLED 0
+define AP_GPS_MAV_ENABLED 1
+define AP_GPS_RTCM_DECODE_ENABLED 0
+define AP_GPS_GPS2_RAW_SENDING_ENABLED 0
+define AP_GPS_GPS_RTK_SENDING_ENABLED 0
+define AP_GPS_GPS2_RTK_SENDING_ENABLED 0
+
+env AP_LIBRARIES_DISABLED AP_TemperatureSensor AP_Generator AP_Gripper AP_Mount AP_Airspeed AP_ADSB AP_ADSB/sagetech-sdk AP_Camera AP_VisualOdom AP_Winch AP_ExternalAHRS AP_Frsky_Telem AP_MSP AP_OSD AP_OpenDroneID AP_Proximity AP_Torqeedo AP_Beacon AP_NavEKF2 AP_VideoTX AP_RPM AP_WheelEncoder AP_Parachute AP_LandingGear AP_RobotisServo AP_SBusOut AP_Volz_Protocol AC_Sprayer AP_ESC_Telem AP_ICEngine AP_IOMCU AP_IRLock AC_PrecLand AP_ADC AP_EFI AP_Radio AP_Networking AP_DDS AP_Logger
 
 define HAL_ESP32_BOARD_NAME "esp32s3m5stampfly"
 
@@ -108,7 +171,12 @@ define AP_COMPASS_ENABLE_DEFAULT 0
 
 # no ADC
 
+define AP_BATT_MONITOR_MAX_INSTANCES 1
+define AP_BATTERY_BACKEND_DEFAULT_ENABLED 0
+define AP_BATTERY_WATT_MAX_ENABLED 0
+define AP_BATTERY_OPTIONS_PARAM_ENABLED 0
 define AP_BATTERY_INA3221_ENABLED 1
+define HAL_TORQEEDO_ENABLED 0
 define HAL_BATTMON_INA3221_SHUNT_OHMS 0.01
 define HAL_BATTMON_INA3221_SHUNT_CONV_TIME_SEL HAL_BATTMON_INA3221_CONV_TIME_4156US
 define HAL_BATTMON_INA3221_BUS_CONV_TIME_SEL HAL_BATTMON_INA3221_CONV_TIME_4156US
@@ -120,17 +188,21 @@ define HAL_ESP32_WIFI 2
 define WIFI_SSID "ardupilot123"
 define WIFI_PWD "ardupilot123"
 
+define AP_DDS_ENABLED 0
+
 # rcin on what pin? enable AP_RCPROTOCOL_ENABLED below if using
 # currently on another unmapped pin
 # define HAL_ESP32_RCIN GPIO_NUM_16
 define HAL_ESP32_RMT_RX_PIN_NUMBER GPIO_NUM_16
 
 
-# log over MAVLink by default
+# StampFly has no SD card or onboard log storage. GCS telemetry and .tlog are
+# independent of AP_Logger.
+define HAL_LOGGING_ENABLED 0
 define HAL_LOGGING_FILESYSTEM_ENABLED 0
 define HAL_LOGGING_DATAFLASH_ENABLED 0
-define HAL_LOGGING_MAVLINK_ENABLED 1
-define HAL_LOGGING_BACKENDS_DEFAULT 2
+define HAL_LOGGING_MAVLINK_ENABLED 0
+define HAL_LOGGING_BACKENDS_DEFAULT 0
 
 define AP_RCPROTOCOL_ENABLED 0
 
