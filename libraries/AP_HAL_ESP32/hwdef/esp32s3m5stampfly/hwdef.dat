@@ -46,6 +46,9 @@ BARO BMP280 I2C:0:0x76
 # VL53L3CX XSHUT pins used by the original M5StampFly firmware.
 # The VL53L3CX driver uses RNGFNDx_ORIENT only to select which
 # same-address sensor is powered up on this board.
+define AP_RANGEFINDER_BACKEND_DEFAULT_ENABLED 0
+define AP_RANGEFINDER_VL53L3CX_ENABLED 1
+env AP_LIBRARY_SOURCES_ENABLED AP_RangeFinder:AP_RangeFinder.cpp,AP_RangeFinder_Backend.cpp,AP_RangeFinder_Backend_I2C.cpp,AP_RangeFinder_Params.cpp,AP_RangeFinder_VL53L3CX.cpp
 define HAL_RANGEFINDER_VL53L3CX_XSHUT_DOWN 7
 define HAL_RANGEFINDER_VL53L3CX_XSHUT_FORWARD 9
 define HAL_RANGEFINDER_VL53L3CX_INT_DOWN 6

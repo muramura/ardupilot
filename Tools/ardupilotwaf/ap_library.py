@@ -94,6 +94,26 @@ def _library_is_disabled(bld, library):
         disabled_libraries.extend(re.split(r'[\s,]+', item))
     return library in disabled_libraries
 
+def _get_enabled_library_sources(bld, library, library_dir):
+    for item in Utils.to_list(getattr(bld.env, 'AP_LIBRARY_SOURCES_ENABLED', [])):
+        for entry in re.split(r'\s+', item):
+            if not entry or ':' not in entry:
+                continue
+            lib, sources = entry.split(':', 1)
+            if lib != library:
+                continue
+            nodes = []
+            for source in re.split(r'[,;]+', sources):
+                if not source:
+                    continue
+                node = library_dir.find_node(source)
+                if node is None:
+                    bld.fatal('AP_LIBRARY_SOURCES_ENABLED: %s not found in %s' %
+                              (source, library))
+                nodes.append(node)
+            return nodes
+    return None
+
 
 @conf
 def ap_library(bld, library, vehicle):
@@ -125,6 +145,10 @@ def ap_library(bld, library, vehicle):
 
     if _library_is_disabled(bld, library):
         src = []
+    else:
+        enabled_sources = _get_enabled_library_sources(bld, library, library_dir)
+        if enabled_sources is not None:
+            src = enabled_sources
 
     # allow for dynamically generated sources in a library that inherit the
     # dependencies and includes
