@@ -74,7 +74,7 @@ define AP_OPTICALFLOW_PIXART_ENABLED 0
 define AP_OPTICALFLOW_PX4FLOW_ENABLED 0
 define AP_OPTICALFLOW_SITL_ENABLED AP_SIM_ENABLED
 define AP_OPTICALFLOW_UPFLOW_ENABLED 0
-env AP_LIBRARY_SOURCES_ENABLED AP_Common:AP_Common.cpp,AP_ExpandingArray.cpp,AP_FWVersion.cpp,ExpandingString.cpp,Location.cpp,c++.cpp,float16.cpp,sorting.cpp,time.cpp AP_RangeFinder:AP_RangeFinder.cpp,AP_RangeFinder_Backend.cpp,AP_RangeFinder_Backend_I2C.cpp,AP_RangeFinder_Params.cpp,AP_RangeFinder_VL53L3CX.cpp AP_Baro:AP_Baro.cpp,AP_Baro_Backend.cpp,AP_Baro_BMP280.cpp,AP_Baro_Logging.cpp,AP_Baro_atmosphere.cpp AP_Compass:AP_Compass.cpp,AP_Compass_Backend.cpp,AP_Compass_BMM150.cpp,AP_Compass_Logging.cpp,AP_Compass_Calibration.cpp,CompassCalibrator.cpp,Compass_PerMotor.cpp AP_InertialSensor:AP_InertialSensor.cpp,AP_InertialSensor_Backend.cpp,AP_InertialSensor_BMI270.cpp,AP_InertialSensor_Logging.cpp,AP_InertialSensor_NONE.cpp,AP_InertialSensor_Params.cpp AP_BattMonitor:AP_BattMonitor.cpp,AP_BattMonitor_Backend.cpp,AP_BattMonitor_INA3221.cpp,AP_BattMonitor_Logging.cpp,AP_BattMonitor_Params.cpp AP_GPS:AP_GPS.cpp,AP_GPS_MAV.cpp,AP_GPS_Params.cpp,AP_GPS_UBLOX.cpp,GPS_Backend.cpp AP_AHRS:AP_AHRS.cpp,AP_AHRS_Backend.cpp,AP_AHRS_DCM.cpp,AP_AHRS_Logging.cpp,AP_AHRS_NavEKF3.cpp,AP_AHRS_View.cpp AP_OpticalFlow:AP_OpticalFlow.cpp,AP_OpticalFlow_Backend.cpp,AP_OpticalFlow_CXOF.cpp,AP_OpticalFlow_MAV.cpp,AP_OpticalFlow_SITL.cpp
+env AP_LIBRARY_SOURCES_ENABLED AP_Notify:AP_Notify.cpp,RGBLed.cpp,SerialLED.cpp,NeoPixel.cpp,ToneAlarm.cpp,MMLPlayer.cpp AP_Common:AP_Common.cpp,AP_ExpandingArray.cpp,AP_FWVersion.cpp,ExpandingString.cpp,Location.cpp,c++.cpp,float16.cpp,sorting.cpp,time.cpp AP_RangeFinder:AP_RangeFinder.cpp,AP_RangeFinder_Backend.cpp,AP_RangeFinder_Backend_I2C.cpp,AP_RangeFinder_Params.cpp,AP_RangeFinder_VL53L3CX.cpp AP_Baro:AP_Baro.cpp,AP_Baro_Backend.cpp,AP_Baro_BMP280.cpp,AP_Baro_Logging.cpp,AP_Baro_atmosphere.cpp AP_Compass:AP_Compass.cpp,AP_Compass_Backend.cpp,AP_Compass_BMM150.cpp,AP_Compass_Logging.cpp,AP_Compass_Calibration.cpp,CompassCalibrator.cpp,Compass_PerMotor.cpp AP_InertialSensor:AP_InertialSensor.cpp,AP_InertialSensor_Backend.cpp,AP_InertialSensor_BMI270.cpp,AP_InertialSensor_Logging.cpp,AP_InertialSensor_NONE.cpp,AP_InertialSensor_Params.cpp AP_BattMonitor:AP_BattMonitor.cpp,AP_BattMonitor_Backend.cpp,AP_BattMonitor_INA3221.cpp,AP_BattMonitor_Logging.cpp,AP_BattMonitor_Params.cpp AP_GPS:AP_GPS.cpp,AP_GPS_MAV.cpp,AP_GPS_Params.cpp,AP_GPS_UBLOX.cpp,GPS_Backend.cpp AP_AHRS:AP_AHRS.cpp,AP_AHRS_Backend.cpp,AP_AHRS_DCM.cpp,AP_AHRS_Logging.cpp,AP_AHRS_NavEKF3.cpp,AP_AHRS_View.cpp AP_OpticalFlow:AP_OpticalFlow.cpp,AP_OpticalFlow_Backend.cpp,AP_OpticalFlow_CXOF.cpp,AP_OpticalFlow_MAV.cpp
 define HAL_RANGEFINDER_VL53L3CX_XSHUT_DOWN 7
 define HAL_RANGEFINDER_VL53L3CX_XSHUT_FORWARD 9
 define HAL_RANGEFINDER_VL53L3CX_INT_DOWN 6
@@ -96,6 +96,16 @@ define HAL_ESP32_SERIALLED_MAX_LEDS 2
 define AP_NOTIFY_NEOPIXEL_MASK 1
 define NOTIFY_LED_LEN_DEFAULT 2
 define DEFAULT_NTF_LED_TYPES 256
+# M5StampFly uses WS2812C NeoPixel LEDs and ToneAlarm only.
+define HAL_DISPLAY_ENABLED 0
+define AP_NOTIFY_BUZZER_ENABLED 0
+define AP_NOTIFY_TOSHIBALED_ENABLED 0
+define AP_NOTIFY_NCP5623_ENABLED 0
+define AP_NOTIFY_PCA9685_ENABLED 0
+define AP_NOTIFY_PROFILED_ENABLED 0
+define AP_NOTIFY_SCRIPTING_LED_ENABLED 0
+define AP_NOTIFY_LP5562_ENABLED 0
+define AP_NOTIFY_IS31FL3195_ENABLED 0
 ESP32_RCOUT GPIO_NUM_42
 ESP32_RCOUT GPIO_NUM_10
 ESP32_RCOUT GPIO_NUM_5
