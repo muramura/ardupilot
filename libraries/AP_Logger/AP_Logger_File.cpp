@@ -790,11 +790,6 @@ void AP_Logger_File::start_new_log(void)
         _read_fd = -1;
     }
 
-    if (disk_space_avail() < _free_space_min_avail && disk_space() > 0) {
-        DEV_PRINTF("Out of space for logging\n");
-        return;
-    }
-
     uint16_t log_num = find_last_log();
     // re-use empty logs if possible
     if (_get_log_size(log_num) > 0 || log_num == 0) {
@@ -803,6 +798,20 @@ void AP_Logger_File::start_new_log(void)
     if (log_num > _front.get_max_num_logs()) {
         log_num = 1;
     }
+
+    // When rotating logs, opening an existing log with O_TRUNC can free space.
+    // Check free space only when we are not about to re-use an existing log.
+    const bool reusing_existing_log = _get_log_size(log_num) > 0;
+    const int64_t avail = disk_space_avail();
+    const int64_t total = disk_space();
+    if (!reusing_existing_log && avail < _free_space_min_avail && total > 0) {
+        DEV_PRINTF("Out of space for logging: avail=%lld total=%lld min=%u log=%u reuse=%u\n",
+                   (long long)avail, (long long)total,
+                   (unsigned)_free_space_min_avail,
+                   (unsigned)log_num, (unsigned)reusing_existing_log);
+        return;
+    }
+
     if (!write_fd_semaphore.take(1)) {
         return;
     }
@@ -949,8 +958,13 @@ void AP_Logger_File::io_timer(void)
     if (tnow - _free_space_last_check_time > _free_space_check_interval) {
         _free_space_last_check_time = tnow;
         last_io_operation = "disk_space_avail";
-        if (disk_space_avail() < _free_space_min_avail && disk_space() > 0) {
-            DEV_PRINTF("Out of space for logging\n");
+        const int64_t avail = disk_space_avail();
+        const int64_t total = disk_space();
+        if (avail < _free_space_min_avail && total > 0) {
+            DEV_PRINTF("Out of space for logging: avail=%lld total=%lld min=%u buffered=%u\n",
+                       (long long)avail, (long long)total,
+                       (unsigned)_free_space_min_avail,
+                       (unsigned)_writebuf.available());
             stop_logging();
             _open_error_ms = AP_HAL::millis(); // prevent logging starting again for 5s
             last_io_operation = "";
@@ -996,7 +1010,12 @@ void AP_Logger_File::io_timer(void)
     last_io_operation = "";
     if (nwritten <= 0) {
         if (errno == ENOSPC) {
-            DEV_PRINTF("Out of space for logging\n");
+            const int64_t avail = disk_space_avail();
+            const int64_t total = disk_space();
+            DEV_PRINTF("Out of space for logging: write failed errno=%d nbytes=%u offset=%u avail=%lld total=%lld min=%u\n",
+                       errno, (unsigned)nbytes, (unsigned)_write_offset,
+                       (long long)avail, (long long)total,
+                       (unsigned)_free_space_min_avail);
             stop_logging();
             _open_error_ms = AP_HAL::millis(); // prevent logging starting again for 5s
             last_io_operation = "";
@@ -1115,4 +1134,3 @@ void AP_Logger_File::erase_next(void)
 }
 
 #endif // HAL_LOGGING_FILESYSTEM_ENABLED
-

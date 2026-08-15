@@ -27,8 +27,10 @@ extern const AP_HAL::HAL& hal;
 
 #if defined(HAL_ESP32_FLASHFS)
 #define ESP32_FILESYSTEM_DISK_PATH "/APM/"
+#define ESP32_FILESYSTEM_SECTOR_SIZE FF_SS_WL
 #else
 #define ESP32_FILESYSTEM_DISK_PATH "/SDCARD/"
+#define ESP32_FILESYSTEM_SECTOR_SIZE FF_SS_SDCARD
 #endif
 
 static const char *disk_path(const char *path)
@@ -184,7 +186,7 @@ int64_t AP_Filesystem_ESP32::disk_free(const char *path)
     /* Get total sectors and free sectors */
     fre_sect = fre_clust * fs->csize;
 
-    return (int64_t)fre_sect * FF_SS_SDCARD;
+    return (int64_t)fre_sect * ESP32_FILESYSTEM_SECTOR_SIZE;
 }
 
 // return total disk space in bytes
@@ -205,7 +207,7 @@ int64_t AP_Filesystem_ESP32::disk_space(const char *path)
     /* Get total sectors and free sectors */
     tot_sect = (fs->n_fatent - 2) * fs->csize;
 
-    return (int64_t)tot_sect * FF_SS_SDCARD;
+    return (int64_t)tot_sect * ESP32_FILESYSTEM_SECTOR_SIZE;
 }
 
 /*
