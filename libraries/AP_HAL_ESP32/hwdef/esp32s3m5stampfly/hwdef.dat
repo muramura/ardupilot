@@ -161,6 +161,10 @@ define AP_RPM_ENABLED 0
 define AP_WHEELENCODER_ENABLED 0
 define HAL_PARACHUTE_ENABLED 0
 define AP_LANDINGGEAR_ENABLED 0
+define AP_RELAY_ENABLED 0
+define AP_SERVORELAYEVENTS_ENABLED 0
+define AP_RSSI_ENABLED 0
+define AP_SERVO_TELEM_ENABLED 0
 define HAL_SPRAYER_ENABLED 0
 define AP_ROBOTISSERVO_ENABLED 0
 define AP_SBUSOUTPUT_ENABLED 0
@@ -201,7 +205,7 @@ define HAL_NMEA_OUTPUT_ENABLED 0
 # hardware, or the feature is not useful for this small indoor MAVLink-controlled
 # aircraft. Keep generally useful disable guards upstreamable, and keep
 # M5StampFly-specific choices in this hwdef.
-env AP_LIBRARIES_DISABLED AP_TemperatureSensor AP_Generator AP_Gripper AP_Mount AP_Airspeed AP_AIS AP_ADSB AP_ADSB/sagetech-sdk AP_Camera AP_VisualOdom AP_Winch AP_ExternalAHRS AP_Frsky_Telem AP_Devo_Telem AP_Hott_Telem AP_IBus_Telem AP_MSP AP_OSD AP_OpenDroneID AP_Proximity AP_Torqeedo AP_Beacon AP_NavEKF2 AP_VideoTX AP_RPM AP_WheelEncoder AP_Parachute AP_LandingGear AC_Autorotation AP_LTM_Telem AP_LightWareSerial AP_RobotisServo AP_FETtecOneWire AP_KDECAN AP_SBusOut AP_Volz_Protocol AC_Sprayer AP_ESC_Telem AP_ICEngine AP_IOMCU AP_IRLock AC_PrecLand AP_ADC AP_EFI AP_Radio AP_RCProtocol AP_RCTelemetry AP_NMEA_Output AP_Networking AP_DDS AP_Logger
+env AP_LIBRARIES_DISABLED AP_TemperatureSensor AP_Generator AP_Gripper AP_Mount AP_Airspeed AP_AIS AP_ADSB AP_ADSB/sagetech-sdk AP_Camera AP_VisualOdom AP_Winch AP_ExternalAHRS AP_Frsky_Telem AP_Devo_Telem AP_Hott_Telem AP_IBus_Telem AP_MSP AP_OSD AP_OpenDroneID AP_Proximity AP_Torqeedo AP_Beacon AP_NavEKF2 AP_VideoTX AP_RPM AP_WheelEncoder AP_Parachute AP_LandingGear AP_Relay AP_ServoRelayEvents AP_RSSI AP_Servo_Telem AC_Autorotation AP_LTM_Telem AP_LightWareSerial AP_RobotisServo AP_FETtecOneWire AP_KDECAN AP_SBusOut AP_Volz_Protocol AC_Sprayer AP_ESC_Telem AP_ICEngine AP_IOMCU AP_IRLock AC_PrecLand AP_ADC AP_EFI AP_Radio AP_RCProtocol AP_RCTelemetry AP_NMEA_Output AP_Networking AP_DDS AP_Logger
 
 define AP_MOTORS_TRI_ENABLED 0
 define AP_MOTORS_FRAME_DEFAULT_ENABLED 0
