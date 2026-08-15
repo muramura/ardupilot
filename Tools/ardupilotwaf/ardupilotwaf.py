@@ -7,6 +7,7 @@ from waflib.Configure import conf
 from waflib.Scripting import run_command
 from waflib.TaskGen import before_method, after_method, feature
 import os.path, os
+import re
 from pathlib import Path
 from collections import OrderedDict
 import subprocess
@@ -358,6 +359,31 @@ def post_link(self):
         _upload_task = self.create_task('upload_fw_blueos', src=link_output)
         _upload_task.set_run_after(self.link_task)
 
+def _filter_program_sources(bld, program_names, sources):
+    disabled_sources = set()
+    program_names = set(Utils.to_list(program_names))
+
+    for item in Utils.to_list(getattr(bld.env, 'AP_PROGRAM_SOURCES_DISABLED', [])):
+        for entry in re.split(r'\s+', item):
+            if not entry or ':' not in entry:
+                continue
+            program, source_list = entry.split(':', 1)
+            if program not in program_names:
+                continue
+            for source in re.split(r'[,;]+', source_list):
+                if not source:
+                    continue
+                node = bld.path.find_node(source)
+                if node is None:
+                    bld.fatal('AP_PROGRAM_SOURCES_DISABLED: %s not found in %s' %
+                              (source, program))
+                disabled_sources.add(node.abspath())
+
+    if not disabled_sources:
+        return sources
+    return [s for s in Utils.to_list(sources) if s.abspath() not in disabled_sources]
+
+
 @conf
 def ap_program(bld,
                program_groups='bin',
@@ -370,11 +396,11 @@ def ap_program(bld,
         bld.fatal('Do not pass target for program')
     if 'defines' not in kw:
         kw['defines'] = []
-    if 'source' not in kw:
-        kw['source'] = bld.path.ant_glob(SOURCE_EXTS)
-
     if not program_name:
         program_name = bld.path.name
+    if 'source' not in kw:
+        kw['source'] = bld.path.ant_glob(SOURCE_EXTS)
+    kw['source'] = _filter_program_sources(bld, [bld.path.name, program_name], kw['source'])
 
     if use_legacy_defines:
         kw['defines'].extend(get_legacy_defines(bld.path.name, bld))
