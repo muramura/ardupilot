@@ -146,6 +146,8 @@ define AP_DEVO_TELEM_ENABLED 0
 define HAL_SPEKTRUM_TELEM_ENABLED 0
 define HAL_CRSF_TELEM_ENABLED 0
 define AP_GHST_TELEM_ENABLED 0
+define HAL_HOTT_TELEM_ENABLED 0
+define AP_IBUS_TELEM_ENABLED 0
 define HAL_MSP_ENABLED 0
 define OSD_ENABLED 0
 define OSD_PARAM_ENABLED 0
@@ -164,6 +166,8 @@ define AP_ROBOTISSERVO_ENABLED 0
 define AP_SBUSOUTPUT_ENABLED 0
 define AP_VOLZ_ENABLED 0
 define HAL_WITH_ESC_TELEM 0
+define AP_FETTEC_ONEWIRE_ENABLED 0
+define AP_KDECAN_ENABLED 0
 define AP_EXTENDED_ESC_TELEM_ENABLED 0
 define AP_ICENGINE_ENABLED 0
 define AP_IRLOCK_ENABLED 0
@@ -176,6 +180,7 @@ define HAL_NAVEKF2_AVAILABLE 0
 define AP_AHRS_NAVEKF2_ENABLED 0
 define AP_AHRS_EXTERNAL_ENABLED 0
 define AP_AHRS_SIM_ENABLED 0
+define MODE_AUTOROTATE_ENABLED 0
 
 # the stampfly has no onboard GPS by default, but supports a Grove-connected SAM-M8Q u-blox GPS.
 define GPS_MAX_RECEIVERS 1
@@ -196,7 +201,7 @@ define HAL_NMEA_OUTPUT_ENABLED 0
 # hardware, or the feature is not useful for this small indoor MAVLink-controlled
 # aircraft. Keep generally useful disable guards upstreamable, and keep
 # M5StampFly-specific choices in this hwdef.
-env AP_LIBRARIES_DISABLED AP_TemperatureSensor AP_Generator AP_Gripper AP_Mount AP_Airspeed AP_AIS AP_ADSB AP_ADSB/sagetech-sdk AP_Camera AP_VisualOdom AP_Winch AP_ExternalAHRS AP_Frsky_Telem AP_Devo_Telem AP_MSP AP_OSD AP_OpenDroneID AP_Proximity AP_Torqeedo AP_Beacon AP_NavEKF2 AP_VideoTX AP_RPM AP_WheelEncoder AP_Parachute AP_LandingGear AP_LTM_Telem AP_LightWareSerial AP_RobotisServo AP_SBusOut AP_Volz_Protocol AC_Sprayer AP_ESC_Telem AP_ICEngine AP_IOMCU AP_IRLock AC_PrecLand AP_ADC AP_EFI AP_Radio AP_RCProtocol AP_RCTelemetry AP_NMEA_Output AP_Networking AP_DDS AP_Logger
+env AP_LIBRARIES_DISABLED AP_TemperatureSensor AP_Generator AP_Gripper AP_Mount AP_Airspeed AP_AIS AP_ADSB AP_ADSB/sagetech-sdk AP_Camera AP_VisualOdom AP_Winch AP_ExternalAHRS AP_Frsky_Telem AP_Devo_Telem AP_Hott_Telem AP_IBus_Telem AP_MSP AP_OSD AP_OpenDroneID AP_Proximity AP_Torqeedo AP_Beacon AP_NavEKF2 AP_VideoTX AP_RPM AP_WheelEncoder AP_Parachute AP_LandingGear AC_Autorotation AP_LTM_Telem AP_LightWareSerial AP_RobotisServo AP_FETtecOneWire AP_KDECAN AP_SBusOut AP_Volz_Protocol AC_Sprayer AP_ESC_Telem AP_ICEngine AP_IOMCU AP_IRLock AC_PrecLand AP_ADC AP_EFI AP_Radio AP_RCProtocol AP_RCTelemetry AP_NMEA_Output AP_Networking AP_DDS AP_Logger
 
 define AP_MOTORS_TRI_ENABLED 0
 define AP_MOTORS_FRAME_DEFAULT_ENABLED 0
