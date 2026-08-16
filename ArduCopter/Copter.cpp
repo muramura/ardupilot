@@ -148,7 +148,7 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
     FAST_TASK(Log_Video_Stabilisation),
 #endif
 
-    SCHED_TASK(rc_loop,              250,    130,  3),
+    SCHED_TASK(rc_loop,               50,    130,  3),
     SCHED_TASK(throttle_loop,         50,     75,  6),
 #if AP_FENCE_ENABLED
     SCHED_TASK(fence_check,           25,    100,  7),
@@ -204,8 +204,8 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #endif
     SCHED_TASK(standby_update,        100,    75,  96),
     SCHED_TASK(lost_vehicle_check,    10,     50,  99),
-    SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_receive, 400, 180, 102),
-    SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_send,    400, 550, 105),
+    SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_receive, 100, 180, 102),
+    SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_send,    100, 550, 105),
 #if HAL_MOUNT_ENABLED
     SCHED_TASK_CLASS(AP_Mount,             &copter.camera_mount,        update,          50,  75, 108),
 #endif
