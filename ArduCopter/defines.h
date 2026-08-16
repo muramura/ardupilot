@@ -105,6 +105,8 @@ enum LoggingParameters {
 #define MASK_LOG_IMU_RAW                (1UL<<19)
 #define MASK_LOG_VIDEO_STABILISATION    (1UL<<20)
 #define MASK_LOG_FTN_FAST               (1UL<<21)
+#define MASK_LOG_EVENT_TEXT             (1UL<<22)
+#define MASK_LOG_STATE_MONITOR          (1UL<<23)
 #define MASK_LOG_ANY                    0xFFFF
 
 // for PILOT_THR_BHV parameter

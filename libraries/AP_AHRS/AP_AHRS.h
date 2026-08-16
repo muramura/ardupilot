@@ -491,6 +491,10 @@ public:
 
     void Log_Write();
 
+    // set log bit for logging filtering (e.g. MASK_LOG_STATE_MONITOR)
+    void set_log_bit(uint32_t log_bit) { _log_bit = log_bit; }
+    uint32_t get_log_bit() const { return _log_bit; }
+
     // check if non-compass sensor is providing yaw.  Allows compass pre-arm checks to be bypassed
     bool using_noncompass_for_yaw(void) const;
 
@@ -1135,6 +1139,8 @@ private:
     // Note that these pointers *must* be nullptr-checked before use!
     // AP_AHRS_Backend *secondary_backend;
     AP_AHRS_Backend::Estimates *secondary_estimates;
+
+    uint32_t _log_bit;
 };
 
 namespace AP {

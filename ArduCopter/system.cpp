@@ -93,6 +93,8 @@ void Copter::init_ardupilot()
     AP::compass().set_log_bit(MASK_LOG_COMPASS);
     AP::compass().init();
 
+    ahrs.set_log_bit(MASK_LOG_STATE_MONITOR);
+
 #if AP_AIRSPEED_ENABLED
     airspeed.set_log_bit(MASK_LOG_IMU);
 #endif

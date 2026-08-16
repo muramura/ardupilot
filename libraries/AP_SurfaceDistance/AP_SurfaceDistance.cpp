@@ -121,7 +121,9 @@ void AP_SurfaceDistance::update()
         }
     }
 #if HAL_LOGGING_ENABLED
-    Log_Write();
+    if (_log_bit != 0 && AP::logger().should_log(_log_bit)) {
+        Log_Write();
+    }
 #endif
 }
 

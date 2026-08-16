@@ -115,8 +115,9 @@ AP_AHRS_DCM::update()
     }
 
 #if HAL_LOGGING_ENABLED
+    const uint32_t log_bit = AP::ahrs().get_log_bit();
     const uint32_t now_ms = AP_HAL::millis();
-    if (now_ms - last_log_ms >= 100) {
+    if (log_bit != 0 && AP::logger().should_log(log_bit) && (now_ms - last_log_ms >= 100)) {
         // log DCM at 10Hz
         last_log_ms = now_ms;
 
