@@ -1,5 +1,7 @@
 #include "Copter.h"
 
+#if AP_COPTER_ESC_CALIBRATION_ENABLED
+
 /*****************************************************************************
 * Functions to check and perform ESC calibration
 *****************************************************************************/
@@ -183,3 +185,5 @@ void Copter::esc_calibration_setup()
     SRV_Channels::enable_by_mask(motors->get_motor_mask());
     hal.util->set_soft_armed(true);
 }
+
+#endif // AP_COPTER_ESC_CALIBRATION_ENABLED

@@ -802,7 +802,7 @@ void Copter::one_hz_loop()
     // update assigned functions and enable auxiliary servos
     AP::srv().enable_aux_servos();
 
-#if HAL_LOGGING_ENABLED
+#if HAL_LOGGING_ENABLED && AP_TERRAIN_AVAILABLE
     // log terrain data
     terrain_logging();
 #endif
