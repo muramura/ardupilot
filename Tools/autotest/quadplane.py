@@ -1581,8 +1581,20 @@ class AutoTestQuadPlane(vehicle_test_suite.TestSuite):
         self.set_current_waypoint(0, check_afterwards=False)
         self.fly_mission('mission.txt')
 
+    # The gains quicktune saves when it finishes.  Written by the applet
+    # or the C++ implementation rather than by us, so the suite cannot
+    # revert them and they would persist for the rest of the session.
+    # everything quicktune can save; the axes and suffixes here are
+    # AP_Quicktune::Param (libraries/AP_Quicktune/AP_Quicktune.h)
+    quicktune_saved_gains = [
+        "Q_A_RAT_%s_%s" % (axis, suffix)
+        for axis in ("RLL", "PIT", "YAW")
+        for suffix in ("P", "I", "D", "SMAX", "FLTT", "FLTD", "FLTE", "FF")
+    ]
+
     def VTOLQuicktune(self):
         '''VTOL Quicktune'''
+        self.context_preserve_parameters(self.quicktune_saved_gains)
         self.install_applet_script_context("VTOL-quicktune.lua")
 
         self.set_parameters({
@@ -1621,12 +1633,16 @@ class AutoTestQuadPlane(vehicle_test_suite.TestSuite):
         # to test aux function method, use aux fn for save
         self.run_auxfunc(300, 2)
         self.wait_text("Tuning: saved", check_context=True)
+        # and put the switch back: aux function state survives
+        # context_pop(), and this test does not reboot afterwards
+        self.run_auxfunc(300, 0)
         self.change_mode("QLAND")
 
         self.wait_disarmed(timeout=120)
 
     def VTOLQuicktune_CPP(self):
         '''VTOL Quicktune in C++'''
+        self.context_preserve_parameters(self.quicktune_saved_gains)
         self.set_parameters({
             "RC7_OPTION": 181,
             "QWIK_ENABLE" : 1,
@@ -1708,16 +1724,11 @@ class AutoTestQuadPlane(vehicle_test_suite.TestSuite):
 
         self.install_applet_script_context("plane_precland.lua")
 
-        here = self.mav.location()
-        target = self.offset_location_ne(here, 20, 0)
-
         self.set_parameters({
             "SCR_ENABLE": 1,
             "PLND_ENABLED": 1,
             "PLND_TYPE": 4,
             "SIM_PLD_ENABLE":   1,
-            "SIM_PLD_LAT" : target.lat,
-            "SIM_PLD_LON" : target.lng,
             "SIM_PLD_HEIGHT" : 0,
             "SIM_PLD_ALT_LMT" : 50,
             "SIM_PLD_DIST_LMT" : 30,
@@ -1741,6 +1752,19 @@ class AutoTestQuadPlane(vehicle_test_suite.TestSuite):
         self.wait_text("PLND: Loaded", check_context=True)
 
         self.wait_ready_to_arm()
+
+        # place the target near the vehicle's current position - which,
+        # having just rebooted, is the spawn position.  Sampling the
+        # position before the reboot places the target wherever the
+        # previous test happened to leave the vehicle, which can be
+        # hundreds of metres from where QRTL will descend:
+        here = self.mav.location()
+        target = self.offset_location_ne(here, 20, 0)
+        self.set_parameters({
+            "SIM_PLD_LAT": target.lat,
+            "SIM_PLD_LON": target.lng,
+        })
+
         self.change_mode("GUIDED")
         self.arm_vehicle()
         self.takeoff(60, 'GUIDED')
@@ -1827,6 +1851,10 @@ class AutoTestQuadPlane(vehicle_test_suite.TestSuite):
         max_distance = 1.2
         if distance > max_distance:
             raise NotAchievedException(f"Did not land within {max_distance}m of ship {distance=}")
+
+        # we are not at the home location - reboot so the next test starts there
+        self.set_parameter("SIM_SHIP_ENABLE", 0)
+        self.reboot_sitl()
 
     def RCDisableAirspeedUse(self):
         '''check disabling airspeed using RC switch'''
@@ -2683,6 +2711,12 @@ class AutoTestQuadPlane(vehicle_test_suite.TestSuite):
 
         self.progress("Recovery AltChange %.1fm" % alt_change)
 
+        # stop asking for inverted flight.  Aux function state is not a
+        # parameter, so context_pop() does not clear it, and this test
+        # does not reboot - without this the next test on this worker
+        # starts with inverted flight still commanded.
+        self.run_auxfunc(43, 0)
+
         max_alt_change = 3
         if alt_change > max_alt_change:
             raise NotAchievedException("Recovery AltChange too high %.1f > %.1f" % (alt_change, max_alt_change))
@@ -3314,7 +3348,10 @@ class AutoTestQuadPlane(vehicle_test_suite.TestSuite):
         defaults_file.write("SERVO17_FUNCTION %d\n" % k_motor1)
         defaults_file.close()
 
-        self.customise_SITL_commandline([], defaults_filepath=defaults_file.name)
+        # wipe: a defaults file only supplies parameters which are not
+        # already saved, so anything an earlier test stored for
+        # SERVO17_FUNCTION would win over the default under test
+        self.customise_SITL_commandline([], defaults_filepath=defaults_file.name, wipe=True)
         self.assert_parameter_values({"SERVO17_FUNCTION": k_motor1})
 
         data, _ = self.ftp_burst_read("@PARAM/param.pck?withdefaults=1")
