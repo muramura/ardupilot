@@ -441,7 +441,7 @@ void Copter::set_mode_auto_do_land_start_or_RTL(ModeReason reason)
     }
 #endif
 
-    gcs().send_text(MAV_SEVERITY_WARNING, "Trying RTL Mode");
+    GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "Trying %s Mode", "RTL");
     set_mode_RTL_or_land_with_pause(reason);
 }
 
@@ -456,7 +456,7 @@ void Copter::set_mode_brake_or_land_with_pause(ModeReason reason)
     }
 #endif
 
-    gcs().send_text(MAV_SEVERITY_WARNING, "Trying Land Mode");
+    GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "Trying %s Mode", "Land");
     set_mode_land_with_pause(reason);
 }
 
