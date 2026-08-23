@@ -229,7 +229,7 @@ uint8_t AP_Filesystem_Param::pack_param(const struct rfile &r, struct cursor &c,
       crosses a block boundary. This ensures that re-reading a block
       won't get a corrupt value for a parameter
      */
-    if (type_len > 1) {
+    if (type_len > 1 && r.read_size > 0) {
         const uint32_t ofs = c.token_ofs + sizeof(struct header) + packed_len;
         const uint32_t ofs_mod = ofs % r.read_size;
         if (ofs_mod > 0 && ofs_mod < type_len) {
@@ -342,10 +342,6 @@ int32_t AP_Filesystem_Param::read(int fd, void *buf, uint32_t count)
      */
     if (r.read_size == 0 && count > 0) {
         r.read_size = count;
-    }
-    if (r.read_size != 0 && r.read_size != count) {
-        errno = EINVAL;
-        return -1;
     }
 
     if (r.file_size != 0) {
