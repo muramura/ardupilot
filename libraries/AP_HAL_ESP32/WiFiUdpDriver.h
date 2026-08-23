@@ -49,9 +49,9 @@ private:
         INITIALIZED,
         CONNECTED
     };
-    const size_t TX_BUF_SIZE = 1024;
-    const size_t RX_BUF_SIZE = 1024;
-    uint8_t _buffer[255]; // 32 means slow param reads as its too small for most mavlink packets, 128 is still a bit small due to packet overheads
+    const size_t TX_BUF_SIZE = 8192;
+    const size_t RX_BUF_SIZE = 8192;
+    uint8_t _buffer[1472]; // Standard MTU size for high throughput UDP transmission
     ByteBuffer _readbuf{0};
     ByteBuffer _writebuf{0};
     Semaphore _write_mutex;
@@ -59,6 +59,13 @@ private:
     ConnectionState _state;
 
     int accept_socket;
+
+    struct ClientInfo {
+        struct in_addr addr;
+        uint32_t last_seen_ms;
+    };
+    static const uint8_t MAX_CLIENTS = 4;
+    ClientInfo _clients[MAX_CLIENTS];
 
     tskTaskControlBlock* _wifi_task_handle;
     void initialize_wifi();

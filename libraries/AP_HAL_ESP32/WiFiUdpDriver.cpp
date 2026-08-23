@@ -121,8 +121,9 @@ bool WiFiUdpDriver::start_listen()
         accept_socket = -1;
         return false;
     }
-    int opt;
+    int opt = 1;
     setsockopt(accept_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    setsockopt(accept_socket, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt));
     struct sockaddr_in destAddr;
     destAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     destAddr.sin_family = AF_INET;
@@ -133,48 +134,102 @@ bool WiFiUdpDriver::start_listen()
         accept_socket = 0;
         return false;
     }
-    //memset(&client_addr, 0, sizeof(client_addr));
     fcntl(accept_socket, F_SETFL, O_NONBLOCK);
 
     return true;
-
 }
 
 bool WiFiUdpDriver::read_all()
 {
     _read_mutex.take_blocking();
-    struct sockaddr_in client_addr;
-    socklen_t socklen = sizeof(client_addr);
-    int count = recvfrom(accept_socket, _buffer, sizeof(_buffer) - 1, 0, (struct sockaddr *)&client_addr, &socklen);
-    if (count > 0) {
-        _readbuf.write(_buffer, count);
-        _read_mutex.give();
-    } else {
-        return false;
+    bool read_any = false;
+    while (true) {
+        struct sockaddr_in client_addr;
+        socklen_t socklen = sizeof(client_addr);
+        int count = recvfrom(accept_socket, _buffer, sizeof(_buffer) - 1, 0, (struct sockaddr *)&client_addr, &socklen);
+        if (count > 0) {
+            _readbuf.write(_buffer, count);
+            read_any = true;
+
+            // Register/update active client IP
+            const uint32_t now = AP_HAL::millis();
+            bool found = false;
+            for (uint8_t i = 0; i < MAX_CLIENTS; i++) {
+                if (_clients[i].addr.s_addr == client_addr.sin_addr.s_addr) {
+                    _clients[i].last_seen_ms = now;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                for (uint8_t i = 0; i < MAX_CLIENTS; i++) {
+                    if (_clients[i].last_seen_ms == 0 || (now - _clients[i].last_seen_ms) > 10000) {
+                        _clients[i].addr = client_addr.sin_addr;
+                        _clients[i].last_seen_ms = now;
+                        break;
+                    }
+                }
+            }
+        } else {
+            break;
+        }
     }
     _read_mutex.give();
-    return true;
+    return read_any;
 }
 
 bool WiFiUdpDriver::write_data()
 {
-
-    _write_mutex.take_blocking();
-    struct sockaddr_in dest_addr;
-    dest_addr.sin_addr.s_addr = inet_addr("192.168.4.255");
-    dest_addr.sin_family = AF_INET;
-    dest_addr.sin_port = htons(UDP_PORT);
-    int count = _writebuf.peekbytes(_buffer, sizeof(_buffer));
-    if (count > 0) {
-        count = sendto(accept_socket, _buffer, count, 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
-        if (count > 0) {
-            _writebuf.advance(count);
-        } else {
+    while (true) {
+        _write_mutex.take_blocking();
+        int count = _writebuf.peekbytes(_buffer, sizeof(_buffer));
+        if (count <= 0) {
             _write_mutex.give();
-            return false;
+            break;
+        }
+
+        const uint32_t now = AP_HAL::millis();
+        int max_sent = 0;
+        bool sent_to_any = false;
+
+        // Deliver unicast to active clients on fixed port 14550
+        for (uint8_t i = 0; i < MAX_CLIENTS; i++) {
+            if (_clients[i].last_seen_ms != 0 && (now - _clients[i].last_seen_ms) < 10000) {
+                struct sockaddr_in dest;
+                dest.sin_addr = _clients[i].addr;
+                dest.sin_family = AF_INET;
+                dest.sin_port = htons(UDP_PORT); // 14550 fixed
+                int sent = sendto(accept_socket, _buffer, count, 0, (struct sockaddr *)&dest, sizeof(dest));
+                if (sent > 0) {
+                    sent_to_any = true;
+                    if (sent > max_sent) {
+                        max_sent = sent;
+                    }
+                }
+            }
+        }
+
+        // If no active client registered yet, send broadcast on 14550 for discovery
+        if (!sent_to_any) {
+            struct sockaddr_in bcast;
+            bcast.sin_addr.s_addr = inet_addr("192.168.4.255");
+            bcast.sin_family = AF_INET;
+            bcast.sin_port = htons(UDP_PORT); // 14550 fixed
+            int sent = sendto(accept_socket, _buffer, count, 0, (struct sockaddr *)&bcast, sizeof(bcast));
+            if (sent > 0) {
+                max_sent = sent;
+            }
+        }
+
+        if (max_sent > 0) {
+            _writebuf.advance(max_sent);
+            _write_mutex.give();
+        } else {
+            _writebuf.advance(count); // advance to prevent blocking
+            _write_mutex.give();
+            break;
         }
     }
-    _write_mutex.give();
     return true;
 }
 
@@ -263,7 +318,13 @@ void WiFiUdpDriver::initialize_wifi()
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
     ESP_ERROR_CHECK(esp_wifi_start());
 
-    hal.console->printf("WiFi softAP init finished. SSID: %s password: %s channel: %d\n",
+    // Set Wi-Fi TX power to maximum (20dBm = 80 in units of 0.25dBm)
+    esp_wifi_set_max_tx_power(80);
+
+    // Disable Wi-Fi power save mode for minimum latency and zero jitter
+    esp_wifi_set_ps(WIFI_PS_NONE);
+
+    hal.console->printf("WiFi softAP init finished. SSID: %s password: %s channel: %d (max TX power, no PS)\n",
                         wifi_config.ap.ssid, wifi_config.ap.password, wifi_config.ap.channel);
 
 /*
@@ -334,9 +395,7 @@ void WiFiUdpDriver::initialize_wifi()
 
 size_t WiFiUdpDriver::_write(const uint8_t *buffer, size_t size)
 {
-    if (!_write_mutex.take_nonblocking()) {
-        return 0;
-    }
+    _write_mutex.take_blocking();
     size_t ret = _writebuf.write(buffer, size);
     _write_mutex.give();
     return ret;
@@ -346,9 +405,10 @@ void WiFiUdpDriver::_wifi_thread2(void *arg)
 {
     WiFiUdpDriver *self = (WiFiUdpDriver *) arg;
     while (true) {
+        const uint32_t timeout_us = self->tx_pending() ? 1000 : 10*1000;
         struct timeval tv = {
             .tv_sec = 0,
-            .tv_usec = 100*1000, // 10 times a sec, we try to write-all even if we read nothing , at just 1000, it floggs the APM_WIFI2 task cpu usage unnecessarily, slowing APM_WIFI1 response
+            .tv_usec = (suseconds_t)timeout_us,
         };
         fd_set rfds;
         FD_ZERO(&rfds);
