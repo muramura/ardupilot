@@ -28,12 +28,13 @@ experimental ArduPilot aircraft.
 ## Hardware Focus
 
 The current work focuses on the onboard M5StampFly hardware and useful Grove
-extensions.
+extensions. Detailed schematics, pinouts, and sensor register maps are documented in
+[stampfly-hardware.md](stampfly-hardware.md).
 
 - BMI270 IMU
 - BMP280 barometer
 - BMM150 compass
-- VL53L3CX distance sensors
+- VL53L3CX distance sensors (Dual: Downward 0x30, Forward 0x29)
 - INA3221 battery monitor
 - WS2812C RGB LEDs
 - GPIO40 ToneAlarm buzzer
