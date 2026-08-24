@@ -68,18 +68,11 @@ static const uint8_t MEASUREMENT_TIME_MS = 50;
 
 #if VL53L3CX_HAS_XSHUT
 static bool xshut_pins_configured;
-static bool vl53l3cx_instance_active;
-static bool vl53l3cx_multiple_reported;
+static bool down_sensor_configured;
+static bool forward_sensor_configured;
 #endif
 
-/**
- * VL53LX target range statuses accepted as usable measurements.
- */
-enum class RangeStatus : uint8_t {
-    Valid = VL53LX_RANGESTATUS_RANGE_VALID,
-    ValidNoWrapCheckFail = VL53LX_RANGESTATUS_RANGE_VALID_NO_WRAP_CHECK_FAIL,
-    ValidMergedPulse = VL53LX_RANGESTATUS_RANGE_VALID_MERGED_PULSE,
-};
+
 
 /**
  * Construct a VL53L3CX rangefinder backend.
@@ -104,7 +97,7 @@ AP_RangeFinder_VL53L3CX::AP_RangeFinder_VL53L3CX(RangeFinder::RangeFinder_State 
  * Probe and initialise a VL53L3CX backend on an I2C device.
  *
  * Board-specific XSHUT pins, when defined, are prepared before reading the
- * sensor ID so StampFly can select one of its same-address sensors.
+ * sensor ID so StampFly can select and readdress its same-address sensors.
  *
  * @param _state frontend state owned by AP_RangeFinder.
  * @param _params parameter set for this rangefinder instance.
@@ -117,31 +110,30 @@ AP_RangeFinder_Backend *AP_RangeFinder_VL53L3CX::detect(RangeFinder::RangeFinder
                                                         AP_HAL::OwnPtr<AP_HAL::I2CDevice> dev,
                                                         uint8_t address)
 {
-#if VL53L3CX_HAS_XSHUT
-    if (vl53l3cx_instance_active) {
-        if (!vl53l3cx_multiple_reported) {
-            printf("VL53L3CX: multiple rangefinder instances are not supported\n");
-            vl53l3cx_multiple_reported = true;
-        }
-        return nullptr;
-    }
-#endif
-
     if (!dev) {
         return nullptr;
     }
 
 #if VL53L3CX_HAS_XSHUT
-    address = VL53L3CX_I2C_ADDR_DEFAULT;
     const Rotation orientation = (Rotation)_params.orientation.get();
     if (orientation != ROTATION_PITCH_270 && orientation != ROTATION_NONE) {
         printf("VL53L3CX: unsupported orientation %u for XSHUT selection (use 25=down or 0=forward)\n",
                unsigned(_params.orientation.get()));
         return nullptr;
     }
-    const bool select_down_xshut = (orientation == ROTATION_PITCH_270);
+    const bool is_down_sensor = (orientation == ROTATION_PITCH_270);
+    if (is_down_sensor && down_sensor_configured) {
+        return nullptr;
+    }
+    if (!is_down_sensor && forward_sensor_configured) {
+        return nullptr;
+    }
+
+    address = VL53L3CX_I2C_ADDR_DEFAULT;
+    const uint8_t operational_address = is_down_sensor ? VL53L3CX_I2C_ADDR_SECONDARY : VL53L3CX_I2C_ADDR_DEFAULT;
 #else
-    const bool select_down_xshut = true;
+    const bool is_down_sensor = true;
+    const uint8_t operational_address = address;
 #endif
 
     AP_RangeFinder_VL53L3CX *sensor =
@@ -154,20 +146,31 @@ AP_RangeFinder_Backend *AP_RangeFinder_VL53L3CX::detect(RangeFinder::RangeFinder
 
     sensor->dev->get_semaphore()->take_blocking();
 
-    if (!prepare_xshut(select_down_xshut)) {
+    if (!prepare_xshut(is_down_sensor)) {
         sensor->dev->get_semaphore()->give();
         delete sensor;
         return nullptr;
     }
 
-    if (!sensor->check_id() || !sensor->init(address)) {
+    if (!sensor->check_id() || !sensor->init(operational_address)) {
         sensor->dev->get_semaphore()->give();
         delete sensor;
         return nullptr;
     }
 
 #if VL53L3CX_HAS_XSHUT
-    vl53l3cx_instance_active = true;
+    if (is_down_sensor) {
+        down_sensor_configured = true;
+        // Down sensor readdressed to 0x30; now wake Forward sensor so it boots at default 0x29
+        hal.gpio->write(HAL_RANGEFINDER_VL53L3CX_XSHUT_FORWARD, 1);
+        hal.scheduler->delay(100);
+    } else {
+        forward_sensor_configured = true;
+        if (!down_sensor_configured) {
+            hal.gpio->write(HAL_RANGEFINDER_VL53L3CX_XSHUT_DOWN, 1);
+            hal.scheduler->delay(100);
+        }
+    }
 #endif
     sensor->dev->get_semaphore()->give();
 
@@ -194,17 +197,16 @@ uint8_t AP_RangeFinder_VL53L3CX::probe_address(uint8_t address)
 /**
  * Prepare board-specific XSHUT and interrupt pins.
  *
- * When paired XSHUT pins are defined, only the selected StampFly sensor is
- * enabled and the other same-address sensor is held in reset.
+ * When paired XSHUT pins are defined, the selected StampFly sensor is
+ * enabled for address configuration and measurement.
  *
- * @param select_down_xshut true to enable the down/bottom sensor, false for
- *        the forward/front sensor.
+ * @param is_down_sensor true to prepare down/bottom sensor, false for forward/front sensor.
  * @return true when no board-specific XSHUT setup failed.
  */
-bool AP_RangeFinder_VL53L3CX::prepare_xshut(bool select_down_xshut)
+bool AP_RangeFinder_VL53L3CX::prepare_xshut(bool is_down_sensor)
 {
 #if !VL53L3CX_HAS_XSHUT
-    (void)select_down_xshut;
+    (void)is_down_sensor;
 #endif
 #if VL53L3CX_HAS_XSHUT
     if (!xshut_pins_configured) {
@@ -222,8 +224,17 @@ bool AP_RangeFinder_VL53L3CX::prepare_xshut(bool select_down_xshut)
         xshut_pins_configured = true;
     }
 
-    hal.gpio->write(HAL_RANGEFINDER_VL53L3CX_XSHUT_FORWARD, select_down_xshut ? 0 : 1);
-    hal.gpio->write(HAL_RANGEFINDER_VL53L3CX_XSHUT_DOWN, select_down_xshut ? 1 : 0);
+    if (is_down_sensor) {
+        hal.gpio->write(HAL_RANGEFINDER_VL53L3CX_XSHUT_DOWN, 1);
+        if (!forward_sensor_configured) {
+            hal.gpio->write(HAL_RANGEFINDER_VL53L3CX_XSHUT_FORWARD, 0);
+        }
+    } else {
+        hal.gpio->write(HAL_RANGEFINDER_VL53L3CX_XSHUT_FORWARD, 1);
+        if (!down_sensor_configured) {
+            hal.gpio->write(HAL_RANGEFINDER_VL53L3CX_XSHUT_DOWN, 0);
+        }
+    }
     hal.scheduler->delay(100);
 #endif
     return true;
@@ -328,9 +339,12 @@ bool AP_RangeFinder_VL53L3CX::init(uint8_t address)
     const uint8_t st_api_addr = address << 1;
     VL53LX_Error status = sensor.InitSensor(st_api_addr);
     if (status != VL53LX_ERROR_NONE) {
-        printf("VL53L3CX[0x%02x]: InitSensor failed status=%d\n", unsigned(i2c_address), int(status));
+        printf("VL53L3CX[0x%02x]: InitSensor failed status=%d\n", unsigned(address), int(status));
         return false;
     }
+
+    dev->set_address(address);
+    i2c_address = address;
 
     status = sensor.VL53LX_SetDistanceMode(VL53LX_DISTANCEMODE_LONG);
     if (status != VL53LX_ERROR_NONE) {
@@ -366,17 +380,24 @@ bool AP_RangeFinder_VL53L3CX::init(uint8_t address)
 
 /**
  * Check whether a VL53LX target status represents a usable range.
+ * Accept all valid, warning, and clipped measurements unless it is a clear failure.
  *
  * @param status [in] ST API range status for one target.
  * @retval true when the target range should be accepted.
- * @retval false when the target status represents an invalid or unusable range.
+ * @retval false when the target status represents a hardware or fatal failure.
  */
 bool AP_RangeFinder_VL53L3CX::range_status_ok(uint8_t status)
 {
-    switch (static_cast<RangeStatus>(status)) {
-    case RangeStatus::Valid:
-    case RangeStatus::ValidNoWrapCheckFail:
-    case RangeStatus::ValidMergedPulse:
+    switch (status) {
+    case VL53LX_RANGESTATUS_RANGE_VALID:                    // 0
+    case VL53LX_RANGESTATUS_SIGMA_FAIL:                     // 1: Sigma warning (usable)
+    case VL53LX_RANGESTATUS_SIGNAL_FAIL:                    // 2: Low signal warning (usable)
+    case VL53LX_RANGESTATUS_RANGE_VALID_MIN_RANGE_CLIPPED:  // 3: Target close to min range (usable)
+    case VL53LX_RANGESTATUS_OUTOFBOUNDS_FAIL:               // 4: Beyond max range (>3m, usable)
+    case VL53LX_RANGESTATUS_RANGE_VALID_NO_WRAP_CHECK_FAIL: // 6: No wrap check fail (usable)
+    case VL53LX_RANGESTATUS_RANGE_VALID_MERGED_PULSE:       // 11: Merged pulse (usable)
+    case VL53LX_RANGESTATUS_TARGET_PRESENT_LACK_OF_SIGNAL:  // 12: Target present (usable)
+    case VL53LX_RANGESTATUS_MIN_RANGE_FAIL:                 // 13: Close distance (usable)
         return true;
     }
 
@@ -384,17 +405,18 @@ bool AP_RangeFinder_VL53L3CX::range_status_ok(uint8_t status)
 }
 
 /**
- * Read the latest multi-target measurement and choose the nearest valid range.
+ * Read the latest multi-target measurement and choose the highest confidence range.
  *
- * @param reading_mm [in/out] nearest valid target range in millimetres.
+ * @param reading_mm [in/out] valid target range in millimetres.
  * @retval true when a valid range was read.
- * @retval false when data is not ready, ST API read/clear fails, or no valid target range is present in the measurement.
+ * @retval false when data is not ready or no usable target range is present.
  */
 bool AP_RangeFinder_VL53L3CX::get_reading(uint16_t &reading_mm)
 {
     uint8_t ready = 0;
     VL53LX_Error status = sensor.VL53LX_GetMeasurementDataReady(&ready);
     if (status != VL53LX_ERROR_NONE) {
+        sensor.VL53LX_ClearInterruptAndStartMeasurement();
         return false;
     }
     if (ready == 0) {
@@ -403,13 +425,17 @@ bool AP_RangeFinder_VL53L3CX::get_reading(uint16_t &reading_mm)
 
     VL53LX_MultiRangingData_t ranging_data;
     status = sensor.VL53LX_GetMultiRangingData(&ranging_data);
+
+    // Always clear interrupt and trigger next continuous measurement to prevent stall
+    sensor.VL53LX_ClearInterruptAndStartMeasurement();
+
     if (status != VL53LX_ERROR_NONE) {
-        sensor.VL53LX_ClearInterruptAndStartMeasurement();
         return false;
     }
 
     bool got_reading = false;
-    uint16_t nearest_mm = UINT16_MAX;
+    uint16_t best_mm = 0;
+    FixPoint1616_t best_signal = 0;
     uint8_t object_count = ranging_data.NumberOfObjectsFound;
     if (object_count > VL53LX_MAX_RANGE_RESULTS) {
         object_count = VL53LX_MAX_RANGE_RESULTS;
@@ -420,23 +446,19 @@ bool AP_RangeFinder_VL53L3CX::get_reading(uint16_t &reading_mm)
         if (!range_status_ok(range.RangeStatus) || range.RangeMilliMeter <= 0) {
             continue;
         }
-        const uint16_t range_mm = uint16_t(range.RangeMilliMeter);
-        if (range_mm < nearest_mm) {
-            nearest_mm = range_mm;
+        // Pick the target with the strongest return signal (highest confidence)
+        if (!got_reading || range.SignalRateRtnMegaCps > best_signal) {
+            best_mm = uint16_t(range.RangeMilliMeter);
+            best_signal = range.SignalRateRtnMegaCps;
             got_reading = true;
         }
-    }
-
-    status = sensor.VL53LX_ClearInterruptAndStartMeasurement();
-    if (status != VL53LX_ERROR_NONE) {
-        return false;
     }
 
     if (!got_reading) {
         return false;
     }
 
-    reading_mm = nearest_mm;
+    reading_mm = best_mm;
     return true;
 }
 
@@ -446,7 +468,7 @@ bool AP_RangeFinder_VL53L3CX::get_reading(uint16_t &reading_mm)
 void AP_RangeFinder_VL53L3CX::timer(void)
 {
     uint16_t range_mm = 0;
-    if (get_reading(range_mm) && (range_mm * 0.001f) <= max_distance()) {
+    if (get_reading(range_mm)) {
         WITH_SEMAPHORE(_sem);
         sum_mm += range_mm;
         counter++;

@@ -11,6 +11,7 @@
 #include <AP_HAL/I2CDevice.h>
 
 #define VL53L3CX_I2C_ADDR_DEFAULT 0x29
+#define VL53L3CX_I2C_ADDR_SECONDARY 0x30
 
 class AP_RangeFinder_VL53L3CX : public AP_RangeFinder_Backend
 {
