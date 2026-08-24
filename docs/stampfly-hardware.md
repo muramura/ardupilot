@@ -13,9 +13,14 @@ The original high-resolution schematics and full component datasheets are stored
 - **VL53L3CX Rangefinder Modular Board**: [VL53L3CX_ToF_Board_Schematic.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/schematics/VL53L3CX_ToF_Board_Schematic.pdf)
 - **PMW3901 Optical Flow Modular Board**: [PMW3901_Optical_Flow_Board_Schematic.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/schematics/PMW3901_Optical_Flow_Board_Schematic.pdf)
 
-### 📑 Sensor Datasheets
+### 📑 MCU & Sensor Datasheets
+- **Espressif ESP32-S3 Series SoC Datasheet**: [ESP32-S3_Datasheet.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/datasheets/ESP32-S3_Datasheet.pdf)
 - **Bosch BMI270 6-Axis IMU (162 pages)**: [BMI270_Datasheet.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/datasheets/BMI270_Datasheet.pdf)
 - **Bosch BMM150 3-Axis Geomagnetic Compass (56 pages)**: [BMM150_Datasheet.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/datasheets/BMM150_Datasheet.pdf)
+- **Bosch BMP280 Digital Barometer / Altimeter**: [BMP280_Datasheet.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/datasheets/BMP280_Datasheet.pdf)
+- **STMicroelectronics VL53L3CX Time-of-Flight Ranging Sensor (35 pages)**: [VL53L3CX_Datasheet.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/datasheets/VL53L3CX_Datasheet.pdf)
+- **PixArt PMW3901 Optical Flow Sensor**: [PMW3901_Datasheet.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/datasheets/PMW3901_Datasheet.pdf)
+- **TI INA3221 Triple-Channel Voltage/Current Power Monitor**: [INA3221_Datasheet.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/datasheets/INA3221_Datasheet.pdf)
 
 ---
 
