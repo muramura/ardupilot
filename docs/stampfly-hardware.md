@@ -4,6 +4,21 @@ This document provides a comprehensive permanent record of the **M5StampFly** ha
 
 ---
 
+## 📁 Archived PDF Schematics & Datasheets
+
+The original high-resolution schematics and full component datasheets are stored permanently in the repository:
+
+### 📐 Hardware Schematics
+- **StampFly Mainboard Schematic**: [StampFly_Mainboard_Schematic.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/schematics/StampFly_Mainboard_Schematic.pdf)
+- **VL53L3CX Rangefinder Modular Board**: [VL53L3CX_ToF_Board_Schematic.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/schematics/VL53L3CX_ToF_Board_Schematic.pdf)
+- **PMW3901 Optical Flow Modular Board**: [PMW3901_Optical_Flow_Board_Schematic.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/schematics/PMW3901_Optical_Flow_Board_Schematic.pdf)
+
+### 📑 Sensor Datasheets
+- **Bosch BMI270 6-Axis IMU (162 pages)**: [BMI270_Datasheet.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/datasheets/BMI270_Datasheet.pdf)
+- **Bosch BMM150 3-Axis Geomagnetic Compass (56 pages)**: [BMM150_Datasheet.pdf](file:///Volumes/work2/ardupilot-stampfly-dev/docs/hardware/datasheets/BMM150_Datasheet.pdf)
+
+---
+
 ## 1. System Overview & Architecture
 
 M5StampFly is an ultra-compact indoor micro quadcopter powered by the **Espressif ESP32-S3** (M5Stack STAMP-S3 module).
