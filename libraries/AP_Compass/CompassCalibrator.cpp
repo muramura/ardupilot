@@ -79,6 +79,24 @@
 // retry overwrites it.
 #define COMPASS_CAL_RETRY_REPORT_HOLD_MS 500
 
+static const char *compass_cal_status_string(CompassCalibrator::Status status)
+{
+    switch (status) {
+    case CompassCalibrator::Status::NOT_STARTED: return "NOT_STARTED";
+    case CompassCalibrator::Status::WAITING_TO_START: return "WAITING_TO_START";
+    case CompassCalibrator::Status::RUNNING_STEP_ONE: return "RUNNING_STEP_ONE";
+    case CompassCalibrator::Status::RUNNING_STEP_TWO: return "RUNNING_STEP_TWO";
+    case CompassCalibrator::Status::SUCCESS: return "SUCCESS";
+    case CompassCalibrator::Status::FAILED: return "FAILED";
+    case CompassCalibrator::Status::FAILED_ORIENTATION: return "FAILED_ORIENTATION";
+    case CompassCalibrator::Status::FAILED_RADIUS: return "FAILED_RADIUS";
+    case CompassCalibrator::Status::FAILED_OFFSETS: return "FAILED_OFFSETS";
+    case CompassCalibrator::Status::FAILED_DIAG_SCALING: return "FAILED_DIAG_SCALING";
+    case CompassCalibrator::Status::FAILED_RESIDUALS_HIGH: return "FAILED_RESIDUALS_HIGH";
+    }
+    return "UNKNOWN";
+}
+
 ////////////////////////////////////////////////////////////
 ///////////////////// PUBLIC INTERFACE /////////////////////
 ////////////////////////////////////////////////////////////
@@ -276,6 +294,15 @@ void CompassCalibrator::pull_sample()
         update_completion_mask(mag_sample.get());
         _sample_buffer[_samples_collected] = mag_sample;
         _samples_collected++;
+
+        const uint8_t pct = (uint8_t)((_samples_collected * 100U) / COMPASS_CAL_NUM_SAMPLES);
+        if (pct >= _last_logged_pct + 25 || _samples_collected == COMPASS_CAL_NUM_SAMPLES) {
+            _last_logged_pct = pct;
+            ::printf("CompassCal[%u]: Step %u progress %u%% (%u/%u samples)\n",
+                     _compass_idx, (_status == Status::RUNNING_STEP_ONE ? 1 : 2), pct, _samples_collected, COMPASS_CAL_NUM_SAMPLES);
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CompassCal[%u]: Step %u %u%%",
+                          _compass_idx, (_status == Status::RUNNING_STEP_ONE ? 1 : 2), pct);
+        }
     }
 }
 
@@ -401,6 +428,7 @@ void CompassCalibrator::reset_state()
 {
     _samples_collected = 0;
     _samples_thinned = 0;
+    _last_logged_pct = 0;
     _params.radius = 200;
     _params.offset.zero();
     _params.diag = Vector3f(1.0f,1.0f,1.0f);
@@ -450,6 +478,9 @@ bool CompassCalibrator::set_status(CompassCalibrator::Status status)
             if (_sample_buffer != nullptr) {
                 initialize_fit();
                 _status = Status::RUNNING_STEP_ONE;
+                _last_logged_pct = 0;
+                ::printf("CompassCal[%u]: Starting Step 1 (attempt %u)...\n", _compass_idx, _attempt);
+                GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CompassCal[%u]: Starting Step 1 (attempt %u)", _compass_idx, _attempt);
                 return true;
             }
             return false;
@@ -461,6 +492,9 @@ bool CompassCalibrator::set_status(CompassCalibrator::Status status)
             thin_samples();
             initialize_fit();
             _status = Status::RUNNING_STEP_TWO;
+            _last_logged_pct = 0;
+            ::printf("CompassCal[%u]: Step 1 complete (radius=%.1f). Starting Step 2...\n", _compass_idx, (double)_params.radius);
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CompassCal[%u]: Step 1 complete (radius=%.0f)", _compass_idx, (double)_params.radius);
             return true;
 
         case Status::SUCCESS:
@@ -475,6 +509,12 @@ bool CompassCalibrator::set_status(CompassCalibrator::Status status)
 
             _status = Status::SUCCESS;
             _retry_pending = false;
+            ::printf("CompassCal[%u]: SUCCESS! Offsets=(%.1f, %.1f, %.1f) Diag=(%.2f, %.2f, %.2f) OffDiag=(%.2f, %.2f, %.2f) Fitness=%.2f\n",
+                     _compass_idx, (double)_params.offset.x, (double)_params.offset.y, (double)_params.offset.z,
+                     (double)_params.diag.x, (double)_params.diag.y, (double)_params.diag.z,
+                     (double)_params.offdiag.x, (double)_params.offdiag.y, (double)_params.offdiag.z, (double)_fitness);
+            GCS_SEND_TEXT(MAV_SEVERITY_NOTICE, "CompassCal[%u]: SUCCESS ofs(%.0f, %.0f, %.0f) fit=%.1f",
+                          _compass_idx, (double)_params.offset.x, (double)_params.offset.y, (double)_params.offset.z, (double)_fitness);
             return true;
 
         case Status::FAILED:
@@ -498,6 +538,11 @@ bool CompassCalibrator::set_status(CompassCalibrator::Status status)
             }
 
             _status = status;
+            ::printf("CompassCal[%u]: FAILED (%s)! fitness=%.2f, radius=%.1f, ofs=(%.1f, %.1f, %.1f)\n",
+                     _compass_idx, compass_cal_status_string(status), (double)_fitness, (double)_params.radius,
+                     (double)_params.offset.x, (double)_params.offset.y, (double)_params.offset.z);
+            GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "CompassCal[%u]: FAILED (%s)",
+                          _compass_idx, compass_cal_status_string(status));
 
             if (_retry) {
                 _retry_pending = true;

@@ -229,6 +229,7 @@ private:
     CompassSample *_sample_buffer;          // buffer of sensor values
     uint16_t _samples_collected;            // number of samples in buffer
     uint16_t _samples_thinned;              // number of samples removed by the thin_samples() call (called before step 2 begins)
+    uint8_t _last_logged_pct;               // last progress percentage logged to console
 
     // fit state
     class param_t _params;                  // latest calibration outputs
