@@ -233,6 +233,17 @@ void CompassCalibrator::update()
         }
     }
 
+    // check if sample collection has stalled (no new samples accepted for > 3.0s)
+    if (_running() && _samples_collected < COMPASS_CAL_NUM_SAMPLES) {
+        const uint32_t now = AP_HAL::millis();
+        if ((now - _last_sample_added_ms > 3000) && (now - _last_hint_sent_ms > 4000)) {
+            _last_hint_sent_ms = now;
+            const char* hint = get_missing_direction_hint();
+            ::printf("CompassCal[%u]: Need samples -> %s\n", _compass_idx, hint);
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CompassCal[%u]: %s", _compass_idx, hint);
+        }
+    }
+
     // collect the minimum number of samples
     if (!_fitting()) {
         return;
@@ -294,6 +305,7 @@ void CompassCalibrator::pull_sample()
         update_completion_mask(mag_sample.get());
         _sample_buffer[_samples_collected] = mag_sample;
         _samples_collected++;
+        _last_sample_added_ms = AP_HAL::millis();
 
         const uint8_t pct = (uint8_t)((_samples_collected * 100U) / COMPASS_CAL_NUM_SAMPLES);
         if (pct >= _last_logged_pct + 25 || _samples_collected == COMPASS_CAL_NUM_SAMPLES) {
@@ -429,6 +441,8 @@ void CompassCalibrator::reset_state()
     _samples_collected = 0;
     _samples_thinned = 0;
     _last_logged_pct = 0;
+    _last_sample_added_ms = AP_HAL::millis();
+    _last_hint_sent_ms = AP_HAL::millis();
     _params.radius = 200;
     _params.offset.zero();
     _params.diag = Vector3f(1.0f,1.0f,1.0f);
@@ -479,6 +493,8 @@ bool CompassCalibrator::set_status(CompassCalibrator::Status status)
                 initialize_fit();
                 _status = Status::RUNNING_STEP_ONE;
                 _last_logged_pct = 0;
+                _last_sample_added_ms = AP_HAL::millis();
+                _last_hint_sent_ms = AP_HAL::millis();
                 ::printf("CompassCal[%u]: Starting Step 1 (attempt %u)...\n", _compass_idx, _attempt);
                 GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CompassCal[%u]: Starting Step 1 (attempt %u)", _compass_idx, _attempt);
                 return true;
@@ -493,6 +509,8 @@ bool CompassCalibrator::set_status(CompassCalibrator::Status status)
             initialize_fit();
             _status = Status::RUNNING_STEP_TWO;
             _last_logged_pct = 0;
+            _last_sample_added_ms = AP_HAL::millis();
+            _last_hint_sent_ms = AP_HAL::millis();
             ::printf("CompassCal[%u]: Step 1 complete (radius=%.1f). Starting Step 2...\n", _compass_idx, (double)_params.radius);
             GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CompassCal[%u]: Step 1 complete (radius=%.0f)", _compass_idx, (double)_params.radius);
             return true;
@@ -1268,4 +1286,62 @@ bool CompassCalibrator::right_angle_rotation(Rotation r) const
     }
 }
 
+const char* CompassCalibrator::get_missing_direction_hint() const
+{
+    if (_samples_collected == 0 || _sample_buffer == nullptr) {
+        return "Rotate all directions";
+    }
+
+    uint16_t counts[6] = {0}; // 0:+X(NoseDown), 1:-X(NoseUp), 2:+Y(RollRight), 3:-Y(RollLeft), 4:+Z(Level), 5:-Z(Inverted)
+
+    for (uint16_t i = 0; i < _samples_collected; i++) {
+        const Vector3f v = _sample_buffer[i].get() + _params.offset;
+        const float ax = fabsf(v.x);
+        const float ay = fabsf(v.y);
+        const float az = fabsf(v.z);
+
+        if (ax >= ay && ax >= az) {
+            if (v.x > 0.0f) {
+                counts[0]++;
+            } else {
+                counts[1]++;
+            }
+        } else if (ay >= ax && ay >= az) {
+            if (v.y > 0.0f) {
+                counts[2]++;
+            } else {
+                counts[3]++;
+            }
+        } else {
+            if (v.z > 0.0f) {
+                counts[4]++;
+            } else {
+                counts[5]++;
+            }
+        }
+    }
+
+    // Find direction with minimum counts
+    uint8_t min_idx = 0;
+    uint16_t min_count = counts[0];
+    for (uint8_t i = 1; i < 6; i++) {
+        if (counts[i] < min_count) {
+            min_count = counts[i];
+            min_idx = i;
+        }
+    }
+
+    switch (min_idx) {
+    case 0: return "Tilt NOSE DOWN";
+    case 1: return "Tilt NOSE UP";
+    case 2: return "Roll RIGHT DOWN";
+    case 3: return "Roll LEFT DOWN";
+    case 4: return "Hold LEVEL";
+    case 5: return "Flip INVERTED";
+    }
+    return "Rotate continuously";
+}
+
 #endif  // COMPASS_CAL_ENABLED
+
+

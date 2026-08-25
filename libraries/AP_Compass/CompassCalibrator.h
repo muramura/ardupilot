@@ -205,6 +205,9 @@ private:
     // fix radius to compensate for sensor scaling errors
     bool fix_radius();
 
+    // get orientation hint when sample collection is stalled
+    const char* get_missing_direction_hint() const;
+
     // update methods to read write intermediate structures, called inside thread
     inline void update_cal_status();
     inline void update_cal_report();
@@ -230,6 +233,8 @@ private:
     uint16_t _samples_collected;            // number of samples in buffer
     uint16_t _samples_thinned;              // number of samples removed by the thin_samples() call (called before step 2 begins)
     uint8_t _last_logged_pct;               // last progress percentage logged to console
+    uint32_t _last_sample_added_ms;         // millis when last sample was added
+    uint32_t _last_hint_sent_ms;            // millis when last guidance hint was sent
 
     // fit state
     class param_t _params;                  // latest calibration outputs
