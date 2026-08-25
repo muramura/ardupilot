@@ -65,10 +65,10 @@ GCS_MAVLINK::queued_param_send()
     }
     uint32_t count = bytes_allowed / size_for_one_param_value_msg;
 
-    // when we don't have flow control we really need to keep the
-    // param download very slow, or it tends to stall
-    if (!have_flow_control() && count > 5) {
-        count = 5;
+    // when we don't have flow control (e.g. WiFi), send 1 parameter per loop
+    // to prevent overflowing mobile socket buffers (150Hz = ~6.6ms spacing)
+    if (!have_flow_control() && count > 1) {
+        count = 1;
     }
     if (async_replies_sent_count >= count) {
         return;
