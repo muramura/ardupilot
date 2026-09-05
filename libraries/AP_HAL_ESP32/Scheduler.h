@@ -40,6 +40,7 @@ public:
     };
     void     delay(uint16_t ms) override;
     void     delay_microseconds(uint16_t us) override;
+    void     expect_delay_ms(uint32_t ms) override;
     void     register_timer_process(AP_HAL::MemberProc) override;
     void     register_io_process(AP_HAL::MemberProc) override;
     void     register_timer_failsafe(AP_HAL::Proc, uint32_t period_us) override;

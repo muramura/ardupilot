@@ -206,11 +206,19 @@ void IRAM_ATTR Scheduler::delay(uint16_t ms)
     uint64_t start = AP_HAL::micros64();
     while ((AP_HAL::micros64() - start)/1000 < ms) {
         delay_microseconds(1000);
-        if (_min_delay_cb_ms <= ms) {
-            if (in_main_thread()) {
+        if (in_main_thread()) {
+            esp_task_wdt_reset();
+            if (_min_delay_cb_ms <= ms) {
                 call_delay_cb();
             }
         }
+    }
+}
+
+void Scheduler::expect_delay_ms(uint32_t ms)
+{
+    if (in_main_thread()) {
+        esp_task_wdt_reset();
     }
 }
 
