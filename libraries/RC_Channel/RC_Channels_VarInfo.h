@@ -81,6 +81,18 @@ const AP_Param::GroupInfo RC_Channels::var_info[] = {
     // @Path: RC_Channel.cpp
     AP_SUBGROUPINFO(obj_channels[15], "16_", 16, RC_CHANNELS_SUBCLASS, RC_CHANNEL_SUBCLASS),
 
+#if NUM_RC_CHANNELS >= 17
+    // @Group: 17_
+    // @Path: RC_Channel.cpp
+    AP_SUBGROUPINFO(obj_channels[16], "17_", 17, RC_CHANNELS_SUBCLASS, RC_CHANNEL_SUBCLASS),
+#endif
+
+#if NUM_RC_CHANNELS >= 18
+    // @Group: 18_
+    // @Path: RC_Channel.cpp
+    AP_SUBGROUPINFO(obj_channels[17], "18_", 18, RC_CHANNELS_SUBCLASS, RC_CHANNEL_SUBCLASS),
+#endif
+
     // @Param: _OVERRIDE_TIME
     // @DisplayName: RC override timeout
     // @Description: Timeout after which RC overrides will no longer be used, and RC input will resume, 0 will disable RC overrides, -1 will never timeout, and continue using overrides until they are disabled

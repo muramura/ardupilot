@@ -4219,6 +4219,12 @@ void GCS_MAVLINK::handle_rc_channels_override(const mavlink_message_t &msg)
         packet.chan14_raw,
         packet.chan15_raw,
         packet.chan16_raw
+#if NUM_RC_CHANNELS >= 17
+        , packet.chan17_raw
+#endif
+#if NUM_RC_CHANNELS >= 18
+        , packet.chan18_raw
+#endif
     };
 
     for (uint8_t i=0; i<8; i++) {

@@ -277,6 +277,9 @@ define AP_DDS_ENABLED 0
 # define HAL_ESP32_RCIN GPIO_NUM_16
 define HAL_ESP32_RMT_RX_PIN_NUMBER GPIO_NUM_16
 
+# Support 18 RC channels on StampFly
+define NUM_RC_CHANNELS 18
+
 
 # StampFly has no SD card, but uses the FlashFS /APM partition for small
 # onboard logs. Keep LOG_BITMASK low in defaults.parm.

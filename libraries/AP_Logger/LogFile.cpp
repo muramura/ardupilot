@@ -181,7 +181,7 @@ void AP_Logger::Write_RCIN(void)
         time_us       : AP_HAL::micros64(),
         chan15         : values[14],
         chan16         : values[15],
-        override_mask  : rc().get_override_mask(),
+        override_mask  : (uint16_t)rc().get_override_mask(),
         flags          : flags,
     };
     WriteBlock(&pkt2, sizeof(pkt2));
