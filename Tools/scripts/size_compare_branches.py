@@ -382,8 +382,8 @@ class SizeCompareBranches(BuildScriptBase):
             board = master.board
             try:
                 results[board] = self.compare_results_sizes(master, pair["branch"])
-            except FileNotFoundError:
-                pass
+            except FileNotFoundError as e:
+                self.progress(f"{board}: missing build product: {e.filename}")
 
         return results
 
@@ -496,6 +496,13 @@ class SizeCompareBranches(BuildScriptBase):
             bin_dirname = "bin"
             bin_filename = self.vehicle_map[vehicle] + '.bin'
             elf_filename = self.vehicle_map[vehicle]
+            if vehicle == 'iofirmware':
+                # boards whose hwdef has no IMU heater pin build a
+                # single "iofirmware" binary rather than the
+                # {low,high}polh heater-polarity pair:
+                if not os.path.exists(os.path.join(elf_basedir, task.board, bin_dirname, bin_filename)):
+                    bin_filename = 'iofirmware.bin'
+                    elf_filename = 'iofirmware'
             esp32_elf_dirname = "esp-idf_build"
             if os.path.exists(os.path.join(elf_basedir, task.board, esp32_elf_dirname)):
                 bin_filename = "ardupilot.bin"
@@ -674,6 +681,7 @@ class SizeCompareBranches(BuildScriptBase):
 
     def compare_results_sizes(self, result_master, result_branch):
         ret = {}
+        board = result_master.board
         for vehicle in result_master.vehicle.keys():
             # check for the difference in size (and identicality)
             # of the two binaries:
@@ -693,6 +701,10 @@ class SizeCompareBranches(BuildScriptBase):
                 new_path = os.path.join(new_bin_dir, elf_filename)
                 master_size = os.path.getsize(master_path)
                 new_size = os.path.getsize(new_path)
+                if self.boards_by_name[board].hal == "QURT":
+                    # use text+data for the size delta; file identity is evaluated separately below
+                    master_size = self.size_for_elf(master_path, toolchain="hexagon")["size_total"]
+                    new_size = self.size_for_elf(new_path, toolchain="hexagon")["size_total"]
 
                 identical = self.files_are_identical(master_path, new_path)
                 if not identical:
@@ -700,15 +712,14 @@ class SizeCompareBranches(BuildScriptBase):
                     # This treats symbol renames as then "identical".
                     master_path_stripped = self.create_stripped_elf(
                         master_path,
-                        toolchain=result_master.toolchain,
+                        toolchain="hexagon" if self.boards_by_name[board].hal == "QURT" else result_master.toolchain,
                     )
                     new_path_stripped = self.create_stripped_elf(
                         new_path,
-                        toolchain=result_branch.toolchain,
+                        toolchain="hexagon" if self.boards_by_name[board].hal == "QURT" else result_branch.toolchain,
                     )
                     identical = self.files_are_identical(master_path_stripped, new_path_stripped)
 
-            board = result_master.board
             ret[vehicle] = SizeCompareBranchesResult(board, vehicle, new_size - master_size, identical)
 
         return ret

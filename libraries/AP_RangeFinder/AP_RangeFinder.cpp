@@ -197,7 +197,7 @@ RangeFinder::RangeFinder()
 
 void RangeFinder::convert_params(void)
 {
-    // PARAMETER_CONVERSION - Added: Dec-2024 for 4.6->4.7
+    // PARAMETER_CONVERSION - Added: Dec-2024 for ArduPilot-4.7
     for (auto &p : params) {
         p.convert_min_max_params();
     }
@@ -415,7 +415,7 @@ __INITFUNC__ void RangeFinder::detect_instance(uint8_t instance, uint8_t& serial
         break;
     }
 #endif
-#if AP_RANGEFINDER_BENEWAKE_TFS20L_ENABLED
+#if AP_RANGEFINDER_BENEWAKE_TFS20L_I2C_ENABLED
     case Type::BenewakeTFS20L: {
         uint8_t addr = TFS20L_ADDR_DEFAULT;
         if (params[instance].address != 0) {
