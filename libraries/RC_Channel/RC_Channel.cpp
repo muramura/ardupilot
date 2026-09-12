@@ -253,6 +253,7 @@ const AP_Param::GroupInfo RC_Channel::var_info[] = {
     // @Values{Copter, Rover, Plane, Blimp, Sub}: 185:Mount Roll/Pitch Lock
     // @Values{Copter, Rover, Plane, Blimp, Sub}: 186:Mount POI Lock
     // @Values{Copter, Rover, Plane, Blimp, Sub}: 187:EKF Reset
+    // @Values{Copter, Rover, Plane, Blimp, Sub}: 188:Slow Mode
     // @Values{Rover}: 201:Roll
     // @Values{Rover}: 202:Pitch
     // @Values{Rover}: 207:MainSail
@@ -436,7 +437,9 @@ float RC_Channel::norm_input() const
         }
         ret = reverse_mul * (float)(radio_in - radio_trim) / (float)(radio_max  - radio_trim);
     }
-    return constrain_float(ret, -1.0f, 1.0f);
+    ret = constrain_float(ret, -1.0f, 1.0f);
+    ret *= rc().get_slow_mode_scale(this);
+    return ret;
 }
 
 float RC_Channel::norm_input_dz() const
@@ -452,7 +455,9 @@ float RC_Channel::norm_input_dz() const
     } else {
         ret = 0;
     }
-    return constrain_float(ret, -1.0f, 1.0f);
+    ret = constrain_float(ret, -1.0f, 1.0f);
+    ret *= rc().get_slow_mode_scale(this);
+    return ret;
 }
 
 // return a normalised input for a channel, in range -1 to 1,
@@ -964,6 +969,7 @@ const RC_Channel::LookupTable RC_Channel::lookuptable[] = {
 #if HAL_MOUNT_ENABLED
     { AUX_FUNC::MOUNT_LRF_ENABLE, "Mount LRF Enable"},
 #endif
+    { AUX_FUNC::SLOW_MODE, "Slow Mode"},
 };
 
 /* lookup the announcement for switch change */
@@ -1527,6 +1533,10 @@ bool RC_Channel::do_aux_function(const AuxFuncTrigger &trigger)
 
     case AUX_FUNC::AVOID_PROXIMITY:
         do_aux_function_avoid_proximity(ch_flag);
+        break;
+
+    case AUX_FUNC::SLOW_MODE:
+        rc().do_aux_function_slow_mode(ch_flag);
         break;
 
 #if AP_SERVORELAYEVENTS_ENABLED && AP_RELAY_ENABLED

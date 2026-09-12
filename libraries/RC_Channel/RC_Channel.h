@@ -375,6 +375,7 @@ public:
 #if AP_AHRS_EKF_RESET_ENABLED
         EKF_RESET =          187, // trigger full EKF bootstrap reset
 #endif  // AP_AHRS_EKF_RESET_ENABLED
+        SLOW_MODE =          188, // slow mode (scale down stick deflection)
         // inputs from 200 will eventually used to replace RCMAP
         ROLL =               201, // roll input
         PITCH =              202, // pitch input
@@ -732,6 +733,11 @@ public:
         return channel(0)->run_aux_function(ch_option, pos, source, source_index);
     }
 
+    // slow mode support
+    float get_slow_mode_scale(const RC_Channel *chan) const;
+    void do_aux_function_slow_mode(const RC_Channel::AuxSwitchPos ch_flag);
+    bool slow_mode_active() const { return _slow_mode_active; }
+
     // check if flight mode channel is assigned RC option
     // return true if assigned
     bool flight_mode_channel_conflicts_with_rc_option() const;
@@ -805,6 +811,10 @@ private:
     AP_Int32  _options;
     AP_Int32  _protocols;
     AP_Float _fs_timeout;
+    AP_Int8   _slow_pct;
+    AP_Int8   _slow_axes;
+
+    bool _slow_mode_active;
 
     // set to true if we see overrides or other RC input
     bool _has_ever_seen_rc_input;

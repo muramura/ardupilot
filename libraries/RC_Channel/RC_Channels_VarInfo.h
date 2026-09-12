@@ -112,6 +112,21 @@ const AP_Param::GroupInfo RC_Channels::var_info[] = {
     // @Units: s
     AP_GROUPINFO("_FS_TIMEOUT", 35, RC_CHANNELS_SUBCLASS, _fs_timeout, 1.0),
 
+    // @Param: _SLOW_PCT
+    // @DisplayName: RC slow mode scale percentage
+    // @Description: Stick deflection scale in percent when slow mode is active. e.g. 25 means 25% of full rate/angle.
+    // @User: Standard
+    // @Range: 5 90
+    // @Units: %
+    AP_GROUPINFO("_SLOW_PCT", 36, RC_CHANNELS_SUBCLASS, _slow_pct, 25),
+
+    // @Param: _SLOW_AXES
+    // @DisplayName: RC slow mode axes
+    // @Description: Bitmask of axes to scale down when slow mode is active
+    // @User: Standard
+    // @Bitmask: 0:Roll, 1:Pitch, 2:Yaw, 3:Throttle
+    AP_GROUPINFO("_SLOW_AXES", 37, RC_CHANNELS_SUBCLASS, _slow_axes, 7),
+
     AP_GROUPEND
 };
 

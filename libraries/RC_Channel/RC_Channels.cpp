@@ -515,6 +515,51 @@ void RC_Channels::rudder_arm_disarm_check()
     }
 }
 
+// handle slow mode aux switch
+void RC_Channels::do_aux_function_slow_mode(const RC_Channel::AuxSwitchPos ch_flag)
+{
+    const bool new_active = (ch_flag == RC_Channel::AuxSwitchPos::HIGH);
+    if (new_active != _slow_mode_active) {
+        _slow_mode_active = new_active;
+        if (_slow_mode_active) {
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO, "Slow Mode ON (%d%%)", (int)_slow_pct.get());
+        } else {
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO, "Slow Mode OFF");
+        }
+    }
+}
+
+// return stick scale factor for slow mode
+float RC_Channels::get_slow_mode_scale(const RC_Channel *chan) const
+{
+    if (!_slow_mode_active || chan == nullptr) {
+        return 1.0f;
+    }
+    const AP_RCMapper *rcmap = AP::rcmap();
+    if (rcmap == nullptr) {
+        return 1.0f;
+    }
+    const uint8_t ch = chan->ch();
+    bool apply = false;
+    const uint8_t axes = _slow_axes.get();
+    if ((axes & (1U << 0)) && (ch == rcmap->roll())) {
+        apply = true;
+    }
+    if ((axes & (1U << 1)) && (ch == rcmap->pitch())) {
+        apply = true;
+    }
+    if ((axes & (1U << 2)) && (ch == rcmap->yaw())) {
+        apply = true;
+    }
+    if ((axes & (1U << 3)) && (ch == rcmap->throttle())) {
+        apply = true;
+    }
+    if (!apply) {
+        return 1.0f;
+    }
+    return constrain_float(_slow_pct.get() * 0.01f, 0.05f, 1.0f);
+}
+
 // singleton instance
 RC_Channels *RC_Channels::_singleton;
 
