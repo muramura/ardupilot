@@ -3,7 +3,12 @@ FRAME_CLASS 1
 MOT_PWM_TYPE 3 # brushed motor PWM
 RC_SPEED 32000 # as fast as ardupilot supports (more would be nice)
 LOG_BACKEND_TYPE 0 # None (logging disabled)
-ARMING_SKIPCHK 1024 # disable logging check (in the event log rx is not up)
+# Arming settings
+# ARMING_SKIPCHK: 1056 (32 + 1024)
+#   Bit  5 (32):   Parameters check skip
+#   Bit 10 (1024): Logging available check skip (in the event log rx is not up)
+ARMING_SKIPCHK 1056
+ARMING_RUDDER 0 # disable rudder stick arming/disarming (GCS/button only)
 LOG_DISARMED 0
 LOG_BITMASK 0 # keep onboard logs small; STATUSTEXT is still logged as MSG
 LOG_MAX_FILES 3
@@ -14,7 +19,9 @@ SCR_ENABLE 0 # disable Lua scripting
 # mavlink RC control
 FS_THR_ENABLE 0 # not wanted for mavlink control
 RC1_MIN 1101 # avoid calibration needed warning
-RC_OPTIONS 96 # ignore rpy stick positions during arming, nice for crap controllers
+# RC_OPTIONS: 32
+#   Bit 5 (32): Check neutral throttle on arming
+RC_OPTIONS 32
 
 # tuning parameters from mission planner's wizard
 ATC_ACC_P_MAX 2002
@@ -68,4 +75,10 @@ EK3_SRC1_VELZ   0
 EK3_RNG_USE_HGT -1
 EK3_RNG_M_NSE   0.2
 SURFTRAK_MODE   1
+
+# Crash check settings (fast disarm on crash or ground tip-over)
+FS_CRASH_CHECK  1
+FS_CRASH_TIME   0.25
+FS_GND_ANGLE    45
+
 
