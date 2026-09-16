@@ -81,4 +81,8 @@ FS_CRASH_CHECK  1
 FS_CRASH_TIME   0.25
 FS_GND_ANGLE    45
 
+# Sequential motor check on arming (0.25s per motor, 1.0s total)
+MOT_ARM_SEQ     0.25
+
+
 
