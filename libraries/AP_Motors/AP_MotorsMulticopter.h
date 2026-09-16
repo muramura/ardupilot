@@ -207,6 +207,9 @@ protected:
     // scaling for booster motor throttle
     AP_Float            _boost_scale;
 
+    // sequential motor spool-up on arming time per motor (s)
+    AP_Float            _motor_arm_seq_time;
+
     // motor output variables
     bool                motor_enabled[AP_MOTORS_MAX_NUM_MOTORS];    // true if motor is enabled
 
@@ -214,6 +217,15 @@ protected:
     float               _spin_up_ratio;         // normalized spin scalar [0..1] between 0 and spin_min (used for ground-idle ramp)
     float               _idle_time;             // idle delay elapsed time at/above ground-idle spin [s]
     bool                _spin_up_complete;      // set to true when spin up is complete and spool up blocks have been enabled
+    uint32_t            _arm_seq_start_ms;      // time when ground-idle sequential spool began
+    bool                _arm_seq_complete;      // true once sequential arming motor check has completed
+
+    // returns number of enabled motors
+    uint8_t             get_num_motors() const;
+
+    // check if sequential arming motor check is currently active
+    bool                is_arm_seq_active(uint8_t& current_seq_num);
+    bool                is_arm_seq_active() const;
 
     // battery voltage, current and air pressure compensation variables
     float               _throttle_limit;        // ratio of throttle limit between hover and maximum
