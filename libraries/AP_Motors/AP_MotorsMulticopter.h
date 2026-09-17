@@ -226,7 +226,7 @@ protected:
     // check if sequential arming motor check is currently active
     // active_motor_idx: 0-indexed motor number (0..num_motors-1) if spinning, -1 during 0.3s pause between motors
     bool                is_arm_seq_active(int8_t& active_motor_idx);
-    bool                is_arm_seq_active() const;
+    bool                is_arm_seq_active() const override;
 
     // battery voltage, current and air pressure compensation variables
     float               _throttle_limit;        // ratio of throttle limit between hover and maximum
