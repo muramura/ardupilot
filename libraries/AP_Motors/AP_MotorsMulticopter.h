@@ -115,6 +115,9 @@ public:
     // Thrust Linearization handling
     Thrust_Linearization thr_lin {*this};
 
+    // Check if sequential arming motor check is currently active
+    bool is_arm_seq_active() const override;
+
     // var_info for holding Parameter information
     static const struct AP_Param::GroupInfo        var_info[];
 
@@ -226,7 +229,6 @@ protected:
     // check if sequential arming motor check is currently active
     // active_motor_idx: 0-indexed motor number (0..num_motors-1) if spinning, -1 during 0.3s pause between motors
     bool                is_arm_seq_active(int8_t& active_motor_idx);
-    bool                is_arm_seq_active() const override;
 
     // battery voltage, current and air pressure compensation variables
     float               _throttle_limit;        // ratio of throttle limit between hover and maximum
