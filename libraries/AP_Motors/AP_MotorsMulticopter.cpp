@@ -747,10 +747,11 @@ void AP_MotorsMulticopter::output_logic()
             const float spool_step = _dt_s / _spool_up_time;
             _spin_up_ratio += spool_step;
 
-            // Hold at ground-idle spin until the configured idle-time delay has elapsed.
-            // This allows ESCs to complete their startup sequence with PWM active at idle
-            // before allowing further spool-up.
-            if (_idle_time < _idle_time_delay_s) {
+            // Hold at ground-idle spin until the configured idle-time delay has elapsed
+            // and the sequential arming motor check has completed.
+            // This prevents spin_up_ratio from ramping up to 1.0 during the sequence,
+            // preventing sudden throttle surge when the sequence finishes.
+            if (_idle_time < _idle_time_delay_s || is_arm_seq_active()) {
                 _spin_up_ratio = MIN(_spin_up_ratio, spin_up_ground_idle_ratio);
                 break;
             }
