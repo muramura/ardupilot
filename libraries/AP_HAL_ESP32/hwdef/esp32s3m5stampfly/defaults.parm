@@ -4,10 +4,11 @@ MOT_PWM_TYPE 3 # brushed motor PWM
 RC_SPEED 32000 # as fast as ardupilot supports (more would be nice)
 LOG_BACKEND_TYPE 0 # None (logging disabled)
 # Arming settings
-# ARMING_SKIPCHK: 1056 (32 + 1024)
+# ARMING_SKIPCHK: 1120 (32 + 64 + 1024)
 #   Bit  5 (32):   Parameters check skip
+#   Bit  6 (64):   RC checks skip (allows duplicate aux options like multiple DISARM switches)
 #   Bit 10 (1024): Logging available check skip (in the event log rx is not up)
-ARMING_SKIPCHK 1056
+ARMING_SKIPCHK 1120
 ARMING_RUDDER 0 # disable rudder stick arming/disarming (GCS/button only)
 LOG_DISARMED 0
 LOG_BITMASK 0 # keep onboard logs small; STATUSTEXT is still logged as MSG
