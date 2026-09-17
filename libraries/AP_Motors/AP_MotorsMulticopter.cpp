@@ -1069,29 +1069,41 @@ uint8_t AP_MotorsMulticopter::get_num_motors() const
 }
 
 // check if sequential arming motor check is currently active and return current sequence number
-bool AP_MotorsMulticopter::is_arm_seq_active(uint8_t& current_seq_num)
+bool AP_MotorsMulticopter::is_arm_seq_active(int8_t& active_motor_idx)
 {
+    active_motor_idx = -1;
+
     if (!is_positive(_motor_arm_seq_time) || _spool_state != SpoolState::GROUND_IDLE || _arm_seq_complete) {
         return false;
     }
 
     const uint32_t now_ms = AP_HAL::millis();
     const uint32_t elapsed_ms = now_ms - _arm_seq_start_ms;
-    const uint32_t per_motor_ms = (uint32_t)(_motor_arm_seq_time * 1000.0f);
+    const uint32_t spin_ms = (uint32_t)(_motor_arm_seq_time * 1000.0f);
+    const uint32_t pause_ms = 300; // 0.3s pause between motor checks
+    const uint32_t slot_ms = spin_ms + pause_ms;
     const uint8_t num_motors = get_num_motors();
 
-    if (per_motor_ms == 0 || num_motors == 0) {
+    if (spin_ms == 0 || num_motors == 0) {
         _arm_seq_complete = true;
         return false;
     }
 
-    const uint32_t total_seq_ms = num_motors * per_motor_ms;
+    const uint32_t total_seq_ms = num_motors * slot_ms;
     if (elapsed_ms >= total_seq_ms) {
         _arm_seq_complete = true;
         return false;
     }
 
-    current_seq_num = (elapsed_ms / per_motor_ms) + 1; // 1-indexed (matches _test_order: 1, 2, 3, 4)
+    const uint8_t motor_slot = elapsed_ms / slot_ms;
+    const uint32_t in_slot_ms = elapsed_ms % slot_ms;
+
+    if (in_slot_ms < spin_ms) {
+        active_motor_idx = (int8_t)motor_slot; // 0-indexed active motor
+    } else {
+        active_motor_idx = -1; // in 0.3s pause interval
+    }
+
     return true;
 }
 
@@ -1103,13 +1115,14 @@ bool AP_MotorsMulticopter::is_arm_seq_active() const
 
     const uint32_t now_ms = AP_HAL::millis();
     const uint32_t elapsed_ms = now_ms - _arm_seq_start_ms;
-    const uint32_t per_motor_ms = (uint32_t)(_motor_arm_seq_time * 1000.0f);
+    const uint32_t spin_ms = (uint32_t)(_motor_arm_seq_time * 1000.0f);
+    const uint32_t pause_ms = 300;
+    const uint32_t slot_ms = spin_ms + pause_ms;
     const uint8_t num_motors = get_num_motors();
 
-    if (per_motor_ms == 0 || num_motors == 0) {
+    if (spin_ms == 0 || num_motors == 0) {
         return false;
     }
 
-    return (elapsed_ms < (uint32_t)num_motors * per_motor_ms);
+    return (elapsed_ms < (uint32_t)num_motors * slot_ms);
 }
-

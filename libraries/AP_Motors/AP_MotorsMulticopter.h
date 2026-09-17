@@ -224,7 +224,8 @@ protected:
     uint8_t             get_num_motors() const;
 
     // check if sequential arming motor check is currently active
-    bool                is_arm_seq_active(uint8_t& current_seq_num);
+    // active_motor_idx: 0-indexed motor number (0..num_motors-1) if spinning, -1 during 0.3s pause between motors
+    bool                is_arm_seq_active(int8_t& active_motor_idx);
     bool                is_arm_seq_active() const;
 
     // battery voltage, current and air pressure compensation variables

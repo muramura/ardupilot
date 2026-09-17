@@ -156,15 +156,16 @@ void AP_MotorsMatrix::output_to_motors()
         }
         case SpoolState::GROUND_IDLE: {
             // sends output to motors when armed but not flying
-            uint8_t current_seq_num = 0;
-            const bool seq_active = is_arm_seq_active(current_seq_num);
+            int8_t active_motor_idx = -1;
+            const bool seq_active = is_arm_seq_active(active_motor_idx);
 
             for (i = 0; i < AP_MOTORS_MAX_NUM_MOTORS; i++) {
                 if (motor_enabled[i]) {
                     if (seq_active) {
-                        // Sequential check: only spin the currently active motor in test order
-                        if (_test_order[i] == current_seq_num) {
-                            set_actuator_with_slew(_actuator[i], actuator_spin_up_to_ground_idle());
+                        // Sequential check: spin the currently active motor in index order (M1, M2, M3, M4...)
+                        // active_motor_idx == -1 during pause
+                        if (active_motor_idx >= 0 && (int8_t)i == active_motor_idx) {
+                            set_actuator_with_slew(_actuator[i], _spin_arm);
                         } else {
                             set_actuator_with_slew(_actuator[i], 0.0f);
                         }
