@@ -85,5 +85,6 @@ FS_GND_ANGLE    45
 # Sequential motor check on arming (1.0s spin + 0.3s pause per motor)
 MOT_ARM_SEQ     1.0
 
-
-
+# Altitude & Throttle deadzone settings for Micro StampFly
+# Narrow throttle deadzone to allow smooth control in slow mode (±125 PWM) while preserving full speed
+THR_DZ          20
