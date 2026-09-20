@@ -21,6 +21,17 @@ def embed_file(out, f, idx, embedded_name, uncompressed):
     except Exception:
         raise Exception("Failed to embed %s" % f)
 
+    if embedded_name.endswith(".lua") and not contents.startswith(b"\x1bLua"):
+        try:
+            scripts_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "scripts"))
+            if scripts_dir not in sys.path:
+                sys.path.append(scripts_dir)
+            import compile_lua_to_bytecode
+            contents = compile_lua_to_bytecode.compile_lua_file(f, strip=True)
+            print("Compiled %s to 32-bit bytecode (%u bytes)" % (embedded_name, len(contents)))
+        except Exception as e:
+            print("Warning: Failed to compile %s to bytecode: %s" % (embedded_name, e))
+
     if embedded_name.endswith("bootloader.bin"):
         # round size to a multiple of 32 bytes for bootloader, this ensures
         # it can be flashed on a STM32H7 chip

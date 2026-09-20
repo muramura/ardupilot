@@ -85,7 +85,7 @@ class Board:
         # embed any scripts from ROMFS/scripts
         if os.path.exists('ROMFS/scripts'):
             for f in os.listdir('ROMFS/scripts'):
-                if fnmatch.fnmatch(f, "*.lua"):
+                if fnmatch.fnmatch(f, "*.lua") and not f.startswith('.'):
                     env.ROMFS_FILES += [('scripts/'+f,'ROMFS/scripts/'+f)]
 
         # allow GCS disable for AP_DAL example
