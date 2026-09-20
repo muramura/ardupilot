@@ -71,6 +71,7 @@ class AllowedSubsystems(object):
         'AP_Periph',
         'AP_Bootloader',
         'mavlink',
+        'ROMFS',
     }
 
     # Vehicle top-level directory -> ordered candidate subsystems.
@@ -95,6 +96,8 @@ class AllowedSubsystems(object):
         ('Tools/AP_Bootloader/', ['AP_Bootloader']),
         ('Tools/bootloaders/', ['bootloaders']),
         ('Tools/Replay/', ['Replay']),
+        ('ROMFS/scripts/', ['AP_Scripting', 'ROMFS']),
+        ('ROMFS/', ['ROMFS', 'waf']),
     ]
 
     # prefixes that are used but do not match the directory they are in
