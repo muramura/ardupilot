@@ -92,6 +92,9 @@ MOT_ARM_SEQ     1.0
 # Narrow throttle deadzone to allow smooth control in slow mode (±125 PWM) while preserving full speed
 THR_DZ          20
 
-# RTC clock source settings: 3 = GPS (1) + MAVLink SYSTEM_TIME (2)
-BRD_RTC_TYPES   3
+# GPS & RTC clock settings (SAM-M8Q on Grove Black connector / SERIAL3)
+SERIAL3_PROTOCOL 5
+SERIAL3_BAUD     230
+GPS1_TYPE        2
+BRD_RTC_TYPES    3
 
