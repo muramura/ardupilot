@@ -15,7 +15,7 @@
   don't support binary load() by default
  */
 #ifndef LUA_SUPPORT_LOAD_BINARY
-#define LUA_SUPPORT_LOAD_BINARY 0
+#define LUA_SUPPORT_LOAD_BINARY 1
 #endif
 #include <AP_Scripting/lua_common_defs.h>
 
