@@ -235,27 +235,20 @@ Util::FlashBootloader Util::flash_bootloader()
 
 bool Util::get_system_id(char buf[50])
 {
-    //uint8_t serialid[12];
-    char board_name[] = HAL_ESP32_BOARD_NAME" ";
-
     uint8_t base_mac_addr[6] = {0};
     esp_err_t ret = esp_efuse_mac_get_custom(base_mac_addr);
     if (ret != ESP_OK) {
         ret = esp_efuse_mac_get_default(base_mac_addr);
     }
 
-    char board_mac[20] = "                   ";
-    snprintf(board_mac,20, "%x %x %x %x %x %x",
-             base_mac_addr[0], base_mac_addr[1], base_mac_addr[2], base_mac_addr[3], base_mac_addr[4], base_mac_addr[5]);
-
-    // null terminate both
-    //board_name[13] = 0;
-    board_mac[19] = 0;
-
-    // tack strings together
-    snprintf(buf, 40, "%s %s", board_name, board_mac);
-    // and null terminate that too..
-    buf[39] = 0;
+#if defined(WIFI_SSID)
+    snprintf(buf, 50, "WiFi SSID: %s_%02X%02X%02X",
+             WIFI_SSID, base_mac_addr[3], base_mac_addr[4], base_mac_addr[5]);
+#else
+    snprintf(buf, 50, "WiFi SSID: StampFly_%02X%02X%02X",
+             base_mac_addr[3], base_mac_addr[4], base_mac_addr[5]);
+#endif
+    buf[49] = 0;
     return true;
 }
 
