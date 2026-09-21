@@ -28,6 +28,8 @@
 #include "driver/mcpwm_prelude.h"
 
 #if HAL_SERIALLED_ENABLED
+#include "driver/rmt_tx.h"
+#include "driver/rmt_encoder.h"
 #ifndef HAL_ESP32_SERIALLED_MAX_LEDS
 #define HAL_ESP32_SERIALLED_MAX_LEDS 8
 #endif
@@ -168,10 +170,14 @@ private:
     struct serial_led_chan {
         uint8_t num_leds;
         output_mode mode;
+        rmt_channel_handle_t tx_channel;
+        rmt_encoder_handle_t copy_encoder;
+        bool configured;
         uint8_t data[SERIAL_LED_MAX_LEDS][3];
     };
-    serial_led_chan _serial_led {};
-    bool _serial_led_configured {false};
+    // Array sized to match RC output channels; hardware RMT TX channel limits
+    // (8 on ESP32, 4 on ESP32-S3) are enforced at runtime by rmt_new_tx_channel().
+    serial_led_chan _serial_led_channels[12] {};
 #endif
     bool _initialized;
 
