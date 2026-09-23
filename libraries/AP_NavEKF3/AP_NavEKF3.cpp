@@ -930,13 +930,25 @@ bool NavEKF3::coreBetterScore(uint8_t new_core, uint8_t current_core) const
 */
 void NavEKF3::UpdateFilter(void)
 {
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_pre_start_us = AP_HAL::micros();
+#endif
+
     dal.start_frame(AP_DAL::FrameType::UpdateFilterEKF3);
+
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_dal_us = AP_HAL::micros() - cpu_e3_pre_start_us;
+#endif
 
     if (!core) {
         return;
     }
 
     imuSampleTime_us = dal.micros64();
+
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_core_start_us = AP_HAL::micros();
+#endif
 
     for (uint8_t i=0; i<num_cores; i++) {
         // if we have not overrun by more than 3 IMU frames, and we
@@ -950,6 +962,10 @@ void NavEKF3::UpdateFilter(void)
         }
         core[i].UpdateFilter(allow_state_prediction);
     }
+
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_core_end_us = AP_HAL::micros();
+#endif
 
     // If the current core selected has a bad error score or is unhealthy, switch to a healthy core with the lowest fault score
     // Don't start running the check until the primary core has started returned healthy for at least 10 seconds to avoid switching
@@ -1039,6 +1055,148 @@ void NavEKF3::UpdateFilter(void)
 
     // align position of inactive sources to ahrs
     sources.align_inactive_sources();
+
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_pre_us = cpu_e3_core_start_us - cpu_e3_pre_start_us;
+    const uint32_t cpu_e3_core_us = cpu_e3_core_end_us - cpu_e3_core_start_us;
+    const uint32_t cpu_e3_dal_end_frame_us = dal.get_cpu_e3_dal_end_frame_us();
+    const uint32_t cpu_e3_dal_common_us = dal.get_cpu_e3_dal_common_us();
+    const uint32_t cpu_e3_dal_common_log_us = dal.get_cpu_e3_dal_common_log_us();
+    const uint32_t cpu_e3_dal_available_memory_us = dal.get_cpu_e3_dal_available_memory_us();
+    const uint32_t cpu_e3_dal_ins_us = dal.get_cpu_e3_dal_ins_us();
+    const uint32_t cpu_e3_dal_baro_us = dal.get_cpu_e3_dal_baro_us();
+    const uint32_t cpu_e3_dal_gps_us = dal.get_cpu_e3_dal_gps_us();
+    const uint32_t cpu_e3_dal_compass_us = dal.get_cpu_e3_dal_compass_us();
+    const uint32_t cpu_e3_dal_compass_header_us = dal.get_cpu_e3_dal_compass_header_us();
+    const uint32_t cpu_e3_dal_compass_instances_us = dal.get_cpu_e3_dal_compass_instances_us();
+    const uint32_t cpu_e3_dal_compass_log_us = dal.get_cpu_e3_dal_compass_log_us();
+    const uint32_t cpu_e3_dal_compass_consistent_us = dal.get_cpu_e3_dal_compass_consistent_us();
+    const uint32_t cpu_e3_dal_compass_num_enabled_us = dal.get_cpu_e3_dal_compass_num_enabled_us();
+    const uint32_t cpu_e3_dal_other_us = dal.get_cpu_e3_dal_other_us();
+    uint32_t cpu_e3_covariance_us = 0;
+    uint32_t cpu_e3_prediction_us = 0;
+    uint32_t cpu_e3_fusion_us = 0;
+    uint32_t cpu_e3_input_us = 0;
+    uint32_t cpu_e3_tail_us = 0;
+    for (uint8_t i=0; i<num_cores; i++) {
+        cpu_e3_covariance_us += core[i].get_cpu_e3_covariance_us();
+        cpu_e3_prediction_us += core[i].get_cpu_e3_prediction_us();
+        cpu_e3_fusion_us += core[i].get_cpu_e3_fusion_us();
+        cpu_e3_input_us += core[i].get_cpu_e3_input_us();
+        cpu_e3_tail_us += core[i].get_cpu_e3_tail_us();
+    }
+
+    static uint64_t cpu_e3_pre_total_us = 0;
+    static uint64_t cpu_e3_dal_total_us = 0;
+    static uint64_t cpu_e3_dal_end_frame_total_us = 0;
+    static uint64_t cpu_e3_dal_common_total_us = 0;
+    static uint64_t cpu_e3_dal_common_log_total_us = 0;
+    static uint64_t cpu_e3_dal_available_memory_total_us = 0;
+    static uint64_t cpu_e3_dal_ins_total_us = 0;
+    static uint64_t cpu_e3_dal_baro_total_us = 0;
+    static uint64_t cpu_e3_dal_gps_total_us = 0;
+    static uint64_t cpu_e3_dal_compass_total_us = 0;
+    static uint64_t cpu_e3_dal_compass_header_total_us = 0;
+    static uint64_t cpu_e3_dal_compass_instances_total_us = 0;
+    static uint64_t cpu_e3_dal_compass_log_total_us = 0;
+    static uint64_t cpu_e3_dal_compass_consistent_total_us = 0;
+    static uint64_t cpu_e3_dal_compass_num_enabled_total_us = 0;
+    static uint64_t cpu_e3_dal_other_total_us = 0;
+    static uint64_t cpu_e3_core_total_us = 0;
+    static uint64_t cpu_e3_covariance_total_us = 0;
+    static uint64_t cpu_e3_prediction_total_us = 0;
+    static uint64_t cpu_e3_fusion_total_us = 0;
+    static uint64_t cpu_e3_input_total_us = 0;
+    static uint64_t cpu_e3_tail_total_us = 0;
+    static uint32_t cpu_e3_samples = 0;
+    static uint32_t cpu_e3_last_report_ms = 0;
+
+    cpu_e3_pre_total_us += cpu_e3_pre_us;
+    cpu_e3_dal_total_us += cpu_e3_dal_us;
+    cpu_e3_dal_end_frame_total_us += cpu_e3_dal_end_frame_us;
+    cpu_e3_dal_common_total_us += cpu_e3_dal_common_us;
+    cpu_e3_dal_common_log_total_us += cpu_e3_dal_common_log_us;
+    cpu_e3_dal_available_memory_total_us += cpu_e3_dal_available_memory_us;
+    cpu_e3_dal_ins_total_us += cpu_e3_dal_ins_us;
+    cpu_e3_dal_baro_total_us += cpu_e3_dal_baro_us;
+    cpu_e3_dal_gps_total_us += cpu_e3_dal_gps_us;
+    cpu_e3_dal_compass_total_us += cpu_e3_dal_compass_us;
+    cpu_e3_dal_compass_header_total_us += cpu_e3_dal_compass_header_us;
+    cpu_e3_dal_compass_instances_total_us += cpu_e3_dal_compass_instances_us;
+    cpu_e3_dal_compass_log_total_us += cpu_e3_dal_compass_log_us;
+    cpu_e3_dal_compass_consistent_total_us += cpu_e3_dal_compass_consistent_us;
+    cpu_e3_dal_compass_num_enabled_total_us += cpu_e3_dal_compass_num_enabled_us;
+    cpu_e3_dal_other_total_us += cpu_e3_dal_other_us;
+    cpu_e3_core_total_us += cpu_e3_core_us;
+    cpu_e3_covariance_total_us += cpu_e3_covariance_us;
+    cpu_e3_prediction_total_us += cpu_e3_prediction_us;
+    cpu_e3_fusion_total_us += cpu_e3_fusion_us;
+    cpu_e3_input_total_us += cpu_e3_input_us;
+    cpu_e3_tail_total_us += cpu_e3_tail_us;
+    cpu_e3_samples++;
+
+    const uint32_t cpu_e3_now_ms = AP_HAL::millis();
+
+    if (cpu_e3_last_report_ms == 0) {
+        cpu_e3_last_report_ms = cpu_e3_now_ms;
+    }
+
+    if (cpu_e3_now_ms - cpu_e3_last_report_ms >= 2000U) {
+        const uint64_t cpu_e3_dal_classified_total_us =
+            cpu_e3_dal_end_frame_total_us + cpu_e3_dal_common_total_us + cpu_e3_dal_ins_total_us +
+            cpu_e3_dal_baro_total_us + cpu_e3_dal_gps_total_us + cpu_e3_dal_compass_total_us +
+            cpu_e3_dal_other_total_us;
+        const uint64_t cpu_e3_dal_residual_total_us = cpu_e3_dal_total_us > cpu_e3_dal_classified_total_us ?
+                                                      cpu_e3_dal_total_us - cpu_e3_dal_classified_total_us : 0;
+        const uint64_t cpu_e3_dal_common_classified_total_us =
+            cpu_e3_dal_common_log_total_us + cpu_e3_dal_available_memory_total_us;
+        const uint64_t cpu_e3_dal_common_other_total_us =
+            cpu_e3_dal_common_total_us > cpu_e3_dal_common_classified_total_us ?
+            cpu_e3_dal_common_total_us - cpu_e3_dal_common_classified_total_us : 0;
+        const uint64_t cpu_e3_dal_compass_header_classified_total_us =
+            cpu_e3_dal_compass_consistent_total_us + cpu_e3_dal_compass_num_enabled_total_us;
+        const uint64_t cpu_e3_dal_compass_header_other_total_us =
+            cpu_e3_dal_compass_header_total_us > cpu_e3_dal_compass_header_classified_total_us ?
+            cpu_e3_dal_compass_header_total_us - cpu_e3_dal_compass_header_classified_total_us : 0;
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                      "CPU_E3 D%lu H%lu V%lu N%lu M%lu K%lu C%lu U%lu O%lu R%lu",
+                      (unsigned long)(cpu_e3_dal_total_us / cpu_e3_samples),
+                      (unsigned long)(cpu_e3_dal_common_total_us / cpu_e3_samples),
+                      (unsigned long)(cpu_e3_dal_available_memory_total_us / cpu_e3_samples),
+                      (unsigned long)(cpu_e3_dal_common_other_total_us / cpu_e3_samples),
+                      (unsigned long)(cpu_e3_dal_compass_total_us / cpu_e3_samples),
+                      (unsigned long)(cpu_e3_dal_compass_header_total_us / cpu_e3_samples),
+                      (unsigned long)(cpu_e3_dal_compass_consistent_total_us / cpu_e3_samples),
+                      (unsigned long)(cpu_e3_dal_compass_num_enabled_total_us / cpu_e3_samples),
+                      (unsigned long)(cpu_e3_dal_compass_header_other_total_us / cpu_e3_samples),
+                      (unsigned long)(cpu_e3_dal_residual_total_us / cpu_e3_samples));
+
+        cpu_e3_pre_total_us = 0;
+        cpu_e3_dal_total_us = 0;
+        cpu_e3_dal_end_frame_total_us = 0;
+        cpu_e3_dal_common_total_us = 0;
+        cpu_e3_dal_common_log_total_us = 0;
+        cpu_e3_dal_available_memory_total_us = 0;
+        cpu_e3_dal_ins_total_us = 0;
+        cpu_e3_dal_baro_total_us = 0;
+        cpu_e3_dal_gps_total_us = 0;
+        cpu_e3_dal_compass_total_us = 0;
+        cpu_e3_dal_compass_header_total_us = 0;
+        cpu_e3_dal_compass_instances_total_us = 0;
+        cpu_e3_dal_compass_log_total_us = 0;
+        cpu_e3_dal_compass_consistent_total_us = 0;
+        cpu_e3_dal_compass_num_enabled_total_us = 0;
+        cpu_e3_dal_other_total_us = 0;
+        cpu_e3_core_total_us = 0;
+        cpu_e3_covariance_total_us = 0;
+        cpu_e3_prediction_total_us = 0;
+        cpu_e3_fusion_total_us = 0;
+        cpu_e3_input_total_us = 0;
+        cpu_e3_tail_total_us = 0;
+        cpu_e3_samples = 0;
+        cpu_e3_last_report_ms = cpu_e3_now_ms;
+    }
+#endif
 }
 
 /*

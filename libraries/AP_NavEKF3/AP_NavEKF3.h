@@ -19,6 +19,7 @@
  */
 #pragma once
 
+#include <AP_Common/AP_CPU_Diagnostics_config.h>
 #include <AP_Common/Location.h>
 #include <AP_Math/AP_Math.h>
 #include <AP_Param/AP_Param.h>

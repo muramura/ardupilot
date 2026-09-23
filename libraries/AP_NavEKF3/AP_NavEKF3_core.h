@@ -25,6 +25,7 @@
 #endif
 
 #include "AP_NavEKF3_feature.h"
+#include <AP_Common/AP_CPU_Diagnostics_config.h>
 #include <AP_Common/Location.h>
 #include <AP_Math/AP_Math.h>
 #include <AP_Math/vectorN.h>
@@ -137,6 +138,14 @@ public:
     // Update Filter States - this should be called whenever new IMU data is available
     // The predict flag is set true when a new prediction cycle can be started
     void UpdateFilter(bool predict);
+
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    uint32_t get_cpu_e3_covariance_us() const { return cpu_e3_covariance_us; }
+    uint32_t get_cpu_e3_prediction_us() const { return cpu_e3_prediction_us; }
+    uint32_t get_cpu_e3_fusion_us() const { return cpu_e3_fusion_us; }
+    uint32_t get_cpu_e3_input_us() const { return cpu_e3_input_us; }
+    uint32_t get_cpu_e3_tail_us() const { return cpu_e3_tail_us; }
+#endif
 
     // Check basic filter health metrics and return a consolidated health status
     bool healthy(void) const;
@@ -500,6 +509,13 @@ private:
     uint8_t core_index;
     uint8_t imu_buffer_length;
     uint8_t obs_buffer_length;
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    uint32_t cpu_e3_covariance_us;
+    uint32_t cpu_e3_prediction_us;
+    uint32_t cpu_e3_fusion_us;
+    uint32_t cpu_e3_input_us;
+    uint32_t cpu_e3_tail_us;
+#endif
 
 #if MATH_CHECK_INDEXES
     class Vector9 : public VectorN<ftype, 9> {
