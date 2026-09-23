@@ -208,6 +208,10 @@
 # define MODE_LOITER_ENABLED 1
 #endif
 
+#ifndef MODE_LOITER_MOTOR_STOPPED_XY_INPUT_SKIP_ENABLED
+# define MODE_LOITER_MOTOR_STOPPED_XY_INPUT_SKIP_ENABLED 0
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // Position Hold - enable holding of global position
 #ifndef MODE_POSHOLD_ENABLED
