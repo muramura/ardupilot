@@ -274,6 +274,24 @@ private:
     // the loop rate in case we are well over budget
     uint32_t extra_loop_us;
 
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+    void cpu_diagnostics_update(uint32_t loop_time_us);
+    void cpu_diagnostics_reset();
+
+    uint32_t *_cpu_diag_task_total_us;
+    const char **_cpu_diag_task_names;
+    uint32_t _cpu_diag_total_task_us;
+    uint32_t _cpu_diag_top_task_total_us;
+    uint32_t _cpu_diag_max_task_us;
+    uint32_t _cpu_diag_max_loop_us;
+    uint32_t _cpu_diag_last_report_ms;
+    const char *_cpu_diag_top_task_name;
+    const char *_cpu_diag_max_task_name;
+    uint16_t _cpu_diag_min_loop_rate_hz;
+    uint16_t _cpu_diag_slip_count;
+    uint16_t _cpu_diag_overrun_count;
+    bool _cpu_diag_saturated;
+#endif
 
     // semaphore that is held while not waiting for ins samples
     HAL_Semaphore _rsem;
