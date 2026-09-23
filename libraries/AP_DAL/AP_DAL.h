@@ -1,5 +1,7 @@
 #pragma once
 
+#include <AP_Common/AP_CPU_Diagnostics_config.h>
+
 /*
   The DAL (Data Abstraction Layer) acts as an intermediary between ArduPilot's AHRS state estimators and its data sources.  Currently the only in-tree estimators using the DAL are the EKF2 and EKF3 estimators.
 
@@ -29,6 +31,9 @@
 #include <stdint.h>
 #include <cstddef>
 
+#ifndef AP_DAL_AVAILABLE_MEMORY_INTERVAL_MS
+#define AP_DAL_AVAILABLE_MEMORY_INTERVAL_MS 0
+#endif
 
 #define DAL_CORE(c) AP::dal().logging_core(c)
 
@@ -86,6 +91,22 @@ public:
 
     void start_frame(FrameType frametype);
     void end_frame(void);
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    uint32_t get_cpu_e3_dal_end_frame_us() const { return _cpu_e3_dal_end_frame_us; }
+    uint32_t get_cpu_e3_dal_common_us() const { return _cpu_e3_dal_common_us; }
+    uint32_t get_cpu_e3_dal_common_log_us() const { return _cpu_e3_dal_common_log_us; }
+    uint32_t get_cpu_e3_dal_available_memory_us() const { return _cpu_e3_dal_available_memory_us; }
+    uint32_t get_cpu_e3_dal_ins_us() const { return _cpu_e3_dal_ins_us; }
+    uint32_t get_cpu_e3_dal_baro_us() const { return _cpu_e3_dal_baro_us; }
+    uint32_t get_cpu_e3_dal_gps_us() const { return _cpu_e3_dal_gps_us; }
+    uint32_t get_cpu_e3_dal_compass_us() const { return _cpu_e3_dal_compass_us; }
+    uint32_t get_cpu_e3_dal_compass_header_us() const { return _compass.get_cpu_e3_header_us(); }
+    uint32_t get_cpu_e3_dal_compass_instances_us() const { return _compass.get_cpu_e3_instances_us(); }
+    uint32_t get_cpu_e3_dal_compass_log_us() const { return _compass.get_cpu_e3_log_us(); }
+    uint32_t get_cpu_e3_dal_compass_consistent_us() const { return _compass.get_cpu_e3_consistent_us(); }
+    uint32_t get_cpu_e3_dal_compass_num_enabled_us() const { return _compass.get_cpu_e3_num_enabled_us(); }
+    uint32_t get_cpu_e3_dal_other_us() const { return _cpu_e3_dal_other_us; }
+#endif
     uint64_t micros64() const { return _RFRH.time_us; }
     uint32_t micros() const { return _micros; }
     uint32_t millis() const { return _millis; }
@@ -390,6 +411,21 @@ private:
     // cached variables for speed:
     uint32_t _micros;
     uint32_t _millis;
+#if AP_DAL_AVAILABLE_MEMORY_INTERVAL_MS > 0
+    uint32_t _last_available_memory_ms{};
+    bool _available_memory_valid{};
+#endif
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    uint32_t _cpu_e3_dal_end_frame_us;
+    uint32_t _cpu_e3_dal_common_us;
+    uint32_t _cpu_e3_dal_common_log_us;
+    uint32_t _cpu_e3_dal_available_memory_us;
+    uint32_t _cpu_e3_dal_ins_us;
+    uint32_t _cpu_e3_dal_baro_us;
+    uint32_t _cpu_e3_dal_gps_us;
+    uint32_t _cpu_e3_dal_compass_us;
+    uint32_t _cpu_e3_dal_other_us;
+#endif
 
     Matrix3f _rotation_vehicle_body_to_autopilot_body;
     Location _home;
@@ -436,4 +472,3 @@ namespace AP {
 
 // replay printf for debugging
 void rprintf(const char *format, ...);
-

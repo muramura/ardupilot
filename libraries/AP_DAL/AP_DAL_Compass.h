@@ -1,8 +1,13 @@
 #pragma once
 
+#include <AP_Common/AP_CPU_Diagnostics_config.h>
 #include <AP_Logger/LogStructure.h>
 
 #include <AP_Compass/AP_Compass.h>
+
+#ifndef AP_DAL_COMPASS_CONSISTENCY_CACHE_ENABLED
+#define AP_DAL_COMPASS_CONSISTENCY_CACHE_ENABLED 0
+#endif
 
 class AP_DAL_Compass {
 public:
@@ -62,6 +67,20 @@ public:
     AP_DAL_Compass();
 
     void start_frame();
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    void reset_cpu_e3_timing() {
+        _cpu_e3_header_us = 0;
+        _cpu_e3_instances_us = 0;
+        _cpu_e3_log_us = 0;
+        _cpu_e3_consistent_us = 0;
+        _cpu_e3_num_enabled_us = 0;
+    }
+    uint32_t get_cpu_e3_header_us() const { return _cpu_e3_header_us; }
+    uint32_t get_cpu_e3_instances_us() const { return _cpu_e3_instances_us; }
+    uint32_t get_cpu_e3_log_us() const { return _cpu_e3_log_us; }
+    uint32_t get_cpu_e3_consistent_us() const { return _cpu_e3_consistent_us; }
+    uint32_t get_cpu_e3_num_enabled_us() const { return _cpu_e3_num_enabled_us; }
+#endif
 
     void handle_message(const log_RMGH &msg) {
         _RMGH = msg;
@@ -74,4 +93,14 @@ private:
 
     struct log_RMGH _RMGH;
     struct log_RMGI _RMGI[COMPASS_MAX_INSTANCES];
+#if AP_DAL_COMPASS_CONSISTENCY_CACHE_ENABLED
+    bool _consistency_cache_valid{};
+#endif
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    uint32_t _cpu_e3_header_us;
+    uint32_t _cpu_e3_instances_us;
+    uint32_t _cpu_e3_log_us;
+    uint32_t _cpu_e3_consistent_us;
+    uint32_t _cpu_e3_num_enabled_us;
+#endif
 };
