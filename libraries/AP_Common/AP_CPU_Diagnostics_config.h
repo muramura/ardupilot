@@ -1,0 +1,5 @@
+#pragma once
+
+#ifndef AP_CPU_DIAGNOSTICS_ENABLED
+#define AP_CPU_DIAGNOSTICS_ENABLED 0
+#endif
