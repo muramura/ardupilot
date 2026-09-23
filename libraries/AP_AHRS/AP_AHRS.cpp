@@ -538,6 +538,10 @@ void AP_AHRS::update_reset_counters()
 // update run at loop rate
 void AP_AHRS::update(bool skip_ins_update)
 {
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_start_us = AP_HAL::micros();
+#endif
+
     // periodically checks to see if we should update the AHRS
     // orientation (e.g. based on the AHRS_ORIENTATION parameter)
     // allow for runtime change of orientation
@@ -568,27 +572,53 @@ void AP_AHRS::update(bool skip_ins_update)
     // update takeoff/touchdown flags
     update_flags();
 
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_backend_start_us = AP_HAL::micros();
+#endif
+
     // update the backends, configured-first.  Some backends look at
     // loop-time-remaining and opt-out of their full update if there
     // isn't enough time left.  Copy back their results while we are
     // at it.
     configured_backend->update();
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_results_start_us = AP_HAL::micros();
+#endif
     *configured_estimates = {};
     configured_backend->get_results(*configured_estimates);
     // if we don't have an origin, maybe set one:
     try_set_common_origin(*configured_backend, *configured_estimates);
 
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_secondary_start_us = AP_HAL::micros();
+    uint32_t cpu_ahrs_secondary_update_call_us = 0;
+    uint32_t cpu_ahrs_secondary_results_call_us = 0;
+#endif
     for (auto &backend_and_estimates : backends_and_estimates) {
         if (&backend_and_estimates.backend == configured_backend) {
             // already updated
             continue;
         }
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+        const uint32_t secondary_update_start_us = AP_HAL::micros();
+#endif
         backend_and_estimates.backend.update();
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+        const uint32_t secondary_results_start_us = AP_HAL::micros();
+        cpu_ahrs_secondary_update_call_us += secondary_results_start_us - secondary_update_start_us;
+#endif
         backend_and_estimates.estimates = {};
         backend_and_estimates.backend.get_results(backend_and_estimates.estimates);
         // if we don't have an origin, maybe set one:
         try_set_common_origin(backend_and_estimates.backend, backend_and_estimates.estimates);
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+        cpu_ahrs_secondary_results_call_us += AP_HAL::micros() - secondary_results_start_us;
+#endif
     }
+
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_post_start_us = AP_HAL::micros();
+#endif
 
     update_configured_ekf_type();
     update_active_EKF_type();
@@ -629,6 +659,53 @@ void AP_AHRS::update(bool skip_ins_update)
 
     // update AOA and SSA
     update_AOA_SSA();
+
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_end_us = AP_HAL::micros();
+    static uint64_t cpu_ahrs_total_us;
+    static uint64_t cpu_ahrs_pre_us;
+    static uint64_t cpu_ahrs_backend_us;
+    static uint64_t cpu_ahrs_results_us;
+    static uint64_t cpu_ahrs_secondary_update_us;
+    static uint64_t cpu_ahrs_secondary_results_us;
+    static uint64_t cpu_ahrs_post_us;
+    static uint32_t cpu_ahrs_samples;
+    static uint32_t cpu_ahrs_last_report_ms;
+
+    cpu_ahrs_total_us += cpu_ahrs_end_us - cpu_ahrs_start_us;
+    cpu_ahrs_pre_us += cpu_ahrs_backend_start_us - cpu_ahrs_start_us;
+    cpu_ahrs_backend_us += cpu_ahrs_results_start_us - cpu_ahrs_backend_start_us;
+    cpu_ahrs_results_us += cpu_ahrs_secondary_start_us - cpu_ahrs_results_start_us;
+    cpu_ahrs_secondary_update_us += cpu_ahrs_secondary_update_call_us;
+    cpu_ahrs_secondary_results_us += cpu_ahrs_secondary_results_call_us;
+    cpu_ahrs_post_us += cpu_ahrs_end_us - cpu_ahrs_post_start_us;
+    cpu_ahrs_samples++;
+
+    const uint32_t now_ms = AP_HAL::millis();
+    if (cpu_ahrs_last_report_ms == 0) {
+        cpu_ahrs_last_report_ms = now_ms;
+    }
+    if (now_ms - cpu_ahrs_last_report_ms >= 2000U) {
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                      "CPU_AHRS T%lu E%lu G%lu U%lu R%lu O%lu P%lu",
+                      (unsigned long)(cpu_ahrs_total_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_backend_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_results_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_secondary_update_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_secondary_results_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_post_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_pre_us / cpu_ahrs_samples));
+        cpu_ahrs_total_us = 0;
+        cpu_ahrs_pre_us = 0;
+        cpu_ahrs_backend_us = 0;
+        cpu_ahrs_results_us = 0;
+        cpu_ahrs_secondary_update_us = 0;
+        cpu_ahrs_secondary_results_us = 0;
+        cpu_ahrs_post_us = 0;
+        cpu_ahrs_samples = 0;
+        cpu_ahrs_last_report_ms = now_ms;
+    }
+#endif
 
 #if CONFIG_HAL_BOARD == HAL_BOARD_SITL
     /*
