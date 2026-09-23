@@ -1933,6 +1933,37 @@ GCS_MAVLINK::update_receive(uint32_t max_time_us)
         return;
     }
 
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+    struct CPUReceiveMessageTiming {
+        uint32_t msgid;
+        uint64_t total_us;
+        uint32_t count;
+        bool used;
+    };
+    struct CPUReceiveLinkTiming {
+        uint64_t total_us;
+        uint64_t available_us;
+        uint64_t byte_loop_us;
+        uint64_t handler_us;
+        uint64_t post_us;
+        uint32_t calls;
+        uint32_t bytes;
+        uint32_t packets;
+    };
+    static CPUReceiveMessageTiming cpu_gcs_message_timing[32];
+    static CPUReceiveLinkTiming cpu_gcs_link_timing[MAVLINK_COMM_NUM_BUFFERS];
+    static uint64_t cpu_gcs_total_us;
+    static uint64_t cpu_gcs_handler_us;
+    static uint32_t cpu_gcs_calls;
+    static uint32_t cpu_gcs_bytes;
+    static uint32_t cpu_gcs_packets;
+    static uint32_t cpu_gcs_last_report_ms;
+    const uint32_t cpu_gcs_start_us = AP_HAL::micros();
+    uint32_t cpu_gcs_handler_call_us = 0;
+    uint16_t cpu_gcs_bytes_call = 0;
+    uint16_t cpu_gcs_packets_call = 0;
+#endif
+
     // receive new packets
     mavlink_message_t msg;
     mavlink_status_t status;
@@ -1942,9 +1973,31 @@ GCS_MAVLINK::update_receive(uint32_t max_time_us)
     status.packet_rx_drop_count = 0;
 
     const uint16_t nbytes = _port->available();
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_gcs_after_available_us = AP_HAL::micros();
+#endif
+    uint8_t rx_buffer[GCS_MAVLINK_RX_CHUNK_SIZE];
+    uint16_t rx_buffer_offset = 0;
+    uint16_t rx_buffer_count = 0;
+    bool stop_after_rx_buffer = false;
     for (uint16_t i=0; i<nbytes; i++)
     {
-        const uint8_t c = (uint8_t)_port->read();
+        if (rx_buffer_offset >= rx_buffer_count) {
+            if (stop_after_rx_buffer) {
+                break;
+            }
+            const uint16_t bytes_to_read = MIN(uint16_t(nbytes - i), uint16_t(sizeof(rx_buffer)));
+            const ssize_t bytes_read = _port->read(rx_buffer, bytes_to_read);
+            if (bytes_read <= 0) {
+                break;
+            }
+            rx_buffer_offset = 0;
+            rx_buffer_count = uint16_t(bytes_read);
+        }
+        const uint8_t c = rx_buffer[rx_buffer_offset++];
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+        cpu_gcs_bytes_call++;
+#endif
         const uint32_t protocol_timeout = 4000;
         
         if (alternative.handler &&
@@ -1974,7 +2027,33 @@ GCS_MAVLINK::update_receive(uint32_t max_time_us)
         const uint8_t framing = mavlink_frame_char_buffer(channel_buffer(), channel_status(), c, &msg, &status);
         if (framing != MAVLINK_FRAMING_INCOMPLETE) {
             hal.util->persistent_data.last_mavlink_msgid = msg.msgid;
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+            const uint32_t cpu_gcs_handler_start_us = AP_HAL::micros();
+#endif
             raw_packetReceived(framing, status, msg);
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+            const uint32_t cpu_gcs_handler_elapsed_us = AP_HAL::micros() - cpu_gcs_handler_start_us;
+            cpu_gcs_handler_call_us += cpu_gcs_handler_elapsed_us;
+            if (framing == MAVLINK_FRAMING_OK) {
+                cpu_gcs_packets_call++;
+                CPUReceiveMessageTiming *timing = nullptr;
+                for (auto &candidate : cpu_gcs_message_timing) {
+                    if (candidate.used && candidate.msgid == msg.msgid) {
+                        timing = &candidate;
+                        break;
+                    }
+                    if (!candidate.used && timing == nullptr) {
+                        timing = &candidate;
+                    }
+                }
+                if (timing != nullptr) {
+                    timing->used = true;
+                    timing->msgid = msg.msgid;
+                    timing->total_us += cpu_gcs_handler_elapsed_us;
+                    timing->count++;
+                }
+            }
+#endif
             if (framing == MAVLINK_FRAMING_OK) {
                 parsed_packet = true;
                 gcs_alternative_active[chan] = false;
@@ -1996,10 +2075,17 @@ GCS_MAVLINK::update_receive(uint32_t max_time_us)
         if (parsed_packet || i % 100 == 0) {
             // make sure we don't spend too much time parsing mavlink messages
             if (AP_HAL::micros() - tstart_us > max_time_us) {
-                break;
+                // Bytes already removed from the UART must still be parsed.
+                if (rx_buffer_offset >= rx_buffer_count) {
+                    break;
+                }
+                stop_after_rx_buffer = true;
             }
         }
     }
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_gcs_after_byte_loop_us = AP_HAL::micros();
+#endif
 
     const uint32_t tnow = AP_HAL::millis();
 
@@ -2097,6 +2183,89 @@ GCS_MAVLINK::update_receive(uint32_t max_time_us)
         }
 
         try_send_message_stats.statustext_last_sent_ms = now16_ms;
+    }
+#endif
+
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_gcs_end_us = AP_HAL::micros();
+    cpu_gcs_total_us += cpu_gcs_end_us - cpu_gcs_start_us;
+    cpu_gcs_handler_us += cpu_gcs_handler_call_us;
+    cpu_gcs_calls++;
+    cpu_gcs_bytes += cpu_gcs_bytes_call;
+    cpu_gcs_packets += cpu_gcs_packets_call;
+    const uint8_t cpu_gcs_link_index = chan - MAVLINK_COMM_0;
+    if (cpu_gcs_link_index < ARRAY_SIZE(cpu_gcs_link_timing)) {
+        CPUReceiveLinkTiming &link_timing = cpu_gcs_link_timing[cpu_gcs_link_index];
+        link_timing.total_us += cpu_gcs_end_us - cpu_gcs_start_us;
+        link_timing.available_us += cpu_gcs_after_available_us - cpu_gcs_start_us;
+        link_timing.byte_loop_us += cpu_gcs_after_byte_loop_us - cpu_gcs_after_available_us;
+        link_timing.handler_us += cpu_gcs_handler_call_us;
+        link_timing.post_us += cpu_gcs_end_us - cpu_gcs_after_byte_loop_us;
+        link_timing.calls++;
+        link_timing.bytes += cpu_gcs_bytes_call;
+        link_timing.packets += cpu_gcs_packets_call;
+    }
+
+    const uint32_t cpu_gcs_now_ms = AP_HAL::millis();
+    if (cpu_gcs_last_report_ms == 0) {
+        cpu_gcs_last_report_ms = cpu_gcs_now_ms;
+    }
+    const uint32_t cpu_gcs_interval_ms = cpu_gcs_now_ms - cpu_gcs_last_report_ms;
+    if (cpu_gcs_interval_ms >= 2000U) {
+        const CPUReceiveMessageTiming *top_timing = nullptr;
+        for (const auto &candidate : cpu_gcs_message_timing) {
+            if (candidate.used && (top_timing == nullptr || candidate.total_us > top_timing->total_us)) {
+                top_timing = &candidate;
+            }
+        }
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                      "CPU_GCSR T%lu H%lu C%lu B%lu P%lu",
+                      (unsigned long)(cpu_gcs_total_us / cpu_gcs_calls),
+                      (unsigned long)(cpu_gcs_handler_us / cpu_gcs_calls),
+                      (unsigned long)((uint64_t(cpu_gcs_calls) * 1000U) / cpu_gcs_interval_ms),
+                      (unsigned long)((uint64_t(cpu_gcs_bytes) * 1000U) / cpu_gcs_interval_ms),
+                      (unsigned long)((uint64_t(cpu_gcs_packets) * 1000U) / cpu_gcs_interval_ms));
+        for (uint8_t i = 0; i < ARRAY_SIZE(cpu_gcs_link_timing); i++) {
+            const CPUReceiveLinkTiming &timing = cpu_gcs_link_timing[i];
+            if (timing.calls == 0) {
+                continue;
+            }
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                          "CPU_GCH I%u A%u T%lu C%lu B%lu P%lu",
+                          i,
+                          (unsigned)((active_channel_mask() & (1U << i)) != 0),
+                          (unsigned long)(timing.total_us / timing.calls),
+                          (unsigned long)((uint64_t(timing.calls) * 1000U) / cpu_gcs_interval_ms),
+                          (unsigned long)((uint64_t(timing.bytes) * 1000U) / cpu_gcs_interval_ms),
+                          (unsigned long)((uint64_t(timing.packets) * 1000U) / cpu_gcs_interval_ms));
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                          "CPU_GCX I%u A%lu L%lu H%lu O%lu",
+                          i,
+                          (unsigned long)(timing.available_us / timing.calls),
+                          (unsigned long)(timing.byte_loop_us / timing.calls),
+                          (unsigned long)(timing.handler_us / timing.calls),
+                          (unsigned long)(timing.post_us / timing.calls));
+        }
+        if (top_timing != nullptr) {
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                          "CPU_GMSG I%lu C%lu U%lu A%lu",
+                          (unsigned long)top_timing->msgid,
+                          (unsigned long)((uint64_t(top_timing->count) * 1000U) / cpu_gcs_interval_ms),
+                          (unsigned long)((top_timing->total_us * 1000U) / cpu_gcs_interval_ms),
+                          (unsigned long)(top_timing->total_us / top_timing->count));
+        }
+        cpu_gcs_total_us = 0;
+        cpu_gcs_handler_us = 0;
+        cpu_gcs_calls = 0;
+        cpu_gcs_bytes = 0;
+        cpu_gcs_packets = 0;
+        for (auto &timing : cpu_gcs_message_timing) {
+            timing = {};
+        }
+        for (auto &timing : cpu_gcs_link_timing) {
+            timing = {};
+        }
+        cpu_gcs_last_report_ms = cpu_gcs_now_ms;
     }
 #endif
 }
