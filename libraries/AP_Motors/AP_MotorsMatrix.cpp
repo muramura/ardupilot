@@ -154,14 +154,28 @@ void AP_MotorsMatrix::output_to_motors()
             }
             break;
         }
-        case SpoolState::GROUND_IDLE:
+        case SpoolState::GROUND_IDLE: {
             // sends output to motors when armed but not flying
+            int8_t active_motor_idx = -1;
+            const bool seq_active = is_arm_seq_active(active_motor_idx);
+
             for (i = 0; i < AP_MOTORS_MAX_NUM_MOTORS; i++) {
                 if (motor_enabled[i]) {
-                    set_actuator_with_slew(_actuator[i], actuator_spin_up_to_ground_idle());
+                    if (seq_active) {
+                        // Sequential check: spin the currently active motor in index order (M1, M2, M3, M4...)
+                        // active_motor_idx == -1 during pause
+                        if (active_motor_idx >= 0 && (int8_t)i == active_motor_idx) {
+                            set_actuator_with_slew(_actuator[i], _spin_arm);
+                        } else {
+                            set_actuator_with_slew(_actuator[i], 0.0f);
+                        }
+                    } else {
+                        set_actuator_with_slew(_actuator[i], actuator_spin_up_to_ground_idle());
+                    }
                 }
             }
             break;
+        }
         case SpoolState::SPOOLING_UP:
         case SpoolState::THROTTLE_UNLIMITED:
         case SpoolState::SPOOLING_DOWN:
@@ -465,6 +479,10 @@ void AP_MotorsMatrix::check_for_failed_motor(float throttle_thrust_best_plus_adj
 //  pwm value is an actual pwm value that will be output, normally in the range of 1000 ~ 2000
 void AP_MotorsMatrix::_output_test_seq(uint8_t motor_seq, int16_t pwm)
 {
+    if (motor_output_disabled()) {
+        return;
+    }
+
     // loop through all the possible orders spinning any motors that match that description
     for (uint8_t i = 0; i < AP_MOTORS_MAX_NUM_MOTORS; i++) {
         if (motor_enabled[i] && _test_order[i] == motor_seq) {
@@ -481,7 +499,7 @@ void AP_MotorsMatrix::_output_test_seq(uint8_t motor_seq, int16_t pwm)
 //  pwm value is an actual pwm value that will be output, normally in the range of 1000 ~ 2000
 bool AP_MotorsMatrix::output_test_num(uint8_t output_channel, int16_t pwm)
 {
-    if (!armed()) {
+    if (!armed() || motor_output_disabled()) {
         return false;
     }
 

@@ -18,6 +18,7 @@
 #include <AP_BattMonitor/AP_BattMonitor.h>
 #include <SRV_Channel/SRV_Channel.h>
 #include <AP_Logger/AP_Logger.h>
+#include <GCS_MAVLink/GCS.h>
 
 #include <AP_Vehicle/AP_Vehicle_Type.h>
 #if APM_BUILD_TYPE(APM_BUILD_ArduPlane)
@@ -254,12 +255,30 @@ const AP_Param::GroupInfo AP_MotorsMulticopter::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("IDLE_SEC", 45, AP_MotorsMulticopter, _idle_time_delay_s, 0),
 
+    // @Param: OUTPUT_DIS
+    // @DisplayName: Motor Output Disable
+    // @Description: Disable physical motor PWM output for safe bench testing and telemetry rate diagnostics. Flight control loops and arming run normally, but physical motors remain stopped.
+    // @Values: 0:Normal, 1:Disable Motor Output
+    // @User: Advanced
+    AP_GROUPINFO("OUTPUT_DIS", 46, AP_MotorsMulticopter, _output_dis, 0),
+
+    // @Param: ARM_SEQ
+    // @DisplayName: Motor Arming Sequential Spool-Up Time
+    // @Description: Pre-flight sequential motor check time per motor when arming. Motors spin up one by one at ground idle speed for this duration before transitioning to all motors ground idle, allowing pilots to audibly and visually confirm all motors operate properly. 0 to disable.
+    // @Range: 0 1.0
+    // @Units: s
+    // @Increment: 0.05
+    // @User: Standard
+    AP_GROUPINFO("ARM_SEQ", 47, AP_MotorsMulticopter, _motor_arm_seq_time, 0.0f),
+
     AP_GROUPEND
 };
 
 // Constructor
 AP_MotorsMulticopter::AP_MotorsMulticopter(uint16_t speed_hz) :
                 AP_Motors(speed_hz),
+                _arm_seq_start_ms(0),
+                _arm_seq_complete(false),
                 _throttle_limit(1.0f)
 {
     AP_Param::setup_object_defaults(this, var_info);
@@ -268,6 +287,16 @@ AP_MotorsMulticopter::AP_MotorsMulticopter(uint16_t speed_hz) :
 // output - sends commands to the motors
 void AP_MotorsMulticopter::output()
 {
+    // warn on arming if motor output is disabled for bench testing
+    if (armed() && (_output_dis != 0)) {
+        static uint32_t last_warn_ms;
+        const uint32_t now_ms = AP_HAL::millis();
+        if (now_ms - last_warn_ms > 5000) {
+            last_warn_ms = now_ms;
+            GCS_SEND_TEXT(MAV_SEVERITY_WARNING, "Motor output disabled (MOT_OUTPUT_DIS=1)");
+        }
+    }
+
     // update throttle filter
     update_throttle_filter();
 
@@ -456,6 +485,10 @@ void AP_MotorsMulticopter::Log_Write()
 // in all other states: map [0..1] linearly between pwm_min and pwm_max
 int16_t AP_MotorsMulticopter::output_to_pwm(float actuator)
 {
+    if (_output_dis != 0) {
+        return (_pwm_type == PWMType::BRUSHED) ? 0 : get_pwm_output_min();
+    }
+
     float pwm_output;
     if (_spool_state == SpoolState::SHUT_DOWN) {
         // in shutdown mode, use PWM 0 or minimum PWM
@@ -618,6 +651,8 @@ void AP_MotorsMulticopter::output_logic()
     if (!armed() || !get_interlock()) {
         _spool_desired = DesiredSpoolState::SHUT_DOWN;
         _spool_state = SpoolState::SHUT_DOWN;
+        _arm_seq_start_ms = 0;
+        _arm_seq_complete = false;
     }
 
     if (_spool_up_time < minimum_spool_time) {
@@ -659,6 +694,8 @@ void AP_MotorsMulticopter::output_logic()
         // until ESCs or servos have completed their start-up sequence.
         if (_spool_desired != DesiredSpoolState::SHUT_DOWN && _disarm_safe_timer >= _safe_time.get()) {
             _spool_state = SpoolState::GROUND_IDLE;
+            _arm_seq_start_ms = AP_HAL::millis();
+            _arm_seq_complete = false;
         }
         break;
 
@@ -710,16 +747,17 @@ void AP_MotorsMulticopter::output_logic()
             const float spool_step = _dt_s / _spool_up_time;
             _spin_up_ratio += spool_step;
 
-            // Hold at ground-idle spin until the configured idle-time delay has elapsed.
-            // This allows ESCs to complete their startup sequence with PWM active at idle
-            // before allowing further spool-up.
-            if (_idle_time < _idle_time_delay_s) {
+            // Hold at ground-idle spin until the configured idle-time delay has elapsed
+            // and the sequential arming motor check has completed.
+            // This prevents spin_up_ratio from ramping up to 1.0 during the sequence,
+            // preventing sudden throttle surge when the sequence finishes.
+            if (_idle_time < _idle_time_delay_s || is_arm_seq_active()) {
                 _spin_up_ratio = MIN(_spin_up_ratio, spin_up_ground_idle_ratio);
                 break;
             }
 
             // wait for spin up to complete
-            if (_spin_up_ratio < 1.0f) {
+            if (_spin_up_ratio < 1.0f || is_arm_seq_active()) {
                 _spin_up_complete = false;
             } else {
                 _spin_up_ratio = 1.0f;
@@ -1018,3 +1056,74 @@ int16_t AP_MotorsMulticopter::get_yaw_headroom() const
     return _yaw_headroom;
 }
 #endif
+
+// returns number of enabled motors
+uint8_t AP_MotorsMulticopter::get_num_motors() const
+{
+    uint8_t count = 0;
+    for (uint8_t i = 0; i < AP_MOTORS_MAX_NUM_MOTORS; i++) {
+        if (motor_enabled[i]) {
+            count++;
+        }
+    }
+    return count;
+}
+
+// check if sequential arming motor check is currently active and return current sequence number
+bool AP_MotorsMulticopter::is_arm_seq_active(int8_t& active_motor_idx)
+{
+    active_motor_idx = -1;
+
+    if (!is_positive(_motor_arm_seq_time) || _spool_state != SpoolState::GROUND_IDLE || _arm_seq_complete) {
+        return false;
+    }
+
+    const uint32_t now_ms = AP_HAL::millis();
+    const uint32_t elapsed_ms = now_ms - _arm_seq_start_ms;
+    const uint32_t spin_ms = (uint32_t)(_motor_arm_seq_time * 1000.0f);
+    const uint32_t pause_ms = 300; // 0.3s pause between motor checks
+    const uint32_t slot_ms = spin_ms + pause_ms;
+    const uint8_t num_motors = get_num_motors();
+
+    if (spin_ms == 0 || num_motors == 0) {
+        _arm_seq_complete = true;
+        return false;
+    }
+
+    const uint32_t total_seq_ms = num_motors * slot_ms;
+    if (elapsed_ms >= total_seq_ms) {
+        _arm_seq_complete = true;
+        return false;
+    }
+
+    const uint8_t motor_slot = elapsed_ms / slot_ms;
+    const uint32_t in_slot_ms = elapsed_ms % slot_ms;
+
+    if (in_slot_ms < spin_ms) {
+        active_motor_idx = (int8_t)motor_slot; // 0-indexed active motor
+    } else {
+        active_motor_idx = -1; // in 0.3s pause interval
+    }
+
+    return true;
+}
+
+bool AP_MotorsMulticopter::is_arm_seq_active() const
+{
+    if (!is_positive(_motor_arm_seq_time) || _spool_state != SpoolState::GROUND_IDLE || _arm_seq_complete) {
+        return false;
+    }
+
+    const uint32_t now_ms = AP_HAL::millis();
+    const uint32_t elapsed_ms = now_ms - _arm_seq_start_ms;
+    const uint32_t spin_ms = (uint32_t)(_motor_arm_seq_time * 1000.0f);
+    const uint32_t pause_ms = 300;
+    const uint32_t slot_ms = spin_ms + pause_ms;
+    const uint8_t num_motors = get_num_motors();
+
+    if (spin_ms == 0 || num_motors == 0) {
+        return false;
+    }
+
+    return (elapsed_ms < (uint32_t)num_motors * slot_ms);
+}

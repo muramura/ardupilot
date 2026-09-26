@@ -72,6 +72,9 @@ public:
     // get minimum or maximum pwm value that can be output to motors
     int16_t             get_pwm_output_min() const { return _pwm_min; }
     int16_t             get_pwm_output_max() const { return _pwm_max; }
+
+    // return true if physical motor output is disabled for bench testing
+    bool                motor_output_disabled() const { return _output_dis != 0; }
     
     // parameter check for MOT_PWM_MIN/MAX, returns true if parameters are valid
     bool check_mot_pwm_params() const;
@@ -111,6 +114,9 @@ public:
 
     // Thrust Linearization handling
     Thrust_Linearization thr_lin {*this};
+
+    // Check if sequential arming motor check is currently active
+    bool is_arm_seq_active() const override;
 
     // var_info for holding Parameter information
     static const struct AP_Param::GroupInfo        var_info[];
@@ -191,6 +197,7 @@ protected:
     AP_Float            _throttle_hover;        // estimated throttle required to hover throttle in the range 0 ~ 1
     AP_Int8             _throttle_hover_learn;  // enable/disabled hover thrust learning
     AP_Int8             _disarm_disable_pwm;    // disable PWM output while disarmed
+    AP_Int8             _output_dis;            // disable motor output for bench testing
 
     // Maximum lean angle of yaw servo in degrees. This is specific to tricopter
     AP_Float            _yaw_servo_angle_max_deg;
@@ -203,6 +210,9 @@ protected:
     // scaling for booster motor throttle
     AP_Float            _boost_scale;
 
+    // sequential motor spool-up on arming time per motor (s)
+    AP_Float            _motor_arm_seq_time;
+
     // motor output variables
     bool                motor_enabled[AP_MOTORS_MAX_NUM_MOTORS];    // true if motor is enabled
 
@@ -210,6 +220,15 @@ protected:
     float               _spin_up_ratio;         // normalized spin scalar [0..1] between 0 and spin_min (used for ground-idle ramp)
     float               _idle_time;             // idle delay elapsed time at/above ground-idle spin [s]
     bool                _spin_up_complete;      // set to true when spin up is complete and spool up blocks have been enabled
+    uint32_t            _arm_seq_start_ms;      // time when ground-idle sequential spool began
+    bool                _arm_seq_complete;      // true once sequential arming motor check has completed
+
+    // returns number of enabled motors
+    uint8_t             get_num_motors() const;
+
+    // check if sequential arming motor check is currently active
+    // active_motor_idx: 0-indexed motor number (0..num_motors-1) if spinning, -1 during 0.3s pause between motors
+    bool                is_arm_seq_active(int8_t& active_motor_idx);
 
     // battery voltage, current and air pressure compensation variables
     float               _throttle_limit;        // ratio of throttle limit between hover and maximum
