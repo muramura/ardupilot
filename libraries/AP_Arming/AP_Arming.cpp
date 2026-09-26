@@ -528,8 +528,9 @@ bool AP_Arming::ins_checks(bool report)
             check_failed(Check::INS, report, "Accels not healthy");
             return false;
         }
-        if (!ins.accel_calibrated_ok_all()) {
-            check_failed(Check::INS, report, "3D Accel calibration needed");
+        char accel_fail_msg[64] {};
+        if (!ins.accel_calibrated_ok_all(accel_fail_msg, sizeof(accel_fail_msg))) {
+            check_failed(Check::INS, report, "%s", accel_fail_msg[0] != '\0' ? accel_fail_msg : "3D Accel calibration needed");
             return false;
         }
         
@@ -836,13 +837,15 @@ bool AP_Arming::rc_arm_checks(AP_Arming::Method method)
 
     bool check_passed = true;
     // ensure all rc channels have different functions
-    if (rc().duplicate_options_exist()) {
-        check_failed(Check::PARAMETERS, true, "Duplicate Aux Switch Options");
-        check_passed = false;
-    }
-    if (rc().flight_mode_channel_conflicts_with_rc_option()) {
-        check_failed(Check::PARAMETERS, true, "Mode channel and RC%d_OPTION conflict", rc().flight_mode_channel_number());
-        check_passed = false;
+    if (check_enabled(Check::PARAMETERS)) {
+        if (rc().duplicate_options_exist()) {
+            check_failed(Check::PARAMETERS, true, "Duplicate Aux Switch Options");
+            check_passed = false;
+        }
+        if (rc().flight_mode_channel_conflicts_with_rc_option()) {
+            check_failed(Check::PARAMETERS, true, "Mode channel and RC%d_OPTION conflict", rc().flight_mode_channel_number());
+            check_passed = false;
+        }
     }
     {
         if (!rc().option_is_enabled(RC_Channels::Option::ARMING_SKIP_CHECK_RPY)) {
@@ -858,7 +861,12 @@ bool AP_Arming::rc_arm_checks(AP_Arming::Method method)
                 const auto *c = channel_to_check.channel;
                 if (c->get_control_in() != 0) {
                     if ((method != Method::RUDDER) || (c != rc().get_arming_channel())) { // ignore the yaw input channel if rudder arming
-                        check_failed(Check::RC, true, "%s (RC%d) is not neutral", channel_to_check.name, c->ch());
+                        check_failed(Check::RC, true, "%s (RC%d) not neutral (%d vs %d+-%d)",
+                                     channel_to_check.name,
+                                     c->ch(),
+                                     c->get_radio_in(),
+                                     c->get_radio_trim(),
+                                     c->get_dead_zone());
                         check_passed = false;
                     }
                 }
@@ -869,7 +877,7 @@ bool AP_Arming::rc_arm_checks(AP_Arming::Method method)
         if (rc().arming_check_throttle()) {
             const RC_Channel *c = &rc().get_throttle_channel();
                 if (c->get_control_in() != 0) {
-                    check_failed(Check::RC, true, "%s (RC%d) is not neutral", "Throttle", c->ch());
+                    check_failed(Check::RC, true, "%s (RC%d) is not zero", "Throttle", c->ch());
                     check_passed = false;
                 }
             c = rc().find_channel_for_option(RC_Channel::AUX_FUNC::FWD_THR);
