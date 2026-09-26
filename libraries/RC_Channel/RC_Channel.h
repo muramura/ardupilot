@@ -27,7 +27,9 @@
 #include <AP_Arming/AP_Arming_config.h>
 #include <AP_BattMonitor/AP_BattMonitor_config.h>
 
+#ifndef NUM_RC_CHANNELS
 #define NUM_RC_CHANNELS 16
+#endif
 
 /// @class	RC_Channel
 /// @brief	Object managing one RC channel
@@ -375,6 +377,9 @@ public:
 #if AP_AHRS_EKF_RESET_ENABLED
         EKF_RESET =          187, // trigger full EKF bootstrap reset
 #endif  // AP_AHRS_EKF_RESET_ENABLED
+#if AP_ARMING_ENABLED
+        ARM =                188, // arm vehicle on high, nothing on low
+#endif  // AP_ARMING_ENABLED
         // inputs from 200 will eventually used to replace RCMAP
         ROLL =               201, // roll input
         PITCH =              202, // pitch input
@@ -641,7 +646,7 @@ public:
 
     // returns a mask indicating which channels have overrides.  Bit 0
     // is RC channel 1.  Beware this is not a cheap call.
-    uint16_t get_override_mask() const;
+    uint32_t get_override_mask() const;
 
     class RC_Channel *find_channel_for_option(const RC_Channel::AUX_FUNC option);
     bool duplicate_options_exist();
