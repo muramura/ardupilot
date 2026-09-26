@@ -394,3 +394,18 @@ Open a discussion before writing code if:
 - **Do not move functions around without goal**: Keep the original code structure as possible.
 - **Do not add comment on all functions/lines**: Document only what was change and useful for future reading.
 - **Do not duplicate PRs**: If a PR was already open on a feature/bugfix/changes recently, do not duplicate it.
+
+---
+
+## 11. Email-Driven Autonomous Tasks (Safety Protocol)
+
+When instructions arrive via the mail watcher (`[Watcher]` or notification containing email requests):
+- **Execute Fully Autonomously**: Never stall waiting for interactive approval; implement, test, and report to completion.
+- **Strict Safety Protocol**:
+  1. **Branch Isolation**: Always create and checkout an isolated task branch (e.g. `auto/YYYYMMDD-HHMMSS-<task>`). Never commit directly to active dev branches or `master`.
+  2. **Local Commit Only**: Commit locally to track progress. Never `git push` unless explicitly ordered in the email.
+  3. **No Destructive Commands**: Absolutely prohibited from running `git reset --hard`, `git clean -fd`, `git checkout -- .`, `rm -rf`, or deleting untracked files.
+  4. **Always Send Email Report**: Send status and logs upon completion or blockers via:
+     ```bash
+     python3 /Users/murata/.config/anne_mail_watcher/send_mail.py "<to>" "<subject>" "<body>"
+     ```
