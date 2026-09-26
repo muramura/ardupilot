@@ -31,6 +31,10 @@ public:
     // get inertially interpolated rangefinder height
     bool get_rangefinder_height_interpolated_m(float& height_m) const;
 
+    // set log bit for logging filtering (e.g. MASK_LOG_STATE_MONITOR)
+    void set_log_bit(uint32_t log_bit) { _log_bit = log_bit; }
+    uint32_t get_log_bit() const { return _log_bit; }
+
     bool enabled;                           // not to be confused with rangefinder enabled, this state is to be set by the vehicle.
     bool alt_healthy;                       // true if we can trust the altitude from the rangefinder
     float alt_m;                            // tilt compensated altitude (in cm) from rangefinder
@@ -56,4 +60,5 @@ private:
     const uint8_t instance;
     uint8_t status;
     uint32_t last_healthy_ms;
+    uint32_t _log_bit;
 };

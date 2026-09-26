@@ -1,5 +1,6 @@
 #pragma once
 
+#include <AP_Common/AP_CPU_Diagnostics_config.h>
 #include <AP_HAL/AP_HAL_Boards.h>
 #include <AP_InertialSensor/AP_InertialSensor_config.h>
 #include <AP_ExternalAHRS/AP_ExternalAHRS_config.h>
@@ -7,6 +8,10 @@
 
 #ifndef AP_AHRS_ENABLED
 #define AP_AHRS_ENABLED 1
+#endif
+
+#ifndef AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+#define AP_AHRS_CPU_DIAGNOSTICS_ENABLED AP_CPU_DIAGNOSTICS_ENABLED
 #endif
 
 #ifndef AP_HOME_ENABLED

@@ -35,6 +35,11 @@
 #include <AP_HAL/SIMState.h>
 #include <AP_Vehicle/AP_Vehicle_Type.h>
 
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+#include <GCS_MAVLink/GCS.h>
+#include <string.h>
+#endif
+
 #if CONFIG_HAL_BOARD == HAL_BOARD_SITL
 #include <SITL/SITL.h>
 #endif
@@ -133,6 +138,12 @@ void AP_Scheduler::init(const AP_Scheduler::Task *tasks, uint8_t num_tasks, uint
     _num_tasks = _num_vehicle_tasks + _num_common_tasks;
 
    _last_run = NEW_NOTHROW uint16_t[_num_tasks];
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+    _cpu_diag_task_total_us = NEW_NOTHROW uint32_t[_num_tasks] {};
+    _cpu_diag_task_names = NEW_NOTHROW const char *[_num_tasks] {};
+    cpu_diagnostics_reset();
+    _cpu_diag_last_report_ms = AP_HAL::millis();
+#endif
     _tick_counter = 0;
 
     // setup initial performance counters
@@ -244,6 +255,9 @@ void AP_Scheduler::run(uint32_t time_available)
 
             if (dt >= interval_ticks*2) {
                 perf_info.task_slipped(i);
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+                _cpu_diag_slip_count++;
+#endif
             }
 
             if (dt >= interval_ticks*max_task_slowdown) {
@@ -289,6 +303,27 @@ void AP_Scheduler::run(uint32_t time_available)
         }
 
         perf_info.update_task_info(i, time_taken, overrun);
+
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+        if (_cpu_diag_task_total_us != nullptr) {
+            _cpu_diag_total_task_us += time_taken;
+            _cpu_diag_task_total_us[i] += time_taken;
+            if (_cpu_diag_task_names != nullptr) {
+                _cpu_diag_task_names[i] = task.name;
+            }
+            if (_cpu_diag_task_total_us[i] > _cpu_diag_top_task_total_us) {
+                _cpu_diag_top_task_total_us = _cpu_diag_task_total_us[i];
+                _cpu_diag_top_task_name = task.name;
+            }
+            if (time_taken > _cpu_diag_max_task_us) {
+                _cpu_diag_max_task_us = time_taken;
+                _cpu_diag_max_task_name = task.name;
+            }
+            if (overrun) {
+                _cpu_diag_overrun_count++;
+            }
+        }
+#endif
 
         if (time_taken >= time_available) {
             /*
@@ -421,7 +456,12 @@ void AP_Scheduler::loop()
     }
 
     // check loop time
-    perf_info.check_loop_time(sample_time_us - _loop_timer_start_us);
+    const uint32_t loop_time_us = sample_time_us - _loop_timer_start_us;
+    perf_info.check_loop_time(loop_time_us);
+
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+    cpu_diagnostics_update(loop_time_us);
+#endif
         
     _loop_timer_start_us = sample_time_us;
 
@@ -429,6 +469,104 @@ void AP_Scheduler::loop()
     hal.simstate->update();
 #endif
 }
+
+#if AP_SCHEDULER_CPU_DIAGNOSTICS_ENABLED
+void AP_Scheduler::cpu_diagnostics_reset()
+{
+    if (_cpu_diag_task_total_us != nullptr) {
+        memset(_cpu_diag_task_total_us, 0, _num_tasks * sizeof(*_cpu_diag_task_total_us));
+    }
+    _cpu_diag_total_task_us = 0;
+    _cpu_diag_top_task_total_us = 0;
+    _cpu_diag_max_task_us = 0;
+    _cpu_diag_max_loop_us = 0;
+    _cpu_diag_top_task_name = "-";
+    _cpu_diag_max_task_name = "-";
+    _cpu_diag_min_loop_rate_hz = UINT16_MAX;
+    _cpu_diag_slip_count = 0;
+    _cpu_diag_overrun_count = 0;
+    _cpu_diag_saturated = false;
+}
+
+void AP_Scheduler::cpu_diagnostics_update(uint32_t loop_time_us)
+{
+    if (_cpu_diag_task_total_us == nullptr) {
+        return;
+    }
+
+    const float filtered_loop_rate_hz = get_filtered_loop_rate_hz();
+    const uint16_t filtered_loop_rate = uint16_t(filtered_loop_rate_hz);
+    _cpu_diag_min_loop_rate_hz = MIN(_cpu_diag_min_loop_rate_hz, filtered_loop_rate);
+    _cpu_diag_max_loop_us = MAX(_cpu_diag_max_loop_us, loop_time_us);
+    if (filtered_loop_rate_hz < get_loop_rate_hz() * 0.95f) {
+        _cpu_diag_saturated = true;
+    }
+
+    const uint32_t now_ms = AP_HAL::millis();
+    const uint32_t interval_ms = now_ms - _cpu_diag_last_report_ms;
+    if (interval_ms < 2000U) {
+        return;
+    }
+
+    if (_cpu_diag_saturated) {
+        const uint32_t interval_us = interval_ms * 1000U;
+        const uint32_t busy_per_mille = uint32_t((uint64_t(_cpu_diag_total_task_us) * 1000U) / interval_us);
+        const uint32_t top_per_mille = uint32_t((uint64_t(_cpu_diag_top_task_total_us) * 1000U) / interval_us);
+        uint8_t top_task_indices[3] { UINT8_MAX, UINT8_MAX, UINT8_MAX };
+        for (uint8_t i = 0; i < _num_tasks; i++) {
+            if (_cpu_diag_task_total_us[i] == 0) {
+                continue;
+            }
+            for (uint8_t rank = 0; rank < ARRAY_SIZE(top_task_indices); rank++) {
+                if (top_task_indices[rank] == UINT8_MAX ||
+                    _cpu_diag_task_total_us[i] > _cpu_diag_task_total_us[top_task_indices[rank]]) {
+                    for (uint8_t move = ARRAY_SIZE(top_task_indices) - 1; move > rank; move--) {
+                        top_task_indices[move] = top_task_indices[move - 1];
+                    }
+                    top_task_indices[rank] = i;
+                    break;
+                }
+            }
+        }
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                      "CPU_SCH F%u/%u B%lu E%lu X%lu",
+                      unsigned(_cpu_diag_min_loop_rate_hz),
+                      unsigned(get_loop_rate_hz()),
+                      (unsigned long)busy_per_mille,
+                      (unsigned long)extra_loop_us,
+                      (unsigned long)_cpu_diag_max_loop_us);
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                      "CPU_TOP %.12s P%lu M%.12s:%lu",
+                      _cpu_diag_top_task_name,
+                      (unsigned long)top_per_mille,
+                      _cpu_diag_max_task_name,
+                      (unsigned long)_cpu_diag_max_task_us);
+        if (_cpu_diag_task_names != nullptr &&
+            top_task_indices[1] != UINT8_MAX &&
+            top_task_indices[2] != UINT8_MAX) {
+            const uint32_t second_per_mille = uint32_t((uint64_t(_cpu_diag_task_total_us[top_task_indices[1]]) * 1000U) / interval_us);
+            const uint32_t third_per_mille = uint32_t((uint64_t(_cpu_diag_task_total_us[top_task_indices[2]]) * 1000U) / interval_us);
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                          "CPU_T2 I%u %.28s P%lu",
+                          unsigned(top_task_indices[1]),
+                          _cpu_diag_task_names[top_task_indices[1]],
+                          (unsigned long)second_per_mille);
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                          "CPU_T3 I%u %.28s P%lu",
+                          unsigned(top_task_indices[2]),
+                          _cpu_diag_task_names[top_task_indices[2]],
+                          (unsigned long)third_per_mille);
+        }
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                      "CPU_EVT S%u O%u",
+                      unsigned(_cpu_diag_slip_count),
+                      unsigned(_cpu_diag_overrun_count));
+    }
+
+    cpu_diagnostics_reset();
+    _cpu_diag_last_report_ms = now_ms;
+}
+#endif
 
 #if HAL_LOGGING_ENABLED
 void AP_Scheduler::update_logging()

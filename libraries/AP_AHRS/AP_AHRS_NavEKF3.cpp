@@ -69,6 +69,9 @@ void AP_AHRS_NavEKF3::update()
 
 void AP_AHRS_NavEKF3::get_results(AP_AHRS_Backend::Estimates &results)
 {
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ekfr_start_us = AP_HAL::micros();
+#endif
     const auto now_ms = AP_HAL::millis();
 
     // initialisation complete some time after ekf has started
@@ -100,6 +103,10 @@ void AP_AHRS_NavEKF3::get_results(AP_AHRS_Backend::Estimates &results)
     // use the same IMU as the primary EKF and correct for gyro drift
     results.gyro_estimate = _ins.get_gyro(results.primary_gyro) + results.gyro_drift;
 
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ekfr_attitude_start_us = AP_HAL::micros();
+#endif
+
     /*
      * attitude estimates:
      */
@@ -121,6 +128,10 @@ void AP_AHRS_NavEKF3::get_results(AP_AHRS_Backend::Estimates &results)
     results.yaw_reset_count = yaw_reset_tracker.count();
 
     results.is_vibration_affected = EKF3.isVibrationAffected();
+
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ekfr_accel_start_us = AP_HAL::micros();
+#endif
 
     /*
      * acceleration estimates
@@ -144,6 +155,10 @@ void AP_AHRS_NavEKF3::get_results(AP_AHRS_Backend::Estimates &results)
     Vector3f accel = _ins.get_accel(results.primary_accel);
     accel -= results.accel_bias;
     results.accel_ef = results.dcm_matrix * AP::ahrs().get_rotation_autopilot_body_to_vehicle_body() * accel;
+
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ekfr_nav_start_us = AP_HAL::micros();
+#endif
 
     /*
      * velocity estimates
@@ -173,6 +188,10 @@ void AP_AHRS_NavEKF3::get_results(AP_AHRS_Backend::Estimates &results)
 
     results.hagl_valid = EKF3.getHAGL(results.hagl);
 
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ekfr_quality_start_us = AP_HAL::micros();
+#endif
+
     /*
      * air data estimates
      */
@@ -181,22 +200,6 @@ void AP_AHRS_NavEKF3::get_results(AP_AHRS_Backend::Estimates &results)
     /*
      * Sensor-related information
      */
-#if AP_AIRSPEED_ENABLED
-    // with multiple airspeed sensors and airspeed affinity in EKF3,
-    // it is possible to have switched over to a lane not using the
-    // primary airspeed sensor, so AHRS should know which airspeed
-    // sensor to use, i.e, the one being used by the primary lane. A
-    // lane switch could have happened due to an airspeed sensor
-    // fault, which makes this even more necessary
-    results.active_airspeed_index = primary_airspeed_index();
-    {
-        const auto *airspeed = AP::airspeed();
-        const uint8_t ret = EKF3.getActiveAirspeed();
-        if (airspeed != nullptr && ret != UINT8_MAX && airspeed->healthy(ret) && airspeed->use(ret)) {
-            results.active_airspeed_index = ret;
-        }
-    }
-#endif  // AP_AIRSPEED_ENABLED
     // true if the estimator will use GPS data in creating its
     // estimate when the data is good:
     results.configured_to_use_gps = EKF3.using_gps();
@@ -238,6 +241,44 @@ void AP_AHRS_NavEKF3::get_results(AP_AHRS_Backend::Estimates &results)
     results.control_gain_scaler_Z = 1;
 
     results.control_height_limit_valid = EKF3.getHeightControlLimit(results.control_height_limit_m);
+
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ekfr_end_us = AP_HAL::micros();
+    static uint64_t cpu_ekfr_imu_us;
+    static uint64_t cpu_ekfr_attitude_us;
+    static uint64_t cpu_ekfr_accel_us;
+    static uint64_t cpu_ekfr_nav_us;
+    static uint64_t cpu_ekfr_quality_us;
+    static uint32_t cpu_ekfr_samples;
+    static uint32_t cpu_ekfr_last_report_ms;
+
+    cpu_ekfr_imu_us += cpu_ekfr_attitude_start_us - cpu_ekfr_start_us;
+    cpu_ekfr_attitude_us += cpu_ekfr_accel_start_us - cpu_ekfr_attitude_start_us;
+    cpu_ekfr_accel_us += cpu_ekfr_nav_start_us - cpu_ekfr_accel_start_us;
+    cpu_ekfr_nav_us += cpu_ekfr_quality_start_us - cpu_ekfr_nav_start_us;
+    cpu_ekfr_quality_us += cpu_ekfr_end_us - cpu_ekfr_quality_start_us;
+    cpu_ekfr_samples++;
+
+    if (cpu_ekfr_last_report_ms == 0) {
+        cpu_ekfr_last_report_ms = now_ms;
+    }
+    if (now_ms - cpu_ekfr_last_report_ms >= 2000U) {
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                      "CPU_EKFR I%lu A%lu X%lu N%lu Q%lu",
+                      (unsigned long)(cpu_ekfr_imu_us / cpu_ekfr_samples),
+                      (unsigned long)(cpu_ekfr_attitude_us / cpu_ekfr_samples),
+                      (unsigned long)(cpu_ekfr_accel_us / cpu_ekfr_samples),
+                      (unsigned long)(cpu_ekfr_nav_us / cpu_ekfr_samples),
+                      (unsigned long)(cpu_ekfr_quality_us / cpu_ekfr_samples));
+        cpu_ekfr_imu_us = 0;
+        cpu_ekfr_attitude_us = 0;
+        cpu_ekfr_accel_us = 0;
+        cpu_ekfr_nav_us = 0;
+        cpu_ekfr_quality_us = 0;
+        cpu_ekfr_samples = 0;
+        cpu_ekfr_last_report_ms = now_ms;
+    }
+#endif
 }
 
 bool AP_AHRS_NavEKF3::pre_arm_check(bool requires_position, char *failure_msg, uint8_t failure_msg_len) const

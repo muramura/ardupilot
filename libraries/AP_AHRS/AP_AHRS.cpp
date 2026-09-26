@@ -538,6 +538,10 @@ void AP_AHRS::update_reset_counters()
 // update run at loop rate
 void AP_AHRS::update(bool skip_ins_update)
 {
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_start_us = AP_HAL::micros();
+#endif
+
     // periodically checks to see if we should update the AHRS
     // orientation (e.g. based on the AHRS_ORIENTATION parameter)
     // allow for runtime change of orientation
@@ -568,27 +572,53 @@ void AP_AHRS::update(bool skip_ins_update)
     // update takeoff/touchdown flags
     update_flags();
 
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_backend_start_us = AP_HAL::micros();
+#endif
+
     // update the backends, configured-first.  Some backends look at
     // loop-time-remaining and opt-out of their full update if there
     // isn't enough time left.  Copy back their results while we are
     // at it.
     configured_backend->update();
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_results_start_us = AP_HAL::micros();
+#endif
     *configured_estimates = {};
     configured_backend->get_results(*configured_estimates);
     // if we don't have an origin, maybe set one:
     try_set_common_origin(*configured_backend, *configured_estimates);
 
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_secondary_start_us = AP_HAL::micros();
+    uint32_t cpu_ahrs_secondary_update_call_us = 0;
+    uint32_t cpu_ahrs_secondary_results_call_us = 0;
+#endif
     for (auto &backend_and_estimates : backends_and_estimates) {
         if (&backend_and_estimates.backend == configured_backend) {
             // already updated
             continue;
         }
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+        const uint32_t secondary_update_start_us = AP_HAL::micros();
+#endif
         backend_and_estimates.backend.update();
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+        const uint32_t secondary_results_start_us = AP_HAL::micros();
+        cpu_ahrs_secondary_update_call_us += secondary_results_start_us - secondary_update_start_us;
+#endif
         backend_and_estimates.estimates = {};
         backend_and_estimates.backend.get_results(backend_and_estimates.estimates);
         // if we don't have an origin, maybe set one:
         try_set_common_origin(backend_and_estimates.backend, backend_and_estimates.estimates);
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+        cpu_ahrs_secondary_results_call_us += AP_HAL::micros() - secondary_results_start_us;
+#endif
     }
+
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_post_start_us = AP_HAL::micros();
+#endif
 
     update_configured_ekf_type();
     update_active_EKF_type();
@@ -629,6 +659,53 @@ void AP_AHRS::update(bool skip_ins_update)
 
     // update AOA and SSA
     update_AOA_SSA();
+
+#if AP_AHRS_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_ahrs_end_us = AP_HAL::micros();
+    static uint64_t cpu_ahrs_total_us;
+    static uint64_t cpu_ahrs_pre_us;
+    static uint64_t cpu_ahrs_backend_us;
+    static uint64_t cpu_ahrs_results_us;
+    static uint64_t cpu_ahrs_secondary_update_us;
+    static uint64_t cpu_ahrs_secondary_results_us;
+    static uint64_t cpu_ahrs_post_us;
+    static uint32_t cpu_ahrs_samples;
+    static uint32_t cpu_ahrs_last_report_ms;
+
+    cpu_ahrs_total_us += cpu_ahrs_end_us - cpu_ahrs_start_us;
+    cpu_ahrs_pre_us += cpu_ahrs_backend_start_us - cpu_ahrs_start_us;
+    cpu_ahrs_backend_us += cpu_ahrs_results_start_us - cpu_ahrs_backend_start_us;
+    cpu_ahrs_results_us += cpu_ahrs_secondary_start_us - cpu_ahrs_results_start_us;
+    cpu_ahrs_secondary_update_us += cpu_ahrs_secondary_update_call_us;
+    cpu_ahrs_secondary_results_us += cpu_ahrs_secondary_results_call_us;
+    cpu_ahrs_post_us += cpu_ahrs_end_us - cpu_ahrs_post_start_us;
+    cpu_ahrs_samples++;
+
+    const uint32_t now_ms = AP_HAL::millis();
+    if (cpu_ahrs_last_report_ms == 0) {
+        cpu_ahrs_last_report_ms = now_ms;
+    }
+    if (now_ms - cpu_ahrs_last_report_ms >= 2000U) {
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO,
+                      "CPU_AHRS T%lu E%lu G%lu U%lu R%lu O%lu P%lu",
+                      (unsigned long)(cpu_ahrs_total_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_backend_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_results_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_secondary_update_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_secondary_results_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_post_us / cpu_ahrs_samples),
+                      (unsigned long)(cpu_ahrs_pre_us / cpu_ahrs_samples));
+        cpu_ahrs_total_us = 0;
+        cpu_ahrs_pre_us = 0;
+        cpu_ahrs_backend_us = 0;
+        cpu_ahrs_results_us = 0;
+        cpu_ahrs_secondary_update_us = 0;
+        cpu_ahrs_secondary_results_us = 0;
+        cpu_ahrs_post_us = 0;
+        cpu_ahrs_samples = 0;
+        cpu_ahrs_last_report_ms = now_ms;
+    }
+#endif
 
 #if CONFIG_HAL_BOARD == HAL_BOARD_SITL
     /*
@@ -759,14 +836,13 @@ bool AP_AHRS::_should_use_airspeed_sensor(uint8_t airspeed_index) const
 // if we have an estimate
 bool AP_AHRS::_airspeed_EAS(float &airspeed_ret, AirspeedEstimateType &airspeed_estimate_type) const
 {
-#if AP_AHRS_DCM_ENABLED || AP_AIRSPEED_ENABLED
+#if AP_AHRS_DCM_ENABLED || (AP_AIRSPEED_ENABLED && AP_GPS_ENABLED)
     const uint8_t idx = get_active_airspeed_index();
 #endif
-#if AP_AIRSPEED_ENABLED
+#if AP_AIRSPEED_ENABLED && AP_GPS_ENABLED
     if (_should_use_airspeed_sensor(idx)) {
         airspeed_ret = AP::airspeed()->get_airspeed(idx);
 
-#if AP_GPS_ENABLED
         if (_wind_max > 0 && AP::gps().status() >= AP_GPS_FixType::FIX_2D) {
             // constrain the airspeed by the ground speed
             // and AHRS_WIND_MAX
@@ -777,12 +853,10 @@ bool AP_AHRS::_airspeed_EAS(float &airspeed_ret, AirspeedEstimateType &airspeed_
                                             gnd_speed + _wind_max);
             airspeed_ret = true_airspeed / get_EAS2TAS();
         }
-#endif  // AP_GPS_ENABLED
-
         airspeed_estimate_type = AirspeedEstimateType::AIRSPEED_SENSOR;
         return true;
     }
-#endif  // AP_AIRSPEED_ENABLED
+#endif
 
     if (!get_wind_estimation_enabled()) {
         airspeed_estimate_type = AirspeedEstimateType::NO_NEW_ESTIMATE;
@@ -2032,6 +2106,33 @@ bool AP_AHRS::get_vel_innovations_and_variances_for_source(uint8_t source, Vecto
     }
 
     return false;
+}
+
+//get the index of the active airspeed sensor, wrt the primary core
+uint8_t AP_AHRS::get_active_airspeed_index() const
+{
+#if AP_AIRSPEED_ENABLED
+    const auto *airspeed = AP::airspeed();
+    if (airspeed == nullptr) {
+        return 0;
+    }
+
+// we only have affinity for EKF3 as of now
+#if HAL_NAVEKF3_AVAILABLE
+    if (active_EKF_type() == EKFType::THREE) {
+        uint8_t ret = ekf3.EKF3.getActiveAirspeed();
+        if (ret != UINT8_MAX && airspeed->healthy(ret) && airspeed->use(ret)) {
+            return ret;
+        }
+    }
+#endif
+
+    // for the rest, let the primary airspeed sensor be used
+    return airspeed->get_primary();
+#else
+
+    return 0;
+#endif // AP_AIRSPEED_ENABLED
 }
 
 #if AP_AIRSPEED_ENABLED

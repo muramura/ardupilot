@@ -15,6 +15,13 @@ NavEKF3_core::NavEKF3_core(NavEKF3 *_frontend, AP_DAL &_dal) :
 {
     firstInitTime_ms = 0;
     lastInitFailReport_ms = 0;
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    cpu_e3_covariance_us = 0;
+    cpu_e3_prediction_us = 0;
+    cpu_e3_fusion_us = 0;
+    cpu_e3_input_us = 0;
+    cpu_e3_tail_us = 0;
+#endif
 }
 
 // setup this core backend
@@ -642,10 +649,22 @@ void NavEKF3_core::CovarianceInit()
 // Update Filter States - this should be called whenever new IMU data is available
 void NavEKF3_core::UpdateFilter(bool predict)
 {
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    cpu_e3_covariance_us = 0;
+    cpu_e3_prediction_us = 0;
+    cpu_e3_fusion_us = 0;
+    cpu_e3_input_us = 0;
+    cpu_e3_tail_us = 0;
+#endif
+
     // don't run filter updates if states have not been initialised
     if (!statesInitialised) {
         return;
     }
+
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_input_start_us = AP_HAL::micros();
+#endif
 
     fill_scratch_variables();
 
@@ -660,18 +679,36 @@ void NavEKF3_core::UpdateFilter(bool predict)
     // read IMU data as delta angles and velocities
     readIMUData(predict);
 
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    cpu_e3_input_us = AP_HAL::micros() - cpu_e3_input_start_us;
+#endif
+
     // Run the EKF equations to estimate at the fusion time horizon if new IMU data is available in the buffer
     if (runUpdates) {
+#if AP_CPU_DIAGNOSTICS_ENABLED
+        const uint32_t cpu_e3_prediction_start_us = AP_HAL::micros();
+#endif
         // Predict states using IMU data from the delayed time horizon
         UpdateStrapdownEquationsNED();
 
         // Predict the covariance growth
+#if AP_CPU_DIAGNOSTICS_ENABLED
+        const uint32_t cpu_e3_covariance_start_us = AP_HAL::micros();
+#endif
         CovariancePrediction(nullptr);
+#if AP_CPU_DIAGNOSTICS_ENABLED
+        cpu_e3_covariance_us = AP_HAL::micros() - cpu_e3_covariance_start_us;
+#endif
 
         // Run the IMU prediction step for the GSF yaw estimator algorithm
         // using IMU and optionally true airspeed data.
         // Must be run before SelectMagFusion() to provide an up to date yaw estimate
         runYawEstimatorPrediction();
+
+#if AP_CPU_DIAGNOSTICS_ENABLED
+        cpu_e3_prediction_us = AP_HAL::micros() - cpu_e3_prediction_start_us - cpu_e3_covariance_us;
+        const uint32_t cpu_e3_fusion_start_us = AP_HAL::micros();
+#endif
 
         // Update states using  magnetometer or external yaw sensor data
         SelectMagFusion();
@@ -708,6 +745,10 @@ void NavEKF3_core::UpdateFilter(bool predict)
         // Update the filter status
         updateFilterStatus();
 
+#if AP_CPU_DIAGNOSTICS_ENABLED
+        cpu_e3_fusion_us = AP_HAL::micros() - cpu_e3_fusion_start_us;
+#endif
+
         if (imuSampleTime_ms - last_oneHz_ms >= 1000) {
             // 1Hz tasks
             last_oneHz_ms = imuSampleTime_ms;
@@ -715,6 +756,10 @@ void NavEKF3_core::UpdateFilter(bool predict)
             checkUpdateEarthField();
         }
     }
+
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_tail_start_us = AP_HAL::micros();
+#endif
 
     // Wind output forward from the fusion to output time horizon
     calcOutputStates();
@@ -739,6 +784,10 @@ void NavEKF3_core::UpdateFilter(bool predict)
         statesInitialised = false;
         InitialiseFilterBootstrap();
     }
+
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    cpu_e3_tail_us = AP_HAL::micros() - cpu_e3_tail_start_us;
+#endif
 }
 
 void NavEKF3_core::correctDeltaAngle(Vector3F &delAng, ftype delAngDT, uint8_t gyro_index)

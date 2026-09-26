@@ -450,16 +450,12 @@ public:
     }
 #endif  // AP_AHRS_GET_MAG_DATA_ENABLED
 
-    // return the index of the airspeed sensor the active backend is
-    // using for airspeed measurements.  Backends which do not track
-    // which sensor they are using report the primary sensor.
-    uint8_t get_active_airspeed_index() const {
-#if AP_AIRSPEED_ENABLED
-        return active_estimates->active_airspeed_index;
-#else
-        return 0;
-#endif
-    }
+    // return the index of the airspeed we should use for airspeed measurements
+    // with multiple airspeed sensors and airspeed affinity in EKF3, it is possible to have switched
+    // over to a lane not using the primary airspeed sensor, so AHRS should know which airspeed sensor
+    // to use, i.e, the one being used by the primary lane. A lane switch could have happened due to an 
+    // airspeed sensor fault, which makes this even more necessary
+    uint8_t get_active_airspeed_index() const;
 
     // get the index of the current primary accelerometer sensor
     uint8_t get_primary_accel_index(void) const { return state.primary_accel; }
@@ -490,6 +486,10 @@ public:
     uint8_t get_posvelyaw_source_set() const;
 
     void Log_Write();
+
+    // set log bit for logging filtering (e.g. MASK_LOG_STATE_MONITOR)
+    void set_log_bit(uint32_t log_bit) { _log_bit = log_bit; }
+    uint32_t get_log_bit() const { return _log_bit; }
 
     // check if non-compass sensor is providing yaw.  Allows compass pre-arm checks to be bypassed
     bool using_noncompass_for_yaw(void) const;
@@ -1135,6 +1135,8 @@ private:
     // Note that these pointers *must* be nullptr-checked before use!
     // AP_AHRS_Backend *secondary_backend;
     AP_AHRS_Backend::Estimates *secondary_estimates;
+
+    uint32_t _log_bit;
 };
 
 namespace AP {
