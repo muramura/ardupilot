@@ -2,15 +2,27 @@
 FRAME_CLASS 1
 MOT_PWM_TYPE 3 # brushed motor PWM
 RC_SPEED 32000 # as fast as ardupilot supports (more would be nice)
-LOG_BACKEND_TYPE 2 # mavlink logging
-ARMING_SKIPCHK 1024 # disable logging check (in the event log rx is not up)
-LOG_DISARMED 1
+LOG_BACKEND_TYPE 0 # None (logging disabled)
+# Arming settings
+# ARMING_SKIPCHK: 1120 (32 + 64 + 1024)
+#   Bit  5 (32):   Parameters check skip
+#   Bit  6 (64):   RC checks skip (allows duplicate aux options like multiple DISARM switches)
+#   Bit 10 (1024): Logging available check skip (in the event log rx is not up)
+ARMING_SKIPCHK 1120
+ARMING_RUDDER 0 # disable rudder stick arming/disarming (GCS/button only)
+LOG_DISARMED 0
+LOG_BITMASK 0 # keep onboard logs small; STATUSTEXT is still logged as MSG
+LOG_MAX_FILES 3
+LOG_FILE_MB_FREE 0
 SCHED_LOOP_RATE 150 # flash won't go faster :(
+SCR_ENABLE 1 # 1: Lua Scripts
 
 # mavlink RC control
 FS_THR_ENABLE 0 # not wanted for mavlink control
 RC1_MIN 1101 # avoid calibration needed warning
-RC_OPTIONS 96 # ignore rpy stick positions during arming, nice for crap controllers
+# RC_OPTIONS: 32
+#   Bit 5 (32): Check neutral throttle on arming
+RC_OPTIONS 32
 
 # tuning parameters from mission planner's wizard
 ATC_ACC_P_MAX 2002
@@ -40,7 +52,54 @@ BATT_I2C_ADDR   64
 BATT_I2C_BUS    0
 BATT_LOW_MAH    0
 BATT_LOW_TIMER  10
-BATT_LOW_VOLT   3.4
+BATT_LOW_VOLT   3.35
 BATT_MONITOR    30
 BATT_OPTIONS    0
 BATT_SERIAL_NUM -1
+
+# RangeFinder settings (Downward VL53L3CX for Altitude, Forward Disabled)
+RNGFND1_TYPE    49
+RNGFND1_ORIENT  25
+RNGFND1_MIN     0.01
+RNGFND1_MAX     3.0
+RNGFND1_GNDCLR  0.02
+RNGFND2_TYPE    0
+
+# Compass settings (BMM150 fixed on PCB)
+COMPASS_ENABLE   1
+COMPASS_USE      1
+COMPASS_EXTERNAL 0
+COMPASS_AUTO_ROT 0
+COMPASS_OFFS_MAX 5500
+COMPASS_CAL_FIT  64
+
+# EKF3 Height source using downward RangeFinder
+EK3_SRC1_POSZ   2
+EK3_SRC1_VELZ   0
+EK3_RNG_USE_HGT -1
+EK3_RNG_M_NSE   0.2
+SURFTRAK_MODE   1
+
+# Crash check settings (fast disarm on crash or ground tip-over)
+FS_CRASH_CHECK  1
+FS_CRASH_TIME   0.25
+FS_GND_ANGLE    45
+
+# Sequential motor check on arming (1.0s spin + 0.3s pause per motor)
+MOT_ARM_SEQ     1.0
+
+# Altitude & Throttle deadzone settings for Micro StampFly
+# Narrow throttle deadzone to allow smooth control in slow mode (±125 PWM) while preserving full speed
+THR_DZ          20
+
+# GPS & RTC clock settings (SAM-M8Q on Grove Black connector / SERIAL3)
+SERIAL3_PROTOCOL 5
+SERIAL3_BAUD     230
+GPS1_TYPE        2
+BRD_RTC_TYPES    3
+
+# NeoPixel LED settings (SERVO5 = Onboard WS2812C LED)
+SERVO5_FUNCTION 120
+NTF_LED_TYPES   256
+NTF_LED_LEN     2
+

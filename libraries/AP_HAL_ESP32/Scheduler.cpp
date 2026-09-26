@@ -206,11 +206,19 @@ void IRAM_ATTR Scheduler::delay(uint16_t ms)
     uint64_t start = AP_HAL::micros64();
     while ((AP_HAL::micros64() - start)/1000 < ms) {
         delay_microseconds(1000);
-        if (_min_delay_cb_ms <= ms) {
-            if (in_main_thread()) {
+        if (in_main_thread()) {
+            esp_task_wdt_reset();
+            if (_min_delay_cb_ms <= ms) {
                 call_delay_cb();
             }
         }
+    }
+}
+
+void Scheduler::expect_delay_ms(uint32_t ms)
+{
+    if (in_main_thread()) {
+        esp_task_wdt_reset();
     }
 }
 
@@ -275,6 +283,7 @@ void Scheduler::reboot(bool hold_in_bootloader)
 {
     printf("Restarting now...\n");
     hal.rcout->force_safety_on();
+    unmount_flashfs();
     unmount_sdcard();
     esp_restart();
 }
@@ -420,6 +429,7 @@ void IRAM_ATTR Scheduler::_io_thread(void* arg)
 #ifdef SCHEDDEBUG
     printf("%s:%d start \n", __PRETTY_FUNCTION__, __LINE__);
 #endif
+    mount_flashfs();
     mount_sdcard();
     Scheduler *sched = (Scheduler *)arg;
     while (!sched->_initialized) {
@@ -440,6 +450,7 @@ void IRAM_ATTR Scheduler::_io_thread(void* arg)
             uint32_t now = AP_HAL::millis();
             if (now - last_sd_start_ms > 3000) {
                 last_sd_start_ms = now;
+                flashfs_retry();
                 sdcard_retry();
             }
         }
@@ -578,4 +589,3 @@ void IRAM_ATTR Scheduler::_main_thread(void *arg)
         };
     }
 }
-
