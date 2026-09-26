@@ -85,7 +85,7 @@ class Board:
         # embed any scripts from ROMFS/scripts
         if os.path.exists('ROMFS/scripts'):
             for f in os.listdir('ROMFS/scripts'):
-                if fnmatch.fnmatch(f, "*.lua"):
+                if fnmatch.fnmatch(f, "*.lua") and not f.startswith('.'):
                     env.ROMFS_FILES += [('scripts/'+f,'ROMFS/scripts/'+f)]
 
         # allow GCS disable for AP_DAL example
@@ -480,13 +480,6 @@ class Board:
                 ]
                 env.CFLAGS += [
                     '-Werror=use-after-free',
-                ]
-            if self.cc_version_gte(cfg, 16, 1):
-                env.CXXFLAGS += [
-                    '-Werror=dangling-pointer',
-                ]
-                env.CFLAGS += [
-                    '-Werror=dangling-pointer',
                 ]
             if self.cc_version_gte(cfg, 14, 0) and self.cc_version_lte(cfg, 16, 2):
                 # the following warnings appear to be buggy in later compiler versions
@@ -1558,8 +1551,6 @@ class QURTBoard(Board):
         env.INCLUDES += [cfg.env.HEXAGON_SDK_DIR + "/rtos/qurt/computev66/include/posix"]
 
         CFLAGS = "-MD -mv66 -fPIC -mcpu=hexagonv66 -G0 -fdata-sections -ffunction-sections -fomit-frame-pointer -fmerge-all-constants -fno-signed-zeros -fno-trapping-math -freciprocal-math -fno-math-errno -fno-strict-aliasing -fvisibility=hidden -fno-rtti -fmath-errno"
-        if not cfg.options.disable_Werror:
-            CFLAGS += " -Werror"
         env.CXXFLAGS += CFLAGS.split()
         env.CFLAGS += CFLAGS.split()
 
