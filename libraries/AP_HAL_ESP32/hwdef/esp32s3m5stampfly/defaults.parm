@@ -103,3 +103,11 @@ SERVO5_FUNCTION 120
 NTF_LED_TYPES   256
 NTF_LED_LEN     2
 
+# Geofence settings (Indoor Ceiling Barrier: Max 2.0m, Report Only)
+FENCE_ENABLE    1     # 1: Enable Geofence
+FENCE_TYPE      1     # 1: Altitude Max only (no GPS required)
+FENCE_ALT_MAX   2.0   # 2.0m: Ceiling limit
+FENCE_MARGIN    0.3   # 0.3m: Deceleration margin before limit
+FENCE_ACTION    0     # 0: Report Only (stop climbing via avoidance, no forced mode change)
+FENCE_ALT_MAX_TP 1    # 1: Above Home
+
