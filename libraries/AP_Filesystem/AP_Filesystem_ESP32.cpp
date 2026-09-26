@@ -25,13 +25,29 @@
 
 extern const AP_HAL::HAL& hal;
 
+#if defined(HAL_ESP32_FLASHFS)
+#define ESP32_FILESYSTEM_DISK_PATH "/APM/"
+#define ESP32_FILESYSTEM_SECTOR_SIZE FF_SS_WL
+#else
+#define ESP32_FILESYSTEM_DISK_PATH "/SDCARD/"
+#define ESP32_FILESYSTEM_SECTOR_SIZE FF_SS_SDCARD
+#endif
+
+static const char *disk_path(const char *path)
+{
+    if (path != nullptr && path[0] == '/') {
+        return path;
+    }
+    return ESP32_FILESYSTEM_DISK_PATH;
+}
+
 int AP_Filesystem_ESP32::open(const char *fname, int flags, bool allow_absolute_paths)
 {
 #if FSDEBUG
     printf("DO open %s \n", fname);
 #endif
     // we automatically add O_CLOEXEC as we always want it for ArduPilot FS usage
-    return ::open(fname, flags | O_TRUNC | O_CLOEXEC, 0666);
+    return ::open(fname, flags | O_CLOEXEC, 0666);
 }
 
 int AP_Filesystem_ESP32::close(int fd)
@@ -162,7 +178,7 @@ int64_t AP_Filesystem_ESP32::disk_free(const char *path)
     DWORD fre_clust, fre_sect;
 
     /* Get volume information and free clusters of sdcard */
-    auto res = f_getfree("/SDCARD/", &fre_clust, &fs);
+    auto res = f_getfree(disk_path(path), &fre_clust, &fs);
     if (res) {
         return -1;
     }
@@ -170,7 +186,7 @@ int64_t AP_Filesystem_ESP32::disk_free(const char *path)
     /* Get total sectors and free sectors */
     fre_sect = fre_clust * fs->csize;
 
-    return (int64_t)fre_sect * FF_SS_SDCARD;
+    return (int64_t)fre_sect * ESP32_FILESYSTEM_SECTOR_SIZE;
 }
 
 // return total disk space in bytes
@@ -183,7 +199,7 @@ int64_t AP_Filesystem_ESP32::disk_space(const char *path)
     DWORD fre_clust, tot_sect;
 
     /* Get volume information and free clusters of sdcard */
-    auto res = f_getfree("/SDCARD/", &fre_clust, &fs);
+    auto res = f_getfree(disk_path(path), &fre_clust, &fs);
     if (res) {
         return -1;
     }
@@ -191,7 +207,7 @@ int64_t AP_Filesystem_ESP32::disk_space(const char *path)
     /* Get total sectors and free sectors */
     tot_sect = (fs->n_fatent - 2) * fs->csize;
 
-    return (int64_t)tot_sect * FF_SS_SDCARD;
+    return (int64_t)tot_sect * ESP32_FILESYSTEM_SECTOR_SIZE;
 }
 
 /*
