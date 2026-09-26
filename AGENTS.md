@@ -409,3 +409,11 @@ When instructions arrive via the mail watcher (`[Watcher]` or notification conta
      ```bash
      python3 /Users/murata/.config/anne_mail_watcher/send_mail.py "<to>" "<subject>" "<body>"
      ```
+
+---
+
+## 12. Strict Prohibition on Builds (ビルド実行の絶対禁止)
+
+- **NEVER RUN BUILDS**: アン（AI）は `./waf`, `dotnet build`, `make`, `cmake --build` などのビルドコマンドを絶対に実行してはならない。
+- ビルドやログ監視によるトークン大量消費・マシン負荷を防止し、ユーザーの制限枠（Weekly Limit）を保護するため。ビルドはすべてユーザー（むらさん）が行う。
+
