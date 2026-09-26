@@ -25,6 +25,18 @@ bool AP_DAL::logging_started;
 void AP_DAL::start_frame(AP_DAL::FrameType frametype)
 {
 #if !APM_BUILD_TYPE(APM_BUILD_AP_DAL_Standalone) && !APM_BUILD_TYPE(APM_BUILD_Replay)
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_end_frame_us = 0;
+    _cpu_e3_dal_common_us = 0;
+    _cpu_e3_dal_common_log_us = 0;
+    _cpu_e3_dal_available_memory_us = 0;
+    _cpu_e3_dal_ins_us = 0;
+    _cpu_e3_dal_baro_us = 0;
+    _cpu_e3_dal_gps_us = 0;
+    _cpu_e3_dal_compass_us = 0;
+    _cpu_e3_dal_other_us = 0;
+    _compass.reset_cpu_e3_timing();
+#endif
 
     if (!init_done) {
         init_sensors();
@@ -48,7 +60,14 @@ void AP_DAL::start_frame(AP_DAL::FrameType frametype)
     logging_started = logging;
 #endif
 
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_dal_end_frame_start_us = AP_HAL::micros();
+#endif
     end_frame();
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_end_frame_us = AP_HAL::micros() - cpu_e3_dal_end_frame_start_us;
+    const uint32_t cpu_e3_dal_common_start_us = AP_HAL::micros();
+#endif
 
     _RFRF.frame_types = uint8_t(frametype);
 
@@ -58,7 +77,13 @@ void AP_DAL::start_frame(AP_DAL::FrameType frametype)
     _RFRH.time_flying_ms = 0;
 #endif
     _RFRH.time_us = AP_HAL::micros64();
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_dal_rfrh_log_start_us = AP_HAL::micros();
+#endif
     WRITE_REPLAY_BLOCK(RFRH, _RFRH);
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_common_log_us += AP_HAL::micros() - cpu_e3_dal_rfrh_log_start_us;
+#endif
 
     // update RFRN data
     const log_RFRN old = _RFRN;
@@ -76,22 +101,73 @@ void AP_DAL::start_frame(AP_DAL::FrameType frametype)
     _RFRN.fly_forward = ahrs.get_fly_forward();
     _RFRN.takeoff_expected = ahrs.get_takeoff_expected();
     _RFRN.touchdown_expected = ahrs.get_touchdown_expected();
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_dal_available_memory_start_us = AP_HAL::micros();
+#endif
+#if AP_DAL_AVAILABLE_MEMORY_INTERVAL_MS > 0
+    const uint32_t now_ms = AP_HAL::millis();
+    // Allocation checks must always use a value captured in the current frame.
+    const bool initialising_filter =
+        frametype == FrameType::InitialiseFilterEKF2 ||
+        frametype == FrameType::InitialiseFilterEKF3;
+    if (!_available_memory_valid ||
+        initialising_filter ||
+        now_ms - _last_available_memory_ms >= AP_DAL_AVAILABLE_MEMORY_INTERVAL_MS) {
+        _RFRN.available_memory = hal.util->available_memory();
+        _last_available_memory_ms = now_ms;
+        _available_memory_valid = true;
+    }
+#else
     _RFRN.available_memory = hal.util->available_memory();
+#endif
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_available_memory_us = AP_HAL::micros() - cpu_e3_dal_available_memory_start_us;
+#endif
     _RFRN.ahrs_trim = ahrs.get_trim();
 #if AP_OPTICALFLOW_ENABLED
     _RFRN.opticalflow_enabled = AP::opticalflow() && AP::opticalflow()->enabled();
 #endif
+#if AP_WHEELENCODER_ENABLED
     _RFRN.wheelencoder_enabled = AP::wheelencoder() && (AP::wheelencoder()->num_sensors() > 0);
+#else
+    _RFRN.wheelencoder_enabled = false;
+#endif
     _RFRN.ekf_type = int8_t(ahrs.configured_ekf_type());
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    const uint32_t cpu_e3_dal_rfrn_log_start_us = AP_HAL::micros();
+#endif
     WRITE_REPLAY_BLOCK_IFCHANGED(RFRN, _RFRN, old);
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_common_log_us += AP_HAL::micros() - cpu_e3_dal_rfrn_log_start_us;
+#endif
 
     // update body conversion
     _rotation_vehicle_body_to_autopilot_body = ahrs.get_rotation_vehicle_body_to_autopilot_body();
 
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_common_us = AP_HAL::micros() - cpu_e3_dal_common_start_us;
+    const uint32_t cpu_e3_dal_ins_start_us = AP_HAL::micros();
+#endif
     _ins.start_frame();
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_ins_us = AP_HAL::micros() - cpu_e3_dal_ins_start_us;
+    const uint32_t cpu_e3_dal_baro_start_us = AP_HAL::micros();
+#endif
     _baro.start_frame();
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_baro_us = AP_HAL::micros() - cpu_e3_dal_baro_start_us;
+    const uint32_t cpu_e3_dal_gps_start_us = AP_HAL::micros();
+#endif
     _gps.start_frame();
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_gps_us = AP_HAL::micros() - cpu_e3_dal_gps_start_us;
+    const uint32_t cpu_e3_dal_compass_start_us = AP_HAL::micros();
+#endif
     _compass.start_frame();
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_compass_us = AP_HAL::micros() - cpu_e3_dal_compass_start_us;
+    const uint32_t cpu_e3_dal_other_start_us = AP_HAL::micros();
+#endif
     if (_airspeed) {
         _airspeed->start_frame();
     }
@@ -109,6 +185,9 @@ void AP_DAL::start_frame(AP_DAL::FrameType frametype)
     if (_visualodom) {
         _visualodom->start_frame();
     }
+#endif
+#if AP_CPU_DIAGNOSTICS_ENABLED
+    _cpu_e3_dal_other_us = AP_HAL::micros() - cpu_e3_dal_other_start_us;
 #endif
 
     // populate some derivative values:
@@ -595,4 +674,3 @@ void rprintf(const char *format, ...)
     va_end(ap);
 #endif
 }
-

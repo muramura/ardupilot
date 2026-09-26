@@ -191,6 +191,8 @@ void Compass::_cancel_calibration(uint8_t i)
     }
     if (_calibrator[prio]->running() || _calibrator[prio]->get_state().status == CompassCalibrator::Status::WAITING_TO_START) {
         AP_Notify::events.compass_cal_canceled = 1;
+        ::printf("CompassCal[%u]: Calibration cancelled\n", i);
+        GCS_SEND_TEXT(MAV_SEVERITY_NOTICE, "CompassCal[%u]: Calibration cancelled", i);
     }
     _cal_saved[prio] = false;
     _calibrator[prio]->stop();
@@ -242,6 +244,9 @@ bool Compass::_accept_calibration(uint8_t i)
         if (!is_calibrating()) {
             AP_Notify::events.compass_cal_saved = 1;
         }
+
+        ::printf("CompassCal[%u]: Offsets saved to parameters: (%.1f, %.1f, %.1f)\n", i, (double)ofs.x, (double)ofs.y, (double)ofs.z);
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CompassCal[%u]: Offsets saved (%.0f, %.0f, %.0f)", i, (double)ofs.x, (double)ofs.y, (double)ofs.z);
         return true;
     } else {
         return false;
