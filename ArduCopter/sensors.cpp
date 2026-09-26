@@ -13,10 +13,12 @@ void Copter::init_rangefinder(void)
 {
    rangefinder.set_log_rfnd_bit(MASK_LOG_CTUN);
    rangefinder.init(ROTATION_PITCH_270);
+   rangefinder_state.set_log_bit(MASK_LOG_STATE_MONITOR);
    rangefinder_state.alt_m_filt.set_cutoff_frequency(g2.rangefinder_filt);
    rangefinder_state.enabled = rangefinder.has_orientation(ROTATION_PITCH_270);
 
    // upward facing range finder
+   rangefinder_up_state.set_log_bit(MASK_LOG_STATE_MONITOR);
    rangefinder_up_state.alt_m_filt.set_cutoff_frequency(g2.rangefinder_filt);
    rangefinder_up_state.enabled = rangefinder.has_orientation(ROTATION_PITCH_90);
 }

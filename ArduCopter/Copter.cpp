@@ -148,7 +148,7 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
     FAST_TASK(Log_Video_Stabilisation),
 #endif
 
-    SCHED_TASK(rc_loop,              250,    130,  3),
+    SCHED_TASK(rc_loop,               50,    130,  3),
     SCHED_TASK(throttle_loop,         50,     75,  6),
 #if AP_FENCE_ENABLED
     SCHED_TASK(fence_check,           25,    100,  7),
@@ -204,8 +204,8 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #endif
     SCHED_TASK(standby_update,        100,    75,  96),
     SCHED_TASK(lost_vehicle_check,    10,     50,  99),
-    SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_receive, 400, 180, 102),
-    SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_send,    400, 550, 105),
+    SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_receive, 100, 180, 102),
+    SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_send,    100, 550, 105),
 #if HAL_MOUNT_ENABLED
     SCHED_TASK_CLASS(AP_Mount,             &copter.camera_mount,        update,          50,  75, 108),
 #endif
@@ -267,7 +267,7 @@ void Copter::get_scheduler_tasks(const AP_Scheduler::Task *&tasks,
 {
     tasks = &scheduler_tasks[0];
     task_count = ARRAY_SIZE(scheduler_tasks);
-    log_bit = MASK_LOG_PM;
+    log_bit = 0;
 }
 
 constexpr int8_t Copter::_failsafe_priorities[7];
@@ -658,8 +658,11 @@ void Copter::loop_rate_logging()
 // should be run at 10hz
 void Copter::ten_hz_logging_loop()
 {
-    // always write AHRS attitude at 10Hz
-    ahrs.Write_Attitude(attitude_control->get_att_target_euler_rad() * RAD_TO_DEG);
+    if (should_log(MASK_LOG_STATE_MONITOR)) {
+        // always write AHRS attitude at 10Hz
+        ahrs.Write_Attitude(attitude_control->get_att_target_euler_rad() * RAD_TO_DEG);
+    }
+
     // log attitude controller data if we're not already logging at the higher rate
     if (should_log(MASK_LOG_ATTITUDE_MED) && !should_log(MASK_LOG_ATTITUDE_FAST) && !copter.flightmode->logs_attitude()) {
         Log_Write_Attitude();
@@ -675,7 +678,9 @@ void Copter::ten_hz_logging_loop()
     }
     // log EKF attitude data always at 10Hz unless ATTITUDE_FAST, then do it in the 25Hz loop
     if (!should_log(MASK_LOG_ATTITUDE_FAST)) {
-        Log_Write_EKF_POS();
+        if (should_log(MASK_LOG_STATE_MONITOR)) {
+            Log_Write_EKF_POS();
+        }
     }
     if ((FRAME_CONFIG == HELI_FRAME) || should_log(MASK_LOG_MOTBATT)) {
         // always write motors log if we are a heli
@@ -799,7 +804,7 @@ void Copter::one_hz_loop()
     // update assigned functions and enable auxiliary servos
     AP::srv().enable_aux_servos();
 
-#if HAL_LOGGING_ENABLED
+#if HAL_LOGGING_ENABLED && AP_TERRAIN_AVAILABLE
     // log terrain data
     terrain_logging();
 #endif

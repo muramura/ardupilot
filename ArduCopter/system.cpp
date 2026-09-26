@@ -69,8 +69,10 @@ void Copter::init_ardupilot()
     // sets up motors and output to escs
     init_rc_out();
 
+#if AP_COPTER_ESC_CALIBRATION_ENABLED
     // check if we should enter esc calibration mode
     esc_calibration_startup_check();
+#endif
 
     // motors initialised so parameters can be sent
     ap.initialised_params = true;
@@ -91,6 +93,8 @@ void Copter::init_ardupilot()
 
     AP::compass().set_log_bit(MASK_LOG_COMPASS);
     AP::compass().init();
+
+    ahrs.set_log_bit(MASK_LOG_STATE_MONITOR);
 
 #if AP_AIRSPEED_ENABLED
     airspeed.set_log_bit(MASK_LOG_IMU);

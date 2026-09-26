@@ -799,12 +799,14 @@ private:
     void check_ekf_reset();
     void check_vibration();
 
+#if AP_COPTER_ESC_CALIBRATION_ENABLED
     // esc_calibration.cpp
     void esc_calibration_startup_check();
     void esc_calibration_passthrough();
     void esc_calibration_auto();
     void esc_calibration_notify();
     void esc_calibration_setup();
+#endif // AP_COPTER_ESC_CALIBRATION_ENABLED
 
     // events.cpp
     bool failsafe_option(FailsafeOption opt) const;
@@ -820,6 +822,7 @@ private:
     void gpsglitch_check();
     void failsafe_deadreckon_check();
     void set_mode_RTL_or_land_with_pause(ModeReason reason);
+    void set_mode_SmartRTL_or_fallback(const char *action_str, ModeReason reason, bool fallback_to_rtl);
     void set_mode_SmartRTL_or_RTL(ModeReason reason);
     void set_mode_SmartRTL_or_land_with_pause(ModeReason reason);
     void set_mode_auto_do_land_start_or_RTL(ModeReason reason);
@@ -839,8 +842,9 @@ private:
 #if AP_FENCE_ENABLED
     void fence_check();
     void fence_checks_async() override;
-#endif
+#endif // AP_FENCE_ENABLED
 
+#if FRAME_CONFIG == HELI_FRAME
     // heli.cpp
     void heli_init();
     void check_dynamic_flight(void);
@@ -851,6 +855,7 @@ private:
     void heli_update_rotor_speed_targets();
     void heli_update_autorotation();
     void update_collective_low_flag(int16_t throttle_control);
+#endif // FRAME_CONFIG == HELI_FRAME
 
     // inertia.cpp
     void read_inertia();
@@ -963,9 +968,11 @@ private:
     // Parameters.cpp
     void load_parameters(void) override;
 
+#if AC_PRECLAND_ENABLED
     // precision_landing.cpp
     void init_precland();
     void update_precland();
+#endif // AC_PRECLAND_ENABLED
 
     // radio.cpp
     void default_dead_zones();
@@ -1001,9 +1008,11 @@ private:
     void allocate_motors(void);
     bool is_tradheli() const;
 
+#if AP_TERRAIN_AVAILABLE
     // terrain.cpp
     void terrain_update();
     void terrain_logging();
+#endif // AP_TERRAIN_AVAILABLE
 
 #if AP_RC_TRANSMITTER_TUNING_ENABLED
     // tuning.cpp
