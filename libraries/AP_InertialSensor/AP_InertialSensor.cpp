@@ -2473,6 +2473,15 @@ void AP_InertialSensor::_acal_save_calibrations()
     for (uint8_t i=0; i<_accel_count; i++) {
         if (_accel_calibrator[i].get_status() == ACCEL_CAL_SUCCESS) {
             _accel_calibrator[i].get_calibration(bias, gain);
+            if (fabsf(bias.x) > GRAVITY_MSS || fabsf(bias.y) > GRAVITY_MSS || fabsf(bias.z) > GRAVITY_MSS ||
+                gain.x < 0.7f || gain.x > 1.3f ||
+                gain.y < 0.7f || gain.y > 1.3f ||
+                gain.z < 0.7f || gain.z > 1.3f) {
+                GCS_SEND_TEXT(MAV_SEVERITY_CRITICAL, "Accel %u 3D cal failed: invalid offset/scale", i + 1);
+                _accel_offset(i).set_and_save(Vector3f());
+                _accel_scale(i).set_and_save(Vector3f());
+                continue;
+            }
             _accel_offset(i).set_and_save(bias);
             _accel_scale(i).set_and_save(gain);
             _accel_id(i).save();
@@ -2739,10 +2748,22 @@ MAV_RESULT AP_InertialSensor::simple_accel_cal()
     _board_orientation = saved_orientation;
 
     if (result == MAV_RESULT_ACCEPTED) {
-        DEV_PRINTF("\nPASSED\n");
         for (uint8_t k=0; k<num_accels; k++) {
             // remove rotated gravity
             new_accel_offset[k] -= rotated_gravity;
+            if (fabsf(new_accel_offset[k].x) > GRAVITY_MSS ||
+                fabsf(new_accel_offset[k].y) > GRAVITY_MSS ||
+                fabsf(new_accel_offset[k].z) > GRAVITY_MSS) {
+                GCS_SEND_TEXT(MAV_SEVERITY_CRITICAL, "Accel %u cal failed: offset > 1G (was vehicle level?)", k + 1);
+                result = MAV_RESULT_FAILED;
+                break;
+            }
+        }
+    }
+
+    if (result == MAV_RESULT_ACCEPTED) {
+        DEV_PRINTF("\nPASSED\n");
+        for (uint8_t k=0; k<num_accels; k++) {
             _accel_offset(k).set_and_save(new_accel_offset[k]);
             _accel_scale(k).save();
             _accel_id(k).save();
