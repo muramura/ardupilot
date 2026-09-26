@@ -1667,27 +1667,82 @@ failed:
 #endif  // HAL_GCS_ENABLED && AP_AHRS_ENABLED
 
 /*
+  check if a single accelerometer is calibrated in 3D and has sane offsets and scaling
+ */
+bool AP_InertialSensor::accel_calibrated_ok(uint8_t instance, char* fail_msg, uint16_t fail_msg_len) const
+{
+    if (instance >= get_accel_count() || !_accel_id_ok[instance]) {
+        if (fail_msg != nullptr && fail_msg_len > 0) {
+            hal.util->snprintf(fail_msg, fail_msg_len, "Accel %u not healthy", instance + 1);
+        }
+        return false;
+    }
+
+    const Vector3f &offset = _accel_offset(instance).get();
+    // exactly 0.0 offset is extremely unlikely and indicates not calibrated
+    if (offset.is_zero()) {
+        if (fail_msg != nullptr && fail_msg_len > 0) {
+            hal.util->snprintf(fail_msg, fail_msg_len, "3D Accel calibration needed");
+        }
+        return false;
+    }
+
+    const Vector3f &scale = _accel_scale(instance).get();
+    // zero scaling also indicates not calibrated
+    if (scale.is_zero()) {
+        if (fail_msg != nullptr && fail_msg_len > 0) {
+            hal.util->snprintf(fail_msg, fail_msg_len, "3D Accel calibration needed");
+        }
+        return false;
+    }
+
+    // Sanity checks on offsets:
+    // Any offset > 1G (GRAVITY_MSS = 9.80665 m/s^2) indicates an invalid calibration or corrupted params
+    if (isnan(offset.x) || isnan(offset.y) || isnan(offset.z) ||
+        isinf(offset.x) || isinf(offset.y) || isinf(offset.z) ||
+        fabsf(offset.x) > GRAVITY_MSS ||
+        fabsf(offset.y) > GRAVITY_MSS ||
+        fabsf(offset.z) > GRAVITY_MSS) {
+        if (fail_msg != nullptr && fail_msg_len > 0) {
+            hal.util->snprintf(fail_msg, fail_msg_len, "Accel %u offset > 1G (re-calibrate)", instance + 1);
+        }
+        return false;
+    }
+
+    // Sanity checks on scaling:
+    // Scaling should be close to 1.0 (typically within 0.8 - 1.2 during calibration).
+    // Allow conservative 0.7 - 1.3 margin to reject wild or corrupted values.
+    if (isnan(scale.x) || isnan(scale.y) || isnan(scale.z) ||
+        isinf(scale.x) || isinf(scale.y) || isinf(scale.z) ||
+        scale.x < 0.7f || scale.x > 1.3f ||
+        scale.y < 0.7f || scale.y > 1.3f ||
+        scale.z < 0.7f || scale.z > 1.3f) {
+        if (fail_msg != nullptr && fail_msg_len > 0) {
+            hal.util->snprintf(fail_msg, fail_msg_len, "Accel %u scale invalid (re-calibrate)", instance + 1);
+        }
+        return false;
+    }
+
+    return true;
+}
+
+/*
   check if the accelerometers are calibrated in 3D and that current number of accels matched number when calibrated
  */
-bool AP_InertialSensor::accel_calibrated_ok_all() const
+bool AP_InertialSensor::accel_calibrated_ok_all(char* fail_msg, uint16_t fail_msg_len) const
 {
-    // check each accelerometer has offsets saved
+    // check each accelerometer is calibrated and within sane limits
     for (uint8_t i=0; i<get_accel_count(); i++) {
-        if (!_accel_id_ok[i]) {
-            return false;
-        }
-        // exactly 0.0 offset is extremely unlikely
-        if (_accel_offset(i).get().is_zero()) {
-            return false;
-        }
-        // zero scaling also indicates not calibrated
-        if (_accel_scale(i).get().is_zero()) {
+        if (!accel_calibrated_ok(i, fail_msg, fail_msg_len)) {
             return false;
         }
     }
     for (uint8_t i=get_accel_count(); i<INS_MAX_INSTANCES; i++) {
         if (_accel_id(i) != 0) {
             // missing accel
+            if (fail_msg != nullptr && fail_msg_len > 0) {
+                hal.util->snprintf(fail_msg, fail_msg_len, "Accel %u missing", i + 1);
+            }
             return false;
         }
     }
@@ -1699,6 +1754,9 @@ bool AP_InertialSensor::accel_calibrated_ok_all() const
             bool have_scaling = (!is_zero(scaling.x) && !is_equal(scaling.x,1.0f)) || (!is_zero(scaling.y) && !is_equal(scaling.y,1.0f)) || (!is_zero(scaling.z) && !is_equal(scaling.z,1.0f));
             bool have_offsets = !_accel_offset(i).get().is_zero();
             if (have_scaling || have_offsets) {
+                if (fail_msg != nullptr && fail_msg_len > 0) {
+                    hal.util->snprintf(fail_msg, fail_msg_len, "Unused accel %u has calibration", i + 1);
+                }
                 return false;
             }
         }
