@@ -359,31 +359,31 @@ void AP_GPS::convert_parameters()
     }
 
     // table parameters to convert without scaling
-    static const AP_Param::ConversionInfoNoKey conversion_info[] {
+    const AP_Param::ConversionInfo conversion_info[] {
         // PARAMETER_CONVERSION - Added: Mar-2024 for ArduPilot-4.6
-        { 0, AP_PARAM_INT8, "GPS1_TYPE" },
-        { 1, AP_PARAM_INT8, "GPS2_TYPE" },
-        { 10, AP_PARAM_INT8, "GPS1_GNSS_MODE" },
-        { 12, AP_PARAM_INT8, "GPS2_GNSS_MODE" },
-        { 14, AP_PARAM_INT16, "GPS1_RATE_MS" },
-        { 15, AP_PARAM_INT16, "GPS2_RATE_MS" },
-        { 16, AP_PARAM_VECTOR3F, "GPS1_POS" },
-        { 17, AP_PARAM_VECTOR3F, "GPS2_POS" },
-        { 18, AP_PARAM_INT16, "GPS1_DELAY_MS" },
-        { 19, AP_PARAM_INT16, "GPS2_DELAY_MS" },
+        { k_param_gps_key, 0, AP_PARAM_INT8, "GPS1_TYPE" },
+        { k_param_gps_key, 1, AP_PARAM_INT8, "GPS2_TYPE" },
+        { k_param_gps_key, 10, AP_PARAM_INT8, "GPS1_GNSS_MODE" },
+        { k_param_gps_key, 12, AP_PARAM_INT8, "GPS2_GNSS_MODE" },
+        { k_param_gps_key, 14, AP_PARAM_INT16, "GPS1_RATE_MS" },
+        { k_param_gps_key, 15, AP_PARAM_INT16, "GPS2_RATE_MS" },
+        { k_param_gps_key, 16, AP_PARAM_VECTOR3F, "GPS1_POS" },
+        { k_param_gps_key, 17, AP_PARAM_VECTOR3F, "GPS2_POS" },
+        { k_param_gps_key, 18, AP_PARAM_INT16, "GPS1_DELAY_MS" },
+        { k_param_gps_key, 19, AP_PARAM_INT16, "GPS2_DELAY_MS" },
 #if AP_GPS_SBF_ENABLED
-        { 23, AP_PARAM_INT8, "GPS1_COM_PORT" },
-        { 24, AP_PARAM_INT8, "GPS2_COM_PORT" },
+        { k_param_gps_key, 23, AP_PARAM_INT8, "GPS1_COM_PORT" },
+        { k_param_gps_key, 24, AP_PARAM_INT8, "GPS2_COM_PORT" },
 #endif
 
 #if HAL_ENABLE_DRONECAN_DRIVERS
-        { 28, AP_PARAM_INT32, "GPS1_CAN_NODEID" },
-        { 29, AP_PARAM_INT32, "GPS2_CAN_NODEID" },
-        { 30, AP_PARAM_INT32, "GPS1_CAN_OVRIDE" },
-        { 31, AP_PARAM_INT32, "GPS2_CAN_OVRIDE" },
+        { k_param_gps_key, 28, AP_PARAM_INT32, "GPS1_CAN_NODEID" },
+        { k_param_gps_key, 29, AP_PARAM_INT32, "GPS2_CAN_NODEID" },
+        { k_param_gps_key, 30, AP_PARAM_INT32, "GPS1_CAN_OVRIDE" },
+        { k_param_gps_key, 31, AP_PARAM_INT32, "GPS2_CAN_OVRIDE" },
 #endif
     };
-    AP_Param::convert_old_parameters(k_param_gps_key, conversion_info, ARRAY_SIZE(conversion_info));
+    AP_Param::convert_old_parameters(conversion_info, ARRAY_SIZE(conversion_info));
 
 #if GPS_MOVING_BASELINE
     // convert old MovingBaseline parameters
@@ -1385,8 +1385,8 @@ uint16_t AP_GPS::gps_yaw_cdeg(uint8_t instance) const
 #if AP_GPS_GPS_RAW_INT_SENDING_ENABLED
 void AP_GPS::send_mavlink_gps_raw(mavlink_channel_t chan)
 {
-    // Only send if enabled
-    if (get_type(0) == GPS_TYPE_NONE) {
+    // Only send if enabled and data has been received at least once during this boot
+    if (get_type(0) == GPS_TYPE_NONE || last_message_time_ms(0) == 0) {
         return;
     }
 
@@ -1426,8 +1426,8 @@ void AP_GPS::send_mavlink_gps_raw(mavlink_channel_t chan)
 #if AP_GPS_GPS2_RAW_SENDING_ENABLED
 void AP_GPS::send_mavlink_gps2_raw(mavlink_channel_t chan)
 {
-    // always send the message if 2nd GPS is configured
-    if (params[1].type == GPS_TYPE_NONE) {
+    // only send the message if 2nd GPS is configured and data has been received at least once during this boot
+    if (params[1].type == GPS_TYPE_NONE || last_message_time_ms(1) == 0) {
         return;
     }
 
