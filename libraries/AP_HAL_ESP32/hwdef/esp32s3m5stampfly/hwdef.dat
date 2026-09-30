@@ -7,9 +7,9 @@
 # and the right (black) connector is SERIAL3. However, the two signal pins in
 # each can be reassigned by editing this file.
 #
-# Grove Red (I2C)
-# 1 (toward front): GPIO_NUM_15, SCL (has 4.7kΩ pullup to 3.3V)
-# 2               : GPIO_NUM_13, SDA (has 4.7kΩ pullup to 3.3V)
+# Grove Red (SERIAL2)
+# 1 (toward front): GPIO_NUM_15, RX (has 4.7kΩ pullup to 3.3V)
+# 2               : GPIO_NUM_13, TX (has 4.7kΩ pullup to 3.3V)
 # 3               : +V (+5V if plugged into USB, else +Vbat)
 # 4 (toward rear) : GND
 #
@@ -35,7 +35,7 @@ ESP32_SPIDEV pixartflow_disabled 0     1       GPIO_NUM_12  3     2*MHZ   2*MHZ
 # i2c Buses
 #             Port       SDA         SCL         SPEED    INTERNAL SOFT
 ESP32_I2CBUS  I2C_NUM_0  GPIO_NUM_3  GPIO_NUM_4  400*KHZ  true     false
-ESP32_I2CBUS  I2C_NUM_1  GPIO_NUM_13 GPIO_NUM_15 400*KHZ  false    false
+# ESP32_I2CBUS  I2C_NUM_1  GPIO_NUM_13 GPIO_NUM_15 400*KHZ  false    false (reassigned to SERIAL2 UART)
 
 # one IMU:
 IMU BMI270 SPI:bmi270 ROTATION_ROLL_180_YAW_90
@@ -97,9 +97,11 @@ define HAL_RANGEFINDER_VL53L3CX_INT_FORWARD 8
 
 # HARDWARE UARTS. UART 0 uses ESP32-S3 USB Serial/JTAG for console/MAVLink.
 # UART 1 (SERIAL3) is the black grove connector
+# UART 2 (SERIAL2) is the red grove connector
 #             PORT        RXPIN        TXPIN
 ESP32_SERIAL  UART_NUM_0  GPIO_NUM_18  GPIO_NUM_17
 ESP32_SERIAL  UART_NUM_1  GPIO_NUM_1   GPIO_NUM_2
+ESP32_SERIAL  UART_NUM_2  GPIO_NUM_15  GPIO_NUM_13
 
 define HAL_ESP32_UART0_USB_SERIAL_JTAG 1
 
