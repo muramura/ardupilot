@@ -280,11 +280,12 @@ define HAL_BATTMON_INA3221_SHUNT_CONV_TIME_SEL HAL_BATTMON_INA3221_CONV_TIME_415
 define HAL_BATTMON_INA3221_BUS_CONV_TIME_SEL HAL_BATTMON_INA3221_CONV_TIME_4156US
 define HAL_BATTMON_INA3221_AVG_MODE_SEL HAL_BATTMON_INA3221_AVG_MODE_16
 
-# 2 use udp, 1 use tcp...  for udp,client needs to connect as UDPCL in missionplanner etc to 192.168.4.1 port 14550
-define HAL_ESP32_WIFI 2
-
-define WIFI_SSID "StampFly"
-define WIFI_PWD "ardupilot123"
+# WiFi settings (1: TCP port 5760, 2: UDP port 14550)
+# Comment out HAL_ESP32_WIFI to disable onboard Wi-Fi stack and save flash/RAM (recommended when using CamS3).
+# To re-enable onboard Wi-Fi (standalone without CamS3), uncomment HAL_ESP32_WIFI and credentials below:
+# define HAL_ESP32_WIFI 2
+# define WIFI_SSID "StampFly"
+# define WIFI_PWD "ardupilot123"
 
 define AP_DDS_ENABLED 0
 
