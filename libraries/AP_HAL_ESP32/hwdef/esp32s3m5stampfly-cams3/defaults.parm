@@ -1,0 +1,9 @@
+# Default parameters for M5StampFly CamS3 FPV variant
+@include ../esp32s3m5stampfly/defaults.parm
+
+# CamS3 MAVLink telemetry settings (Grove Red connector / SERIAL2 at 2Mbps)
+SERIAL2_PROTOCOL 2
+SERIAL2_BAUD     2000
+
+# Disable onboard Wi-Fi port protocol on CamS3 build
+SERIAL1_PROTOCOL -1

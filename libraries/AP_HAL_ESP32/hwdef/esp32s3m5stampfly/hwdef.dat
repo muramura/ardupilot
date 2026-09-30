@@ -281,11 +281,11 @@ define HAL_BATTMON_INA3221_BUS_CONV_TIME_SEL HAL_BATTMON_INA3221_CONV_TIME_4156U
 define HAL_BATTMON_INA3221_AVG_MODE_SEL HAL_BATTMON_INA3221_AVG_MODE_16
 
 # WiFi settings (1: TCP port 5760, 2: UDP port 14550)
-# Comment out HAL_ESP32_WIFI to disable onboard Wi-Fi stack and save flash/RAM (recommended when using CamS3).
-# To re-enable onboard Wi-Fi (standalone without CamS3), uncomment HAL_ESP32_WIFI and credentials below:
-# define HAL_ESP32_WIFI 2
-# define WIFI_SSID "StampFly"
-# define WIFI_PWD "ardupilot123"
+# Onboard Wi-Fi enabled by default on this base board.
+# For CamS3 FPV builds without internal Wi-Fi, use the 'esp32s3m5stampfly-cams3' board target.
+define HAL_ESP32_WIFI 2
+define WIFI_SSID "StampFly"
+define WIFI_PWD "ardupilot123"
 
 define AP_DDS_ENABLED 0
 

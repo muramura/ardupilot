@@ -1,0 +1,12 @@
+# https://shop.m5stack.com/products/m5stamp-fly-with-m5stamps3
+#
+# M5StampFly variant for CamS3 FPV operation.
+# Inherits all hardware settings from esp32s3m5stampfly, with onboard Wi-Fi disabled
+# to save RAM/Flash and eliminate RF interference with the CamS3 Wi-Fi stream.
+
+include ../esp32s3m5stampfly/hwdef.dat
+
+# Disable onboard Wi-Fi stack
+undef HAL_ESP32_WIFI
+undef WIFI_SSID
+undef WIFI_PWD
