@@ -96,7 +96,8 @@ THR_DZ          20
 SERIAL2_PROTOCOL 2
 SERIAL2_BAUD     2000
 
-# Onboard Wi-Fi (SERIAL1) defaults to MAVLink2 (2) automatically via HAL_ESP32_WIFI.
+# Onboard Wi-Fi (SERIAL1) disabled to avoid RF interference with CamS3
+SERIAL1_PROTOCOL -1
 
 # GPS & RTC clock settings (SAM-M8Q on Grove Black connector / SERIAL3)
 SERIAL3_PROTOCOL 5
