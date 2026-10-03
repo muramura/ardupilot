@@ -70,9 +70,17 @@ Current choices include:
 - BMP280 barometer is detected.
 - INA3221 battery monitor is detected.
 
-## Build Command
+## Build Commands
 
+### Standard & CamS3 FPV (Unified Target)
 ```bash
 ./waf configure --board esp32s3m5stampfly
 ./waf copter -j1
 ```
+- Onboard Wi-Fi (SERIAL1) provides UDP 14550 GCS telemetry (`StampFly` / `ardupilot123`).
+- Grove Red connector (SERIAL2) provides 2Mbps MAVLink2 for Unit CamS3.
+- Grove Black connector (SERIAL3) provides 230400bps for optional SAM-M8Q GPS/RTC.
+
+## TODO / Future Work
+
+- [ ] **CamS3 SSID Customization**: Unit CamS3側のSoftAP SSIDが現在 `Stamp-cam` となっているため、MACアドレス下位3バイト（HEX）を用いた一意の識別名 `StampFly_XXXXXX`（例: `StampFly_1A2B3C`）に変更する。複数機体運用時のSSID重複・誤接続を防ぐ。
