@@ -28,6 +28,9 @@
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Scheduler/AP_Scheduler.h>
 #include <stdio.h>
+#include <nvs_flash.h>
+#include <esp_netif.h>
+#include <esp_event.h>
 
 //#define SCHEDULERDEBUG 1
 
@@ -53,8 +56,8 @@ void Scheduler::wdt_init(uint32_t timeout, uint32_t core_mask)
 {
     esp_task_wdt_config_t config = {
         .timeout_ms = timeout,
-        .idle_core_mask = core_mask,
-        .trigger_panic = true
+        .idle_core_mask = 0, // Never monitor idle tasks on flight controller; high-priority control loops starve idle tasks intentionally
+        .trigger_panic = false // Do not panic-reset on TWDT during flight
     };
 
     if ( ESP_OK != esp_task_wdt_init(&config) ) {
@@ -72,6 +75,23 @@ void Scheduler::init()
 #ifdef SCHEDDEBUG
     printf("%s:%d \n", __PRETTY_FUNCTION__, __LINE__);
 #endif
+
+    // Ensure ESP-IDF NVS, netif, and default event loop are initialized early,
+    // even if Wi-Fi driver is disabled or serial protocol is set to None.
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+    esp_err_t netif_ret = esp_netif_init();
+    if (netif_ret != ESP_OK && netif_ret != ESP_ERR_INVALID_STATE) {
+        ESP_ERROR_CHECK(netif_ret);
+    }
+    esp_err_t loop_ret = esp_event_loop_create_default();
+    if (loop_ret != ESP_OK && loop_ret != ESP_ERR_INVALID_STATE) {
+        ESP_ERROR_CHECK(loop_ret);
+    }
 
     hal.console->printf("%s:%d running with CONFIG_FREERTOS_HZ=%d\n", __PRETTY_FUNCTION__, __LINE__,CONFIG_FREERTOS_HZ);
 
@@ -567,8 +587,8 @@ void IRAM_ATTR Scheduler::_main_thread(void *arg)
 
     sched->set_system_initialized();
 
-    //initialize WTD for current thread on FASTCPU, all cores will be (1 << CONFIG_FREERTOS_NUMBER_OF_CORES) - 1
-    wdt_init( TWDT_TIMEOUT_MS, 1 << FASTCPU ); // 3 sec
+    // Initialize Task Watchdog for main thread (no idle core monitoring)
+    wdt_init( TWDT_TIMEOUT_MS, 0 ); // 5 sec
 
 
 #ifdef SCHEDDEBUG

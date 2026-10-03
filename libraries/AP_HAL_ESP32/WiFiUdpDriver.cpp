@@ -279,10 +279,14 @@ void WiFiUdpDriver::initialize_wifi()
       ESP_ERROR_CHECK(nvs_flash_erase());
       ret = nvs_flash_init();
     }
-    ESP_ERROR_CHECK(ret);
-
-    ESP_ERROR_CHECK(esp_netif_init());
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
+    esp_err_t netif_ret = esp_netif_init();
+    if (netif_ret != ESP_OK && netif_ret != ESP_ERR_INVALID_STATE) {
+        ESP_ERROR_CHECK(netif_ret);
+    }
+    esp_err_t loop_ret = esp_event_loop_create_default();
+    if (loop_ret != ESP_OK && loop_ret != ESP_ERR_INVALID_STATE) {
+        ESP_ERROR_CHECK(loop_ret);
+    }
 
     wifi_config_t wifi_config;
     bzero(&wifi_config, sizeof(wifi_config));

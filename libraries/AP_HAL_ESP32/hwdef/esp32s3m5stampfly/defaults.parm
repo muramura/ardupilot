@@ -96,11 +96,7 @@ THR_DZ          20
 SERIAL2_PROTOCOL 2
 SERIAL2_BAUD     2000
 
-# Onboard Wi-Fi (SERIAL1) settings:
-# Controlled at build-time via HAL_ESP32_WIFI in hwdef.dat.
-# When HAL_ESP32_WIFI is enabled, SERIAL1 defaults to MAVLink2 (2) automatically.
-# Uncomment below only if you want to force disable SERIAL1 protocol at runtime:
-# SERIAL1_PROTOCOL -1
+# Onboard Wi-Fi (SERIAL1) defaults to MAVLink2 (2) automatically via HAL_ESP32_WIFI.
 
 # GPS & RTC clock settings (SAM-M8Q on Grove Black connector / SERIAL3)
 SERIAL3_PROTOCOL 5
