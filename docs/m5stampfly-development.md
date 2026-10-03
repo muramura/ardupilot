@@ -70,16 +70,18 @@ Current choices include:
 - BMP280 barometer is detected.
 - INA3221 battery monitor is detected.
 
-## Build Commands
-
-### Standard & CamS3 FPV (Unified Target)
+### Build Commands
 ```bash
 ./waf configure --board esp32s3m5stampfly
 ./waf copter -j1
 ```
-- Onboard Wi-Fi (SERIAL1) provides UDP 14550 GCS telemetry (`StampFly` / `ardupilot123`).
-- Grove Red connector (SERIAL2) provides 2Mbps MAVLink2 for Unit CamS3.
-- Grove Black connector (SERIAL3) provides 230400bps for optional SAM-M8Q GPS/RTC.
+
+### Branch Profiles
+- **`stampfly-dev`**: Base development branch with onboard Wi-Fi (UDP 14550, `StampFly` / `ardupilot123`) enabled for standalone flight.
+- **`stampfly-cams3`**: Dedicated FPV companion computer branch.
+  - Onboard Wi-Fi disabled (`HAL_ESP32_WIFI 0`, `SERIAL1_PROTOCOL -1`) to eliminate 2.4GHz RF interference with CamS3 and reduce CPU/power consumption.
+  - Grove Red connector (`SERIAL2`) enabled at 2,000,000 baud (2Mbps MAVLink2) for high-speed Unit CamS3 telemetry/control.
+  - Grove Black connector (`SERIAL3`) enabled at 230,400 baud for optional SAM-M8Q GPS/RTC.
 
 ## TODO / Future Work
 
