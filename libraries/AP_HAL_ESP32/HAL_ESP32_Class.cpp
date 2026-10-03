@@ -33,6 +33,33 @@
 #include <AP_HAL/SIMState.h>
 #endif
 
+namespace ESP32 {
+
+class NullUARTDriver : public AP_HAL::UARTDriver {
+public:
+    NullUARTDriver() = default;
+    virtual ~NullUARTDriver() = default;
+
+    bool is_initialized() override { return _initialized; }
+    bool tx_pending() override { return false; }
+    uint32_t txspace() override { return 1024; }
+    void _timer_tick(void) override {}
+
+protected:
+    void _begin(uint32_t b, uint16_t rxS, uint16_t txS) override { _initialized = true; }
+    size_t _write(const uint8_t *buffer, size_t size) override { return size; }
+    ssize_t _read(uint8_t *buffer, uint16_t size) override { return 0; }
+    void _end() override { _initialized = false; }
+    void _flush() override {}
+    uint32_t _available() override { return 0; }
+    bool _discard_input() override { return true; }
+
+private:
+    bool _initialized = true;
+};
+
+}
+
 static ESP32::UARTDriver cons(0);
 #ifdef HAL_ESP32_WIFI
 #if HAL_ESP32_WIFI == 1
@@ -40,19 +67,19 @@ static ESP32::WiFiDriver serial1Driver; //tcp, client should connect to 192.168.
 #elif HAL_ESP32_WIFI == 2
 static ESP32::WiFiUdpDriver serial1Driver; //udp
 #else
-static Empty::UARTDriver serial1Driver;
+static ESP32::NullUARTDriver serial1Driver;
 #endif
 #else
-static Empty::UARTDriver serial1Driver;
+static ESP32::NullUARTDriver serial1Driver;
 #endif
 static ESP32::UARTDriver serial2Driver(2);
 static ESP32::UARTDriver serial3Driver(1);
-static Empty::UARTDriver serial4Driver;
-static Empty::UARTDriver serial5Driver;
-static Empty::UARTDriver serial6Driver;
-static Empty::UARTDriver serial7Driver;
-static Empty::UARTDriver serial8Driver;
-static Empty::UARTDriver serial9Driver;
+static ESP32::NullUARTDriver serial4Driver;
+static ESP32::NullUARTDriver serial5Driver;
+static ESP32::NullUARTDriver serial6Driver;
+static ESP32::NullUARTDriver serial7Driver;
+static ESP32::NullUARTDriver serial8Driver;
+static ESP32::NullUARTDriver serial9Driver;
 
 #if HAL_WITH_DSP
 static Empty::DSP dspDriver;
