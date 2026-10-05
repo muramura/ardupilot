@@ -4443,6 +4443,17 @@ void GCS_MAVLINK::handle_rc_channels_override(const mavlink_message_t &msg)
 #if AP_OPTICALFLOW_ENABLED
 void GCS_MAVLINK::handle_optical_flow(const mavlink_message_t &msg)
 {
+    static uint32_t last_flow_report_ms = 0;
+    static uint32_t flow_count = 0;
+    flow_count++;
+    const uint32_t now = AP_HAL::millis();
+    if (flow_count == 1) {
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CamS3 Flow data streaming started");
+    } else if (now - last_flow_report_ms >= 10000) {
+        last_flow_report_ms = now;
+        GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CamS3 Flow data streaming (%u pkts)", (unsigned)flow_count);
+    }
+
     AP_OpticalFlow *optflow = AP::opticalflow();
     if (optflow == nullptr) {
         return;
@@ -4555,6 +4566,20 @@ void GCS_MAVLINK::handle_heartbeat(const mavlink_message_t &msg)
     // now...
     if (gcs().sysid_is_gcs(msg.sysid)) {
         sysid_mygcs_seen(AP_HAL::millis());
+    }
+
+    // CamS3 Optical Flow (Component 197) Heartbeat Monitor
+    if (msg.compid == 197) {
+        static uint32_t last_cams3_hb_report_ms = 0;
+        static uint32_t cams3_hb_count = 0;
+        cams3_hb_count++;
+        const uint32_t now = AP_HAL::millis();
+        if (cams3_hb_count == 1) {
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CamS3 Flow (Comp 197) connected");
+        } else if (now - last_cams3_hb_report_ms >= 5000) {
+            last_cams3_hb_report_ms = now;
+            GCS_SEND_TEXT(MAV_SEVERITY_INFO, "CamS3 Flow (Comp 197) Heartbeat OK (#%u)", (unsigned)cams3_hb_count);
+        }
     }
 }
 
